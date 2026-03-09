@@ -7,7 +7,8 @@ import CartButton from '@/components/CartButton';
 const NAV_LINKS = [
   { label: 'Collection', href: '/collection' },
   { label: 'Oils', href: '/collection#signature-oils' },
-  { label: 'Technology', href: '/product/puredrive-pro' },
+  { label: 'Technology', href: '/product/autivora-one' },
+  { label: 'Journal', href: '/blog' },
 ];
 
 export default function Header() {

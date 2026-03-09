@@ -1,6 +1,8 @@
 import { createClient } from '@sanity/client';
 
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
+const rawProjectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
+const projectId =
+  rawProjectId && !rawProjectId.startsWith("your-") ? rawProjectId : undefined;
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? 'production';
 
 // Export for use in server components and server actions

@@ -9,7 +9,7 @@ export type SocialProof = {
 };
 
 const SOCIAL_PROOF: Record<string, SocialProof> = {
-  'puredrive-pro': {
+  'autivora-one': {
     rating: 4.9,
     reviewCount: 38,
     sold: 214,

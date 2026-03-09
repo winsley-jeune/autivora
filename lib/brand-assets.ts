@@ -9,6 +9,13 @@ export const BRAND_COLORS: Record<string, string> = {
   lamborghini: '#ffbf00', // Giallo Orion
   bentley: '#0e2f44', // Dark Sapphire
   'aston-martin': '#004225', // Racing Green
+  'rolls-royce': '#1c1c1c', // Spirit of Ecstasy Black
+  maserati: '#003366', // Blu Nobile
+  genesis: '#8b6f47', // Copper Crest
+  cadillac: '#a71930', // Cadillac Red
+  tesla: '#cc0000', // Tesla Red
+  volvo: '#003057', // Volvo Navy
+  jaguar: '#1a472a', // British Racing Green
 };
 
 export function getBrandColor(brand: string): string {

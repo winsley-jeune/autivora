@@ -76,7 +76,7 @@ export default function RootLayout({
                 <ul className="space-y-3">
                   {[
                     { label: 'Collection', href: '/collection' },
-                    { label: 'The Autivora One', href: '/product/puredrive-pro' },
+                    { label: 'The Autivora One', href: '/product/autivora-one' },
                     { label: 'Vehicle Compatibility', href: '/fitment' },
                   ].map(({ label, href }) => (
                     <li key={href}>

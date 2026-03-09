@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { getAllVehicles } from '@/lib/sanity';
 import { LUXURY_BRANDS } from '@/lib/mock-db';
+import FitmentSearch, { type FitmentVehicle } from '@/components/FitmentSearch';
 
 // Group an array of Sanity vehicles into { brand: { modelSlug: vehicle } }
 function groupVehicles(vehicles: Awaited<ReturnType<typeof getAllVehicles>>) {
@@ -13,6 +14,25 @@ function groupVehicles(vehicles: Awaited<ReturnType<typeof getAllVehicles>>) {
   return grouped;
 }
 
+// Build flat vehicle list for search from mock-db
+function getMockVehicleList(): FitmentVehicle[] {
+  const list: FitmentVehicle[] = [];
+  for (const brand of Object.keys(LUXURY_BRANDS)) {
+    for (const model of Object.keys(LUXURY_BRANDS[brand])) {
+      const v = LUXURY_BRANDS[brand][model];
+      list.push({
+        brand,
+        model,
+        year: v.year,
+        make: v.make,
+        displayModel: v.model,
+        href: `/fitment/${brand}/${model}`,
+      });
+    }
+  }
+  return list;
+}
+
 export default async function FitmentIndex() {
   // Try Sanity first, fall back to mock-db if not configured
   const sanityVehicles = await getAllVehicles();
@@ -21,6 +41,21 @@ export default async function FitmentIndex() {
   if (useSanity) {
     const grouped = groupVehicles(sanityVehicles);
     const brands = Object.keys(grouped).sort();
+
+    const searchVehicles: FitmentVehicle[] = sanityVehicles.map((v) => {
+      const brandSlug = v.make.toLowerCase().replace(/\s+/g, '-');
+      const modelSlug =
+        v.slug?.current?.split('/')[1] ??
+        v.model.toLowerCase().replace(/\s+/g, '-');
+      return {
+        brand: brandSlug,
+        model: modelSlug,
+        year: v.year ?? '2024',
+        make: v.make,
+        displayModel: v.model,
+        href: `/fitment/${brandSlug}/${modelSlug}`,
+      };
+    });
 
     return (
       <div className="max-w-6xl mx-auto px-6 py-20">
@@ -36,6 +71,8 @@ export default async function FitmentIndex() {
             </h1>
           </div>
         </div>
+
+        <FitmentSearch vehicles={searchVehicles} />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {brands.map((brand) => (
@@ -68,6 +105,7 @@ export default async function FitmentIndex() {
 
   // Fallback: static mock-db data
   const brands = Object.keys(LUXURY_BRANDS).sort();
+  const searchVehicles = getMockVehicleList();
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-20">
@@ -83,6 +121,8 @@ export default async function FitmentIndex() {
           </h1>
         </div>
       </div>
+
+      <FitmentSearch vehicles={searchVehicles} />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
         {brands.map((brand) => (

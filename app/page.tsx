@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight, Sparkles } from 'lucide-react';
 
 export default function Home() {
@@ -8,10 +9,13 @@ export default function Home() {
       <section className="relative h-[90vh] flex items-center justify-center overflow-hidden px-6">
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-black/20 z-10"></div>
-          <img 
+          <Image 
             src="/image/61YkBrJrPhL._AC_SL1500_.jpg" 
             alt="Autivora Hero" 
-            className="w-full h-full object-cover grayscale"
+            fill
+            priority
+            className="object-cover grayscale"
+            sizes="100vw"
           />
         </div>
 
@@ -28,7 +32,7 @@ export default function Home() {
           
           <div className="flex flex-col items-center gap-8 max-w-xs mx-auto">
             <Link 
-              href="/product/puredrive-pro" 
+              href="/product/autivora-one" 
               className="w-full bg-white text-black px-12 py-5 text-[11px] font-bold uppercase tracking-[0.3em] hover:bg-neutral-200 transition-all duration-300 rounded-sm shadow-sm"
             >
               Shop The One
@@ -68,10 +72,12 @@ export default function Home() {
       <section className="py-32 px-6 bg-white overflow-hidden">
         <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
           <div className="relative aspect-square flex items-center justify-center bg-gray-50 rounded-2xl overflow-hidden">
-            <img 
+            <Image 
               src="/image/61T6CC0ta-L._AC_SL1500_.jpg" 
               alt="Nebulization Technology" 
-              className="w-full h-full object-contain p-12"
+              fill
+              className="object-contain p-12"
+              sizes="(max-width: 1024px) 100vw, 50vw"
             />
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-white/20"></div>
           </div>
@@ -83,7 +89,7 @@ export default function Home() {
               Our cold-air nebulization technology transforms fragrance oils into a dry, ultra-fine mist. This process maintains the chemical integrity of the scent without the use of heat or water, ensuring a consistent and sophisticated olfactory experience.
             </p>
             <div className="pt-4">
-              <Link href="/product/puredrive-pro" className="text-[10px] font-bold uppercase tracking-[0.2em] border-b border-black pb-1 hover:text-gray-500 hover:border-gray-500 transition-all">
+              <Link href="/product/autivora-one" className="text-[10px] font-bold uppercase tracking-[0.2em] border-b border-black pb-1 hover:text-gray-500 hover:border-gray-500 transition-all">
                 View Technical Specs
               </Link>
             </div>
@@ -106,10 +112,12 @@ export default function Home() {
           </Link>
         </div>
         <div className="aspect-[4/5] bg-gray-100 relative grayscale hover:grayscale-0 transition-all duration-1000 overflow-hidden shadow-2xl rounded-sm">
-            <img 
+            <Image 
               src="/image/71+vAlNiJKL._AC_SX679_.jpg" 
               alt="Luxury Interior Detail" 
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 50vw"
             />
         </div>
       </section>
@@ -122,10 +130,12 @@ export default function Home() {
             
             <div className="relative max-w-3xl mx-auto aspect-square mb-16 flex items-center justify-center">
                  <div className="absolute inset-0 bg-white shadow-inner rounded-full opacity-50 scale-95"></div>
-                 <img 
+                 <Image 
                    src="/image/81dWe9a1a2L._AC_SY879_.jpg" 
                    alt="Autivora One Device" 
-                   className="w-full h-full object-contain z-10 drop-shadow-2xl"
+                   fill
+                   className="object-contain z-10 drop-shadow-2xl"
+                   sizes="(max-width: 1200px) 100vw, 800px"
                  />
             </div>
 
@@ -134,7 +144,7 @@ export default function Home() {
             </p>
             
             <Link 
-              href="/product/puredrive-pro" 
+              href="/product/autivora-one" 
               className="bg-black text-white px-12 py-5 text-xs font-bold uppercase tracking-[0.2em] hover:bg-gray-800 transition-all"
             >
               Shop the One
@@ -146,17 +156,17 @@ export default function Home() {
       <section className="py-32 px-6 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="aspect-square bg-gray-50 overflow-hidden rounded-sm">
-              <img src="/image/61Il7eszZRL._AC_SY879_.jpg" alt="Autivora Detail" className="w-full h-full object-cover hover:scale-110 transition-transform duration-700" />
+            <div className="relative aspect-square bg-gray-50 overflow-hidden rounded-sm">
+              <Image src="/image/61Il7eszZRL._AC_SY879_.jpg" alt="Autivora Detail" fill className="object-cover hover:scale-110 transition-transform duration-700" sizes="(max-width: 768px) 50vw, 25vw" />
             </div>
-            <div className="aspect-square bg-gray-50 overflow-hidden rounded-sm">
-              <img src="/image/61xGUIBZw8L._AC_SY879_.jpg" alt="Autivora Detail" className="w-full h-full object-cover hover:scale-110 transition-transform duration-700" />
+            <div className="relative aspect-square bg-gray-50 overflow-hidden rounded-sm">
+              <Image src="/image/61xGUIBZw8L._AC_SY879_.jpg" alt="Autivora Detail" fill className="object-cover hover:scale-110 transition-transform duration-700" sizes="(max-width: 768px) 50vw, 25vw" />
             </div>
-            <div className="aspect-square bg-gray-50 overflow-hidden rounded-sm">
-              <img src="/image/714NkT3KSzL._AC_SX679_.jpg" alt="Autivora Detail" className="w-full h-full object-cover hover:scale-110 transition-transform duration-700" />
+            <div className="relative aspect-square bg-gray-50 overflow-hidden rounded-sm">
+              <Image src="/image/714NkT3KSzL._AC_SX679_.jpg" alt="Autivora Detail" fill className="object-cover hover:scale-110 transition-transform duration-700" sizes="(max-width: 768px) 50vw, 25vw" />
             </div>
-            <div className="aspect-square bg-gray-50 overflow-hidden rounded-sm">
-              <img src="/image/71f22Sj2VML._AC_SX679_.jpg" alt="Autivora Detail" className="w-full h-full object-cover hover:scale-110 transition-transform duration-700" />
+            <div className="relative aspect-square bg-gray-50 overflow-hidden rounded-sm">
+              <Image src="/image/71f22Sj2VML._AC_SX679_.jpg" alt="Autivora Detail" fill className="object-cover hover:scale-110 transition-transform duration-700" sizes="(max-width: 768px) 50vw, 25vw" />
             </div>
           </div>
         </div>

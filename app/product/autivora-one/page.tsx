@@ -8,7 +8,7 @@ import UpsellModal from '@/components/UpsellModal';
 import ProductJsonLd from '@/components/ProductJsonLd';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const product = await getProduct('puredrive-pro');
+  const product = await getProduct('autivora-one');
   return {
     title: product?.seo?.title ?? 'The Autivora One | Luxury Automotive Diffuser',
     description:
@@ -18,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function AutivoraOneProduct() {
-  const product = await getProduct('puredrive-pro');
+  const product = await getProduct('autivora-one');
 
   const price = product
     ? parseFloat(product.priceRange.minVariantPrice.amount).toFixed(2)
