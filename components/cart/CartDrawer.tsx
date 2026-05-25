@@ -3,6 +3,7 @@
 import { Minus, Plus, Trash2, X } from 'lucide-react';
 import Image from 'next/image';
 import { useCart } from './cart-context';
+import { trackInitiateCheckout } from '@/components/analytics/events';
 
 function formatPrice(amount: string, currencyCode: string) {
   return new Intl.NumberFormat('en-US', {
@@ -145,6 +146,13 @@ export default function CartDrawer() {
             </p>
             <a
               href={cart?.checkoutUrl ?? '#'}
+              onClick={() => {
+                if (!cart) return;
+                const value = parseFloat(cart.cost.subtotalAmount.amount);
+                const currency = cart.cost.subtotalAmount.currencyCode;
+                const itemIds = cart.lines.edges.map((e) => e.node.merchandise.product.id);
+                trackInitiateCheckout(value, currency, itemIds);
+              }}
               className="block w-full py-4 bg-black text-white text-center text-[11px] font-bold uppercase tracking-[0.3em] hover:bg-neutral-800 transition-all duration-300 rounded-sm"
             >
               Checkout

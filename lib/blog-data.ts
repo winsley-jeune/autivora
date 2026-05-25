@@ -14,7 +14,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
   {
     slug: "car-diffuser-vs-air-freshener",
     title: "Car Diffuser vs. Air Freshener: Why the Little Tree Era Is Over",
-    metaTitle: "Car Diffuser vs Air Freshener: Which Is Better for Your Car? | Autivora",
+    metaTitle: "Car Diffuser vs Air Freshener: Which Is Better for Your Car? | Autivara",
     metaDescription: "Discover why luxury car owners are abandoning traditional air fresheners for cold-air nebulizing diffusers. Compare cost, safety, scent quality, and interior protection.",
     date: "2026-02-15",
     readTime: "8 min read",
@@ -53,7 +53,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
   {
     slug: "cold-air-nebulization-explained",
     title: "What Is Cold-Air Nebulization? The Science Behind Premium Car Fragrance",
-    metaTitle: "Cold-Air Nebulization for Cars: How Waterless Diffusers Work | Autivora",
+    metaTitle: "Cold-Air Nebulization for Cars: How Waterless Diffusers Work | Autivara",
     metaDescription: "Learn how cold-air nebulization technology transforms pure essential oils into dry nano-mist without heat or water. Why it matters for your car interior.",
     date: "2026-02-22",
     readTime: "6 min read",
@@ -99,7 +99,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
   {
     slug: "will-car-diffuser-damage-leather-interior",
     title: "Will a Car Diffuser Damage Your Leather Interior? We Tested It.",
-    metaTitle: "Car Diffuser Safe for Leather? Alcantara, Wood Trim & Piano Black Guide | Autivora",
+    metaTitle: "Car Diffuser Safe for Leather? Alcantara, Wood Trim & Piano Black Guide | Autivara",
     metaDescription: "Can a car diffuser stain leather, damage Alcantara, or leave residue on piano black trim? Material-by-material analysis for luxury car owners.",
     date: "2026-03-01",
     readTime: "7 min read",
@@ -146,7 +146,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
   {
     slug: "essential-oils-driving-safety",
     title: "Essential Oils While Driving: Which Scents Keep You Alert (and Which Make You Drowsy)",
-    metaTitle: "Best Essential Oils for Driving: Stay Alert & Focused Behind the Wheel | Autivora",
+    metaTitle: "Best Essential Oils for Driving: Stay Alert & Focused Behind the Wheel | Autivara",
     metaDescription: "Not all scents are safe for driving. Learn which essential oils improve alertness and reaction time, and which ones can make you dangerously drowsy.",
     date: "2026-03-05",
     readTime: "6 min read",
@@ -203,7 +203,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
   {
     slug: "hidden-chemicals-car-air-fresheners",
     title: "The Hidden Chemicals in Your Car Air Freshener (And What the Label Doesn\u2019t Tell You)",
-    metaTitle: "Toxic Chemicals in Car Air Fresheners: What You Need to Know | Autivora",
+    metaTitle: "Toxic Chemicals in Car Air Fresheners: What You Need to Know | Autivara",
     metaDescription: "Car air fresheners contain chemicals the label never mentions. Learn what VOCs, phthalates, and formaldehyde are doing in your car cabin \u2014 and the safer alternatives.",
     date: "2026-03-08",
     readTime: "9 min read",
@@ -244,7 +244,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
   {
     slug: "true-cost-car-fragrance-disposable-vs-refillable",
     title: "The True Cost of Car Fragrance: Disposable vs. Refillable Over 3 Years",
-    metaTitle: "Car Diffuser Cost Comparison: Disposable vs Refillable Diffuser Savings | Autivora",
+    metaTitle: "Car Diffuser Cost Comparison: Disposable vs Refillable Diffuser Savings | Autivara",
     metaDescription: "Is a $149 car diffuser actually cheaper than $3 air fresheners? We did the math over 3 years. The results might surprise you.",
     date: "2026-02-28",
     readTime: "5 min read",

@@ -33,3 +33,6 @@ yarn-error.log*
 
 # Vercel
 .vercel
+
+# Proprietary business research — keep local, never commit
+files/

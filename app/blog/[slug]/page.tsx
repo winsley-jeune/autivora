@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { BLOG_ARTICLES } from "@/lib/blog-data";
+import BreadcrumbJsonLd from "@/components/BreadcrumbJsonLd";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -14,11 +15,25 @@ function getArticle(slug: string) {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const article = getArticle(slug);
-  if (!article) return { title: "Article Not Found | Autivora" };
+  if (!article) return { title: "Article Not Found" };
 
+  const canonical = `/blog/${slug}`;
   return {
     title: article.metaTitle,
     description: article.metaDescription,
+    alternates: { canonical },
+    openGraph: {
+      title: article.metaTitle,
+      description: article.metaDescription,
+      url: canonical,
+      type: "article",
+      publishedTime: article.date,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: article.metaTitle,
+      description: article.metaDescription,
+    },
   };
 }
 
@@ -143,13 +158,20 @@ export default async function BlogArticle({ params }: Props) {
 
   return (
     <div className="bg-white min-h-screen">
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", url: "/" },
+          { name: "Journal", url: "/blog" },
+          { name: article.title, url: `/blog/${slug}` },
+        ]}
+      />
       {/* Article Header */}
       <section className="pt-32 pb-12 px-6 max-w-3xl mx-auto">
         <Link
           href="/blog"
           className="text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-400 hover:text-black transition-colors mb-8 block"
         >
-          &larr; The Autivora Journal
+          &larr; The Autivara Journal
         </Link>
         <div className="flex items-center gap-4 text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-400 mb-6">
           <span>{article.category}</span>
@@ -186,15 +208,15 @@ export default async function BlogArticle({ params }: Props) {
             Ready to Upgrade Your Cabin?
           </h2>
           <p className="text-neutral-400 font-light">
-            The Autivora One uses cold-air nebulization to deliver pure essential
+            The Autivara One uses cold-air nebulization to deliver pure essential
             oil fragrance without heat, water, or chemicals. Machined aluminum.
             48-hour battery. Zero residue.
           </p>
           <Link
-            href="/product/autivora-one"
+            href="/product/autivara-one"
             className="inline-block px-16 py-5 bg-white text-black text-[11px] font-bold uppercase tracking-[0.3em] hover:bg-neutral-200 transition-all rounded-sm"
           >
-            Shop the Autivora One
+            Shop the Autivara One
           </Link>
         </div>
       </section>

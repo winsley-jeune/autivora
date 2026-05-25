@@ -1,7 +1,24 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getAllVehicles } from '@/lib/sanity';
 import { LUXURY_BRANDS } from '@/lib/mock-db';
 import FitmentSearch, { type FitmentVehicle } from '@/components/FitmentSearch';
+import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
+
+export const metadata: Metadata = {
+  title: 'Vehicle Compatibility — Find the Right Diffuser for Your Car',
+  description:
+    'Confirm the Autivara One fits your luxury vehicle. Brand-by-brand scent pairings, placement guides, and intensity recommendations across Porsche, BMW, Mercedes, Audi, Ferrari, and more.',
+  alternates: { canonical: '/fitment' },
+  openGraph: {
+    title: 'Vehicle Compatibility — Find the Right Diffuser for Your Car',
+    description:
+      'Brand-by-brand scent pairings, placement guides, and intensity recommendations for luxury cabin interiors.',
+    url: '/fitment',
+    type: 'website',
+  },
+  twitter: { card: 'summary_large_image' },
+};
 
 // Group an array of Sanity vehicles into { brand: { modelSlug: vehicle } }
 function groupVehicles(vehicles: Awaited<ReturnType<typeof getAllVehicles>>) {
@@ -59,6 +76,12 @@ export default async function FitmentIndex() {
 
     return (
       <div className="max-w-6xl mx-auto px-6 py-20">
+        <BreadcrumbJsonLd
+          items={[
+            { name: 'Home', url: '/' },
+            { name: 'Vehicle Compatibility', url: '/fitment' },
+          ]}
+        />
         <div className="relative h-64 w-full mb-16 rounded-sm overflow-hidden grayscale">
           <img
             src="/image/71aaruoc5QL._AC_SX679_.jpg"
@@ -109,6 +132,12 @@ export default async function FitmentIndex() {
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-20">
+      <BreadcrumbJsonLd
+        items={[
+          { name: 'Home', url: '/' },
+          { name: 'Vehicle Compatibility', url: '/fitment' },
+        ]}
+      />
       <div className="relative h-64 w-full mb-16 rounded-sm overflow-hidden grayscale">
         <img
           src="/image/71aaruoc5QL._AC_SX679_.jpg"

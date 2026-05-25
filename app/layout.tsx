@@ -4,36 +4,97 @@ import './globals.css'
 import { CartProvider } from '@/components/cart/cart-context'
 import CartDrawer from '@/components/cart/CartDrawer'
 import Header from '@/components/Header'
+import Analytics from '@/components/analytics/Analytics'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-playfair' })
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://autivora.com';
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://autivara.com';
 
 export const metadata: Metadata = {
-  title: 'Autivora | Luxury Automotive Fragrance',
-  description: 'Premium electronic car diffusers for the discerning driver.',
+  title: {
+    default: 'Autivara | Excellence in Air — Cold-Air Diffusion for Every Space',
+    template: '%s | Autivara',
+  },
+  description:
+    'Precision cold-air nebulization across automotive, residential, workplace, and commercial spaces. One technology. Every space.',
   metadataBase: new URL(BASE_URL),
+  applicationName: 'Autivara',
+  authors: [{ name: 'Autivara' }],
+  generator: 'Next.js',
+  keywords: [
+    'cold air diffuser',
+    'waterless diffuser',
+    'car diffuser',
+    'home diffuser',
+    'office diffuser',
+    'commercial diffuser',
+    'hotel diffuser',
+    'essential oil nebulizer',
+    'luxury fragrance',
+    'cold-air nebulization',
+  ],
+  alternates: { canonical: '/' },
   openGraph: {
-    siteName: 'Autivora',
+    siteName: 'Autivara',
     type: 'website',
+    url: BASE_URL,
+    title: 'Autivara | Excellence in Air',
+    description:
+      'Precision cold-air nebulization across automotive, residential, workplace, and commercial spaces.',
+    locale: 'en_US',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Autivara | Excellence in Air',
+    description:
+      'Precision cold-air nebulization across automotive, residential, workplace, and commercial spaces.',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
+  },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+    yandex: process.env.NEXT_PUBLIC_YANDEX_VERIFICATION,
+    other: {
+      ...(process.env.NEXT_PUBLIC_FACEBOOK_DOMAIN_VERIFICATION
+        ? { 'facebook-domain-verification': process.env.NEXT_PUBLIC_FACEBOOK_DOMAIN_VERIFICATION }
+        : {}),
+      ...(process.env.NEXT_PUBLIC_PINTEREST_SITE_VERIFICATION
+        ? { 'p:domain_verify': process.env.NEXT_PUBLIC_PINTEREST_SITE_VERIFICATION }
+        : {}),
+      ...(process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION
+        ? { 'msvalidate.01': process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION }
+        : {}),
+      ...(process.env.NEXT_PUBLIC_TIKTOK_SITE_VERIFICATION
+        ? { 'tiktok-developers-site-verification': process.env.NEXT_PUBLIC_TIKTOK_SITE_VERIFICATION }
+        : {}),
+    },
   },
 }
 
 const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  name: 'Autivora',
+  name: 'Autivara',
   url: BASE_URL,
   logo: `${BASE_URL}/icon.png`,
-  description: 'Precision cold-air nebulization technology for the discerning driver. Engineered in Europe.',
+  description: 'Precision cold-air nebulization technology across automotive, residential, workplace, and commercial spaces. Engineered in Europe.',
   sameAs: [],
 };
 
 const websiteSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: 'Autivora',
+  name: 'Autivara',
   url: BASE_URL,
 };
 
@@ -49,6 +110,7 @@ export default function RootLayout({
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
       </head>
       <body className="antialiased min-h-screen flex flex-col">
+        <Analytics />
         <CartProvider>
           <Header />
           <main className="flex-grow">
@@ -60,7 +122,7 @@ export default function RootLayout({
               {/* Brand */}
               <div className="space-y-4">
                 <span className="text-sm font-display font-bold tracking-tighter uppercase">
-                  Autivora
+                  Autivara
                 </span>
                 <p className="text-xs text-neutral-400 font-light leading-relaxed max-w-xs">
                   Precision cold-air nebulization technology for the discerning driver.
@@ -75,9 +137,12 @@ export default function RootLayout({
                 </span>
                 <ul className="space-y-3">
                   {[
-                    { label: 'Collection', href: '/collection' },
-                    { label: 'The Autivora One', href: '/product/autivora-one' },
-                    { label: 'Vehicle Compatibility', href: '/fitment' },
+                    { label: 'Auto', href: '/auto' },
+                    { label: 'Home', href: '/home' },
+                    { label: 'Office', href: '/office' },
+                    { label: 'Industrial', href: '/industrial' },
+                    { label: 'Scents', href: '/scents' },
+                    { label: 'Journal', href: '/blog' },
                   ].map(({ label, href }) => (
                     <li key={href}>
                       <a
@@ -100,7 +165,7 @@ export default function RootLayout({
                   {[
                     { label: 'Shipping Policy', href: '/shipping' },
                     { label: 'Returns & Refunds', href: '/returns' },
-                    { label: 'Contact Us', href: 'mailto:support@autivora.com' },
+                    { label: 'Contact Us', href: 'mailto:support@autivara.com' },
                   ].map(({ label, href }) => (
                     <li key={href}>
                       <a
@@ -118,10 +183,10 @@ export default function RootLayout({
             {/* Bottom bar */}
             <div className="border-t border-neutral-100 px-8 py-6 flex flex-col sm:flex-row justify-between items-center gap-3">
               <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-300">
-                Autivora — Excellence in Air
+                Autivara — Excellence in Air
               </span>
               <span className="text-[10px] text-neutral-300 font-light">
-                &copy; {new Date().getFullYear()} Autivora. All rights reserved.
+                &copy; {new Date().getFullYear()} Autivara. All rights reserved.
               </span>
             </div>
           </footer>

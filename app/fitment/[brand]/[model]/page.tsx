@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { getVehicleBySlug } from '@/lib/sanity';
 import { LUXURY_BRANDS, VehicleData } from '@/lib/mock-db';
 import { getBrandSVG } from '@/lib/brand-assets';
+import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
+import FaqJsonLd from '@/components/FaqJsonLd';
 
 // Resolve vehicle data: Sanity first, then mock-db fallback
 async function getVehicleData(brand: string, model: string): Promise<VehicleData | null> {
@@ -15,7 +17,7 @@ async function getVehicleData(brand: string, model: string): Promise<VehicleData
       model: sanityVehicle.model,
       year: sanityVehicle.year ?? '2024',
       interior_type: (sanityVehicle.interior_type as VehicleData['interior_type']) ?? 'Leather',
-      scent_pairing: sanityVehicle.scent_pairing ?? 'Signature Autivora Blend',
+      scent_pairing: sanityVehicle.scent_pairing ?? 'Signature Autivara Blend',
       description:
         sanityVehicle.description ??
         `A bespoke scent profile designed for the ${sanityVehicle.make} experience.`,
@@ -47,12 +49,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const vehicle = await getVehicleData(brand, model);
 
   if (!vehicle) {
-    return { title: 'Luxury Car Fragrance | Autivora' };
+    return { title: 'Luxury Car Fragrance' };
   }
 
+  const title = `${vehicle.make} ${vehicle.model} Car Diffuser — Scent Pairing & Fit Guide`;
+  const description = `Will the Autivara One fit your ${vehicle.year} ${vehicle.make} ${vehicle.model}? Placement guide, intensity recommendations for ${vehicle.interior_type} interiors, and the perfect scent pairing.`;
+  const canonical = `/fitment/${brand}/${model}`;
   return {
-    title: `${vehicle.make} ${vehicle.model} Car Diffuser — Scent Pairing & Fit Guide | Autivora`,
-    description: `Will the Autivora One fit your ${vehicle.year} ${vehicle.make} ${vehicle.model}? Placement guide, intensity recommendations for ${vehicle.interior_type} interiors, and the perfect scent pairing.`,
+    title,
+    description,
+    alternates: { canonical },
+    openGraph: {
+      title,
+      description,
+      url: canonical,
+      type: 'article',
+    },
+    twitter: { card: 'summary_large_image', title, description },
     robots: { index: true, follow: true },
   };
 }
@@ -65,8 +78,19 @@ export default async function Page({ params }: Props) {
 
   const vehicleImage = getBrandSVG(brand, vehicle.model);
 
+  const brandDisplay = brand.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+
   return (
     <div className="bg-white min-h-screen">
+      <BreadcrumbJsonLd
+        items={[
+          { name: 'Home', url: '/' },
+          { name: 'Vehicle Compatibility', url: '/fitment' },
+          { name: brandDisplay, url: `/fitment/${brand}` },
+          { name: `${vehicle.make} ${vehicle.model}`, url: `/fitment/${brand}/${model}` },
+        ]}
+      />
+      {vehicle.faq?.length > 0 && <FaqJsonLd items={vehicle.faq} />}
       {/* Hero Section */}
       <section className="relative h-[80vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-gray-100">
@@ -93,10 +117,10 @@ export default async function Page({ params }: Props) {
             {vehicle.description}
           </p>
           <Link
-            href="/product/autivora-one"
+            href="/product/autivara-one"
             className="inline-block bg-white text-black px-12 py-5 text-sm font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-all duration-500 rounded-sm shadow-xl"
           >
-            Experience Autivora
+            Experience Autivara
           </Link>
         </div>
       </section>
@@ -167,7 +191,7 @@ export default async function Page({ params }: Props) {
                 {vehicle.cabin_size === 'small'
                   ? 'Compact / sports car cockpit. Scent fills the space quickly — start low.'
                   : vehicle.cabin_size === 'medium'
-                    ? 'Mid-size sedan or coupé. The sweet spot for the Autivora One — even coverage without adjustments.'
+                    ? 'Mid-size sedan or coupé. The sweet spot for the Autivara One — even coverage without adjustments.'
                     : 'Full-size SUV or luxury sedan. Use higher intensity for rear-seat coverage. Consider a second unit for three-row vehicles.'}
               </p>
             </div>
@@ -200,7 +224,7 @@ export default async function Page({ params }: Props) {
           <div className="aspect-square bg-gray-50 rounded-sm shadow-xl border border-gray-100 p-8 flex items-center justify-center group overflow-hidden">
             <img
               src="/image/616Bu0HYtsL._AC_SL1500_.jpg"
-              alt="Autivora One"
+              alt="Autivara One"
               className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-1000"
             />
           </div>
@@ -208,7 +232,7 @@ export default async function Page({ params }: Props) {
             <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400">
               The Recommended Device
             </span>
-            <h2 className="text-4xl font-display font-medium tracking-tight">The Autivora One.</h2>
+            <h2 className="text-4xl font-display font-medium tracking-tight">The Autivara One.</h2>
             <p className="text-gray-500 text-lg font-light leading-relaxed">
               Precision cold-air nebulization. No water, no heat, no dilution. Machined from a
               single block of aerospace-grade aluminum. 48-hour battery. USB-C charging. Whisper-quiet at 40dB.
@@ -232,7 +256,7 @@ export default async function Page({ params }: Props) {
               </li>
             </ul>
             <Link
-              href="/product/autivora-one"
+              href="/product/autivara-one"
               className="inline-block bg-black text-white px-12 py-5 text-xs font-bold uppercase tracking-widest hover:bg-gray-800 transition-all"
             >
               Shop Now

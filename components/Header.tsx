@@ -5,10 +5,11 @@ import { Menu, X } from 'lucide-react';
 import CartButton from '@/components/CartButton';
 
 const NAV_LINKS = [
-  { label: 'Collection', href: '/collection' },
-  { label: 'Oils', href: '/collection#signature-oils' },
-  { label: 'Technology', href: '/product/autivora-one' },
-  { label: 'Journal', href: '/blog' },
+  { label: 'Auto', href: '/auto' },
+  { label: 'Home', href: '/home' },
+  { label: 'Office', href: '/office' },
+  { label: 'Industrial', href: '/industrial' },
+  { label: 'Scents', href: '/scents' },
 ];
 
 export default function Header() {
@@ -21,7 +22,7 @@ export default function Header() {
         href="/"
         className="text-xl font-display font-bold tracking-tighter uppercase hover:opacity-70 transition-opacity"
       >
-        Autivora
+        Autivara
       </a>
 
       {/* Desktop nav */}
@@ -47,7 +48,7 @@ export default function Header() {
 
       {/* Mobile drawer */}
       {open && (
-        <div className="fixed inset-0 top-[73px] z-40 bg-white flex flex-col px-8 pt-10 pb-16 space-y-8 md:hidden">
+        <div className="fixed inset-0 top-[73px] z-40 bg-white flex flex-col px-8 pt-10 pb-16 space-y-8 md:hidden overflow-y-auto">
           {NAV_LINKS.map(({ label, href }) => (
             <a
               key={href}
@@ -61,14 +62,14 @@ export default function Header() {
 
           {/* Bottom strip */}
           <div className="!mt-auto border-t border-neutral-100 pt-8 space-y-3">
+            <a href="/blog" onClick={() => setOpen(false)} className="block text-xs text-neutral-400 hover:text-black transition-colors">
+              Journal
+            </a>
             <a href="/shipping" onClick={() => setOpen(false)} className="block text-xs text-neutral-400 hover:text-black transition-colors">
               Shipping Policy
             </a>
             <a href="/returns" onClick={() => setOpen(false)} className="block text-xs text-neutral-400 hover:text-black transition-colors">
               Returns & Refunds
-            </a>
-            <a href="/fitment" onClick={() => setOpen(false)} className="block text-xs text-neutral-400 hover:text-black transition-colors">
-              Vehicle Compatibility
             </a>
           </div>
         </div>

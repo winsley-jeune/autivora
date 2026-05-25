@@ -1,6 +1,37 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+
+const CATEGORIES = [
+  {
+    label: 'Auto',
+    href: '/auto',
+    headline: 'Scent beyond motion.',
+    blurb: 'Cold-air diffusion engineered for luxury automotive cabins.',
+    image: '/image/71aaruoc5QL._AC_SX679_.jpg',
+  },
+  {
+    label: 'Home',
+    href: '/home',
+    headline: 'The atmosphere of home.',
+    blurb: 'Whisper-quiet, residue-free fragrance for every room.',
+    image: '/image/61T6CC0ta-L._AC_SL1500_.jpg',
+  },
+  {
+    label: 'Office',
+    href: '/office',
+    headline: 'Focus, by design.',
+    blurb: 'Workspace scenting calibrated for an 8-hour day.',
+    image: '/image/71G8FzfKNjL._AC_SX679_.jpg',
+  },
+  {
+    label: 'Industrial',
+    href: '/industrial',
+    headline: 'Hotel-grade. Indie price.',
+    blurb: 'Commercial scenting for the SMBs Aroma360 ignores.',
+    image: '/image/6182hqWxxcL._AC_SL1500_.jpg',
+  },
+];
 
 export default function Home() {
   return (
@@ -8,10 +39,10 @@ export default function Home() {
       {/* Editorial Hero */}
       <section className="relative h-[90vh] flex items-center justify-center overflow-hidden px-6">
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-black/20 z-10"></div>
-          <Image 
-            src="/image/61YkBrJrPhL._AC_SL1500_.jpg" 
-            alt="Autivora Hero" 
+          <div className="absolute inset-0 bg-black/30 z-10" />
+          <Image
+            src="/image/61YkBrJrPhL._AC_SL1500_.jpg"
+            alt="Autivara"
             fill
             priority
             className="object-cover grayscale"
@@ -24,150 +55,120 @@ export default function Home() {
             The New Olfactory Standard
           </span>
           <h1 className="text-6xl md:text-8xl font-display font-bold tracking-tighter mb-8 leading-[0.9] text-white">
-            Scent <br /> Beyond <br /> Motion.
+            Excellence <br /> In Air.
           </h1>
-          <p className="text-xl md:text-2xl text-white/80 max-w-xl mx-auto font-light mb-12 leading-relaxed">
-            Autivora redefines the automotive atmosphere through precision-engineered nebulization technology.
+          <p className="text-xl md:text-2xl text-white/80 max-w-2xl mx-auto font-light mb-12 leading-relaxed">
+            Precision cold-air nebulization across automotive, residential, workplace, and
+            commercial environments. One technology. Every space.
           </p>
-          
-          <div className="flex flex-col items-center gap-8 max-w-xs mx-auto">
-            <Link 
-              href="/product/autivora-one" 
-              className="w-full bg-white text-black px-12 py-5 text-[11px] font-bold uppercase tracking-[0.3em] hover:bg-neutral-200 transition-all duration-300 rounded-sm shadow-sm"
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+            <Link
+              href="/scents"
+              className="bg-white text-black px-12 py-5 text-[11px] font-bold uppercase tracking-[0.3em] hover:bg-neutral-200 transition-all rounded-sm"
             >
-              Shop The One
+              The Scent Catalog
             </Link>
-            <Link 
-              href="/fitment" 
-              className="text-[10px] font-bold uppercase tracking-[0.4em] text-white/60 hover:text-white transition-colors duration-300 border-b border-transparent hover:border-white pb-1"
+            <Link
+              href="/auto"
+              className="text-[10px] font-bold uppercase tracking-[0.4em] text-white/70 hover:text-white transition-colors border-b border-transparent hover:border-white pb-1"
             >
-              Select Your Vehicle
+              Browse Categories
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Silent Credibility Strip */}
-      <section className="border-y border-gray-100 py-20 px-6">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12 text-center md:text-left">
-          <div className="flex-1 px-8 border-r-0 md:border-r border-gray-100 last:border-r-0 text-center">
-            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400">
-              Engineered in Europe
-            </span>
-          </div>
-          <div className="flex-1 px-8 border-r-0 md:border-r border-gray-100 last:border-r-0 text-center">
-            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400">
-              Aerospace-Grade Aluminum
-            </span>
-          </div>
-          <div className="flex-1 px-8 border-r-0 md:border-r border-gray-100 last:border-r-0 text-center">
-            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400">
-              Precision Nebulization
-            </span>
-          </div>
+      {/* Credibility strip */}
+      <section className="border-y border-neutral-100 py-16 px-6">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 text-center">
+          <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400 flex-1">
+            Engineered in Europe
+          </span>
+          <div className="hidden md:block w-[1px] h-4 bg-neutral-100" />
+          <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400 flex-1">
+            Aerospace-Grade Aluminum
+          </span>
+          <div className="hidden md:block w-[1px] h-4 bg-neutral-100" />
+          <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400 flex-1">
+            Precision Cold-Air Nebulization
+          </span>
         </div>
       </section>
 
-      {/* Technology Preview Section */}
-      <section className="py-32 px-6 bg-white overflow-hidden">
+      {/* 4-category showcase */}
+      <section className="py-32 px-6 max-w-7xl mx-auto">
+        <div className="text-center space-y-4 mb-20">
+          <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400">
+            Four Categories. One Standard.
+          </span>
+          <h2 className="text-4xl md:text-5xl font-display font-medium tracking-tight">
+            Where will you scent?
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+          {CATEGORIES.map((cat) => (
+            <Link
+              key={cat.href}
+              href={cat.href}
+              className="group relative aspect-[4/5] overflow-hidden rounded-sm bg-neutral-100"
+            >
+              <Image
+                src={cat.image}
+                alt={cat.label}
+                fill
+                className="object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+              <div className="absolute inset-0 p-8 lg:p-12 flex flex-col justify-end text-white">
+                <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-white/70 mb-4">
+                  {cat.label}
+                </span>
+                <h3 className="text-3xl lg:text-5xl font-display font-bold tracking-tighter mb-3 leading-[0.95]">
+                  {cat.headline}
+                </h3>
+                <p className="text-white/80 font-light max-w-sm mb-6">{cat.blurb}</p>
+                <span className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.3em] border-b border-white/40 group-hover:border-white pb-1 w-max transition-colors">
+                  Explore {cat.label} <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
+                </span>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* Technology / brand ethos */}
+      <section className="py-32 px-6 bg-neutral-50">
         <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
-          <div className="relative aspect-square flex items-center justify-center bg-gray-50 rounded-2xl overflow-hidden">
-            <Image 
-              src="/image/61T6CC0ta-L._AC_SL1500_.jpg" 
-              alt="Nebulization Technology" 
+          <div className="relative aspect-square flex items-center justify-center bg-white rounded-sm overflow-hidden">
+            <Image
+              src="/image/81dWe9a1a2L._AC_SY879_.jpg"
+              alt="Cold-air nebulization technology"
               fill
               className="object-contain p-12"
               sizes="(max-width: 1024px) 100vw, 50vw"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-white/20"></div>
           </div>
           <div className="space-y-8">
+            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400">
+              The Technology
+            </span>
             <h2 className="text-4xl font-display font-medium tracking-tight">
               Engineered for the Invisible.
             </h2>
-            <p className="text-gray-500 text-lg font-light leading-relaxed">
-              Our cold-air nebulization technology transforms fragrance oils into a dry, ultra-fine mist. This process maintains the chemical integrity of the scent without the use of heat or water, ensuring a consistent and sophisticated olfactory experience.
+            <p className="text-neutral-500 text-lg font-light leading-relaxed">
+              Cold-air nebulization converts undiluted fragrance oil into a dry, nano-sized mist —
+              no heat, no water, no residue. The same engineering across every Autivara device,
+              calibrated for the space it serves.
             </p>
-            <div className="pt-4">
-              <Link href="/product/autivora-one" className="text-[10px] font-bold uppercase tracking-[0.2em] border-b border-black pb-1 hover:text-gray-500 hover:border-gray-500 transition-all">
-                View Technical Specs
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Brand Ethos Section */}
-      <section className="py-32 px-6 max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-24 items-center">
-        <div>
-          <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400 mb-6 block">Our Story</span>
-          <h2 className="text-4xl font-display font-medium tracking-tight mb-8 leading-tight">
-            Crafted for the discerning driver who values the invisible.
-          </h2>
-          <p className="text-gray-500 text-lg font-light leading-relaxed mb-8">
-            We believe that every journey deserves a signature. Not a masking scent, but a curated olfactory layer that enhances the materials of your cabin—whether it's the warmth of open-pore oak or the technical precision of Alcantara.
-          </p>
-          <Link href="/collection" className="group inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest border-b border-black pb-1">
-            Shop the Collection <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-          </Link>
-        </div>
-        <div className="aspect-[4/5] bg-gray-100 relative grayscale hover:grayscale-0 transition-all duration-1000 overflow-hidden shadow-2xl rounded-sm">
-            <Image 
-              src="/image/71+vAlNiJKL._AC_SX679_.jpg" 
-              alt="Luxury Interior Detail" 
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 50vw"
-            />
-        </div>
-      </section>
-
-      {/* Product Highlight */}
-      <section className="bg-gray-50 py-32 px-6">
-        <div className="max-w-7xl mx-auto text-center">
-            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400 mb-6 block">The Device</span>
-            <h2 className="text-5xl font-display font-bold mb-16 tracking-tight">The Autivora One.</h2>
-            
-            <div className="relative max-w-3xl mx-auto aspect-square mb-16 flex items-center justify-center">
-                 <div className="absolute inset-0 bg-white shadow-inner rounded-full opacity-50 scale-95"></div>
-                 <Image 
-                   src="/image/81dWe9a1a2L._AC_SY879_.jpg" 
-                   alt="Autivora One Device" 
-                   fill
-                   className="object-contain z-10 drop-shadow-2xl"
-                   sizes="(max-width: 1200px) 100vw, 800px"
-                 />
-            </div>
-
-            <p className="text-gray-600 text-xl font-light max-w-2xl mx-auto leading-relaxed mb-12">
-                A seamless blend of high-performance engineering and haute-perfumery. No water. No heat. Just pure scent.
-            </p>
-            
-            <Link 
-              href="/product/autivora-one" 
-              className="bg-black text-white px-12 py-5 text-xs font-bold uppercase tracking-[0.2em] hover:bg-gray-800 transition-all"
+            <Link
+              href="/scents"
+              className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] border-b border-black pb-1 hover:text-neutral-500 transition-colors"
             >
-              Shop the One
+              The Scent Catalog <ArrowRight size={12} />
             </Link>
-        </div>
-      </section>
-
-      {/* Visual Gallery */}
-      <section className="py-32 px-6 bg-white">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="relative aspect-square bg-gray-50 overflow-hidden rounded-sm">
-              <Image src="/image/61Il7eszZRL._AC_SY879_.jpg" alt="Autivora Detail" fill className="object-cover hover:scale-110 transition-transform duration-700" sizes="(max-width: 768px) 50vw, 25vw" />
-            </div>
-            <div className="relative aspect-square bg-gray-50 overflow-hidden rounded-sm">
-              <Image src="/image/61xGUIBZw8L._AC_SY879_.jpg" alt="Autivora Detail" fill className="object-cover hover:scale-110 transition-transform duration-700" sizes="(max-width: 768px) 50vw, 25vw" />
-            </div>
-            <div className="relative aspect-square bg-gray-50 overflow-hidden rounded-sm">
-              <Image src="/image/714NkT3KSzL._AC_SX679_.jpg" alt="Autivora Detail" fill className="object-cover hover:scale-110 transition-transform duration-700" sizes="(max-width: 768px) 50vw, 25vw" />
-            </div>
-            <div className="relative aspect-square bg-gray-50 overflow-hidden rounded-sm">
-              <Image src="/image/71f22Sj2VML._AC_SX679_.jpg" alt="Autivora Detail" fill className="object-cover hover:scale-110 transition-transform duration-700" sizes="(max-width: 768px) 50vw, 25vw" />
-            </div>
           </div>
         </div>
       </section>

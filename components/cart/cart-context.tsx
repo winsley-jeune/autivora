@@ -3,6 +3,8 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { addToCartAction, getCartAction, removeFromCartAction, updateCartAction } from '@/app/actions/cart';
 import { Cart, CartItem } from '@/lib/shopify-types';
+import { trackAddToCart, trackRemoveFromCart } from '@/components/analytics/events';
+import { categoryFromTags } from '@/lib/category';
 
 type CartContextType = {
   cart: Cart | undefined;
@@ -14,6 +16,14 @@ type CartContextType = {
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
+
+function lineForVariant(cart: Cart, variantId: string): CartItem | undefined {
+  return cart.lines.edges.find((e) => e.node.merchandise.id === variantId)?.node;
+}
+
+function lineById(cart: Cart, lineId: string): CartItem | undefined {
+  return cart.lines.edges.find((e) => e.node.id === lineId)?.node;
+}
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<Cart | undefined>(undefined);
@@ -34,6 +44,18 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
     setCart(res);
     setCartOpen(true);
+
+    const line = lineForVariant(res, variantId);
+    if (line) {
+      trackAddToCart({
+        id: line.merchandise.product.id,
+        name: line.merchandise.product.title,
+        price: parseFloat(line.merchandise.product.priceRange.minVariantPrice.amount),
+        currency: line.merchandise.product.priceRange.minVariantPrice.currencyCode,
+        quantity,
+        category: categoryFromTags(line.merchandise.product.tags),
+      });
+    }
   };
 
   const updateCartItem = async (lineId: string, variantId: string, quantity: number) => {
@@ -45,11 +67,23 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   };
 
   const removeCartItem = async (lineId: string) => {
+    const removed = cart ? lineById(cart, lineId) : undefined;
     const res = await removeFromCartAction(lineId);
     if (typeof res === 'string') {
       return res;
     }
     setCart(res);
+
+    if (removed) {
+      trackRemoveFromCart({
+        id: removed.merchandise.product.id,
+        name: removed.merchandise.product.title,
+        price: parseFloat(removed.merchandise.product.priceRange.minVariantPrice.amount),
+        currency: removed.merchandise.product.priceRange.minVariantPrice.currencyCode,
+        quantity: removed.quantity,
+        category: categoryFromTags(removed.merchandise.product.tags),
+      });
+    }
   };
 
   const value = useMemo(
