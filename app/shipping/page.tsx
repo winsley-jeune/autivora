@@ -2,10 +2,10 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Shipping Policy',
-  description: 'Autivara shipping information — delivery times, carriers, and international orders.',
+  description: 'Autivora shipping information — delivery times, carriers, and international orders.',
   alternates: { canonical: '/shipping' },
   openGraph: {
-    title: 'Shipping Policy — Autivara',
+    title: 'Shipping Policy — Autivora',
     description: 'Delivery times, carriers, and international orders.',
     url: '/shipping',
     type: 'website',
@@ -87,7 +87,7 @@ export default function ShippingPage() {
               International Shipping
             </h2>
             <p>
-              Autivara ships to over 40 countries worldwide. International orders are shipped via
+              Autivora ships to over 40 countries worldwide. International orders are shipped via
               DHL Express or your local postal carrier depending on the destination.
             </p>
             <div className="border border-neutral-100 rounded-sm overflow-hidden">
@@ -148,8 +148,8 @@ export default function ShippingPage() {
             <p>
               In the unlikely event that your order arrives damaged or is lost in transit, please
               contact us at{' '}
-              <a href="mailto:support@autivara.com" className="text-black underline underline-offset-2">
-                support@autivara.com
+              <a href="mailto:support@autivora.com" className="text-black underline underline-offset-2">
+                support@autivora.com
               </a>{' '}
               within 7 days of the estimated delivery date. We will arrange a replacement or full
               refund at no additional cost.

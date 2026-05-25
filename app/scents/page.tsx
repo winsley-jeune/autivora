@@ -6,13 +6,13 @@ import { getUpsellProducts } from '@/lib/shopify';
 import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 
 export const metadata: Metadata = {
-  title: 'The Scent Catalog — Refill Oils for Every Autivara Diffuser',
+  title: 'The Scent Catalog — Refill Oils for Every Autivora Diffuser',
   description:
-    'Browse the full Autivara scent catalog. Cold-air formulated essential-oil blends compatible with every Autivara diffuser — auto, home, office, industrial.',
+    'Browse the full Autivora scent catalog. Cold-air formulated essential-oil blends compatible with every Autivora diffuser — auto, home, office, industrial.',
   alternates: { canonical: '/scents' },
   openGraph: {
     title: 'The Scent Catalog',
-    description: 'Cold-air formulated essential-oil blends for every Autivara diffuser.',
+    description: 'Cold-air formulated essential-oil blends for every Autivora diffuser.',
     url: '/scents',
     type: 'website',
   },
@@ -40,7 +40,7 @@ export default async function ScentsCatalog() {
           One catalog. <br /> Every space.
         </h1>
         <p className="text-xl text-neutral-500 font-light max-w-2xl mx-auto leading-relaxed">
-          Each Autivara scent is formulated for cold-air nebulization and engineered to perform
+          Each Autivora scent is formulated for cold-air nebulization and engineered to perform
           across automotive, residential, workplace, and commercial environments.
         </p>
       </section>

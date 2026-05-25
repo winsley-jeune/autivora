@@ -32,7 +32,7 @@ export default function ProductDetail({ vehicle, vehicleImage }: ProductDetailPr
              {/* High Quality Product Image */}
             <img 
               src="/image/616Bu0HYtsL._AC_SL1500_.jpg" 
-              alt="Autivara One" 
+              alt="Autivora One" 
               className="w-full h-full object-contain z-10 relative drop-shadow-xl group-hover:scale-105 transition-transform duration-700"
             />
              
@@ -48,7 +48,7 @@ export default function ProductDetail({ vehicle, vehicleImage }: ProductDetailPr
         <div className="flex flex-col space-y-10">
           <div>
             <h1 className="text-4xl lg:text-5xl font-display font-bold tracking-tight text-gray-900 mb-2">
-              The Autivara One.
+              The Autivora One.
             </h1>
             <p className="text-lg text-gray-500 font-light tracking-wide">
               Precision-milled aluminum. Cold-air nebulization.

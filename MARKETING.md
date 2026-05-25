@@ -1,6 +1,6 @@
-# Autivara — Marketing & Launch Playbook
+# Autivora — Marketing & Launch Playbook
 
-Living document covering site architecture, tracking infrastructure, SEO strategy, channel setup, and the human action list to take Autivara from "code on disk" to "first paying customer."
+Living document covering site architecture, tracking infrastructure, SEO strategy, channel setup, and the human action list to take Autivora from "code on disk" to "first paying customer."
 
 **Strategy:** 100% organic + SEO across **four product categories** (Auto · Home · Office · Industrial) plus a **unified Scent catalog**. Ad channels wired but $0 spend until SEO baseline is established. Subscription oil refills drive LTV.
 
@@ -8,7 +8,7 @@ Living document covering site architecture, tracking infrastructure, SEO strateg
 
 ## 1. Brand & category architecture
 
-**Brand:** Autivara — "Excellence in Air." Cross-category umbrella covering one core technology (cold-air nebulization) deployed across four distinct categories. Each category gets a purpose-built device.
+**Brand:** Autivora — "Excellence in Air." Cross-category umbrella covering one core technology (cold-air nebulization) deployed across four distinct categories. Each category gets a purpose-built device.
 
 | Category | URL | Form factor | Target customer |
 |---|---|---|---|
@@ -43,7 +43,7 @@ All four categories use the same Storefront, Cart, Checkout, and Subscription sy
 /scents                            — unified scent catalog
 /scents/[handle]                   — individual scent page (cross-category positioning)
 /product/[handle]                  — generic Shopify product page
-/product/autivara-one              — auto hero product editorial page
+/product/autivora-one              — auto hero product editorial page
 /collection                        — full Shopify product list
 /blog, /blog/[slug]                — content marketing
 /shipping, /returns                — policy pages
@@ -98,7 +98,7 @@ All wired into `components/analytics/`. Dormant until env vars are populated.
 |---|---|
 | Canonical URLs | ✅ Every route |
 | OpenGraph + Twitter cards | ✅ Every route |
-| Title template `%s \| Autivara` | ✅ |
+| Title template `%s \| Autivora` | ✅ |
 | Robots directives | ✅ |
 | Site verification (Google, Bing, Yandex, Meta, Pinterest, TikTok) | ✅ Env-driven |
 | Organization + WebSite JSON-LD | ✅ Root layout |
@@ -114,8 +114,8 @@ All wired into `components/analytics/`. Dormant until env vars are populated.
 
 ### 🔴 Blocks deployment
 
-1. **Wire Vercel** — link repo, set master as production branch, add `autivara.com` + `www.autivara.com`, update DNS.
-2. **Copy `.env` values into Vercel env (Production scope).** Critical: `NEXT_PUBLIC_BASE_URL=https://autivara.com`.
+1. **Wire Vercel** — link repo, set master as production branch, add `autivora.com` + `www.autivora.com`, update DNS.
+2. **Copy `.env` values into Vercel env (Production scope).** Critical: `NEXT_PUBLIC_BASE_URL=https://autivora.com`.
 
 ### 🟡 Blocks credible multi-category launch
 
@@ -127,7 +127,7 @@ All wired into `components/analytics/`. Dormant until env vars are populated.
    - Scents: clean studio shots for each oil
    Drop into `/public/image/` and I'll rewire references in one pass.
 
-4. **Shopify product catalog** — you only have one product (`autivara-one`) plus 3 oils in Shopify today. To launch all 4 categories you need:
+4. **Shopify product catalog** — you only have one product (`autivora-one`) plus 3 oils in Shopify today. To launch all 4 categories you need:
    - 1 auto product (existing) — tag with `auto`
    - 1 home product — create + tag with `home`
    - 1 office product — create + tag with `office`
@@ -170,7 +170,7 @@ Each category has its own programmatic SEO surface. Combined: well over 100 long
 Each category gets 3-5 high-intent posts (15-20 total). All cross-link to relevant SEO surface pages and product pages.
 
 **Auto:**
-- Aera vs. Pura vs. Autivara: 2026 luxury car diffuser comparison
+- Aera vs. Pura vs. Autivora: 2026 luxury car diffuser comparison
 - Why ultrasonic car diffusers leak — and what to buy instead
 - How to scent a Porsche 911 without ruining the cabin
 - Are essential oil diffusers safe in cars? (Vet + materials science)
@@ -197,7 +197,7 @@ Each category gets 3-5 high-intent posts (15-20 total). All cross-link to releva
 
 ```
 Home (/)
- ├─→ /auto → /product/autivara-one + /fitment hub → /fitment/[brand]/[model]
+ ├─→ /auto → /product/autivora-one + /fitment hub → /fitment/[brand]/[model]
  ├─→ /home → /home/rooms → /home/rooms/[room]
  ├─→ /office → /office/sizes → /office/sizes/[size]
  ├─→ /industrial → /industrial/use-cases → /industrial/use-cases/[type]
@@ -215,13 +215,13 @@ Every SEO surface page links back up to its category landing AND down to scent p
 | INP | <200ms |
 | CLS | <0.1 |
 
-Run Lighthouse on `/`, `/auto`, `/home`, `/office`, `/industrial`, `/scents`, `/product/autivara-one`, and one of each surface page after deploy.
+Run Lighthouse on `/`, `/auto`, `/home`, `/office`, `/industrial`, `/scents`, `/product/autivora-one`, and one of each surface page after deploy.
 
 ---
 
 ## 6. Purchase tracking — the tricky part
 
-Site uses Shopify hosted checkout, so Purchase happens off `autivara.com`. Solved by Shopify's native apps (step 8 in action list) — they inject pixel events on Shopify checkout pages and send server-side conversions to each platform.
+Site uses Shopify hosted checkout, so Purchase happens off `autivora.com`. Solved by Shopify's native apps (step 8 in action list) — they inject pixel events on Shopify checkout pages and send server-side conversions to each platform.
 
 **Without those native apps, you see InitiateCheckout but NO Purchase.** Install before any campaign.
 
@@ -230,7 +230,7 @@ Site uses Shopify hosted checkout, so Purchase happens off `autivara.com`. Solve
 ## 7. Organic launch plan — week by week
 
 ### Week 1: Foundation
-- Vercel + autivara.com live
+- Vercel + autivora.com live
 - All pixels verified in each platform's debug tool
 - GSC verified, sitemap submitted, Merchant Center connected
 - All 4 category landings pass Lighthouse
@@ -279,7 +279,7 @@ First category to hit gate: probably **Auto** (most content built, hero product 
 2. **TikTok organic** — by category creator network (auto / home / office / industrial)
 3. **Pinterest organic** — strongest for home + industrial categories
 4. **YouTube/TikTok creator seeding** — free product, real reviews
-5. **Google Search ads (branded)** — protect "autivara" SERP from competitors
+5. **Google Search ads (branded)** — protect "autivora" SERP from competitors
 6. **Google Shopping (free organic listings)** — via Merchant Center
 7. **Meta Advantage+ Shopping** — only after category readiness gate
 8. **Influencer paid partnerships** — last priority
@@ -307,7 +307,7 @@ app/
   fitment/page.tsx                        — Auto SEO hub
   fitment/[brand]/[model]/page.tsx        — Auto SEO surface
   product/[handle]/page.tsx               — Generic Shopify product
-  product/autivara-one/page.tsx           — Auto hero editorial
+  product/autivora-one/page.tsx           — Auto hero editorial
   blog/page.tsx, blog/[slug]/page.tsx     — Journal
   sitemap.ts                              — Includes all of the above
 

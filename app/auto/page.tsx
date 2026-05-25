@@ -35,7 +35,7 @@ export default function AutoLanding() {
           <div className="absolute inset-0 bg-black/30 z-10" />
           <Image
             src="/image/71aaruoc5QL._AC_SX679_.jpg"
-            alt="Autivara in luxury vehicle cabin"
+            alt="Autivora in luxury vehicle cabin"
             fill
             priority
             className="object-cover grayscale"
@@ -54,7 +54,7 @@ export default function AutoLanding() {
             Just signature scent — calibrated to your vehicle.
           </p>
           <Link
-            href="/product/autivara-one"
+            href="/product/autivora-one"
             className="inline-block bg-white text-black px-12 py-5 text-[11px] font-bold uppercase tracking-[0.3em] hover:bg-neutral-200 transition-all rounded-sm"
           >
             Shop The One
@@ -82,7 +82,7 @@ export default function AutoLanding() {
           <div className="relative aspect-square bg-white rounded-sm overflow-hidden">
             <Image
               src="/image/81dWe9a1a2L._AC_SY879_.jpg"
-              alt="The Autivara One"
+              alt="The Autivora One"
               fill
               className="object-contain p-12"
               sizes="(max-width: 1024px) 100vw, 50vw"
@@ -90,13 +90,13 @@ export default function AutoLanding() {
           </div>
           <div className="space-y-8">
             <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400">The Device</span>
-            <h2 className="text-4xl lg:text-5xl font-display font-medium tracking-tight">The Autivara One.</h2>
+            <h2 className="text-4xl lg:text-5xl font-display font-medium tracking-tight">The Autivora One.</h2>
             <p className="text-neutral-500 text-lg font-light leading-relaxed">
               Designed for the luxury cabin. 65mm diameter fits all standard cup holders, 220g
               total weight, whisper-quiet 40dB operation.
             </p>
             <Link
-              href="/product/autivara-one"
+              href="/product/autivora-one"
               className="inline-block bg-black text-white px-12 py-5 text-[11px] font-bold uppercase tracking-[0.3em] hover:bg-neutral-800 transition-all rounded-sm"
             >
               View Product

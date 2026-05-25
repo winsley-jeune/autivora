@@ -21,9 +21,9 @@ export type ScentEntry = UpsellOil & {
 export const SCENTS: ScentEntry[] = SIGNATURE_OILS.map((oil) => {
   const enrichment: Record<string, Pick<ScentEntry, 'metaTitle' | 'metaDescription' | 'longDescription' | 'bestFor'>> = {
     savage: {
-      metaTitle: 'Savage — Warm, Woody, Sensual Scent | Autivara',
+      metaTitle: 'Savage — Warm, Woody, Sensual Scent | Autivora',
       metaDescription:
-        'Rich resinous notes designed to complement leather and dark-wood interiors. Available as a refill or subscription for any Autivara diffuser.',
+        'Rich resinous notes designed to complement leather and dark-wood interiors. Available as a refill or subscription for any Autivora diffuser.',
       longDescription:
         'A composition built around warm wood and resinous depth. Top notes settle within minutes into a long-lingering base of leather, amber, and dark spice — ideal for spaces that benefit from a sense of weight and presence.',
       bestFor: {
@@ -34,9 +34,9 @@ export const SCENTS: ScentEntry[] = SIGNATURE_OILS.map((oil) => {
       },
     },
     compassion: {
-      metaTitle: 'Compassion — Fresh, Citrus, Opulent Scent | Autivara',
+      metaTitle: 'Compassion — Fresh, Citrus, Opulent Scent | Autivora',
       metaDescription:
-        'Crisp citrus and green notes designed for refined, balanced ambient scenting. Works across every Autivara category.',
+        'Crisp citrus and green notes designed for refined, balanced ambient scenting. Works across every Autivora category.',
       longDescription:
         'A bright, multi-faceted composition that opens with sharp citrus and resolves into a clean green-floral base. Works across more contexts than any other scent in the catalog — auto, home, office, hospitality — without ever feeling dated.',
       bestFor: {
@@ -47,9 +47,9 @@ export const SCENTS: ScentEntry[] = SIGNATURE_OILS.map((oil) => {
       },
     },
     'vanilla-macadamia': {
-      metaTitle: 'Vanilla Macadamia — Soft, Sweet, Enveloping Scent | Autivara',
+      metaTitle: 'Vanilla Macadamia — Soft, Sweet, Enveloping Scent | Autivora',
       metaDescription:
-        'Warm vanilla layered with rich macadamia. The gourmand-leaning option in the Autivara catalog.',
+        'Warm vanilla layered with rich macadamia. The gourmand-leaning option in the Autivora catalog.',
       longDescription:
         'A soft, comforting blend that pairs warm vanilla with rich macadamia nut. Reads as familiar and welcoming without ever tipping into dessert-like sweetness — engineered for environments where comfort is the goal.',
       bestFor: {
@@ -62,7 +62,7 @@ export const SCENTS: ScentEntry[] = SIGNATURE_OILS.map((oil) => {
   };
 
   const e = enrichment[oil.id] ?? {
-    metaTitle: `${oil.id} | Autivara`,
+    metaTitle: `${oil.id} | Autivora`,
     metaDescription: oil.description,
     longDescription: oil.description,
     bestFor: { auto: oil.description, home: oil.description, office: oil.description, industrial: oil.description },

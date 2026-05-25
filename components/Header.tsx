@@ -22,7 +22,7 @@ export default function Header() {
         href="/"
         className="text-xl font-display font-bold tracking-tighter uppercase hover:opacity-70 transition-opacity"
       >
-        Autivara
+        Autivora
       </a>
 
       {/* Desktop nav */}

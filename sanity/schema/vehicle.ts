@@ -52,7 +52,7 @@ export default {
       name: 'scent_pairing',
       title: 'Recommended Scent Pairing',
       type: 'string',
-      description: 'The Autivara scent name that best complements this vehicle interior (e.g., Smoked Sandalwood & Amber).',
+      description: 'The Autivora scent name that best complements this vehicle interior (e.g., Smoked Sandalwood & Amber).',
     },
     {
       name: 'description',

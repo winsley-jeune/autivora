@@ -171,7 +171,7 @@ export default async function BlogArticle({ params }: Props) {
           href="/blog"
           className="text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-400 hover:text-black transition-colors mb-8 block"
         >
-          &larr; The Autivara Journal
+          &larr; The Autivora Journal
         </Link>
         <div className="flex items-center gap-4 text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-400 mb-6">
           <span>{article.category}</span>
@@ -208,15 +208,15 @@ export default async function BlogArticle({ params }: Props) {
             Ready to Upgrade Your Cabin?
           </h2>
           <p className="text-neutral-400 font-light">
-            The Autivara One uses cold-air nebulization to deliver pure essential
+            The Autivora One uses cold-air nebulization to deliver pure essential
             oil fragrance without heat, water, or chemicals. Machined aluminum.
             48-hour battery. Zero residue.
           </p>
           <Link
-            href="/product/autivara-one"
+            href="/product/autivora-one"
             className="inline-block px-16 py-5 bg-white text-black text-[11px] font-bold uppercase tracking-[0.3em] hover:bg-neutral-200 transition-all rounded-sm"
           >
-            Shop the Autivara One
+            Shop the Autivora One
           </Link>
         </div>
       </section>

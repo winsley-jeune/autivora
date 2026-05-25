@@ -11,8 +11,8 @@ import ProductViewTracker from '@/components/analytics/ProductViewTracker';
 import { categoryFromTags } from '@/lib/category';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const product = await getProduct('autivara-one');
-  const title = product?.seo?.title ?? 'The Autivara One — Luxury Automotive Diffuser';
+  const product = await getProduct('autivora-one');
+  const title = product?.seo?.title ?? 'The Autivora One — Luxury Automotive Diffuser';
   const description =
     product?.seo?.description ??
     'Precision cold-air nebulization for the discerning driver. Aerospace-grade aluminum, 48-hour battery, whisper-quiet.';
@@ -20,13 +20,13 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title,
     description,
-    alternates: { canonical: '/product/autivara-one' },
+    alternates: { canonical: '/product/autivora-one' },
     openGraph: {
       title,
       description,
-      url: '/product/autivara-one',
+      url: '/product/autivora-one',
       type: 'website',
-      images: [{ url: ogImage, alt: 'The Autivara One — Luxury Automotive Diffuser' }],
+      images: [{ url: ogImage, alt: 'The Autivora One — Luxury Automotive Diffuser' }],
     },
     twitter: {
       card: 'summary_large_image',
@@ -37,15 +37,15 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function AutivaraOneProduct() {
-  const product = await getProduct('autivara-one');
+export default async function AutivoraOneProduct() {
+  const product = await getProduct('autivora-one');
 
   const price = product
     ? parseFloat(product.priceRange.minVariantPrice.amount).toFixed(2)
     : '149.00';
   const currencyCode = product?.priceRange.minVariantPrice.currencyCode ?? 'USD';
   const heroImageUrl = product?.featuredImage?.url ?? '/image/61T6CC0ta-L._AC_SL1500_.jpg';
-  const heroImageAlt = product?.featuredImage?.altText ?? 'The Autivara One - Hero';
+  const heroImageAlt = product?.featuredImage?.altText ?? 'The Autivora One - Hero';
   const firstVariantId = product?.variants?.edges?.[0]?.node?.id ?? null;
 
   // Fetch real oil data from Shopify and merge with static config
@@ -82,12 +82,12 @@ export default async function AutivaraOneProduct() {
         items={[
           { name: 'Home', url: '/' },
           { name: 'Shop', url: '/collection' },
-          { name: 'The Autivara One', url: '/product/autivara-one' },
+          { name: 'The Autivora One', url: '/product/autivora-one' },
         ]}
       />
       <ProductViewTracker
-        id={product?.id ?? 'autivara-one'}
-        name={product?.title ?? 'The Autivara One'}
+        id={product?.id ?? 'autivora-one'}
+        name={product?.title ?? 'The Autivora One'}
         price={parseFloat(price)}
         currency={currencyCode}
         category={product?.tags ? categoryFromTags(product.tags) : 'Auto Diffuser'}
@@ -116,7 +116,7 @@ export default async function AutivaraOneProduct() {
                 The Device
               </span>
               <h1 className="text-5xl lg:text-7xl font-display font-bold tracking-tighter leading-[0.9]">
-                {product?.title ?? 'The Autivara One.'}
+                {product?.title ?? 'The Autivora One.'}
               </h1>
               <p className="text-xl lg:text-2xl font-display italic text-neutral-400 tracking-tight">
                 Scent. Without Compromise.
@@ -125,7 +125,7 @@ export default async function AutivaraOneProduct() {
 
             <p className="text-neutral-500 text-lg font-light leading-relaxed max-w-md">
               {product?.description ??
-                'Autivara diffuses fragrance in its purest form — no water, no heat, no dilution. Precision nano-vapor technology preserves the integrity of every note.'}
+                'Autivora diffuses fragrance in its purest form — no water, no heat, no dilution. Precision nano-vapor technology preserves the integrity of every note.'}
             </p>
 
             <div className="space-y-6">
@@ -182,7 +182,7 @@ export default async function AutivaraOneProduct() {
               Engineered for the Invisible.
             </h2>
             <p className="text-neutral-500 text-lg font-light leading-relaxed">
-              Unlike traditional diffusers that use heat or water to carry scent, Autivara employs
+              Unlike traditional diffusers that use heat or water to carry scent, Autivora employs
               cold-air nebulization to convert undiluted fragrance oil into a dry, nano-sized mist.
             </p>
           </div>
@@ -224,7 +224,7 @@ export default async function AutivaraOneProduct() {
               Sculpted from Metal.
             </h2>
             <p className="text-neutral-500 text-lg font-light leading-relaxed">
-              Each Autivara One is machined from a single block of aerospace-grade aluminum, then
+              Each Autivora One is machined from a single block of aerospace-grade aluminum, then
               anodized to a satin finish that complements the interiors of the world's most refined
               cabins. Its minimal cylindrical form is designed to disappear into your environment,
               leaving only its presence felt.
@@ -299,7 +299,7 @@ export default async function AutivaraOneProduct() {
           </h2>
           <p className="text-xl text-white/80 font-light leading-relaxed">
             Whether it's the focused intensity of the daily commute or the expansive freedom of a
-            cross-continent grand tour, the Autivara One ensures your personal space is always
+            cross-continent grand tour, the Autivora One ensures your personal space is always
             defined by your signature scent.
           </p>
         </div>
@@ -338,7 +338,7 @@ export default async function AutivaraOneProduct() {
 
       <footer className="py-12 px-6 text-center border-t border-neutral-100">
         <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-300">
-          Autivara — Excellence in Air
+          Autivora — Excellence in Air
         </span>
       </footer>
     </div>

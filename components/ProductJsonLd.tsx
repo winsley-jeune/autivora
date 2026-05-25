@@ -1,7 +1,7 @@
 import { Product } from '@/lib/shopify-types';
 import { getSocialProof } from '@/lib/product-social-proof';
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://autivara.com';
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://autivora.com';
 
 type Props = {
   product: Product;
@@ -27,7 +27,7 @@ export default function ProductJsonLd({ product }: Props) {
     sku: product.handle,
     brand: {
       '@type': 'Brand',
-      name: 'Autivara',
+      name: 'Autivora',
     },
     offers: {
       '@type': 'Offer',
@@ -42,7 +42,7 @@ export default function ProductJsonLd({ product }: Props) {
         .split('T')[0],
       seller: {
         '@type': 'Organization',
-        name: 'Autivara',
+        name: 'Autivora',
         url: BASE_URL,
       },
     },

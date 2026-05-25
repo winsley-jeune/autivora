@@ -6,7 +6,7 @@ import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 export const metadata: Metadata = {
   title: 'Diffusers by Room — Living Room, Bedroom, Kitchen & More',
   description:
-    'Browse Autivara diffuser recommendations by room. Scent pairings, intensity, and placement guides for every space in your home.',
+    'Browse Autivora diffuser recommendations by room. Scent pairings, intensity, and placement guides for every space in your home.',
   alternates: { canonical: '/home/rooms' },
   openGraph: {
     title: 'Diffusers by Room',

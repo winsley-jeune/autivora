@@ -9,18 +9,18 @@ import Analytics from '@/components/analytics/Analytics'
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-playfair' })
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://autivara.com';
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://autivora.com';
 
 export const metadata: Metadata = {
   title: {
-    default: 'Autivara | Excellence in Air — Cold-Air Diffusion for Every Space',
-    template: '%s | Autivara',
+    default: 'Autivora | Excellence in Air — Cold-Air Diffusion for Every Space',
+    template: '%s | Autivora',
   },
   description:
     'Precision cold-air nebulization across automotive, residential, workplace, and commercial spaces. One technology. Every space.',
   metadataBase: new URL(BASE_URL),
-  applicationName: 'Autivara',
-  authors: [{ name: 'Autivara' }],
+  applicationName: 'Autivora',
+  authors: [{ name: 'Autivora' }],
   generator: 'Next.js',
   keywords: [
     'cold air diffuser',
@@ -36,17 +36,17 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: '/' },
   openGraph: {
-    siteName: 'Autivara',
+    siteName: 'Autivora',
     type: 'website',
     url: BASE_URL,
-    title: 'Autivara | Excellence in Air',
+    title: 'Autivora | Excellence in Air',
     description:
       'Precision cold-air nebulization across automotive, residential, workplace, and commercial spaces.',
     locale: 'en_US',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Autivara | Excellence in Air',
+    title: 'Autivora | Excellence in Air',
     description:
       'Precision cold-air nebulization across automotive, residential, workplace, and commercial spaces.',
   },
@@ -84,7 +84,7 @@ export const metadata: Metadata = {
 const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  name: 'Autivara',
+  name: 'Autivora',
   url: BASE_URL,
   logo: `${BASE_URL}/icon.png`,
   description: 'Precision cold-air nebulization technology across automotive, residential, workplace, and commercial spaces. Engineered in Europe.',
@@ -94,7 +94,7 @@ const organizationSchema = {
 const websiteSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: 'Autivara',
+  name: 'Autivora',
   url: BASE_URL,
 };
 
@@ -122,7 +122,7 @@ export default function RootLayout({
               {/* Brand */}
               <div className="space-y-4">
                 <span className="text-sm font-display font-bold tracking-tighter uppercase">
-                  Autivara
+                  Autivora
                 </span>
                 <p className="text-xs text-neutral-400 font-light leading-relaxed max-w-xs">
                   Precision cold-air nebulization technology for the discerning driver.
@@ -165,7 +165,7 @@ export default function RootLayout({
                   {[
                     { label: 'Shipping Policy', href: '/shipping' },
                     { label: 'Returns & Refunds', href: '/returns' },
-                    { label: 'Contact Us', href: 'mailto:support@autivara.com' },
+                    { label: 'Contact Us', href: 'mailto:support@autivora.com' },
                   ].map(({ label, href }) => (
                     <li key={href}>
                       <a
@@ -183,10 +183,10 @@ export default function RootLayout({
             {/* Bottom bar */}
             <div className="border-t border-neutral-100 px-8 py-6 flex flex-col sm:flex-row justify-between items-center gap-3">
               <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-300">
-                Autivara — Excellence in Air
+                Autivora — Excellence in Air
               </span>
               <span className="text-[10px] text-neutral-300 font-light">
-                &copy; {new Date().getFullYear()} Autivara. All rights reserved.
+                &copy; {new Date().getFullYear()} Autivora. All rights reserved.
               </span>
             </div>
           </footer>

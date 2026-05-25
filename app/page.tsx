@@ -42,7 +42,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-black/30 z-10" />
           <Image
             src="/image/61YkBrJrPhL._AC_SL1500_.jpg"
-            alt="Autivara"
+            alt="Autivora"
             fill
             priority
             className="object-cover grayscale"
@@ -160,7 +160,7 @@ export default function Home() {
             </h2>
             <p className="text-neutral-500 text-lg font-light leading-relaxed">
               Cold-air nebulization converts undiluted fragrance oil into a dry, nano-sized mist —
-              no heat, no water, no residue. The same engineering across every Autivara device,
+              no heat, no water, no residue. The same engineering across every Autivora device,
               calibrated for the space it serves.
             </p>
             <Link

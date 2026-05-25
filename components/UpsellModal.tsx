@@ -93,7 +93,7 @@ export default function UpsellModal({ variantId, oils, label = 'Shop The One', c
                   Add a Signature Oil
                 </h2>
                 <p className="text-sm text-neutral-400 font-light">
-                  20ml · Cold-air compatible · Pairs with your Autivara device
+                  20ml · Cold-air compatible · Pairs with your Autivora device
                 </p>
               </div>
               <button onClick={() => setOpen(false)} className="text-neutral-300 hover:text-black transition-colors mt-1" aria-label="Close">

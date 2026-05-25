@@ -46,7 +46,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-// Fallback images (same ones used on autivara-one editorial page)
+// Fallback images (same ones used on autivora-one editorial page)
 const FALLBACKS = {
   hero: '/image/61T6CC0ta-L._AC_SL1500_.jpg',
   tech1: '/image/71G8FzfKNjL._AC_SX679_.jpg',
@@ -161,7 +161,7 @@ export default async function ProductPage({ params }: Props) {
 
             <p className="text-neutral-500 text-lg font-light leading-relaxed max-w-md">
               {product.description ||
-                'Autivara diffuses fragrance in its purest form — no water, no heat, no dilution. Precision nano-vapor technology preserves the integrity of every note.'}
+                'Autivora diffuses fragrance in its purest form — no water, no heat, no dilution. Precision nano-vapor technology preserves the integrity of every note.'}
             </p>
 
             <div className="space-y-6">
@@ -216,7 +216,7 @@ export default async function ProductPage({ params }: Props) {
               Engineered for the Invisible.
             </h2>
             <p className="text-neutral-500 text-lg font-light leading-relaxed">
-              Unlike traditional diffusers that use heat or water to carry scent, Autivara employs
+              Unlike traditional diffusers that use heat or water to carry scent, Autivora employs
               cold-air nebulization to convert undiluted fragrance oil into a dry, nano-sized mist.
             </p>
           </div>
@@ -245,7 +245,7 @@ export default async function ProductPage({ params }: Props) {
               Sculpted from Metal.
             </h2>
             <p className="text-neutral-500 text-lg font-light leading-relaxed">
-              Each Autivara device is machined from a single block of aerospace-grade aluminum, then
+              Each Autivora device is machined from a single block of aerospace-grade aluminum, then
               anodized to a satin finish that complements the interiors of the world's most refined
               cabins. Its minimal cylindrical form is designed to disappear into your environment,
               leaving only its presence felt.
@@ -320,7 +320,7 @@ export default async function ProductPage({ params }: Props) {
           </h2>
           <p className="text-xl text-white/80 font-light leading-relaxed">
             Whether it&apos;s the focused intensity of the daily commute or the expansive freedom of a
-            cross-continent grand tour, Autivara ensures your personal space is always defined by
+            cross-continent grand tour, Autivora ensures your personal space is always defined by
             your signature scent.
           </p>
         </div>
@@ -359,7 +359,7 @@ export default async function ProductPage({ params }: Props) {
 
       <footer className="py-12 px-6 text-center border-t border-neutral-100">
         <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-300">
-          Autivara — Excellence in Air
+          Autivora — Excellence in Air
         </span>
       </footer>
 

@@ -1,7 +1,7 @@
 type Crumb = { name: string; url: string };
 
 export default function BreadcrumbJsonLd({ items }: { items: Crumb[] }) {
-  const base = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://autivara.com';
+  const base = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://autivora.com';
   const data = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',

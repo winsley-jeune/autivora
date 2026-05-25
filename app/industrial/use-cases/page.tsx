@@ -6,7 +6,7 @@ import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 export const metadata: Metadata = {
   title: 'Commercial Scenting Use Cases — Hotels, Salons, Retail, Real Estate & More',
   description:
-    'Autivara for commercial scenting. Hotel-grade cold-air diffusion at SMB economics — boutique hotels, salons, retail, real estate staging, fitness studios, medical offices.',
+    'Autivora for commercial scenting. Hotel-grade cold-air diffusion at SMB economics — boutique hotels, salons, retail, real estate staging, fitness studios, medical offices.',
   alternates: { canonical: '/industrial/use-cases' },
   openGraph: {
     title: 'Commercial Scenting Use Cases',
