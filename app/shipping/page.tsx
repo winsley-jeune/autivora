@@ -148,8 +148,8 @@ export default function ShippingPage() {
             <p>
               In the unlikely event that your order arrives damaged or is lost in transit, please
               contact us at{' '}
-              <a href="mailto:support@autivora.com" className="text-black underline underline-offset-2">
-                support@autivora.com
+              <a href="mailto:support@autivara.com" className="text-black underline underline-offset-2">
+                support@autivara.com
               </a>{' '}
               within 7 days of the estimated delivery date. We will arrange a replacement or full
               refund at no additional cost.

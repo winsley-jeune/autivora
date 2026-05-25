@@ -114,8 +114,8 @@ All wired into `components/analytics/`. Dormant until env vars are populated.
 
 ### 🔴 Blocks deployment
 
-1. **Wire Vercel** — link repo, set master as production branch, add `autivora.com` + `www.autivora.com`, update DNS.
-2. **Copy `.env` values into Vercel env (Production scope).** Critical: `NEXT_PUBLIC_BASE_URL=https://autivora.com`.
+1. **Wire Vercel** — link repo, set master as production branch, add `autivara.com` + `www.autivara.com`, update DNS.
+2. **Copy `.env` values into Vercel env (Production scope).** Critical: `NEXT_PUBLIC_BASE_URL=https://autivara.com`.
 
 ### 🟡 Blocks credible multi-category launch
 
@@ -221,7 +221,7 @@ Run Lighthouse on `/`, `/auto`, `/home`, `/office`, `/industrial`, `/scents`, `/
 
 ## 6. Purchase tracking — the tricky part
 
-Site uses Shopify hosted checkout, so Purchase happens off `autivora.com`. Solved by Shopify's native apps (step 8 in action list) — they inject pixel events on Shopify checkout pages and send server-side conversions to each platform.
+Site uses Shopify hosted checkout, so Purchase happens off `autivara.com`. Solved by Shopify's native apps (step 8 in action list) — they inject pixel events on Shopify checkout pages and send server-side conversions to each platform.
 
 **Without those native apps, you see InitiateCheckout but NO Purchase.** Install before any campaign.
 
@@ -230,7 +230,7 @@ Site uses Shopify hosted checkout, so Purchase happens off `autivora.com`. Solve
 ## 7. Organic launch plan — week by week
 
 ### Week 1: Foundation
-- Vercel + autivora.com live
+- Vercel + autivara.com live
 - All pixels verified in each platform's debug tool
 - GSC verified, sitemap submitted, Merchant Center connected
 - All 4 category landings pass Lighthouse

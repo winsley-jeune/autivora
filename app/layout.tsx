@@ -9,7 +9,7 @@ import Analytics from '@/components/analytics/Analytics'
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-playfair' })
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://autivora.com';
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://autivara.com';
 
 export const metadata: Metadata = {
   title: {
@@ -165,7 +165,7 @@ export default function RootLayout({
                   {[
                     { label: 'Shipping Policy', href: '/shipping' },
                     { label: 'Returns & Refunds', href: '/returns' },
-                    { label: 'Contact Us', href: 'mailto:support@autivora.com' },
+                    { label: 'Contact Us', href: 'mailto:support@autivara.com' },
                   ].map(({ label, href }) => (
                     <li key={href}>
                       <a

@@ -57,7 +57,7 @@ export default function ReturnsPage() {
               {[
                 {
                   step: '01',
-                  text: 'Email us at support@autivora.com with your order number and the reason for your return.',
+                  text: 'Email us at support@autivara.com with your order number and the reason for your return.',
                 },
                 {
                   step: '02',
@@ -133,8 +133,8 @@ export default function ReturnsPage() {
             <p>
               If you receive a product that is defective or not what you ordered, please contact us
               at{' '}
-              <a href="mailto:support@autivora.com" className="text-black underline underline-offset-2">
-                support@autivora.com
+              <a href="mailto:support@autivara.com" className="text-black underline underline-offset-2">
+                support@autivara.com
               </a>{' '}
               within 7 days of delivery. We will arrange a replacement or full refund, including
               return shipping costs, at no charge to you.
@@ -169,7 +169,7 @@ export default function ReturnsPage() {
               Friday, 9:00 AM – 6:00 PM GMT.
             </p>
             <a
-              href="mailto:support@autivora.com"
+              href="mailto:support@autivara.com"
               className="inline-block text-[11px] font-bold uppercase tracking-[0.3em] border border-black px-8 py-4 hover:bg-black hover:text-white transition-colors duration-300 rounded-sm"
             >
               Contact Support

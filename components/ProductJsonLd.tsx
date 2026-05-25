@@ -1,7 +1,7 @@
 import { Product } from '@/lib/shopify-types';
 import { getSocialProof } from '@/lib/product-social-proof';
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://autivora.com';
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://autivara.com';
 
 type Props = {
   product: Product;

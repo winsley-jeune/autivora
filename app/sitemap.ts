@@ -5,7 +5,7 @@ import { HOME_ROOMS, OFFICE_SIZES, INDUSTRIAL_USE_CASES } from '@/lib/seo-surfac
 import { SCENTS } from '@/lib/scent-catalog';
 import { BLOG_ARTICLES } from '@/lib/blog-data';
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://autivora.com';
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://autivara.com';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // ── Top-level pages ─────────────────────────────────────────────────────────
