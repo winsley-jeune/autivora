@@ -4,7 +4,10 @@ import {
   Product,
 } from './shopify-types';
 
-const domain = process.env.SHOPIFY_STORE_DOMAIN;
+// Normalize the store domain: tolerate https:// prefix or trailing slash
+// so a misconfigured Vercel env var doesn't silently break product fetches.
+const rawDomain = process.env.SHOPIFY_STORE_DOMAIN;
+const domain = rawDomain?.replace(/^https?:\/\//, '').replace(/\/$/, '');
 const storefrontAccessToken = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN;
 const API_VERSION = '2024-01';
 
