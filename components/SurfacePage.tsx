@@ -19,7 +19,7 @@ export default function SurfacePage({
   categoryHref,
   surfaceHubLabel,
   surfaceHubHref,
-  productHref = '/product/autivora-one',
+  productHref = '/product/autivora-drive',
   productCta = 'Shop the Device',
 }: Props) {
   return (

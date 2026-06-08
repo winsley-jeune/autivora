@@ -567,6 +567,54 @@ export async function getUpsellProducts(ids: string[]): Promise<UpsellProduct[]>
   }
 }
 
+export type CatalogCard = {
+  handle: string;
+  title: string;
+  description: string;
+  price: string;
+  currencyCode: string;
+  image?: string;
+};
+
+// Fetch products by tag via Storefront API (e.g. tag 'fragrance-oil', 'car-diffusers').
+// Used to render catalog/collection grids dynamically without hardcoded IDs.
+export async function getProductsByTag(
+  tag: string,
+  sortKey: string = 'TITLE',
+): Promise<CatalogCard[]> {
+  try {
+    const res = await shopifyFetch<any>({
+      query: `
+        query getByTag($q: String, $sortKey: ProductSortKeys) {
+          products(first: 100, query: $q, sortKey: $sortKey) {
+            edges {
+              node {
+                handle
+                title
+                description
+                featuredImage { url altText }
+                priceRange { minVariantPrice { amount currencyCode } }
+              }
+            }
+          }
+        }
+      `,
+      variables: { q: `tag:${tag}`, sortKey },
+    });
+    return (res.body.data.products.edges as any[]).map((e) => ({
+      handle: e.node.handle,
+      title: e.node.title,
+      description: e.node.description ?? '',
+      price: e.node.priceRange.minVariantPrice.amount,
+      currencyCode: e.node.priceRange.minVariantPrice.currencyCode,
+      image: e.node.featuredImage?.url,
+    }));
+  } catch (e) {
+    console.error('[Shopify] getProductsByTag failed:', tag, e);
+    return [];
+  }
+}
+
 export async function getProducts({
   query,
   reverse,

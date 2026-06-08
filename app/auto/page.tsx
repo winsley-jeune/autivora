@@ -54,7 +54,7 @@ export default function AutoLanding() {
             Just signature scent — calibrated to your vehicle.
           </p>
           <Link
-            href="/product/autivora-one"
+            href="/product/autivora-drive"
             className="inline-block bg-white text-black px-12 py-5 text-[11px] font-bold uppercase tracking-[0.3em] hover:bg-neutral-200 transition-all rounded-sm"
           >
             Shop The One
@@ -96,7 +96,7 @@ export default function AutoLanding() {
               total weight, whisper-quiet 40dB operation.
             </p>
             <Link
-              href="/product/autivora-one"
+              href="/product/autivora-drive"
               className="inline-block bg-black text-white px-12 py-5 text-[11px] font-bold uppercase tracking-[0.3em] hover:bg-neutral-800 transition-all rounded-sm"
             >
               View Product

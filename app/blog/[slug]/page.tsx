@@ -213,7 +213,7 @@ export default async function BlogArticle({ params }: Props) {
             48-hour battery. Zero residue.
           </p>
           <Link
-            href="/product/autivora-one"
+            href="/product/autivora-drive"
             className="inline-block px-16 py-5 bg-white text-black text-[11px] font-bold uppercase tracking-[0.3em] hover:bg-neutral-200 transition-all rounded-sm"
           >
             Shop the Autivora One
