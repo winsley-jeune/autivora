@@ -117,7 +117,7 @@ export default async function Page({ params }: Props) {
             {vehicle.description}
           </p>
           <Link
-            href="/product/autivora-one"
+            href="/product/autivora-drive"
             className="inline-block bg-white text-black px-12 py-5 text-sm font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-all duration-500 rounded-sm shadow-xl"
           >
             Experience Autivora
@@ -256,7 +256,7 @@ export default async function Page({ params }: Props) {
               </li>
             </ul>
             <Link
-              href="/product/autivora-one"
+              href="/product/autivora-drive"
               className="inline-block bg-black text-white px-12 py-5 text-xs font-bold uppercase tracking-widest hover:bg-gray-800 transition-all"
             >
               Shop Now
