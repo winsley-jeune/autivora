@@ -579,9 +579,10 @@ export type CatalogCard = {
 // Fetch products by tag via Storefront API (e.g. tag 'fragrance-oil', 'car-diffusers').
 // Used to render catalog/collection grids dynamically without hardcoded IDs.
 export async function getProductsByTag(
-  tag: string,
+  tags: string | string[],
   sortKey: string = 'TITLE',
 ): Promise<CatalogCard[]> {
+  const q = (Array.isArray(tags) ? tags : [tags]).map((t) => `tag:${t}`).join(' OR ');
   try {
     const res = await shopifyFetch<any>({
       query: `
@@ -599,7 +600,7 @@ export async function getProductsByTag(
           }
         }
       `,
-      variables: { q: `tag:${tag}`, sortKey },
+      variables: { q, sortKey },
     });
     return (res.body.data.products.edges as any[]).map((e) => ({
       handle: e.node.handle,
@@ -610,7 +611,7 @@ export async function getProductsByTag(
       image: e.node.featuredImage?.url,
     }));
   } catch (e) {
-    console.error('[Shopify] getProductsByTag failed:', tag, e);
+    console.error('[Shopify] getProductsByTag failed:', tags, e);
     return [];
   }
 }

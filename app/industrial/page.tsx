@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { INDUSTRIAL_USE_CASES } from '@/lib/seo-surfaces';
 import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
+import ProductGrid from '@/components/ProductGrid';
 
 export const metadata: Metadata = {
   title: 'Commercial Diffusers — Boutique Scenting for SMB Properties',
@@ -49,6 +50,13 @@ export default function IndustrialLanding() {
           </Link>
         </div>
       </section>
+
+      {/* Commercial & B2B products (live from Shopify) */}
+      <ProductGrid
+        tags={['commercial-industrial', 'business']}
+        eyebrow="The Range"
+        heading="Scale your scent."
+      />
 
       {/* Pillars */}
       <section className="py-24 px-6 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
+import ProductGrid from '@/components/ProductGrid';
 
 export const metadata: Metadata = {
   title: 'Car Diffusers — Luxury Automotive Fragrance',
@@ -76,34 +77,12 @@ export default function AutoLanding() {
         ))}
       </section>
 
-      {/* Featured product */}
-      <section className="bg-neutral-50 py-32 px-6">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          <div className="relative aspect-square bg-white rounded-sm overflow-hidden">
-            <Image
-              src="/image/81dWe9a1a2L._AC_SY879_.jpg"
-              alt="The Autivora One"
-              fill
-              className="object-contain p-12"
-              sizes="(max-width: 1024px) 100vw, 50vw"
-            />
-          </div>
-          <div className="space-y-8">
-            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400">The Device</span>
-            <h2 className="text-4xl lg:text-5xl font-display font-medium tracking-tight">The Autivora One.</h2>
-            <p className="text-neutral-500 text-lg font-light leading-relaxed">
-              Designed for the luxury cabin. 65mm diameter fits all standard cup holders, 220g
-              total weight, whisper-quiet 40dB operation.
-            </p>
-            <Link
-              href="/product/autivora-drive"
-              className="inline-block bg-black text-white px-12 py-5 text-[11px] font-bold uppercase tracking-[0.3em] hover:bg-neutral-800 transition-all rounded-sm"
-            >
-              View Product
-            </Link>
-          </div>
-        </div>
-      </section>
+      {/* Car products (live from Shopify) */}
+      <ProductGrid
+        tags={['car-diffusers', 'car-accessories']}
+        eyebrow="The Collection"
+        heading="Built for the cabin."
+      />
 
       {/* Fitment CTA */}
       <section className="py-32 px-6 text-center max-w-3xl mx-auto space-y-8">
