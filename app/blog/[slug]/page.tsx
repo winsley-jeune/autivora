@@ -208,15 +208,15 @@ export default async function BlogArticle({ params }: Props) {
             Ready to Upgrade Your Cabin?
           </h2>
           <p className="text-neutral-400 font-light">
-            The Autivora One uses cold-air nebulization to deliver pure essential
-            oil fragrance without heat, water, or chemicals. Machined aluminum.
-            48-hour battery. Zero residue.
+            Autivora uses cold-air nebulization to deliver pure fragrance
+            without heat, water, or chemicals. Waterless. USB-C rechargeable.
+            Zero residue.
           </p>
           <Link
             href="/product/autivora-drive"
             className="inline-block px-16 py-5 bg-white text-black text-[11px] font-bold uppercase tracking-[0.3em] hover:bg-neutral-200 transition-all rounded-sm"
           >
-            Shop the Autivora One
+            Shop Autivora
           </Link>
         </div>
       </section>

@@ -8,7 +8,7 @@ import ProductGrid from '@/components/ProductGrid';
 export const metadata: Metadata = {
   title: 'Car Diffusers — Luxury Automotive Fragrance',
   description:
-    'Precision cold-air diffusers designed for the luxury automotive cabin. Aerospace-grade aluminum, 48-hour battery, vehicle-specific scent pairings for Porsche, BMW, Mercedes, and more.',
+    'Precision waterless cold-air diffusers for the automotive cabin. No heat, no water — pure fragrance, with vehicle-specific scent pairings for Porsche, BMW, Mercedes, and more.',
   alternates: { canonical: '/auto' },
   openGraph: {
     title: 'Car Diffusers — Luxury Automotive Fragrance',
@@ -66,8 +66,8 @@ export default function AutoLanding() {
       {/* Pillars */}
       <section className="py-24 px-6 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
         {[
-          { h: 'Aerospace-grade aluminum', p: 'Machined from a single block. Anodized to a satin finish that complements luxury cabin materials.' },
-          { h: '48-hour battery', p: 'USB-C charging. Cordless freedom for weeks of commuting between charges.' },
+          { h: 'Waterless cold-air', p: 'Pure fragrance oil atomized into a dry nano-mist — no water, no heat, no residue on cabin surfaces.' },
+          { h: 'USB-C rechargeable', p: 'Cordless USB-C charging keeps your cabin scented between drives.' },
           { h: 'Vehicle-specific fit', p: 'Compatibility data across 17 luxury brands. Cup-holder, dash, or vent placement guides per vehicle.' },
         ].map((item) => (
           <div key={item.h} className="space-y-3">

@@ -41,7 +41,7 @@ export default function HomeLanding() {
           </h1>
           <p className="text-lg md:text-xl text-neutral-500 font-light max-w-xl mx-auto leading-relaxed mb-12">
             Cold-air nebulization engineered for residential spaces. Safe on hardwood, leather,
-            upholstery, and stone. Whisper-quiet at 40dB.
+            upholstery, and stone. Whisper-quiet operation.
           </p>
           <Link
             href="/home/rooms"
@@ -59,7 +59,7 @@ export default function HomeLanding() {
       <section className="py-24 px-6 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
         {[
           { h: 'Zero residue', p: 'Dry nano-mist with no water carrier. Safe on hardwood floors, upholstery, leather, marble, and wood furniture.' },
-          { h: 'Whisper-quiet', p: '40dB operation — quieter than a refrigerator. Will not disturb sleep, reading, or conversation.' },
+          { h: 'Whisper-quiet', p: 'Near-silent operation — quieter than a refrigerator. Will not disturb sleep, reading, or conversation.' },
           { h: 'Room-calibrated', p: 'Adjustable intensity from 1 (nursery) to 5 (large kitchen). Pre-loaded room profiles in the app.' },
         ].map((item) => (
           <div key={item.h} className="space-y-3">
