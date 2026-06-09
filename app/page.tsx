@@ -87,7 +87,7 @@ export default function Home() {
           </span>
           <div className="hidden md:block w-[1px] h-4 bg-neutral-100" />
           <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400 flex-1">
-            Aerospace-Grade Aluminum
+            Waterless · Heat-Free
           </span>
           <div className="hidden md:block w-[1px] h-4 bg-neutral-100" />
           <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400 flex-1">
