@@ -13,6 +13,16 @@ const nextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      // Old flagship product retired → real car hero
+      {
+        source: '/product/autivora-one',
+        destination: '/product/autivora-drive',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
