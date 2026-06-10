@@ -60,6 +60,21 @@ function renderBlock(block: string, index: number) {
     );
   }
 
+  // Product CTA button:  [[cta]]Label|/product/handle
+  if (block.startsWith("[[cta]]")) {
+    const [label, href] = block.slice(7).split("|");
+    return (
+      <div key={index} className="my-10">
+        <Link
+          href={(href ?? "#").trim()}
+          className="inline-block bg-black text-white px-10 py-4 text-[11px] font-bold uppercase tracking-[0.3em] hover:bg-neutral-800 transition-all rounded-sm"
+        >
+          {(label ?? "Shop Now").trim()}
+        </Link>
+      </div>
+    );
+  }
+
   // Table
   if (block.startsWith("|")) {
     const rows = block.split("\n").filter((r) => r.trim());
@@ -125,20 +140,34 @@ function renderBlock(block: string, index: number) {
     );
   }
 
-  // Regular paragraph with inline bold and italic
-  const formatted = block.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/).map((seg, i) => {
-    if (seg.startsWith("**") && seg.endsWith("**")) {
-      return (
-        <strong key={i} className="text-black font-medium">
-          {seg.slice(2, -2)}
-        </strong>
-      );
-    }
-    if (seg.startsWith("*") && seg.endsWith("*")) {
-      return <em key={i}>{seg.slice(1, -1)}</em>;
-    }
-    return <span key={i}>{seg}</span>;
-  });
+  // Regular paragraph with inline bold, italic, and [text](/link)
+  const formatted = block
+    .split(/(\*\*[^*]+\*\*|\*[^*]+\*|\[[^\]]+\]\([^)]+\))/)
+    .map((seg, i) => {
+      if (seg.startsWith("**") && seg.endsWith("**")) {
+        return (
+          <strong key={i} className="text-black font-medium">
+            {seg.slice(2, -2)}
+          </strong>
+        );
+      }
+      if (seg.startsWith("*") && seg.endsWith("*")) {
+        return <em key={i}>{seg.slice(1, -1)}</em>;
+      }
+      const link = seg.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+      if (link) {
+        return (
+          <Link
+            key={i}
+            href={link[2]}
+            className="text-black underline underline-offset-2 decoration-neutral-300 hover:decoration-black transition-colors"
+          >
+            {link[1]}
+          </Link>
+        );
+      }
+      return <span key={i}>{seg}</span>;
+    });
 
   return (
     <p key={index} className="text-gray-600 leading-relaxed mb-4">
