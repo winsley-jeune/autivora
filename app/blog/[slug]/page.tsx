@@ -19,7 +19,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const canonical = `/blog/${slug}`;
   return {
-    title: article.metaTitle,
+    // metaTitle already includes the "| Autivora" brand suffix — bypass the
+    // layout's "%s | Autivora" template to avoid doubling it.
+    title: { absolute: article.metaTitle },
     description: article.metaDescription,
     alternates: { canonical },
     openGraph: {

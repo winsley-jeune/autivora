@@ -52,7 +52,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: 'Luxury Car Fragrance' };
   }
 
-  const title = `${vehicle.make} ${vehicle.model} Car Diffuser — Scent Pairing & Fit Guide`;
+  const title = `${vehicle.make} ${vehicle.model} Car Diffuser — Fit & Scents`;
   const description = `Will the Autivora Drive fit your ${vehicle.year} ${vehicle.make} ${vehicle.model}? Placement guide, intensity recommendations for ${vehicle.interior_type} interiors, and the perfect scent pairing.`;
   const canonical = `/fitment/${brand}/${model}`;
   return {

@@ -18,7 +18,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!scent) return { title: 'Scent' };
   const canonical = `/scents/${handle}`;
   return {
-    title: scent.metaTitle,
+    // metaTitle already includes the "| Autivora" brand suffix — bypass the
+    // layout's "%s | Autivora" template to avoid doubling it.
+    title: { absolute: scent.metaTitle },
     description: scent.metaDescription,
     alternates: { canonical },
     openGraph: {
