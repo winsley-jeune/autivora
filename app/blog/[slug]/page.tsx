@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { BLOG_ARTICLES } from "@/lib/blog-data";
 import BreadcrumbJsonLd from "@/components/BreadcrumbJsonLd";
+import PuraCostCalculator from "@/components/blog/PuraCostCalculator";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -19,7 +20,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const canonical = `/blog/${slug}`;
   return {
-    title: article.metaTitle,
+    // metaTitle already includes the "| Autivora" brand suffix — bypass the
+    // layout's "%s | Autivora" template to avoid doubling it.
+    title: { absolute: article.metaTitle },
     description: article.metaDescription,
     alternates: { canonical },
     openGraph: {
@@ -57,6 +60,26 @@ function renderBlock(block: string, index: number) {
       >
         {block.slice(4)}
       </h3>
+    );
+  }
+
+  // Interactive subscription-cost calculator
+  if (block.startsWith("[[calculator]]")) {
+    return <PuraCostCalculator key={index} />;
+  }
+
+  // Product CTA button:  [[cta]]Label|/product/handle
+  if (block.startsWith("[[cta]]")) {
+    const [label, href] = block.slice(7).split("|");
+    return (
+      <div key={index} className="my-10">
+        <Link
+          href={(href ?? "#").trim()}
+          className="inline-block bg-black text-white px-10 py-4 text-[11px] font-bold uppercase tracking-[0.3em] hover:bg-neutral-800 transition-all rounded-sm"
+        >
+          {(label ?? "Shop Now").trim()}
+        </Link>
+      </div>
     );
   }
 
@@ -125,20 +148,34 @@ function renderBlock(block: string, index: number) {
     );
   }
 
-  // Regular paragraph with inline bold and italic
-  const formatted = block.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/).map((seg, i) => {
-    if (seg.startsWith("**") && seg.endsWith("**")) {
-      return (
-        <strong key={i} className="text-black font-medium">
-          {seg.slice(2, -2)}
-        </strong>
-      );
-    }
-    if (seg.startsWith("*") && seg.endsWith("*")) {
-      return <em key={i}>{seg.slice(1, -1)}</em>;
-    }
-    return <span key={i}>{seg}</span>;
-  });
+  // Regular paragraph with inline bold, italic, and [text](/link)
+  const formatted = block
+    .split(/(\*\*[^*]+\*\*|\*[^*]+\*|\[[^\]]+\]\([^)]+\))/)
+    .map((seg, i) => {
+      if (seg.startsWith("**") && seg.endsWith("**")) {
+        return (
+          <strong key={i} className="text-black font-medium">
+            {seg.slice(2, -2)}
+          </strong>
+        );
+      }
+      if (seg.startsWith("*") && seg.endsWith("*")) {
+        return <em key={i}>{seg.slice(1, -1)}</em>;
+      }
+      const link = seg.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+      if (link) {
+        return (
+          <Link
+            key={i}
+            href={link[2]}
+            className="text-black underline underline-offset-2 decoration-neutral-300 hover:decoration-black transition-colors"
+          >
+            {link[1]}
+          </Link>
+        );
+      }
+      return <span key={i}>{seg}</span>;
+    });
 
   return (
     <p key={index} className="text-gray-600 leading-relaxed mb-4">
@@ -208,15 +245,15 @@ export default async function BlogArticle({ params }: Props) {
             Ready to Upgrade Your Cabin?
           </h2>
           <p className="text-neutral-400 font-light">
-            The Autivora One uses cold-air nebulization to deliver pure essential
-            oil fragrance without heat, water, or chemicals. Machined aluminum.
-            48-hour battery. Zero residue.
+            Autivora uses cold-air nebulization to deliver pure fragrance
+            without heat, water, or chemicals. Waterless. USB-C rechargeable.
+            Zero residue.
           </p>
           <Link
             href="/product/autivora-drive"
             className="inline-block px-16 py-5 bg-white text-black text-[11px] font-bold uppercase tracking-[0.3em] hover:bg-neutral-200 transition-all rounded-sm"
           >
-            Shop the Autivora One
+            Shop Autivora
           </Link>
         </div>
       </section>

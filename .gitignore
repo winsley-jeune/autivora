@@ -36,3 +36,4 @@ yarn-error.log*
 
 # Proprietary business research — keep local, never commit
 files/
+content-drafts/

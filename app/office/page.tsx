@@ -39,7 +39,7 @@ export default function OfficeLanding() {
           </h1>
           <p className="text-lg md:text-xl text-neutral-500 font-light max-w-xl mx-auto leading-relaxed mb-12">
             Workspace scenting engineered for an 8-hour day. Low-distraction profiles, scheduled
-            cycles, and inaudible 40dB operation that doesn&apos;t register on video calls.
+            cycles, and near-silent operation that doesn&apos;t register on video calls.
           </p>
           <Link
             href="/office/sizes"
@@ -53,7 +53,7 @@ export default function OfficeLanding() {
       {/* Pillars */}
       <section className="py-24 px-6 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
         {[
-          { h: 'Microphone-safe', p: 'At 40dB the device is below ambient HVAC noise. Tested with Shure SM7B, Rode NT1, and laptop mics — no pickup.' },
+          { h: 'Microphone-safe', p: 'Near-silent operation sits below ambient HVAC noise — it will not register on calls or recordings.' },
           { h: 'Scheduled cycles', p: 'On/off scheduling avoids scent fatigue. Pre-warm meeting rooms 10 minutes before recurring calendar holds.' },
           { h: 'Multi-unit sync', p: 'For open-plan and large agencies, deploy a synchronized array against your HVAC airflow direction.' },
         ].map((item) => (

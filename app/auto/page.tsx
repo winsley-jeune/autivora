@@ -3,11 +3,12 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
+import ProductGrid from '@/components/ProductGrid';
 
 export const metadata: Metadata = {
   title: 'Car Diffusers — Luxury Automotive Fragrance',
   description:
-    'Precision cold-air diffusers designed for the luxury automotive cabin. Aerospace-grade aluminum, 48-hour battery, vehicle-specific scent pairings for Porsche, BMW, Mercedes, and more.',
+    'Precision waterless cold-air diffusers for the automotive cabin. No heat, no water — pure fragrance, with vehicle-specific scent pairings for Porsche, BMW, Mercedes, and more.',
   alternates: { canonical: '/auto' },
   openGraph: {
     title: 'Car Diffusers — Luxury Automotive Fragrance',
@@ -65,8 +66,8 @@ export default function AutoLanding() {
       {/* Pillars */}
       <section className="py-24 px-6 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
         {[
-          { h: 'Aerospace-grade aluminum', p: 'Machined from a single block. Anodized to a satin finish that complements luxury cabin materials.' },
-          { h: '48-hour battery', p: 'USB-C charging. Cordless freedom for weeks of commuting between charges.' },
+          { h: 'Waterless cold-air', p: 'Pure fragrance oil atomized into a dry nano-mist — no water, no heat, no residue on cabin surfaces.' },
+          { h: 'USB-C rechargeable', p: 'Cordless USB-C charging keeps your cabin scented between drives.' },
           { h: 'Vehicle-specific fit', p: 'Compatibility data across 17 luxury brands. Cup-holder, dash, or vent placement guides per vehicle.' },
         ].map((item) => (
           <div key={item.h} className="space-y-3">
@@ -76,34 +77,12 @@ export default function AutoLanding() {
         ))}
       </section>
 
-      {/* Featured product */}
-      <section className="bg-neutral-50 py-32 px-6">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          <div className="relative aspect-square bg-white rounded-sm overflow-hidden">
-            <Image
-              src="/image/81dWe9a1a2L._AC_SY879_.jpg"
-              alt="The Autivora One"
-              fill
-              className="object-contain p-12"
-              sizes="(max-width: 1024px) 100vw, 50vw"
-            />
-          </div>
-          <div className="space-y-8">
-            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400">The Device</span>
-            <h2 className="text-4xl lg:text-5xl font-display font-medium tracking-tight">The Autivora One.</h2>
-            <p className="text-neutral-500 text-lg font-light leading-relaxed">
-              Designed for the luxury cabin. 65mm diameter fits all standard cup holders, 220g
-              total weight, whisper-quiet 40dB operation.
-            </p>
-            <Link
-              href="/product/autivora-drive"
-              className="inline-block bg-black text-white px-12 py-5 text-[11px] font-bold uppercase tracking-[0.3em] hover:bg-neutral-800 transition-all rounded-sm"
-            >
-              View Product
-            </Link>
-          </div>
-        </div>
-      </section>
+      {/* Car products (live from Shopify) */}
+      <ProductGrid
+        tags={['car-diffusers', 'car-accessories']}
+        eyebrow="The Collection"
+        heading="Built for the cabin."
+      />
 
       {/* Fitment CTA */}
       <section className="py-32 px-6 text-center max-w-3xl mx-auto space-y-8">

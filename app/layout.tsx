@@ -86,8 +86,9 @@ const organizationSchema = {
   '@type': 'Organization',
   name: 'Autivora',
   url: BASE_URL,
-  logo: `${BASE_URL}/icon.png`,
-  description: 'Precision cold-air nebulization technology across automotive, residential, workplace, and commercial spaces. Engineered in Europe.',
+  logo: `${BASE_URL}/icon`,
+  description: 'Precision cold-air nebulization technology across automotive, residential, workplace, and commercial spaces. Waterless, heat-free fragrance diffusion.',
+  email: 'support@autivara.com',
   sameAs: [],
 };
 
@@ -125,8 +126,8 @@ export default function RootLayout({
                   Autivora
                 </span>
                 <p className="text-xs text-neutral-400 font-light leading-relaxed max-w-xs">
-                  Precision cold-air nebulization technology for the discerning driver.
-                  Engineered in Europe.
+                  Precision cold-air nebulization for car, home, office, and commercial
+                  spaces. Waterless. Heat-free.
                 </p>
               </div>
 
@@ -141,6 +142,7 @@ export default function RootLayout({
                     { label: 'Home', href: '/home' },
                     { label: 'Office', href: '/office' },
                     { label: 'Industrial', href: '/industrial' },
+                    { label: 'All Products', href: '/collection' },
                     { label: 'Scents', href: '/scents' },
                     { label: 'Journal', href: '/blog' },
                   ].map(({ label, href }) => (
@@ -165,7 +167,7 @@ export default function RootLayout({
                   {[
                     { label: 'Shipping Policy', href: '/shipping' },
                     { label: 'Returns & Refunds', href: '/returns' },
-                    { label: 'Contact Us', href: 'mailto:support@autivara.com' },
+                    { label: 'Contact Us', href: '/contact' },
                   ].map(({ label, href }) => (
                     <li key={href}>
                       <a

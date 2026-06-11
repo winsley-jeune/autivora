@@ -1,0 +1,27 @@
+row,handle,proposed_name,segment,est_price,analysis_verdict,alibaba_source_url
+1,autivora-long-lasting-scent,Autivora Long-Lasting Car Scent,Car Accessory,15,Skip (ambiguous/commodity),https://www.alibaba.com/product-detail/2025-New-Style-Long-lasting-Scent_1601629560587.html
+2,autivora-home,Autivora Home — Whole-House HVAC Diffuser,Home,199,HERO,https://www.alibaba.com/product-detail/Perfume-Diffuser-Wall-Mounted-App-Controlled_1601624168353.html
+3,autivora-vent-tree,Autivora Vent Tree Clip,Car Accessory,14,Accessory,https://www.alibaba.com/product-detail/Car-Vent-Aroma-Air-Freshener-Tree_60815814812.html
+4,autivora-drive-electric,Autivora Drive Electric,Car,49,HERO,https://www.alibaba.com/product-detail/Top-Sale-Custom-Electric-USB-Rechargeable_1601582869533.html
+5,autivora-vent-clip,Autivora Vent Clip,Car Accessory,16,Accessory (dup of row 3),https://www.alibaba.com/product-detail/Car-Diffuser-Vent-Clip-Car-Vent_1601031849627.html
+6,autivora-pro,Autivora Pro — Commercial Scent System,Industrial,549,HERO,https://www.alibaba.com/product-detail/Wholesale-Aroma-Diffusion-System-Machine-with_1601489594111.html
+7,autivora-suite,Autivora Suite — Hotel Diffuser,Industrial,129,Sell,https://www.alibaba.com/product-detail/CNUS-C400B-Hotel-Collection-Fragrance-Electric_1601585735967.html
+8,autivora-home-room,Autivora Home Room — Large-Room Diffuser,Home,109,HERO,https://www.alibaba.com/product-detail/Rechargeable-Plastic-Timer-Tower-Diffusers-OEM_1601446020896.html
+9,autivora-woodgrain,Autivora Wood-Grain Home Diffuser,Home,19,Skip (water-based ultrasonic - off-brand),https://www.alibaba.com/product-detail/2022-Hot-Sale-USB-Wood-Grain_1600618631679.html
+10,autivora-home-aroma,Autivora Home Aromatherapy,Home,39,Sell only if waterless (ultrasonic - off-brand),https://www.alibaba.com/product-detail/Diffusor-De-Aromas-Electric-Aromatherapy-Home_1600195159338.html
+11,autivora-drive-mini,Autivora Drive Mini — Portable Car Diffuser,Car,34,Sell,https://www.alibaba.com/product-detail/Mini-USB-Portable-Aroma-Oil-Diffuser_1600096673615.html
+12,autivora-smart-car,Autivora Smart Car Diffuser,Car,39,HERO,https://www.alibaba.com/product-detail/2023-Popular-Car-Air-Fresheners-Aromatherapy_1600180328122.html
+13,autivora-duo,Autivora Duo — Car & Home,Car,44,HERO,https://www.alibaba.com/product-detail/Custom-USB-Rechargeable-New-Car-Household_1601722279720.html
+14,autivora-pony-clip,Autivora Pony Vent Clip,Car Accessory,12,Accessory (VERIFY artwork IP),https://www.alibaba.com/product-detail/Luxury-Attractive-Pony-Car-Vent-Clip_1601559199155.html
+15,autivora-drive-lite,Autivora Drive Lite,Car,24,Skip (redundant w/ Drive Mini),https://www.alibaba.com/product-detail/Brand-New-Portable-Plastic-10ml-Car_1601636601034.html
+16,autivora-drive,Autivora Drive — Cold-Air Car Diffuser,Car,59,HERO (top pick),https://www.alibaba.com/product-detail/Wholesale-Rechargeable-Smart-Car-Air-Freshener_1601363075296.html
+17,autivora-sneaker,Autivora Sneaker Freshener,Car Accessory,12,EXCLUDE - Nike/Air Jordan trade-dress legal risk,https://www.alibaba.com/product-detail/Mini-3D-AJ-Sneaker-Car-Air_1601487500470.html
+18,autivora-luxe-vent,Autivora Luxe Vent,Car Accessory,19,Sell,https://www.alibaba.com/product-detail/Unique-Luxury-Car-Air-Freshener-Vent_1601597423605.html
+20,autivora-drive-cordless,Autivora Drive Cordless,Car,45,HERO,https://www.alibaba.com/product-detail/Modern-Electric-Free-Car-Aromatherapy-Diffuser_1601649742207.html
+21,autivora-business-leather-clip,Autivora for Business — Custom-Logo Leather Clip,Business,19,Sell (B2B),https://www.alibaba.com/product-detail/Wholesale-Custom-Logo-Luxury-Lambskin-Car_1601600998945.html
+22,autivora-drive-metal,Autivora Drive Metal,Car,59,HERO (best margin),https://www.alibaba.com/product-detail/USB-Rechargeable-10ml-Metal-Essential-Oil_1601518806113.html
+23,autivora-camellia-clip,Autivora Camellia Vent Clip,Car Accessory,14,Accessory,https://www.alibaba.com/product-detail/Luxury-Camellia-Car-Vent-Clip-Air_1601633857742.html
+24,autivora-halloween,Autivora Halloween Vent,Car Accessory,12,Skip (seasonal novelty),https://www.alibaba.com/product-detail/Halloween-Car-Air-Vent-Decoration-Alloy_1601595050257.html
+25,autivora-clip,Autivora Clip — Refillable Metal Car Diffuser,Car Accessory,24,Sell,https://www.alibaba.com/product-detail/Custom-Metal-Car-Perfume-Car-Air_1601275699278.html
+26,autivora-pear-scent,Autivora Pear Car Scent,Car Accessory,9,Skip (fold into scent menu),https://www.alibaba.com/product-detail/Pear-Fruit-Scent-Car-Air-Freshener_1601790477131.html
+27,autivora-business-custom-freshener,Autivora for Business — Custom-Logo Air Fresheners,Business,2,Sell (B2B),https://www.alibaba.com/product-detail/Custom-Logo-Fragrance-Gifts-Car-Scent_1601769495704.html

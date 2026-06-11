@@ -52,8 +52,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: 'Luxury Car Fragrance' };
   }
 
-  const title = `${vehicle.make} ${vehicle.model} Car Diffuser — Scent Pairing & Fit Guide`;
-  const description = `Will the Autivora One fit your ${vehicle.year} ${vehicle.make} ${vehicle.model}? Placement guide, intensity recommendations for ${vehicle.interior_type} interiors, and the perfect scent pairing.`;
+  const title = `${vehicle.make} ${vehicle.model} Car Diffuser — Fit & Scents`;
+  const description = `Will the Autivora Drive fit your ${vehicle.year} ${vehicle.make} ${vehicle.model}? Placement guide, intensity recommendations for ${vehicle.interior_type} interiors, and the perfect scent pairing.`;
   const canonical = `/fitment/${brand}/${model}`;
   return {
     title,
@@ -191,7 +191,7 @@ export default async function Page({ params }: Props) {
                 {vehicle.cabin_size === 'small'
                   ? 'Compact / sports car cockpit. Scent fills the space quickly — start low.'
                   : vehicle.cabin_size === 'medium'
-                    ? 'Mid-size sedan or coupé. The sweet spot for the Autivora One — even coverage without adjustments.'
+                    ? 'Mid-size sedan or coupé. The sweet spot for the Autivora Drive — even coverage without adjustments.'
                     : 'Full-size SUV or luxury sedan. Use higher intensity for rear-seat coverage. Consider a second unit for three-row vehicles.'}
               </p>
             </div>
@@ -224,7 +224,7 @@ export default async function Page({ params }: Props) {
           <div className="aspect-square bg-gray-50 rounded-sm shadow-xl border border-gray-100 p-8 flex items-center justify-center group overflow-hidden">
             <img
               src="/image/616Bu0HYtsL._AC_SL1500_.jpg"
-              alt="Autivora One"
+              alt="Autivora Drive"
               className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-1000"
             />
           </div>
@@ -232,19 +232,19 @@ export default async function Page({ params }: Props) {
             <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400">
               The Recommended Device
             </span>
-            <h2 className="text-4xl font-display font-medium tracking-tight">The Autivora One.</h2>
+            <h2 className="text-4xl font-display font-medium tracking-tight">Autivora Drive.</h2>
             <p className="text-gray-500 text-lg font-light leading-relaxed">
-              Precision cold-air nebulization. No water, no heat, no dilution. Machined from a
-              single block of aerospace-grade aluminum. 48-hour battery. USB-C charging. Whisper-quiet at 40dB.
+              Precision cold-air nebulization. No water, no heat, no dilution. USB-C rechargeable,
+              whisper-quiet operation, pure fragrance with zero residue.
             </p>
             <ul className="space-y-4 text-sm text-gray-600">
               <li className="flex items-center gap-3">
                 <div className="w-1.5 h-1.5 bg-black rounded-full"></div>
-                65mm diameter — fits all standard cup holders
+                Compact — fits all standard cup holders
               </li>
               <li className="flex items-center gap-3">
                 <div className="w-1.5 h-1.5 bg-black rounded-full"></div>
-                220g — lighter than a can of soda
+                Lightweight — barely there in the cabin
               </li>
               <li className="flex items-center gap-3">
                 <div className="w-1.5 h-1.5 bg-black rounded-full"></div>
