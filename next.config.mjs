@@ -67,6 +67,22 @@ const nextConfig = {
         destination: '/blog',
         permanent: true,
       },
+      // ── Retired test scents → nearest live scent ──────────────────────────
+      {
+        source: '/scents/savage',
+        destination: '/scents/noir-oud',
+        permanent: true,
+      },
+      {
+        source: '/scents/compassion',
+        destination: '/scents/citrus-bloom',
+        permanent: true,
+      },
+      {
+        source: '/scents/vanilla-macadamia',
+        destination: '/scents/amber-vanilla',
+        permanent: true,
+      },
     ];
   },
 };

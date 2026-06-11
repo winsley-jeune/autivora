@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { BLOG_ARTICLES } from "@/lib/blog-data";
 import BreadcrumbJsonLd from "@/components/BreadcrumbJsonLd";
+import PuraCostCalculator from "@/components/blog/PuraCostCalculator";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -60,6 +61,11 @@ function renderBlock(block: string, index: number) {
         {block.slice(4)}
       </h3>
     );
+  }
+
+  // Interactive subscription-cost calculator
+  if (block.startsWith("[[calculator]]")) {
+    return <PuraCostCalculator key={index} />;
   }
 
   // Product CTA button:  [[cta]]Label|/product/handle

@@ -1,3 +1,5 @@
+import { COMPETITIVE_ARTICLES } from './blog-competitive';
+
 export type BlogArticle = {
   slug: string;
   title: string;
@@ -10,7 +12,7 @@ export type BlogArticle = {
   content: string[];
 };
 
-export const BLOG_ARTICLES: BlogArticle[] = [
+const CORE_ARTICLES: BlogArticle[] = [
   {
     "slug": "whole-house-scent-diffuser-guide",
     "title": "The Best Whole-House Scent Diffuser: How HVAC Cold-Air Scenting Actually Works in 2026",
@@ -550,3 +552,6 @@ export const BLOG_ARTICLES: BlogArticle[] = [
     ],
   },
 ];
+
+// Newest first: competitive/comparison set (2026-06-10) ahead of the core set.
+export const BLOG_ARTICLES: BlogArticle[] = [...COMPETITIVE_ARTICLES, ...CORE_ARTICLES];
