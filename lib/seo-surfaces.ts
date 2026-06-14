@@ -32,7 +32,7 @@ export const HOME_ROOMS: SurfaceEntry[] = [
       'Designed for open living spaces. Even scent dispersion, whisper-quiet operation, and dry nano-mist that protects upholstery and wood finishes.',
     intro:
       'The living room is the largest scent surface in your home — and the hardest to scent evenly without overwhelming guests. Autivora delivers a balanced, diffuse atmosphere that suits seating areas of 200–500 square feet without spiking intensity near the device.',
-    scentPairings: ['Compassion', 'Vanilla Macadamia', 'Savage'],
+    scentPairings: ['Citrus Bloom', 'Amber Vanilla', 'Noir Oud'],
     intensity: 3,
     coverage: '200–500 sqft',
     considerations: [
@@ -73,7 +73,7 @@ export const HOME_ROOMS: SurfaceEntry[] = [
       'Whisper-quiet 40dB operation and gentle scent dispersion designed for restorative sleep. Auto-off timer and dimmable LED for night use.',
     intro:
       'Bedrooms demand restraint — both in volume and in scent. Autivora is engineered around a 40dB acoustic profile and adjustable low-intensity modes that diffuse without saturating the room, supporting a calmer pre-sleep ritual.',
-    scentPairings: ['Vanilla Macadamia', 'Compassion'],
+    scentPairings: ['Amber Vanilla', 'Citrus Bloom'],
     intensity: 2,
     coverage: '120–250 sqft',
     considerations: [
@@ -114,7 +114,7 @@ export const HOME_ROOMS: SurfaceEntry[] = [
       'Kitchen-grade cold-air diffusion that holds its own against cooking aromas. Place on the counter or wall-mount above the range — no heat, no residue.',
     intro:
       'Kitchens are the hardest room to keep scented — cooking aromas overwhelm most ambient diffusers within minutes. Autivora uses cold-air nebulization at higher intensity to maintain a clean base layer that returns within 30 minutes of cooking ending.',
-    scentPairings: ['Compassion', 'Savage'],
+    scentPairings: ['Citrus Bloom', 'Noir Oud'],
     intensity: 4,
     coverage: '150–300 sqft',
     considerations: [
@@ -155,7 +155,7 @@ export const HOME_ROOMS: SurfaceEntry[] = [
       'Humidity-tolerant cold-air diffusion engineered for bathrooms. Hotel-spa atmosphere without water tanks, plug-in plates, or candle hazards.',
     intro:
       "Bathrooms are humidity-heavy and small — a combination that breaks most ultrasonic diffusers and overpowers reed diffusers within hours. Autivora's waterless design is unaffected by ambient moisture and produces a controlled, spa-grade scent envelope.",
-    scentPairings: ['Compassion', 'Vanilla Macadamia'],
+    scentPairings: ['Citrus Bloom', 'Amber Vanilla'],
     intensity: 2,
     coverage: '50–120 sqft',
     considerations: [
@@ -196,7 +196,7 @@ export const HOME_ROOMS: SurfaceEntry[] = [
       'Carefully formulated for child-safe scenting. No magnets, no heat elements, no water reservoirs to spill. CPSC-compliant device design.',
     intro:
       'Nursery scenting requires three things competitors rarely deliver together: low intensity, child-safe materials, and a non-tipping design. Autivora meets all three — no detachable magnets, no heat, no water tank, with an intensity floor that suits infants.',
-    scentPairings: ['Vanilla Macadamia', 'Compassion'],
+    scentPairings: ['Amber Vanilla', 'Citrus Bloom'],
     intensity: 1,
     coverage: '80–150 sqft',
     considerations: [
@@ -237,7 +237,7 @@ export const HOME_ROOMS: SurfaceEntry[] = [
       'Define your home from the first step. Entryway-optimized diffusion with sensor-triggered intensity boost when guests arrive.',
     intro:
       'The entryway sets the first impression of your home. Autivora is engineered for short, intentional bursts of higher intensity when motion is detected, then drops to ambient — so guests experience the scent on arrival, not the empty hallway.',
-    scentPairings: ['Savage', 'Compassion'],
+    scentPairings: ['Noir Oud', 'Citrus Bloom'],
     intensity: 3,
     coverage: '50–150 sqft',
     considerations: [
@@ -249,7 +249,7 @@ export const HOME_ROOMS: SurfaceEntry[] = [
       {
         question: "What scents work best for a 'signature' entryway?",
         answer:
-          'Warm, layered profiles travel further and form clearer associations. Try Savage (woods + leather) or Compassion (citrus + green).',
+          'Warm, layered profiles travel further and form clearer associations. Try Noir Oud (woods + leather) or Citrus Bloom (citrus + green).',
       },
       {
         question: 'Should it run all day?',
@@ -285,7 +285,7 @@ export const OFFICE_SIZES: SurfaceEntry[] = [
       'Compact desktop diffuser engineered for private offices and home studies. Energy and focus profiles dispatched at intensity 1–2 — no distraction.',
     intro:
       'A private office is your acoustic and olfactory bubble. Autivora at intensity 1–2 produces a steady, low-distraction base scent linked to focus profiles (rosemary, mint, citrus) without the headache load that high-intensity diffusion produces over 8-hour days.',
-    scentPairings: ['Compassion', 'Savage'],
+    scentPairings: ['Citrus Bloom', 'Noir Oud'],
     intensity: 2,
     coverage: '80–150 sqft',
     considerations: [
@@ -326,7 +326,7 @@ export const OFFICE_SIZES: SurfaceEntry[] = [
       'Scenting for 5–15 person team offices. Neutral, consensus-friendly profiles at moderated intensity. No conflict over personal scent preferences.',
     intro:
       'Shared offices have a coordination problem: one person\'s favorite is another\'s migraine trigger. Autivora is engineered around neutral consensus profiles at moderated intensity — strong enough to neutralize stale-office smell, restrained enough that no one notices it as "perfume."',
-    scentPairings: ['Compassion', 'Vanilla Macadamia'],
+    scentPairings: ['Citrus Bloom', 'Amber Vanilla'],
     intensity: 3,
     coverage: '300–600 sqft',
     considerations: [
@@ -367,7 +367,7 @@ export const OFFICE_SIZES: SurfaceEntry[] = [
       'Large-area scenting for open-plan offices, agencies, and coworking spaces. Multi-unit array recommendations and HVAC-aware placement guide.',
     intro:
       'Open-plan offices are an HVAC problem disguised as a scent problem. A single diffuser cannot serve 1500+ sqft — you need an array placed against your ventilation pattern. Autivora is engineered for multi-unit deployment with synchronized intensity scheduling.',
-    scentPairings: ['Compassion', 'Savage'],
+    scentPairings: ['Citrus Bloom', 'Noir Oud'],
     intensity: 4,
     coverage: '600–2,000 sqft (multi-unit)',
     considerations: [
@@ -408,7 +408,7 @@ export const OFFICE_SIZES: SurfaceEntry[] = [
       'Conference and boardroom scenting designed for shorter, higher-intensity sessions. Neutral profile that frames the room without distracting from the conversation.',
     intro:
       'Meeting rooms have an unusual scent challenge: they\'re empty 90% of the time and full 10%. Autivora is engineered for sensor or scheduled activation — clean scent on demand, off when not needed, so the air feels intentional but never stale.',
-    scentPairings: ['Compassion', 'Savage'],
+    scentPairings: ['Citrus Bloom', 'Noir Oud'],
     intensity: 3,
     coverage: '150–300 sqft',
     considerations: [
@@ -456,7 +456,7 @@ export const INDUSTRIAL_USE_CASES: SurfaceEntry[] = [
       'Hotel-grade scenting for independent and boutique properties. Same cold-air technology Hotel Collection sells at 3× the price, with month-to-month plans and real customer support.',
     intro:
       "Hotel scenting is the highest-ROI ambient fragrance category — guests associate scent with the property within minutes. Autivora delivers commercial-grade cold-air diffusion at independent-property economics, without the 3-month contract lock-in or aggressive upsell funnels of Aroma360 and Hotel Collection.",
-    scentPairings: ['Savage', 'Compassion', 'Vanilla Macadamia'],
+    scentPairings: ['Noir Oud', 'Citrus Bloom', 'Amber Vanilla'],
     intensity: 4,
     coverage: 'Lobby: 800–2,000 sqft; Suite: 250–500 sqft',
     considerations: [
@@ -497,7 +497,7 @@ export const INDUSTRIAL_USE_CASES: SurfaceEntry[] = [
       'Spa-quality scenting designed for salons, massage studios, and treatment rooms. Skin-safe profiles, low maintenance, no candle hazards.',
     intro:
       'Salons and spas live or die on atmosphere. Autivora replaces candles (fire risk, smoke residue on stone) and plug-in plates (synthetic, headache-inducing) with clean cold-air essential oil diffusion engineered for treatment-room timing.',
-    scentPairings: ['Vanilla Macadamia', 'Compassion'],
+    scentPairings: ['Amber Vanilla', 'Citrus Bloom'],
     intensity: 3,
     coverage: '100–300 sqft (per treatment room)',
     considerations: [
@@ -538,7 +538,7 @@ export const INDUSTRIAL_USE_CASES: SurfaceEntry[] = [
       'Retail scenting linked to longer customer dwell time and higher AOV. Boutique-scale cold-air diffusion, no commercial commitment required.',
     intro:
       'Retail scenting is documented to increase customer dwell time by 15–30% and basket size by 5–10% when done correctly. Autivora enters this category at an SMB-friendly price point with consumer-clean ingredients — no commercial PVC carriers, no synthetic musks.',
-    scentPairings: ['Savage', 'Compassion'],
+    scentPairings: ['Noir Oud', 'Citrus Bloom'],
     intensity: 3,
     coverage: '200–800 sqft',
     considerations: [
@@ -550,7 +550,7 @@ export const INDUSTRIAL_USE_CASES: SurfaceEntry[] = [
       {
         question: 'What scent type is best for a clothing boutique?',
         answer:
-          'Subtle wood + amber profiles. Examples: Savage (warm woody) works for menswear; Vanilla Macadamia (soft sweet) works for womenswear/loungewear.',
+          'Subtle wood + amber profiles. Examples: Noir Oud (warm woody) works for menswear; Amber Vanilla (soft sweet) works for womenswear/loungewear.',
       },
       {
         question: 'Will customers complain about the scent?',
@@ -579,7 +579,7 @@ export const INDUSTRIAL_USE_CASES: SurfaceEntry[] = [
       'Staging diffuser for luxury real estate showings. Universally appealing profiles, fast deployment, no candle fire risk on listings.',
     intro:
       'Open houses live and die in the first 10 seconds. Autivora is a staging tool: rapid setup, universally appealing scent profiles, and no fire risk to a listed property. Used by stagers and listing agents across luxury and mid-market segments.',
-    scentPairings: ['Vanilla Macadamia', 'Compassion'],
+    scentPairings: ['Amber Vanilla', 'Citrus Bloom'],
     intensity: 3,
     coverage: '500–2,000 sqft (multi-unit for whole-house)',
     considerations: [
@@ -620,7 +620,7 @@ export const INDUSTRIAL_USE_CASES: SurfaceEntry[] = [
       'Cold-air diffusion designed for yoga studios, pilates, and boutique fitness. Sweat-neutralizing profiles without overpowering the practice.',
     intro:
       'Fitness and yoga studios have two scent problems competing simultaneously: sweat odor (constant) and the desire for a wellness-coded atmosphere. Autivora at moderated intensity uses eucalyptus, mint, and citrus profiles that address both without distracting from the practice.',
-    scentPairings: ['Compassion', 'Vanilla Macadamia'],
+    scentPairings: ['Citrus Bloom', 'Amber Vanilla'],
     intensity: 3,
     coverage: '300–800 sqft',
     considerations: [
@@ -661,7 +661,7 @@ export const INDUSTRIAL_USE_CASES: SurfaceEntry[] = [
       "Calming, clinical-friendly scenting for dental, medical, and veterinary waiting rooms. Reduce 'doctor's office' association and patient anxiety.",
     intro:
       "Medical and dental waiting rooms are scent-coded for anxiety — the 'clinic smell' is well documented as a stress trigger. Autivora replaces that association with a calm, clean scent profile that doesn't read as masking or floral cover-up.",
-    scentPairings: ['Vanilla Macadamia', 'Compassion'],
+    scentPairings: ['Amber Vanilla', 'Citrus Bloom'],
     intensity: 2,
     coverage: '150–400 sqft',
     considerations: [
@@ -702,7 +702,7 @@ export const INDUSTRIAL_USE_CASES: SurfaceEntry[] = [
       'Hospitality scenting for restaurant entrances, lounges, and bars. Strict food-area placement guidance and FDA-compliant oil selection.',
     intro:
       "Restaurants need scent in the right places — entrance, lounge, and restroom corridor — and nowhere near food. Autivora's cold-air system gives precise per-zone control with food-area exclusions clearly documented.",
-    scentPairings: ['Savage', 'Vanilla Macadamia'],
+    scentPairings: ['Noir Oud', 'Amber Vanilla'],
     intensity: 3,
     coverage: '150–500 sqft (entrance/lounge zones)',
     considerations: [
