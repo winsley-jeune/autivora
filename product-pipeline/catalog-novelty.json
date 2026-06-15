@@ -57,9 +57,10 @@
    "images": [
     "https://autivara.com/products/autivora-astronaut-car-diffuser/autivora-astronaut-car-diffuser-1.jpg",
     "https://autivara.com/products/autivora-astronaut-car-diffuser/autivora-astronaut-car-diffuser-2.jpg",
-    "https://autivara.com/products/autivora-astronaut-car-diffuser/autivora-astronaut-car-diffuser-3.jpg"
+    "https://autivara.com/products/autivora-astronaut-car-diffuser/autivora-astronaut-car-diffuser-3.jpg",
+    "https://autivara.com/products/autivora-astronaut-car-diffuser/autivora-astronaut-car-diffuser-4.jpg"
    ],
-   "ready": false
+   "ready": true
   },
   {
    "handle": "autivora-bear-propeller-diffuser",
@@ -80,9 +81,11 @@
    "seo_description": "A pilot bear with a spinning propeller that catches the airflow and carries scent through the cabin.",
    "images": [
     "https://autivara.com/products/autivora-bear-propeller-diffuser/autivora-bear-propeller-diffuser-1.jpg",
-    "https://autivara.com/products/autivora-bear-propeller-diffuser/autivora-bear-propeller-diffuser-2.jpg"
+    "https://autivara.com/products/autivora-bear-propeller-diffuser/autivora-bear-propeller-diffuser-2.jpg",
+    "https://autivara.com/products/autivora-bear-propeller-diffuser/autivora-bear-propeller-diffuser-3.jpg",
+    "https://autivara.com/products/autivora-bear-propeller-diffuser/autivora-bear-propeller-diffuser-4.jpg"
    ],
-   "ready": false
+   "ready": true
   },
   {
    "handle": "autivora-magnetic-vent-diffuser",
@@ -129,9 +132,10 @@
    "images": [
     "https://autivara.com/products/autivora-rechargeable-car-diffuser/autivora-rechargeable-car-diffuser-1.jpg",
     "https://autivara.com/products/autivora-rechargeable-car-diffuser/autivora-rechargeable-car-diffuser-2.jpg",
-    "https://autivara.com/products/autivora-rechargeable-car-diffuser/autivora-rechargeable-car-diffuser-3.jpg"
+    "https://autivara.com/products/autivora-rechargeable-car-diffuser/autivora-rechargeable-car-diffuser-3.jpg",
+    "https://autivara.com/products/autivora-rechargeable-car-diffuser/autivora-rechargeable-car-diffuser-4.jpg"
    ],
-   "ready": false
+   "ready": true
   },
   {
    "handle": "autivora-smart-spray-diffuser",
@@ -152,9 +156,11 @@
    "seo_description": "An automatic micro-spray that pulses fragrance on a timer, with an ambient RGB glow for night drives.",
    "images": [
     "https://autivara.com/products/autivora-smart-spray-diffuser/autivora-smart-spray-diffuser-1.jpg",
-    "https://autivara.com/products/autivora-smart-spray-diffuser/autivora-smart-spray-diffuser-2.jpg"
+    "https://autivara.com/products/autivora-smart-spray-diffuser/autivora-smart-spray-diffuser-2.jpg",
+    "https://autivara.com/products/autivora-smart-spray-diffuser/autivora-smart-spray-diffuser-3.jpg",
+    "https://autivara.com/products/autivora-smart-spray-diffuser/autivora-smart-spray-diffuser-4.jpg"
    ],
-   "ready": false
+   "ready": true
   },
   {
    "handle": "autivora-volcano-flame-diffuser",
@@ -175,7 +181,8 @@
    "seo_description": "A glowing volcano that breathes a cold mist plume \u2014 equal parts diffuser and tabletop ambience.",
    "images": [
     "https://autivara.com/products/autivora-volcano-flame-diffuser/autivora-volcano-flame-diffuser-1.jpg",
-    "https://autivara.com/products/autivora-volcano-flame-diffuser/autivora-volcano-flame-diffuser-2.jpg"
+    "https://autivara.com/products/autivora-volcano-flame-diffuser/autivora-volcano-flame-diffuser-2.jpg",
+    "https://autivara.com/products/autivora-volcano-flame-diffuser/autivora-volcano-flame-diffuser-3.jpg"
    ],
    "ready": false
   },
@@ -197,9 +204,12 @@
    "seo_title": "Autivora Nimbus | Home Diffuser | Autivora",
    "seo_description": "Drifting jellyfish rise through a backlit mist \u2014 a calming light show with a remote to set the mood.",
    "images": [
-    "https://autivara.com/products/autivora-jellyfish-mist-diffuser/autivora-jellyfish-mist-diffuser-1.jpg"
+    "https://autivara.com/products/autivora-jellyfish-mist-diffuser/autivora-jellyfish-mist-diffuser-1.jpg",
+    "https://autivara.com/products/autivora-jellyfish-mist-diffuser/autivora-jellyfish-mist-diffuser-2.jpg",
+    "https://autivara.com/products/autivora-jellyfish-mist-diffuser/autivora-jellyfish-mist-diffuser-3.jpg",
+    "https://autivara.com/products/autivora-jellyfish-mist-diffuser/autivora-jellyfish-mist-diffuser-4.jpg"
    ],
-   "ready": false
+   "ready": true
   },
   {
    "handle": "autivora-fireplace-flame-diffuser",
@@ -218,8 +228,13 @@
    "body_html": "<p>A miniature hearth with a startlingly real flame and a soft scented mist \u2014 warmth without the heat.</p><ul><li>Realistic fireplace flame effect</li><li>Ultrasonic cold mist</li><li>Multiple timer modes</li><li>Auto shut-off when dry</li></ul>",
    "seo_title": "Autivora Hearth | Home Diffuser | Autivora",
    "seo_description": "A miniature hearth with a startlingly real flame and a soft scented mist \u2014 warmth without the heat.",
-   "images": [],
-   "ready": false
+   "images": [
+    "https://autivara.com/products/autivora-fireplace-flame-diffuser/autivora-fireplace-flame-diffuser-1.jpg",
+    "https://autivara.com/products/autivora-fireplace-flame-diffuser/autivora-fireplace-flame-diffuser-2.jpg",
+    "https://autivara.com/products/autivora-fireplace-flame-diffuser/autivora-fireplace-flame-diffuser-3.jpg",
+    "https://autivara.com/products/autivora-fireplace-flame-diffuser/autivora-fireplace-flame-diffuser-4.jpg"
+   ],
+   "ready": true
   },
   {
    "handle": "autivora-rocket-flame-diffuser",
@@ -239,9 +254,12 @@
    "seo_title": "Autivora Apollo | Home Diffuser | Autivora",
    "seo_description": "A desk rocket on a glowing plume of mist \u2014 a small piece of liftoff for the workspace.",
    "images": [
-    "https://autivara.com/products/autivora-rocket-flame-diffuser/autivora-rocket-flame-diffuser-1.jpg"
+    "https://autivara.com/products/autivora-rocket-flame-diffuser/autivora-rocket-flame-diffuser-1.jpg",
+    "https://autivara.com/products/autivora-rocket-flame-diffuser/autivora-rocket-flame-diffuser-2.jpg",
+    "https://autivara.com/products/autivora-rocket-flame-diffuser/autivora-rocket-flame-diffuser-3.jpg",
+    "https://autivara.com/products/autivora-rocket-flame-diffuser/autivora-rocket-flame-diffuser-4.jpg"
    ],
-   "ready": false
+   "ready": true
   },
   {
    "handle": "autivora-disco-ball-diffuser",
@@ -260,8 +278,13 @@
    "body_html": "<p>A mirrored sphere that scatters a full laser light-show while it diffuses \u2014 the room's centerpiece.</p><ul><li>Mirror-ball laser light show</li><li>Ultrasonic cold mist</li><li>Multiple light modes</li><li>USB powered</li></ul>",
    "seo_title": "Autivora Nova | Home Diffuser | Autivora",
    "seo_description": "A mirrored sphere that scatters a full laser light-show while it diffuses \u2014 the room's centerpiece.",
-   "images": [],
-   "ready": false
+   "images": [
+    "https://autivara.com/products/autivora-disco-ball-diffuser/autivora-disco-ball-diffuser-1.jpg",
+    "https://autivara.com/products/autivora-disco-ball-diffuser/autivora-disco-ball-diffuser-2.jpg",
+    "https://autivara.com/products/autivora-disco-ball-diffuser/autivora-disco-ball-diffuser-3.jpg",
+    "https://autivara.com/products/autivora-disco-ball-diffuser/autivora-disco-ball-diffuser-4.jpg"
+   ],
+   "ready": true
   },
   {
    "handle": "autivora-wood-grain-diffuser",
@@ -330,8 +353,13 @@
    "body_html": "<p>A 4-litre reservoir for whole-room humidifying and scenting that runs for hours between fills.</p><ul><li>4L large-capacity tank</li><li>Adjustable mist output</li><li>Top-fill, easy to refill</li><li>Timer + sleep modes</li></ul>",
    "seo_title": "Autivora Reservoir | Home Diffuser | Autivora",
    "seo_description": "A 4-litre reservoir for whole-room humidifying and scenting that runs for hours between fills.",
-   "images": [],
-   "ready": false
+   "images": [
+    "https://autivara.com/products/autivora-4l-humidifying-diffuser/autivora-4l-humidifying-diffuser-1.jpg",
+    "https://autivara.com/products/autivora-4l-humidifying-diffuser/autivora-4l-humidifying-diffuser-2.jpg",
+    "https://autivara.com/products/autivora-4l-humidifying-diffuser/autivora-4l-humidifying-diffuser-3.jpg",
+    "https://autivara.com/products/autivora-4l-humidifying-diffuser/autivora-4l-humidifying-diffuser-4.jpg"
+   ],
+   "ready": true
   },
   {
    "handle": "autivora-atmos-wifi-diffuser",
@@ -378,9 +406,12 @@
    "seo_title": "Autivora Atmos Pro | Commercial Diffuser | Autivora",
    "seo_description": "The commercial workhorse: an HVAC-integrated scent machine for large venues, run by app with precise scheduling.",
    "images": [
-    "https://autivara.com/products/autivora-atmos-pro-hvac/autivora-atmos-pro-hvac-1.jpg"
+    "https://autivara.com/products/autivora-atmos-pro-hvac/autivora-atmos-pro-hvac-1.jpg",
+    "https://autivara.com/products/autivora-atmos-pro-hvac/autivora-atmos-pro-hvac-2.jpg",
+    "https://autivara.com/products/autivora-atmos-pro-hvac/autivora-atmos-pro-hvac-3.jpg",
+    "https://autivara.com/products/autivora-atmos-pro-hvac/autivora-atmos-pro-hvac-4.jpg"
    ],
-   "ready": false
+   "ready": true
   },
   {
    "handle": "autivora-smart-plug-diffuser",
@@ -401,9 +432,11 @@
    "seo_description": "A wall-plug smart diffuser with app control \u2014 set-and-forget scenting for offices, lobbies and rooms.",
    "images": [
     "https://autivara.com/products/autivora-smart-plug-diffuser/autivora-smart-plug-diffuser-1.jpg",
-    "https://autivara.com/products/autivora-smart-plug-diffuser/autivora-smart-plug-diffuser-2.jpg"
+    "https://autivara.com/products/autivora-smart-plug-diffuser/autivora-smart-plug-diffuser-2.jpg",
+    "https://autivara.com/products/autivora-smart-plug-diffuser/autivora-smart-plug-diffuser-3.jpg",
+    "https://autivara.com/products/autivora-smart-plug-diffuser/autivora-smart-plug-diffuser-4.jpg"
    ],
-   "ready": false
+   "ready": true
   },
   {
    "handle": "autivora-guitar-car-diffuser",
@@ -423,9 +456,12 @@
    "seo_title": "Autivora Riff | Car Diffuser | Autivora",
    "seo_description": "A miniature guitar that swings on a 360\u00b0 clip \u2014 a design-led vent piece with a refillable scent core.",
    "images": [
-    "https://autivara.com/products/autivora-guitar-car-diffuser/autivora-guitar-car-diffuser-1.jpg"
+    "https://autivara.com/products/autivora-guitar-car-diffuser/autivora-guitar-car-diffuser-1.jpg",
+    "https://autivara.com/products/autivora-guitar-car-diffuser/autivora-guitar-car-diffuser-2.jpg",
+    "https://autivara.com/products/autivora-guitar-car-diffuser/autivora-guitar-car-diffuser-3.jpg",
+    "https://autivara.com/products/autivora-guitar-car-diffuser/autivora-guitar-car-diffuser-4.jpg"
    ],
-   "ready": false
+   "ready": true
   },
   {
    "handle": "autivora-pear-car-diffuser",
@@ -444,7 +480,10 @@
    "body_html": "<p>A no-spill pear that nestles in a vent and keeps a soft fruity scent in the cabin.</p><ul><li>No-spill solid-scent design</li><li>Clips to any air vent</li><li>Refillable scent core</li><li>Compact, lightweight</li></ul>",
    "seo_title": "Autivora Orchard | Car Diffuser | Autivora",
    "seo_description": "A no-spill pear that nestles in a vent and keeps a soft fruity scent in the cabin.",
-   "images": [],
+   "images": [
+    "https://autivara.com/products/autivora-pear-car-diffuser/autivora-pear-car-diffuser-1.jpg",
+    "https://autivara.com/products/autivora-pear-car-diffuser/autivora-pear-car-diffuser-2.jpg"
+   ],
    "ready": false
   }
  ]
