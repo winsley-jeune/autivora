@@ -9,6 +9,7 @@ import UpsellModal from '@/components/UpsellModal';
 import ProductJsonLd from '@/components/ProductJsonLd';
 import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 import ProductViewTracker from '@/components/analytics/ProductViewTracker';
+import ProductGallery from '@/components/ProductGallery';
 import { categoryFromTags, isCarProduct, isOil } from '@/lib/category';
 
 type Props = {
@@ -94,8 +95,7 @@ export default async function ProductPage({ params }: Props) {
   ]) {
     if (i && !seen.has(i.url)) { seen.add(i.url); images.push(i); }
   }
-  const heroImage = images[0];
-  const galleryImages = images.slice(1);
+  // Main image + thumbnail swapping handled by <ProductGallery>.
 
   return (
     <div className="bg-white text-black min-h-screen selection:bg-black selection:text-white">
@@ -118,20 +118,8 @@ export default async function ProductPage({ params }: Props) {
       {/* 1️⃣ Hero */}
       <section className="pt-32 pb-24 px-6 lg:px-12 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-          {/* Left: hero image (or neutral placeholder until photography is added) */}
-          <div className="relative aspect-square bg-neutral-50 flex items-center justify-center overflow-hidden rounded-sm">
-            {heroImage ? (
-              <img
-                src={heroImage.url}
-                alt={heroImage.altText ?? product.title}
-                className="w-full h-full object-contain mix-blend-multiply"
-              />
-            ) : (
-              <span className="text-[11px] font-bold uppercase tracking-[0.4em] text-neutral-300">
-                Autivora
-              </span>
-            )}
-          </div>
+          {/* Left: image gallery — main + clickable thumbnails */}
+          <ProductGallery images={images} title={product.title} />
 
           {/* Right: info */}
           <div className="flex flex-col space-y-8">
@@ -211,23 +199,6 @@ export default async function ProductPage({ params }: Props) {
           </p>
         </div>
       </section>
-
-      {/* 4️⃣ Gallery — only real Shopify images, if any */}
-      {galleryImages.length > 0 && (
-        <section className="py-12 px-6 bg-neutral-50">
-          <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {galleryImages.map((image) => (
-              <div key={image.url} className="aspect-square bg-white rounded-sm overflow-hidden">
-                <img
-                  src={image.url}
-                  alt={image.altText ?? product.title}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
 
       {/* 5️⃣ Final CTA */}
       <section className="py-32 px-6 bg-neutral-900 text-white text-center">
