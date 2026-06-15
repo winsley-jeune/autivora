@@ -18,13 +18,13 @@ const nextConfig = {
       // Old flagship product retired → real car hero
       {
         source: '/product/autivora-one',
-        destination: '/product/autivora-drive',
+        destination: '/product/autivora-rechargeable-car-diffuser',
         permanent: true,
       },
       // ── Legacy Shopify-storefront URLs (still in Google's index) ──────────
       {
         source: '/products/puredrive-pro',
-        destination: '/product/autivora-drive',
+        destination: '/product/autivora-rechargeable-car-diffuser',
         permanent: true,
       },
       {
@@ -83,6 +83,17 @@ const nextConfig = {
         destination: '/scents/amber-vanilla',
         permanent: true,
       },
+      // ── Retired premium product handles → nearest real product ────────────
+      { source: '/product/autivora-drive', destination: '/product/autivora-rechargeable-car-diffuser', permanent: true },
+      { source: '/product/autivora-drive-mini', destination: '/product/autivora-astronaut-car-diffuser', permanent: true },
+      { source: '/product/autivora-clip', destination: '/product/autivora-magnetic-vent-diffuser', permanent: true },
+      { source: '/product/autivora-home', destination: '/product/autivora-wood-grain-diffuser', permanent: true },
+      { source: '/product/autivora-home-room', destination: '/product/autivora-volcano-flame-diffuser', permanent: true },
+      { source: '/product/autivora-pro', destination: '/product/autivora-atmos-pro-hvac', permanent: true },
+      { source: '/product/autivora-business-leather-clip', destination: '/product/autivora-atmos-wifi-diffuser', permanent: true },
+      // ── Retired sections (premium-only, no real products) → live category ─
+      { source: '/office/:path*', destination: '/home', permanent: true },
+      { source: '/fitment/:path*', destination: '/auto', permanent: true },
     ];
   },
 };
