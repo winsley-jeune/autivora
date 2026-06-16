@@ -69,7 +69,16 @@ export default async function CollectionPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
             {devices.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard
+                key={product.id}
+                handle={product.handle}
+                title={product.title}
+                price={product.priceRange.minVariantPrice.amount}
+                currencyCode={product.priceRange.minVariantPrice.currencyCode}
+                image={product.featuredImage?.url}
+                secondaryImage={product.images?.edges?.[1]?.node?.url}
+                variantId={product.variants?.edges?.[0]?.node?.id}
+              />
             ))}
           </div>
         </section>
@@ -90,7 +99,16 @@ export default async function CollectionPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
             {oils.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard
+                key={product.id}
+                handle={product.handle}
+                title={product.title}
+                price={product.priceRange.minVariantPrice.amount}
+                currencyCode={product.priceRange.minVariantPrice.currencyCode}
+                image={product.featuredImage?.url}
+                secondaryImage={product.images?.edges?.[1]?.node?.url}
+                variantId={product.variants?.edges?.[0]?.node?.id}
+              />
             ))}
           </div>
         </section>

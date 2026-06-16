@@ -1,9 +1,9 @@
-import Link from 'next/link';
-import Image from 'next/image';
 import { getProductsByTag } from '@/lib/shopify';
+import ProductCard from '@/components/ProductCard';
 
-// Server component: renders a live product grid for the given tag(s).
-// Returns null if no products match, so it can be safely dropped into any page.
+// Server component: renders a live product grid for the given tag(s) using the
+// canonical ProductCard. Returns null if no products match, so it can be safely
+// dropped into any page.
 export default async function ProductGrid({
   tags,
   eyebrow,
@@ -38,42 +38,18 @@ export default async function ProductGrid({
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {products.map((p) => {
-          const price = new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: p.currencyCode || 'USD',
-          }).format(parseFloat(p.price));
-          const name = p.title.split('—')[0].trim();
-          return (
-            <Link
-              key={p.handle}
-              href={`/product/${p.handle}`}
-              className="group block space-y-4 border border-neutral-100 rounded-sm p-6 hover:border-black transition-colors"
-            >
-              <div className="relative aspect-square bg-neutral-50 rounded-sm overflow-hidden">
-                {p.image ? (
-                  <Image
-                    src={p.image}
-                    alt={name}
-                    fill
-                    className="object-contain mix-blend-multiply p-6"
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-[10px] uppercase tracking-[0.3em] text-neutral-300">
-                    Autivora
-                  </div>
-                )}
-              </div>
-              <div className="space-y-2">
-                <h3 className="text-xl font-display font-medium tracking-tight group-hover:underline">
-                  {name}
-                </h3>
-                <p className="text-sm font-medium text-neutral-900">From {price}</p>
-              </div>
-            </Link>
-          );
-        })}
+        {products.map((p) => (
+          <ProductCard
+            key={p.handle}
+            handle={p.handle}
+            title={p.title}
+            price={p.price}
+            currencyCode={p.currencyCode}
+            image={p.image}
+            secondaryImage={p.secondaryImage}
+            variantId={p.variantId}
+          />
+        ))}
       </div>
     </section>
   );

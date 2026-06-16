@@ -574,6 +574,8 @@ export type CatalogCard = {
   price: string;
   currencyCode: string;
   image?: string;
+  secondaryImage?: string;
+  variantId?: string;
 };
 
 // Fetch products by tag via Storefront API (e.g. tag 'fragrance-oil', 'car-diffusers').
@@ -594,6 +596,8 @@ export async function getProductsByTag(
                 title
                 description
                 featuredImage { url altText }
+                images(first: 2) { edges { node { url } } }
+                variants(first: 1) { edges { node { id } } }
                 priceRange { minVariantPrice { amount currencyCode } }
               }
             }
@@ -602,14 +606,20 @@ export async function getProductsByTag(
       `,
       variables: { q, sortKey },
     });
-    return (res.body.data.products.edges as any[]).map((e) => ({
-      handle: e.node.handle,
-      title: e.node.title,
-      description: e.node.description ?? '',
-      price: e.node.priceRange.minVariantPrice.amount,
-      currencyCode: e.node.priceRange.minVariantPrice.currencyCode,
-      image: e.node.featuredImage?.url,
-    }));
+    return (res.body.data.products.edges as any[]).map((e) => {
+      const primary = e.node.featuredImage?.url as string | undefined;
+      const imgs = (e.node.images?.edges ?? []).map((g: any) => g.node.url as string);
+      return {
+        handle: e.node.handle,
+        title: e.node.title,
+        description: e.node.description ?? '',
+        price: e.node.priceRange.minVariantPrice.amount,
+        currencyCode: e.node.priceRange.minVariantPrice.currencyCode,
+        image: primary ?? imgs[0],
+        secondaryImage: imgs.find((u: string) => u !== (primary ?? imgs[0])),
+        variantId: e.node.variants?.edges?.[0]?.node?.id,
+      };
+    });
   } catch (e) {
     console.error('[Shopify] getProductsByTag failed:', tags, e);
     return [];
