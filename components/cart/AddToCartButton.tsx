@@ -9,7 +9,7 @@ type Props = {
   className?: string;
 };
 
-export default function AddToCartButton({ variantId, label = 'Shop The One', className }: Props) {
+export default function AddToCartButton({ variantId, label = 'Add to Cart', className }: Props) {
   const [loading, setLoading] = useState(false);
   const { addCartItem } = useCart();
 

@@ -24,7 +24,7 @@ function discountedPrice(price: string, pct: number): string {
   return price.replace(/[\d.]+/, discounted.toFixed(2));
 }
 
-export default function UpsellModal({ variantId, oils, label = 'Shop The One', className }: Props) {
+export default function UpsellModal({ variantId, oils, label = 'Add to Cart', className }: Props) {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(false);

@@ -58,7 +58,7 @@ export default function AutoLanding() {
             href="/product/autivora-rechargeable-car-diffuser"
             className="inline-block bg-white text-black px-12 py-5 text-[11px] font-bold uppercase tracking-[0.3em] hover:bg-neutral-200 transition-all rounded-sm"
           >
-            Shop The One
+            Shop Now
           </Link>
         </div>
       </section>
