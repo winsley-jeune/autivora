@@ -10,6 +10,7 @@ import ProductJsonLd from '@/components/ProductJsonLd';
 import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 import ProductViewTracker from '@/components/analytics/ProductViewTracker';
 import ProductGallery from '@/components/ProductGallery';
+import ProductGrid from '@/components/ProductGrid';
 import { categoryFromTags, isCarProduct, isOil } from '@/lib/category';
 
 type Props = {
@@ -56,6 +57,10 @@ export default async function ProductPage({ params }: Props) {
   const category = categoryFromTags(product.tags);
   const carProduct = isCarProduct(product.tags);
   const oilProduct = isOil(product.tags);
+
+  // Recommendations: other products from the same collection.
+  const COLLECTION_TAGS = ['car-diffusers', 'home-diffusers', 'industrial-scenting'];
+  const collectionTag = product.tags?.find((t: string) => COLLECTION_TAGS.includes(t)) ?? null;
 
   // Upsell oils (refills) — fetched from Shopify; shown in the add-to-cart modal.
   const productIds = SIGNATURE_OILS.map((o) => o.productId);
@@ -199,6 +204,17 @@ export default async function ProductPage({ params }: Props) {
           </p>
         </div>
       </section>
+
+      {/* Recommendations — more from the same collection */}
+      {collectionTag && (
+        <ProductGrid
+          tags={collectionTag}
+          exclude={handle}
+          limit={3}
+          eyebrow="Pairs well with"
+          heading="You May Also Like"
+        />
+      )}
 
       {/* 5️⃣ Final CTA */}
       <section className="py-32 px-6 bg-neutral-900 text-white text-center">

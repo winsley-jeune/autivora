@@ -8,12 +8,18 @@ export default async function ProductGrid({
   tags,
   eyebrow,
   heading,
+  exclude,
+  limit,
 }: {
   tags: string | string[];
   eyebrow?: string;
   heading?: string;
+  exclude?: string; // handle to omit (e.g. the current product)
+  limit?: number;
 }) {
-  const products = await getProductsByTag(tags).catch(() => []);
+  let products = await getProductsByTag(tags).catch(() => []);
+  if (exclude) products = products.filter((p) => p.handle !== exclude);
+  if (limit) products = products.slice(0, limit);
   if (!products.length) return null;
 
   return (
