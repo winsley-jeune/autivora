@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { BLOG_ARTICLES } from "@/lib/blog-data";
 import BreadcrumbJsonLd from "@/components/BreadcrumbJsonLd";
+import ArticleJsonLd from "@/components/ArticleJsonLd";
 import PuraCostCalculator from "@/components/blog/PuraCostCalculator";
 
 type Props = {
@@ -195,6 +196,12 @@ export default async function BlogArticle({ params }: Props) {
 
   return (
     <div className="bg-white min-h-screen">
+      <ArticleJsonLd
+        title={article.title}
+        description={article.metaDescription}
+        datePublished={article.date}
+        slug={slug}
+      />
       <BreadcrumbJsonLd
         items={[
           { name: "Home", url: "/" },

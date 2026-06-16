@@ -1,6 +1,22 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
+
+export const metadata: Metadata = {
+  title: {
+    absolute: 'Autivara — Design-Led Scent Diffusers for Car, Home & Commercial',
+  },
+  description:
+    'Statement aroma diffusers with personality — flame-effect, mist, vent-clip, and commercial scent machines for the car, home, and business. Excellence in air.',
+  alternates: { canonical: '/' },
+  openGraph: {
+    title: 'Autivara — Design-Led Scent Diffusers',
+    description: 'Statement aroma diffusers for car, home, and commercial spaces.',
+    url: '/',
+    type: 'website',
+  },
+};
 
 const CATEGORIES = [
   {
@@ -35,7 +51,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-black/30 z-10" />
           <Image
             src="/products/autivora-disco-ball-diffuser/autivora-disco-ball-diffuser-1.jpg"
-            alt="Autivara diffuser"
+            alt="Autivara disco-ball aroma diffuser glowing in a dark room"
             fill
             priority
             className="object-cover grayscale"
@@ -109,7 +125,7 @@ export default function Home() {
             >
               <Image
                 src={cat.image}
-                alt={cat.label}
+                alt={`Autivara ${cat.label.toLowerCase()} scent diffusers`}
                 fill
                 className="object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
                 sizes="(max-width: 768px) 100vw, 50vw"
@@ -138,7 +154,7 @@ export default function Home() {
           <div className="relative aspect-square flex items-center justify-center bg-white rounded-sm overflow-hidden">
             <Image
               src="/products/autivora-wood-grain-diffuser/autivora-wood-grain-diffuser-1.jpg"
-              alt="Autivara diffuser"
+              alt="Autivara wood-grain aroma diffuser"
               fill
               className="object-cover"
               sizes="(max-width: 1024px) 100vw, 50vw"

@@ -87,8 +87,9 @@ const organizationSchema = {
   name: 'Autivara',
   url: BASE_URL,
   logo: `${BASE_URL}/icon`,
-  description: 'Precision cold-air nebulization technology across automotive, residential, workplace, and commercial spaces. Waterless, heat-free fragrance diffusion.',
+  description: 'Design-led aroma diffusers — flame-effect, mist, vent-clip, and commercial scent machines for the car, home, and business.',
   email: 'support@autivara.com',
+  // TODO: add real social profile URLs (Instagram, TikTok, etc.) to strengthen the brand entity.
   sameAs: [],
 };
 
