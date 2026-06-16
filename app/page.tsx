@@ -4,32 +4,25 @@ import { ArrowRight } from 'lucide-react';
 
 const CATEGORIES = [
   {
-    label: 'Auto',
+    label: 'Car',
     href: '/auto',
-    headline: 'Scent beyond motion.',
-    blurb: 'Cold-air diffusion engineered for luxury automotive cabins.',
-    image: '/image/71aaruoc5QL._AC_SX679_.jpg',
+    headline: 'Scent that moves with you.',
+    blurb: 'Vent clips, solar spinners, and rechargeable diffusers for every cabin.',
+    image: '/products/autivora-astronaut-car-diffuser/autivora-astronaut-car-diffuser-1.jpg',
   },
   {
     label: 'Home',
     href: '/home',
-    headline: 'The atmosphere of home.',
-    blurb: 'Whisper-quiet, residue-free fragrance for every room.',
-    image: '/image/61T6CC0ta-L._AC_SL1500_.jpg',
+    headline: 'Ambience you can switch on.',
+    blurb: 'Flame-glow, mist, and light-show diffusers for every room.',
+    image: '/products/autivora-volcano-flame-diffuser/autivora-volcano-flame-diffuser-1.jpg',
   },
   {
-    label: 'Office',
-    href: '/office',
-    headline: 'Focus, by design.',
-    blurb: 'Workspace scenting calibrated for an 8-hour day.',
-    image: '/image/71G8FzfKNjL._AC_SX679_.jpg',
-  },
-  {
-    label: 'Industrial',
+    label: 'Commercial',
     href: '/industrial',
-    headline: 'Hotel-grade. Indie price.',
-    blurb: 'Commercial scenting for the SMBs Aroma360 ignores.',
-    image: '/image/6182hqWxxcL._AC_SL1500_.jpg',
+    headline: 'Scaled scenting.',
+    blurb: 'Wi-Fi and HVAC scent machines for offices, lobbies, and venues.',
+    image: '/products/autivora-atmos-pro-hvac/autivora-atmos-pro-hvac-1.jpg',
   },
 ];
 
@@ -41,8 +34,8 @@ export default function Home() {
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-black/30 z-10" />
           <Image
-            src="/image/61YkBrJrPhL._AC_SL1500_.jpg"
-            alt="Autivora"
+            src="/products/autivora-disco-ball-diffuser/autivora-disco-ball-diffuser-1.jpg"
+            alt="Autivora diffuser"
             fill
             priority
             className="object-cover grayscale"
@@ -64,16 +57,16 @@ export default function Home() {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
             <Link
-              href="/scents"
+              href="#collections"
               className="bg-white text-black px-12 py-5 text-[11px] font-bold uppercase tracking-[0.3em] hover:bg-neutral-200 transition-all rounded-sm"
             >
-              The Scent Catalog
+              Explore Collections
             </Link>
             <Link
-              href="/auto"
+              href="/collection"
               className="text-[10px] font-bold uppercase tracking-[0.4em] text-white/70 hover:text-white transition-colors border-b border-transparent hover:border-white pb-1"
             >
-              Browse Categories
+              Shop All Diffusers
             </Link>
           </div>
         </div>
@@ -96,18 +89,18 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4-category showcase */}
-      <section className="py-32 px-6 max-w-7xl mx-auto">
+      {/* Our Collections */}
+      <section id="collections" className="scroll-mt-24 py-32 px-6 max-w-7xl mx-auto">
         <div className="text-center space-y-4 mb-20">
           <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400">
-            Four Categories. One Standard.
+            Shop by Space
           </span>
           <h2 className="text-4xl md:text-5xl font-display font-medium tracking-tight">
-            Where will you scent?
+            Our Collections
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
           {CATEGORIES.map((cat) => (
             <Link
               key={cat.href}
@@ -144,10 +137,10 @@ export default function Home() {
         <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
           <div className="relative aspect-square flex items-center justify-center bg-white rounded-sm overflow-hidden">
             <Image
-              src="/image/81dWe9a1a2L._AC_SY879_.jpg"
-              alt="Cold-air nebulization technology"
+              src="/products/autivora-wood-grain-diffuser/autivora-wood-grain-diffuser-1.jpg"
+              alt="Autivora diffuser"
               fill
-              className="object-contain p-12"
+              className="object-cover"
               sizes="(max-width: 1024px) 100vw, 50vw"
             />
           </div>
