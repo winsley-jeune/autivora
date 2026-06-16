@@ -20,8 +20,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const canonical = `/blog/${slug}`;
   return {
-    // metaTitle already includes the "| Autivora" brand suffix — bypass the
-    // layout's "%s | Autivora" template to avoid doubling it.
+    // metaTitle already includes the "| Autivara" brand suffix — bypass the
+    // layout's "%s | Autivara" template to avoid doubling it.
     title: { absolute: article.metaTitle },
     description: article.metaDescription,
     alternates: { canonical },
@@ -208,7 +208,7 @@ export default async function BlogArticle({ params }: Props) {
           href="/blog"
           className="text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-400 hover:text-black transition-colors mb-8 block"
         >
-          &larr; The Autivora Journal
+          &larr; The Autivara Journal
         </Link>
         <div className="flex items-center gap-4 text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-400 mb-6">
           <span>{article.category}</span>
@@ -245,7 +245,7 @@ export default async function BlogArticle({ params }: Props) {
             Ready to Upgrade Your Cabin?
           </h2>
           <p className="text-neutral-400 font-light">
-            Autivora uses cold-air nebulization to deliver pure fragrance
+            Autivara uses cold-air nebulization to deliver pure fragrance
             without heat, water, or chemicals. Waterless. USB-C rechargeable.
             Zero residue.
           </p>
@@ -253,7 +253,7 @@ export default async function BlogArticle({ params }: Props) {
             href="/product/autivora-rechargeable-car-diffuser"
             className="inline-block px-16 py-5 bg-white text-black text-[11px] font-bold uppercase tracking-[0.3em] hover:bg-neutral-200 transition-all rounded-sm"
           >
-            Shop Autivora
+            Shop Autivara
           </Link>
         </div>
       </section>

@@ -2,10 +2,10 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Shipping Policy',
-  description: 'Autivora shipping information — delivery times, carriers, and international orders.',
+  description: 'Autivara shipping information — delivery times, carriers, and international orders.',
   alternates: { canonical: '/shipping' },
   openGraph: {
-    title: 'Shipping Policy — Autivora',
+    title: 'Shipping Policy — Autivara',
     description: 'Delivery times, carriers, and international orders.',
     url: '/shipping',
     type: 'website',
@@ -87,7 +87,7 @@ export default function ShippingPage() {
               International Shipping
             </h2>
             <p>
-              Autivora ships to over 40 countries worldwide. International orders are shipped via
+              Autivara ships to over 40 countries worldwide. International orders are shipped via
               DHL Express or your local postal carrier depending on the destination.
             </p>
             <div className="border border-neutral-100 rounded-sm overflow-hidden">

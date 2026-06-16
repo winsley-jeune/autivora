@@ -21,7 +21,7 @@ export type ScentEntry = UpsellOil & {
 export const SCENTS: ScentEntry[] = SIGNATURE_OILS.map((oil) => {
   const enrichment: Record<string, Pick<ScentEntry, 'metaTitle' | 'metaDescription' | 'longDescription' | 'bestFor'>> = {
     'coastal-linen': {
-      metaTitle: 'Coastal Linen — Sea Salt & Cotton Scent | Autivora',
+      metaTitle: 'Coastal Linen — Sea Salt & Cotton Scent | Autivara',
       metaDescription:
         'Sea salt, white musk, and crisp cotton — clean ocean-air fragrance oil for waterless cold-air diffusion in car, home, and commercial spaces.',
       longDescription:
@@ -34,7 +34,7 @@ export const SCENTS: ScentEntry[] = SIGNATURE_OILS.map((oil) => {
       },
     },
     'white-tea-cedar': {
-      metaTitle: 'White Tea & Cedar — Hotel-Lobby Scent | Autivora',
+      metaTitle: 'White Tea & Cedar — Hotel-Lobby Scent | Autivara',
       metaDescription:
         'White tea, cedar, and light citrus — the polished hotel-lobby fragrance oil for cold-air diffusers in car, home, office, and commercial spaces.',
       longDescription:
@@ -47,7 +47,7 @@ export const SCENTS: ScentEntry[] = SIGNATURE_OILS.map((oil) => {
       },
     },
     'cloud-cotton': {
-      metaTitle: 'Cloud Cotton — Fresh Laundry Scent | Autivora',
+      metaTitle: 'Cloud Cotton — Fresh Laundry Scent | Autivara',
       metaDescription:
         'Fresh cotton, soft aldehydes, and light musk — airy laundry-day fragrance oil for waterless diffusion in bedrooms, rentals, and family cars.',
       longDescription:
@@ -60,7 +60,7 @@ export const SCENTS: ScentEntry[] = SIGNATURE_OILS.map((oil) => {
       },
     },
     'pure-rain': {
-      metaTitle: 'Pure Rain — After-the-Storm Fresh Scent | Autivora',
+      metaTitle: 'Pure Rain — After-the-Storm Fresh Scent | Autivara',
       metaDescription:
         'Ozone, petrichor, and green leaves — the crisp after-rain fragrance oil for cold-air diffusers. Cool, clean, and quietly green in any space.',
       longDescription:
@@ -73,7 +73,7 @@ export const SCENTS: ScentEntry[] = SIGNATURE_OILS.map((oil) => {
       },
     },
     'citrus-bloom': {
-      metaTitle: 'Citrus Bloom — Bergamot & Neroli Scent | Autivora',
+      metaTitle: 'Citrus Bloom — Bergamot & Neroli Scent | Autivara',
       metaDescription:
         'Bergamot, neroli, and grapefruit — bright citrus-floral fragrance oil for waterless cold-air diffusion. Energy without aggression, in any space.',
       longDescription:
@@ -86,7 +86,7 @@ export const SCENTS: ScentEntry[] = SIGNATURE_OILS.map((oil) => {
       },
     },
     'amalfi-sun': {
-      metaTitle: 'Amalfi Sun — Lemon & Sea Breeze Scent | Autivora',
+      metaTitle: 'Amalfi Sun — Lemon & Sea Breeze Scent | Autivara',
       metaDescription:
         'Lemon, mandarin, and sea breeze — sun-drenched Mediterranean citrus fragrance oil for cold-air diffusion in cars, homes, and hospitality spaces.',
       longDescription:
@@ -99,9 +99,9 @@ export const SCENTS: ScentEntry[] = SIGNATURE_OILS.map((oil) => {
       },
     },
     'yuzu-verbena': {
-      metaTitle: 'Yuzu Verbena — Zesty Citrus Mint Scent | Autivora',
+      metaTitle: 'Yuzu Verbena — Zesty Citrus Mint Scent | Autivara',
       metaDescription:
-        'Yuzu, verbena, and cool mint — the sharpest, most energizing fragrance oil in the Autivora line. Waterless cold-air diffusion for car and space.',
+        'Yuzu, verbena, and cool mint — the sharpest, most energizing fragrance oil in the Autivara line. Waterless cold-air diffusion for car and space.',
       longDescription:
         'Japanese yuzu and lemon verbena edged with cool mint — the most awake scent in the catalog. Yuzu Verbena is precision freshness: zesty, slightly green, and finished with a menthol coolness that keeps a space feeling sharp.',
       bestFor: {
@@ -112,9 +112,9 @@ export const SCENTS: ScentEntry[] = SIGNATURE_OILS.map((oil) => {
       },
     },
     'noir-oud': {
-      metaTitle: 'Noir Oud — Oud, Amber & Leather Scent | Autivora',
+      metaTitle: 'Noir Oud — Oud, Amber & Leather Scent | Autivara',
       metaDescription:
-        'Oud, amber, and leather — the deepest fragrance oil in the Autivora line. Premium cold-air diffusion for leather interiors and evening spaces.',
+        'Oud, amber, and leather — the deepest fragrance oil in the Autivara line. Premium cold-air diffusion for leather interiors and evening spaces.',
       longDescription:
         'Dark oud wrapped in amber and finished with worn leather. Noir Oud is the statement scent of the catalog — deep, resinous, and unapologetically luxurious. It does for a space what dim lighting does: everything in it becomes more interesting.',
       bestFor: {
@@ -125,7 +125,7 @@ export const SCENTS: ScentEntry[] = SIGNATURE_OILS.map((oil) => {
       },
     },
     'cedar-sage': {
-      metaTitle: 'Cedar & Sage — Grounded Woody Spa Scent | Autivora',
+      metaTitle: 'Cedar & Sage — Grounded Woody Spa Scent | Autivara',
       metaDescription:
         'Cedarwood, sage, and vetiver — grounded, spa-calm fragrance oil for waterless cold-air diffusion in homes, studios, and treatment rooms.',
       longDescription:
@@ -138,7 +138,7 @@ export const SCENTS: ScentEntry[] = SIGNATURE_OILS.map((oil) => {
       },
     },
     'smoked-vetiver': {
-      metaTitle: 'Smoked Vetiver — Bold Smoky Wood Scent | Autivora',
+      metaTitle: 'Smoked Vetiver — Bold Smoky Wood Scent | Autivara',
       metaDescription:
         'Vetiver, smoke, and black pepper — bold, peppered fragrance oil for cold-air diffusion. Presence, not perfume, for cabins and commercial spaces.',
       longDescription:
@@ -151,7 +151,7 @@ export const SCENTS: ScentEntry[] = SIGNATURE_OILS.map((oil) => {
       },
     },
     'santal-royale': {
-      metaTitle: 'Santal Royale — Creamy Sandalwood Scent | Autivora',
+      metaTitle: 'Santal Royale — Creamy Sandalwood Scent | Autivara',
       metaDescription:
         'Sandalwood, cardamom, and musk — creamy, quietly luxurious fragrance oil for waterless cold-air diffusion in cars, homes, and boutiques.',
       longDescription:
@@ -164,7 +164,7 @@ export const SCENTS: ScentEntry[] = SIGNATURE_OILS.map((oil) => {
       },
     },
     'amber-vanilla': {
-      metaTitle: 'Amber Vanilla — Warm Vanilla Tonka Scent | Autivora',
+      metaTitle: 'Amber Vanilla — Warm Vanilla Tonka Scent | Autivara',
       metaDescription:
         'Vanilla, amber, and tonka bean — warm, composed fragrance oil for cold-air diffusion. Comfort without the candy-shop sweetness.',
       longDescription:
@@ -177,7 +177,7 @@ export const SCENTS: ScentEntry[] = SIGNATURE_OILS.map((oil) => {
       },
     },
     'tobacco-caramel': {
-      metaTitle: 'Tobacco Caramel — Sweet Smoke Scent | Autivora',
+      metaTitle: 'Tobacco Caramel — Sweet Smoke Scent | Autivara',
       metaDescription:
         'Tobacco leaf, caramel, and vanilla — the cocktail-bar signature fragrance oil for cold-air diffusion in lounges, dens, and statement cabins.',
       longDescription:
@@ -190,7 +190,7 @@ export const SCENTS: ScentEntry[] = SIGNATURE_OILS.map((oil) => {
       },
     },
     'cashmere-musk': {
-      metaTitle: 'Cashmere Musk — Soft Warm Musk Scent | Autivora',
+      metaTitle: 'Cashmere Musk — Soft Warm Musk Scent | Autivara',
       metaDescription:
         'Warm musk, sandalwood, and vanilla — soft, skin-close fragrance oil for waterless cold-air diffusion. The scent equivalent of cashmere.',
       longDescription:
@@ -203,7 +203,7 @@ export const SCENTS: ScentEntry[] = SIGNATURE_OILS.map((oil) => {
       },
     },
     'velvet-rose': {
-      metaTitle: 'Velvet Rose — Modern Rose & Wood Scent | Autivora',
+      metaTitle: 'Velvet Rose — Modern Rose & Wood Scent | Autivara',
       metaDescription:
         'Rose, peony, and sandalwood — a modern rose fragrance oil, never powdery. Waterless cold-air diffusion for homes, boutiques, and salons.',
       longDescription:
@@ -216,7 +216,7 @@ export const SCENTS: ScentEntry[] = SIGNATURE_OILS.map((oil) => {
       },
     },
     'jasmine-noir': {
-      metaTitle: 'Jasmine Noir — Night-Blooming Floral | Autivora',
+      metaTitle: 'Jasmine Noir — Night-Blooming Floral | Autivara',
       metaDescription:
         'Jasmine, tuberose, and amber — heady white florals after dark. A confident fragrance oil for cold-air diffusion in evening-first spaces.',
       longDescription:
@@ -229,7 +229,7 @@ export const SCENTS: ScentEntry[] = SIGNATURE_OILS.map((oil) => {
       },
     },
     'peony-petal': {
-      metaTitle: 'Peony Petal — Light Dewy Floral Scent | Autivora',
+      metaTitle: 'Peony Petal — Light Dewy Floral Scent | Autivara',
       metaDescription:
         'Peony, lychee, and soft musk — light, dewy floral fragrance oil for waterless cold-air diffusion. Effortlessly pretty in any daytime space.',
       longDescription:
@@ -242,7 +242,7 @@ export const SCENTS: ScentEntry[] = SIGNATURE_OILS.map((oil) => {
       },
     },
     'eucalyptus-mint': {
-      metaTitle: 'Eucalyptus Mint — Cool Spa Clarity Scent | Autivora',
+      metaTitle: 'Eucalyptus Mint — Cool Spa Clarity Scent | Autivara',
       metaDescription:
         'Eucalyptus, mint, and spearmint — the steam-room standard fragrance oil for cold-air diffusion in gyms, spas, bathrooms, and focus spaces.',
       longDescription:
@@ -255,7 +255,7 @@ export const SCENTS: ScentEntry[] = SIGNATURE_OILS.map((oil) => {
       },
     },
     'lavender-haze': {
-      metaTitle: 'Lavender Haze — Calming Lavender Scent | Autivora',
+      metaTitle: 'Lavender Haze — Calming Lavender Scent | Autivara',
       metaDescription:
         'Lavender, chamomile, and vanilla — soft, rounded calming fragrance oil for cold-air diffusion in bedrooms, waiting rooms, and wind-down spaces.',
       longDescription:
@@ -268,7 +268,7 @@ export const SCENTS: ScentEntry[] = SIGNATURE_OILS.map((oil) => {
       },
     },
     'green-bamboo': {
-      metaTitle: 'Green Bamboo — Clean Green Tea Scent | Autivora',
+      metaTitle: 'Green Bamboo — Clean Green Tea Scent | Autivara',
       metaDescription:
         'Bamboo, green tea, and aloe — light, watery green fragrance oil for waterless cold-air diffusion. Balanced serenity for any modern space.',
       longDescription:
@@ -283,7 +283,7 @@ export const SCENTS: ScentEntry[] = SIGNATURE_OILS.map((oil) => {
   };
 
   const e = enrichment[oil.id] ?? {
-    metaTitle: `${oil.id} | Autivora`,
+    metaTitle: `${oil.id} | Autivara`,
     metaDescription: oil.description,
     longDescription: oil.description,
     bestFor: { auto: oil.description, home: oil.description, office: oil.description, industrial: oil.description },

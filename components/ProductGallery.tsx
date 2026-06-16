@@ -18,7 +18,7 @@ export default function ProductGallery({
     return (
       <div className="relative aspect-square bg-neutral-50 flex items-center justify-center overflow-hidden rounded-sm">
         <span className="text-[11px] font-bold uppercase tracking-[0.4em] text-neutral-300">
-          Autivora
+          Autivara
         </span>
       </div>
     );

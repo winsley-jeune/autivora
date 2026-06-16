@@ -17,7 +17,7 @@ async function getVehicleData(brand: string, model: string): Promise<VehicleData
       model: sanityVehicle.model,
       year: sanityVehicle.year ?? '2024',
       interior_type: (sanityVehicle.interior_type as VehicleData['interior_type']) ?? 'Leather',
-      scent_pairing: sanityVehicle.scent_pairing ?? 'Signature Autivora Blend',
+      scent_pairing: sanityVehicle.scent_pairing ?? 'Signature Autivara Blend',
       description:
         sanityVehicle.description ??
         `A bespoke scent profile designed for the ${sanityVehicle.make} experience.`,
@@ -53,7 +53,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const title = `${vehicle.make} ${vehicle.model} Car Diffuser — Fit & Scents`;
-  const description = `Will the Autivora Drive fit your ${vehicle.year} ${vehicle.make} ${vehicle.model}? Placement guide, intensity recommendations for ${vehicle.interior_type} interiors, and the perfect scent pairing.`;
+  const description = `Will the Autivara Drive fit your ${vehicle.year} ${vehicle.make} ${vehicle.model}? Placement guide, intensity recommendations for ${vehicle.interior_type} interiors, and the perfect scent pairing.`;
   const canonical = `/fitment/${brand}/${model}`;
   return {
     title,
@@ -120,7 +120,7 @@ export default async function Page({ params }: Props) {
             href="/product/autivora-rechargeable-car-diffuser"
             className="inline-block bg-white text-black px-12 py-5 text-sm font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-all duration-500 rounded-sm shadow-xl"
           >
-            Experience Autivora
+            Experience Autivara
           </Link>
         </div>
       </section>
@@ -191,7 +191,7 @@ export default async function Page({ params }: Props) {
                 {vehicle.cabin_size === 'small'
                   ? 'Compact / sports car cockpit. Scent fills the space quickly — start low.'
                   : vehicle.cabin_size === 'medium'
-                    ? 'Mid-size sedan or coupé. The sweet spot for the Autivora Drive — even coverage without adjustments.'
+                    ? 'Mid-size sedan or coupé. The sweet spot for the Autivara Drive — even coverage without adjustments.'
                     : 'Full-size SUV or luxury sedan. Use higher intensity for rear-seat coverage. Consider a second unit for three-row vehicles.'}
               </p>
             </div>
@@ -224,7 +224,7 @@ export default async function Page({ params }: Props) {
           <div className="aspect-square bg-gray-50 rounded-sm shadow-xl border border-gray-100 p-8 flex items-center justify-center group overflow-hidden">
             <img
               src="/image/616Bu0HYtsL._AC_SL1500_.jpg"
-              alt="Autivora Drive"
+              alt="Autivara Drive"
               className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-1000"
             />
           </div>
@@ -232,7 +232,7 @@ export default async function Page({ params }: Props) {
             <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400">
               The Recommended Device
             </span>
-            <h2 className="text-4xl font-display font-medium tracking-tight">Autivora Drive.</h2>
+            <h2 className="text-4xl font-display font-medium tracking-tight">Autivara Drive.</h2>
             <p className="text-gray-500 text-lg font-light leading-relaxed">
               Precision cold-air nebulization. No water, no heat, no dilution. USB-C rechargeable,
               whisper-quiet operation, pure fragrance with zero residue.

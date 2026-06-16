@@ -4,10 +4,10 @@ import Link from 'next/link';
 export const metadata: Metadata = {
   title: 'Contact Us',
   description:
-    'Reach the Autivora team — order questions, product support, wholesale and B2B inquiries. We respond within 1 business day.',
+    'Reach the Autivara team — order questions, product support, wholesale and B2B inquiries. We respond within 1 business day.',
   alternates: { canonical: '/contact' },
   openGraph: {
-    title: 'Contact Us — Autivora',
+    title: 'Contact Us — Autivara',
     description: 'Order questions, product support, wholesale and B2B inquiries.',
     url: '/contact',
     type: 'website',
@@ -42,7 +42,7 @@ export default function ContactPage() {
             </h2>
             <p>
               Questions about an order, shipping, a return, or getting the most out of your
-              Autivora diffuser — email us and a real person will get back to you within one
+              Autivara diffuser — email us and a real person will get back to you within one
               business day, Monday through Friday, 9:00 AM – 6:00 PM GMT.
             </p>
             <a

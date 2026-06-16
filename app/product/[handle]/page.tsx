@@ -142,7 +142,7 @@ export default async function ProductPage({ params }: Props) {
 
             <p className="text-neutral-500 text-lg font-light leading-relaxed max-w-md">
               {product.description ||
-                'Autivora diffuses fragrance in its purest form — no water, no heat, no dilution. Cold-air nebulization preserves the integrity of every note.'}
+                'Autivara diffuses fragrance in its purest form — no water, no heat, no dilution. Cold-air nebulization preserves the integrity of every note.'}
             </p>
 
             <div className="space-y-6">
@@ -200,7 +200,7 @@ export default async function ProductPage({ params }: Props) {
           <p className="text-neutral-500 text-lg font-light leading-relaxed">
             {oilProduct
               ? 'A pure, water-free fragrance oil formulated for cold-air diffusion — so every note reaches the air undiluted, exactly as composed.'
-              : 'Unlike diffusers that rely on heat or water, Autivora uses cold-air nebulization to convert undiluted fragrance oil into a dry, nano-sized mist — strong, even, and residue-free.'}
+              : 'Unlike diffusers that rely on heat or water, Autivara uses cold-air nebulization to convert undiluted fragrance oil into a dry, nano-sized mist — strong, even, and residue-free.'}
           </p>
         </div>
       </section>
@@ -241,7 +241,7 @@ export default async function ProductPage({ params }: Props) {
 
       <footer className="py-12 px-6 text-center border-t border-neutral-100">
         <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-300">
-          Autivora — Excellence in Air
+          Autivara — Excellence in Air
         </span>
       </footer>
     </div>

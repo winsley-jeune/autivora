@@ -54,7 +54,7 @@ export default function ProductCard({
           </>
         ) : (
           <div className="w-full h-full flex items-center justify-center text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-300">
-            Autivora
+            Autivara
           </div>
         )}
 

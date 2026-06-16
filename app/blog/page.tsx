@@ -3,12 +3,12 @@ import { Metadata } from "next";
 import { BLOG_ARTICLES } from "@/lib/blog-data";
 
 export const metadata: Metadata = {
-  title: "The Autivora Journal — Luxury Car Fragrance Insights",
+  title: "The Autivara Journal — Luxury Car Fragrance Insights",
   description:
     "Expert guides on car diffuser technology, interior protection, essential oil safety, and the science of automotive fragrance.",
   alternates: { canonical: "/blog" },
   openGraph: {
-    title: "The Autivora Journal",
+    title: "The Autivara Journal",
     description:
       "Expert guides on car diffuser technology, interior protection, essential oil safety, and the science of automotive fragrance.",
     url: "/blog",
@@ -23,7 +23,7 @@ export default function BlogIndex() {
       {/* Hero */}
       <section className="pt-32 pb-16 px-6 max-w-4xl mx-auto text-center">
         <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-neutral-400 mb-4 block">
-          The Autivora Journal
+          The Autivara Journal
         </span>
         <h1 className="text-5xl md:text-6xl font-display font-bold tracking-tighter mb-6">
           Knowledge. Refined.

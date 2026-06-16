@@ -13,14 +13,14 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://autivara.com';
 
 export const metadata: Metadata = {
   title: {
-    default: 'Autivora | Excellence in Air — Cold-Air Diffusion for Every Space',
-    template: '%s | Autivora',
+    default: 'Autivara | Excellence in Air — Cold-Air Diffusion for Every Space',
+    template: '%s | Autivara',
   },
   description:
     'Precision cold-air nebulization across automotive, residential, workplace, and commercial spaces. One technology. Every space.',
   metadataBase: new URL(BASE_URL),
-  applicationName: 'Autivora',
-  authors: [{ name: 'Autivora' }],
+  applicationName: 'Autivara',
+  authors: [{ name: 'Autivara' }],
   generator: 'Next.js',
   keywords: [
     'cold air diffuser',
@@ -36,17 +36,17 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: '/' },
   openGraph: {
-    siteName: 'Autivora',
+    siteName: 'Autivara',
     type: 'website',
     url: BASE_URL,
-    title: 'Autivora | Excellence in Air',
+    title: 'Autivara | Excellence in Air',
     description:
       'Precision cold-air nebulization across automotive, residential, workplace, and commercial spaces.',
     locale: 'en_US',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Autivora | Excellence in Air',
+    title: 'Autivara | Excellence in Air',
     description:
       'Precision cold-air nebulization across automotive, residential, workplace, and commercial spaces.',
   },
@@ -84,7 +84,7 @@ export const metadata: Metadata = {
 const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  name: 'Autivora',
+  name: 'Autivara',
   url: BASE_URL,
   logo: `${BASE_URL}/icon`,
   description: 'Precision cold-air nebulization technology across automotive, residential, workplace, and commercial spaces. Waterless, heat-free fragrance diffusion.',
@@ -95,7 +95,7 @@ const organizationSchema = {
 const websiteSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: 'Autivora',
+  name: 'Autivara',
   url: BASE_URL,
 };
 
@@ -123,7 +123,7 @@ export default function RootLayout({
               {/* Brand */}
               <div className="space-y-4">
                 <span className="text-sm font-display font-bold tracking-tighter uppercase">
-                  Autivora
+                  Autivara
                 </span>
                 <p className="text-xs text-neutral-400 font-light leading-relaxed max-w-xs">
                   Precision cold-air nebulization for car, home, office, and commercial
@@ -185,10 +185,10 @@ export default function RootLayout({
             {/* Bottom bar */}
             <div className="border-t border-neutral-100 px-8 py-6 flex flex-col sm:flex-row justify-between items-center gap-3">
               <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-300">
-                Autivora — Excellence in Air
+                Autivara — Excellence in Air
               </span>
               <span className="text-[10px] text-neutral-300 font-light">
-                &copy; {new Date().getFullYear()} Autivora. All rights reserved.
+                &copy; {new Date().getFullYear()} Autivara. All rights reserved.
               </span>
             </div>
           </footer>

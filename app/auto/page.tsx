@@ -36,7 +36,7 @@ export default function AutoLanding() {
           <div className="absolute inset-0 bg-black/30 z-10" />
           <Image
             src="/image/71aaruoc5QL._AC_SX679_.jpg"
-            alt="Autivora in luxury vehicle cabin"
+            alt="Autivara in luxury vehicle cabin"
             fill
             priority
             className="object-cover grayscale"

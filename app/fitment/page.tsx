@@ -8,7 +8,7 @@ import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 export const metadata: Metadata = {
   title: 'Vehicle Compatibility — Find the Right Diffuser for Your Car',
   description:
-    'Confirm Autivora Drive fits your vehicle. Brand-by-brand scent pairings, placement guides, and intensity recommendations across Porsche, BMW, Mercedes, Audi, Ferrari, and more.',
+    'Confirm Autivara Drive fits your vehicle. Brand-by-brand scent pairings, placement guides, and intensity recommendations across Porsche, BMW, Mercedes, Audi, Ferrari, and more.',
   alternates: { canonical: '/fitment' },
   openGraph: {
     title: 'Vehicle Compatibility — Find the Right Diffuser for Your Car',

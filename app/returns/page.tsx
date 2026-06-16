@@ -2,11 +2,11 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Returns & Refunds',
-  description: 'Autivora 30-day return policy — hassle-free returns and refunds.',
+  description: 'Autivara 30-day return policy — hassle-free returns and refunds.',
   alternates: { canonical: '/returns' },
   openGraph: {
-    title: 'Returns & Refunds — Autivora',
-    description: 'Autivora 30-day return policy.',
+    title: 'Returns & Refunds — Autivara',
+    description: 'Autivara 30-day return policy.',
     url: '/returns',
     type: 'website',
   },
@@ -37,7 +37,7 @@ export default function ReturnsPage() {
               30-Day Return Guarantee
             </h2>
             <p>
-              We stand behind the quality of every Autivora product. If you are not completely
+              We stand behind the quality of every Autivara product. If you are not completely
               satisfied with your purchase, you may return it within{' '}
               <strong className="text-black font-medium">30 days of delivery</strong> for a full
               refund, no questions asked.

@@ -6,7 +6,7 @@ import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 export const metadata: Metadata = {
   title: 'Office Diffusers by Size — Private, Team, Open-Plan & Meeting Room',
   description:
-    'Find the right Autivora setup for your office. Scenting recommendations from solo private offices to open-plan agencies and boutique coworking spaces.',
+    'Find the right Autivara setup for your office. Scenting recommendations from solo private offices to open-plan agencies and boutique coworking spaces.',
   alternates: { canonical: '/office/sizes' },
   openGraph: {
     title: 'Office Diffusers by Size',

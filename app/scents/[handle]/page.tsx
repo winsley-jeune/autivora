@@ -18,8 +18,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!scent) return { title: 'Scent' };
   const canonical = `/scents/${handle}`;
   return {
-    // metaTitle already includes the "| Autivora" brand suffix — bypass the
-    // layout's "%s | Autivora" template to avoid doubling it.
+    // metaTitle already includes the "| Autivara" brand suffix — bypass the
+    // layout's "%s | Autivara" template to avoid doubling it.
     title: { absolute: scent.metaTitle },
     description: scent.metaDescription,
     alternates: { canonical },

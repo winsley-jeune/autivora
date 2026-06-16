@@ -9,10 +9,10 @@ import ProductCard from '@/components/ProductCard';
 export const metadata: Metadata = {
   title: 'The Collection — Precision Automotive Fragrance',
   description:
-    'The full Autivora collection: cold-air nebulization devices and signature fragrance oils engineered for luxury automotive cabins.',
+    'The full Autivara collection: cold-air nebulization devices and signature fragrance oils engineered for luxury automotive cabins.',
   alternates: { canonical: '/collection' },
   openGraph: {
-    title: 'The Autivora Collection',
+    title: 'The Autivara Collection',
     description:
       'Cold-air nebulization devices and signature fragrance oils engineered for luxury automotive cabins.',
     url: '/collection',
@@ -94,7 +94,7 @@ export default async function CollectionPage() {
             <div className="flex-1 h-[1px] bg-neutral-100" />
           </div>
           <p className="text-xs text-neutral-400 font-light mb-12">
-            20ml cold-air compatible refills — formulated exclusively for the Autivora device.
+            20ml cold-air compatible refills — formulated exclusively for the Autivara device.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">

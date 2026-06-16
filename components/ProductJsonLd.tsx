@@ -27,7 +27,7 @@ export default function ProductJsonLd({ product }: Props) {
     sku: product.handle,
     brand: {
       '@type': 'Brand',
-      name: 'Autivora',
+      name: 'Autivara',
     },
     offers: {
       '@type': 'Offer',
@@ -42,7 +42,7 @@ export default function ProductJsonLd({ product }: Props) {
         .split('T')[0],
       seller: {
         '@type': 'Organization',
-        name: 'Autivora',
+        name: 'Autivara',
         url: BASE_URL,
       },
     },

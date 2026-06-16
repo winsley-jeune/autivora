@@ -16,8 +16,8 @@ const PRICING = {
     refillMl: 10,
   },
   autivora: {
-    label: 'Autivora à la carte',
-    device: 109, // Autivora Home Room
+    label: 'Autivara à la carte',
+    device: 109, // Autivara Home Room
     oil: 39, // 200ml bottle
     oilMl: 200,
   },
@@ -135,7 +135,7 @@ export default function PuraCostCalculator() {
         <p className="text-[11px] text-neutral-400 leading-relaxed">
           Assumes one Pura vial ({PRICING.pura.refillMl}ml at {money(PRICING.pura.refill)} on subscription) lasts{' '}
           {pace.vialDays} days at this pace, and the same fragrance volume purchased as {PRICING.autivora.oilMl}ml
-          bottles at {money(PRICING.autivora.oil)}. Device prices: Pura 4 {money(PRICING.pura.device)}, Autivora Home
+          bottles at {money(PRICING.autivora.oil)}. Device prices: Pura 4 {money(PRICING.pura.device)}, Autivara Home
           Room {money(PRICING.autivora.device)}. Prices as of June 2026 — check brand sites for current pricing.
         </p>
       </div>
