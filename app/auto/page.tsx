@@ -67,7 +67,7 @@ export default function AutoLanding() {
         {[
           { h: 'Waterless & refillable', p: 'Clips to any air vent, a few drops of oil — no water, no spills, no residue on your interior.' },
           { h: 'Solar & USB-C', p: 'From solar-spun rotors that turn in sunlight to USB-C rechargeable smart diffusers — power that fits how you drive.' },
-          { h: 'Designed to be seen', p: 'Collectible designs — astronaut, guitar, pear, magnetic disc — that look as good as they smell.' },
+          { h: 'Designed to be shown', p: 'Crafted designs — sculpted figures and machined metal — that look as considered as they smell.' },
         ].map((item) => (
           <div key={item.h} className="space-y-3">
             <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-400">{item.h}</h3>

@@ -40,7 +40,8 @@ export default function HomeLanding() {
           </h1>
           <p className="text-lg md:text-xl text-neutral-500 font-light max-w-xl mx-auto leading-relaxed mb-12">
             Flame-glow, drifting mist, and light-show diffusers that turn any room into a mood — from
-            a cozy fireplace to a full disco. Cool to the touch, whisper-quiet, refill in seconds.
+            a fireplace glow to a mirror-ball light show. Cool to the touch, whisper-quiet, refilled
+            in seconds.
           </p>
           <Link
             href="/home/rooms"
@@ -59,7 +60,7 @@ export default function HomeLanding() {
         {[
           { h: 'Mood, not just scent', p: 'Flame-effect glow, rising mist, and color light shows — ambience and fragrance in one piece.' },
           { h: 'Cool mist, no heat', p: 'Ultrasonic cool-mist diffusion runs quiet and never hot, with auto shut-off when the tank runs dry.' },
-          { h: 'Made to display', p: 'Volcano, jellyfish, disco-ball, steam-train, wood-grain — designs you will want on the shelf.' },
+          { h: 'Made to display', p: 'Volcano, jellyfish, mirror-ball, steam-train, wood-grain — pieces you will want on display.' },
         ].map((item) => (
           <div key={item.h} className="space-y-3">
             <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-400">{item.h}</h3>

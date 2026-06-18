@@ -67,8 +67,8 @@ export default function Home() {
             Excellence <br /> In Air.
           </h1>
           <p className="text-xl md:text-2xl text-white/80 max-w-2xl mx-auto font-light mb-12 leading-relaxed">
-            Design-led aroma diffusers with personality — flame-effect, mist, vent-clip, and
-            commercial scent machines for the car, the home, and business.
+            Design-forward aroma diffusers — flame-effect, mist, vent-clip, and commercial scent
+            machines, crafted for the car, the home, and business.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
@@ -162,15 +162,15 @@ export default function Home() {
           </div>
           <div className="space-y-8">
             <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400">
-              The Idea
+              The Standard
             </span>
             <h2 className="text-4xl font-display font-medium tracking-tight">
-              Scent, with a personality.
+              Designed to be displayed.
             </h2>
             <p className="text-neutral-500 text-lg font-light leading-relaxed">
-              From a glowing volcano to a spinning astronaut, every Autivara diffuser is built to be
-              displayed, not hidden — pairing a real fragrance oil with a design you actually want to
-              look at. Refill it whenever the mood changes.
+              From a sculpted volcano to a precision astronaut, every Autivara diffuser pairs a real
+              fragrance oil with a design worth displaying — considered, refined, and made to be
+              seen. Refill it whenever the mood changes.
             </p>
             <Link
               href="/scents"
