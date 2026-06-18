@@ -4,9 +4,11 @@ import Link from "next/link";
 import { BLOG_ARTICLES } from "@/lib/blog-data";
 import BreadcrumbJsonLd from "@/components/BreadcrumbJsonLd";
 import ArticleJsonLd from "@/components/ArticleJsonLd";
+import FaqJsonLd from "@/components/FaqJsonLd";
 import PuraCostCalculator from "@/components/blog/PuraCostCalculator";
 import Image from "next/image";
 import { blogImage } from "@/lib/blog-image";
+import { extractFaq } from "@/lib/blog-faq";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -197,9 +199,11 @@ export default async function BlogArticle({ params }: Props) {
 
   // Find related articles (same category, or next/prev)
   const related = BLOG_ARTICLES.filter((a) => a.slug !== slug).slice(0, 2);
+  const faq = extractFaq(article.content);
 
   return (
     <div className="bg-white min-h-screen">
+      {faq.length > 0 && <FaqJsonLd items={faq} />}
       <ArticleJsonLd
         title={article.title}
         description={article.metaDescription}

@@ -1,4 +1,5 @@
 import { COMPETITIVE_ARTICLES } from './blog-competitive';
+import { BLOG_REWRITES } from './blog-rewrites';
 
 export type BlogArticle = {
   slug: string;
@@ -561,6 +562,7 @@ const RETIRED_SLUGS = new Set([
 ]);
 
 // Newest first: competitive/comparison set (2026-06-10) ahead of the core set.
-export const BLOG_ARTICLES: BlogArticle[] = [...COMPETITIVE_ARTICLES, ...CORE_ARTICLES].filter(
-  (a) => !RETIRED_SLUGS.has(a.slug),
-);
+// SEO rewrites (lib/blog-rewrites.ts) override the original article by slug.
+export const BLOG_ARTICLES: BlogArticle[] = [...COMPETITIVE_ARTICLES, ...CORE_ARTICLES]
+  .filter((a) => !RETIRED_SLUGS.has(a.slug))
+  .map((a) => BLOG_REWRITES[a.slug] ?? a);
