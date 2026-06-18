@@ -1,7 +1,5 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
 import { getProduct, getUpsellProducts } from '@/lib/shopify';
 import { Image as ShopifyImage } from '@/lib/shopify-types';
 import { SIGNATURE_OILS, type OilCard } from '@/lib/upsell-products';
@@ -11,7 +9,7 @@ import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 import ProductViewTracker from '@/components/analytics/ProductViewTracker';
 import ProductGallery from '@/components/ProductGallery';
 import ProductGrid from '@/components/ProductGrid';
-import { categoryFromTags, isCarProduct, isOil } from '@/lib/category';
+import { categoryFromTags, isOil } from '@/lib/category';
 import { brandName } from '@/lib/brand';
 
 type Props = {
@@ -56,7 +54,6 @@ export default async function ProductPage({ params }: Props) {
   if (!product) notFound();
 
   const category = categoryFromTags(product.tags);
-  const carProduct = isCarProduct(product.tags);
   const oilProduct = isOil(product.tags);
   const displayTitle = brandName(product.title);
 
@@ -160,15 +157,6 @@ export default async function ProductPage({ params }: Props) {
                   >
                     Coming Soon
                   </button>
-                )}
-                {carProduct && (
-                  <Link
-                    href="/fitment"
-                    className="group inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-400 hover:text-black transition-colors"
-                  >
-                    Vehicle Compatibility{' '}
-                    <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
-                  </Link>
                 )}
               </div>
             </div>
