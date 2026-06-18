@@ -29,7 +29,7 @@ export const HOME_ROOMS: SurfaceEntry[] = [
     title: 'Living Room Diffuser',
     metaTitle: 'Best Diffuser for the Living Room — Living Space Fragrance Guide',
     metaDescription:
-      'Designed for open living spaces. Even scent dispersion, whisper-quiet operation, and dry nano-mist that protects upholstery and wood finishes.',
+      'Designed for open living spaces. Even scent dispersion, whisper-quiet operation, and a fine cool mist that protects upholstery and wood finishes.',
     intro:
       'The living room is the largest scent surface in your home — and the hardest to scent evenly without overwhelming guests. Autivara delivers a balanced, diffuse atmosphere that suits seating areas of 200–500 square feet without spiking intensity near the device.',
     scentPairings: ['Citrus Bloom', 'Amber Vanilla', 'Noir Oud'],
@@ -38,13 +38,13 @@ export const HOME_ROOMS: SurfaceEntry[] = [
     considerations: [
       'Place at room edge, not next to seating — scent travels outward',
       'Set intensity to 2–3 for entertaining, 1 for daily ambient',
-      'Cold-air mist leaves zero residue on fabric or wood',
+      'Cool mist leaves zero residue on fabric or wood',
     ],
     faq: [
       {
         question: 'Will a diffuser damage my furniture or wood floors?',
         answer:
-          "Autivara's cold-air nebulization produces a dry nano-mist — no water carrier, no condensation, no oily residue. It is safe on hardwood, upholstery, leather, and stone.",
+          "Autivara's ultrasonic cool-mist diffusion produces a fine cool mist — no heat, no flame, no oily residue. It is safe on hardwood, upholstery, leather, and stone.",
       },
       {
         question: 'Is it loud enough to interrupt a conversation?',
@@ -111,9 +111,9 @@ export const HOME_ROOMS: SurfaceEntry[] = [
     title: 'Kitchen Diffuser',
     metaTitle: 'Best Diffuser for the Kitchen — Cooking-Resilient Fragrance',
     metaDescription:
-      'Kitchen-grade cold-air diffusion that holds its own against cooking aromas. Place on the counter or wall-mount above the range — no heat, no residue.',
+      'Kitchen-grade cool-mist diffusion that holds its own against cooking aromas. Place on the counter or wall-mount above the range — no heat, no residue.',
     intro:
-      'Kitchens are the hardest room to keep scented — cooking aromas overwhelm most ambient diffusers within minutes. Autivara uses cold-air nebulization at higher intensity to maintain a clean base layer that returns within 30 minutes of cooking ending.',
+      'Kitchens are the hardest room to keep scented — cooking aromas overwhelm most ambient diffusers within minutes. Autivara uses ultrasonic cool-mist diffusion at higher intensity to maintain a clean base layer that returns within 30 minutes of cooking ending.',
     scentPairings: ['Citrus Bloom', 'Noir Oud'],
     intensity: 4,
     coverage: '150–300 sqft',
@@ -131,7 +131,7 @@ export const HOME_ROOMS: SurfaceEntry[] = [
       {
         question: 'Is the device safe near food prep surfaces?',
         answer:
-          'Yes. The nano-mist is non-oily and food-safe at typical diffuser distances (3+ feet from food prep). Wipe down monthly with a dry cloth.',
+          'Yes. The fine mist is non-oily and food-safe at typical diffuser distances (3+ feet from food prep). Wipe down monthly with a dry cloth.',
       },
       {
         question: 'Will the scent affect the taste of food?',
@@ -152,9 +152,9 @@ export const HOME_ROOMS: SurfaceEntry[] = [
     title: 'Bathroom Diffuser',
     metaTitle: 'Best Diffuser for the Bathroom — Spa-Grade Fragrance',
     metaDescription:
-      'Humidity-tolerant cold-air diffusion engineered for bathrooms. Hotel-spa atmosphere without water tanks, plug-in plates, or candle hazards.',
+      'Humidity-tolerant cool-mist diffusion engineered for bathrooms. Hotel-spa atmosphere without plug-in plates or candle hazards.',
     intro:
-      "Bathrooms are humidity-heavy and small — a combination that breaks most ultrasonic diffusers and overpowers reed diffusers within hours. Autivara's waterless design is unaffected by ambient moisture and produces a controlled, spa-grade scent envelope.",
+      "Bathrooms are humidity-heavy and small — a combination that breaks most ultrasonic diffusers and overpowers reed diffusers within hours. Autivara's sealed design shrugs off ambient moisture and produces a controlled, spa-grade scent envelope.",
     scentPairings: ['Citrus Bloom', 'Amber Vanilla'],
     intensity: 2,
     coverage: '50–120 sqft',
@@ -453,9 +453,9 @@ export const INDUSTRIAL_USE_CASES: SurfaceEntry[] = [
     title: 'Boutique Hotel Scenting',
     metaTitle: 'Boutique Hotel Diffuser — Lobby & Suite Scenting System',
     metaDescription:
-      'Hotel-grade scenting for independent and boutique properties. Same cold-air technology Hotel Collection sells at 3× the price, with month-to-month plans and real customer support.',
+      'Hotel-grade scenting for independent and boutique properties. Same cool-mist technology Hotel Collection sells at 3× the price, with month-to-month plans and real customer support.',
     intro:
-      "Hotel scenting is the highest-ROI ambient fragrance category — guests associate scent with the property within minutes. Autivara delivers commercial-grade cold-air diffusion at independent-property economics, without the 3-month contract lock-in or aggressive upsell funnels of Aroma360 and Hotel Collection.",
+      "Hotel scenting is the highest-ROI ambient fragrance category — guests associate scent with the property within minutes. Autivara delivers commercial-grade cool-mist diffusion at independent-property economics, without the 3-month contract lock-in or aggressive upsell funnels of Aroma360 and Hotel Collection.",
     scentPairings: ['Noir Oud', 'Citrus Bloom', 'Amber Vanilla'],
     intensity: 4,
     coverage: 'Lobby: 800–2,000 sqft; Suite: 250–500 sqft',
@@ -468,7 +468,7 @@ export const INDUSTRIAL_USE_CASES: SurfaceEntry[] = [
       {
         question: 'How do you compare to Aroma360 or Hotel Collection?',
         answer:
-          'Same cold-air nebulization category. Differences: month-to-month plans (not 3-month minimums), real-human support, transparent pricing on devices and refills, no aggressive upsell funnel.',
+          'Same ultrasonic cool-mist diffusion category. Differences: month-to-month plans (not 3-month minimums), real-human support, transparent pricing on devices and refills, no aggressive upsell funnel.',
       },
       {
         question: 'What does it cost to scent a 10-room boutique hotel?',
@@ -496,7 +496,7 @@ export const INDUSTRIAL_USE_CASES: SurfaceEntry[] = [
     metaDescription:
       'Spa-quality scenting designed for salons, massage studios, and treatment rooms. Skin-safe profiles, low maintenance, no candle hazards.',
     intro:
-      'Salons and spas live or die on atmosphere. Autivara replaces candles (fire risk, smoke residue on stone) and plug-in plates (synthetic, headache-inducing) with clean cold-air essential oil diffusion engineered for treatment-room timing.',
+      'Salons and spas live or die on atmosphere. Autivara replaces candles (fire risk, smoke residue on stone) and plug-in plates (synthetic, headache-inducing) with clean cool-mist essential oil diffusion engineered for treatment-room timing.',
     scentPairings: ['Amber Vanilla', 'Citrus Bloom'],
     intensity: 3,
     coverage: '100–300 sqft (per treatment room)',
@@ -535,7 +535,7 @@ export const INDUSTRIAL_USE_CASES: SurfaceEntry[] = [
     title: 'Retail Boutique Scenting',
     metaTitle: 'Retail Boutique Diffuser — In-Store Fragrance That Increases Dwell Time',
     metaDescription:
-      'Retail scenting linked to longer customer dwell time and higher AOV. Boutique-scale cold-air diffusion, no commercial commitment required.',
+      'Retail scenting linked to longer customer dwell time and higher AOV. Boutique-scale cool-mist diffusion, no commercial commitment required.',
     intro:
       'Retail scenting is documented to increase customer dwell time by 15–30% and basket size by 5–10% when done correctly. Autivara enters this category at an SMB-friendly price point with consumer-clean ingredients — no commercial PVC carriers, no synthetic musks.',
     scentPairings: ['Noir Oud', 'Citrus Bloom'],
@@ -617,7 +617,7 @@ export const INDUSTRIAL_USE_CASES: SurfaceEntry[] = [
     title: 'Yoga & Fitness Studio Scenting',
     metaTitle: 'Yoga & Fitness Studio Diffuser — Wellness Space Fragrance',
     metaDescription:
-      'Cold-air diffusion designed for yoga studios, pilates, and boutique fitness. Sweat-neutralizing profiles without overpowering the practice.',
+      'Cool-mist diffusion designed for yoga studios, pilates, and boutique fitness. Sweat-neutralizing profiles without overpowering the practice.',
     intro:
       'Fitness and yoga studios have two scent problems competing simultaneously: sweat odor (constant) and the desire for a wellness-coded atmosphere. Autivara at moderated intensity uses eucalyptus, mint, and citrus profiles that address both without distracting from the practice.',
     scentPairings: ['Citrus Bloom', 'Amber Vanilla'],
@@ -701,7 +701,7 @@ export const INDUSTRIAL_USE_CASES: SurfaceEntry[] = [
     metaDescription:
       'Hospitality scenting for restaurant entrances, lounges, and bars. Strict food-area placement guidance and FDA-compliant oil selection.',
     intro:
-      "Restaurants need scent in the right places — entrance, lounge, and restroom corridor — and nowhere near food. Autivara's cold-air system gives precise per-zone control with food-area exclusions clearly documented.",
+      "Restaurants need scent in the right places — entrance, lounge, and restroom corridor — and nowhere near food. Autivara's cool-mist system gives precise per-zone control with food-area exclusions clearly documented.",
     scentPairings: ['Noir Oud', 'Amber Vanilla'],
     intensity: 3,
     coverage: '150–500 sqft (entrance/lounge zones)',

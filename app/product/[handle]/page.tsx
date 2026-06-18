@@ -144,7 +144,7 @@ export default async function ProductPage({ params }: Props) {
 
             <p className="text-neutral-500 text-lg font-light leading-relaxed max-w-md">
               {product.description ||
-                'Autivara diffuses fragrance in its purest form — no water, no heat, no dilution. Cold-air nebulization preserves the integrity of every note.'}
+                'Autivara pairs a real fragrance oil with a design you will want on display — refillable, easy to live with, and made to set the mood.'}
             </p>
 
             <div className="space-y-6">
@@ -180,29 +180,29 @@ export default async function ProductPage({ params }: Props) {
       <section className="border-y border-neutral-100 py-16 px-6">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
           <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-neutral-400 text-center flex-1">
-            Waterless Cold-Air
+            Refillable Oils
           </span>
           <div className="hidden md:block w-[1px] h-4 bg-neutral-100" />
           <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-neutral-400 text-center flex-1">
-            No Heat · No Water
+            No Cartridges · No Waste
           </span>
           <div className="hidden md:block w-[1px] h-4 bg-neutral-100" />
           <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-neutral-400 text-center flex-1">
-            Pure Fragrance Oil
+            Designed to Display
           </span>
         </div>
       </section>
 
-      {/* 3️⃣ Technology — the cold-air story, true across the whole line */}
+      {/* 3️⃣ Brand ethos — true across the whole line */}
       <section className="py-32 px-6 bg-white">
         <div className="max-w-3xl mx-auto text-center space-y-6">
           <h2 className="text-4xl lg:text-5xl font-display font-medium tracking-tight">
-            Engineered for the Invisible.
+            Made to be seen.
           </h2>
           <p className="text-neutral-500 text-lg font-light leading-relaxed">
             {oilProduct
-              ? 'A pure, water-free fragrance oil formulated for cold-air diffusion — so every note reaches the air undiluted, exactly as composed.'
-              : 'Unlike diffusers that rely on heat or water, Autivara uses cold-air nebulization to convert undiluted fragrance oil into a dry, nano-sized mist — strong, even, and residue-free.'}
+              ? 'A real fragrance oil, refillable into any Autivara diffuser — change your scent as often as your mood.'
+              : 'Every Autivara diffuser pairs a real fragrance oil with a design built to be displayed — refill it in seconds and change the mood whenever you like.'}
           </p>
         </div>
       </section>

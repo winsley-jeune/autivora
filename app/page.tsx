@@ -67,8 +67,8 @@ export default function Home() {
             Excellence <br /> In Air.
           </h1>
           <p className="text-xl md:text-2xl text-white/80 max-w-2xl mx-auto font-light mb-12 leading-relaxed">
-            Precision cold-air nebulization across automotive, residential, workplace, and
-            commercial environments. One technology. Every space.
+            Design-led aroma diffusers with personality — flame-effect, mist, vent-clip, and
+            commercial scent machines for the car, the home, and business.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
@@ -92,15 +92,15 @@ export default function Home() {
       <section className="border-y border-neutral-100 py-16 px-6">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 text-center">
           <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400 flex-1">
-            Engineered in Europe
+            Design-Led Diffusers
           </span>
           <div className="hidden md:block w-[1px] h-4 bg-neutral-100" />
           <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400 flex-1">
-            Waterless · Heat-Free
+            Refillable · No Cartridges
           </span>
           <div className="hidden md:block w-[1px] h-4 bg-neutral-100" />
           <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400 flex-1">
-            Precision Cold-Air Nebulization
+            Car · Home · Commercial
           </span>
         </div>
       </section>
@@ -162,15 +162,15 @@ export default function Home() {
           </div>
           <div className="space-y-8">
             <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400">
-              The Technology
+              The Idea
             </span>
             <h2 className="text-4xl font-display font-medium tracking-tight">
-              Engineered for the Invisible.
+              Scent, with a personality.
             </h2>
             <p className="text-neutral-500 text-lg font-light leading-relaxed">
-              Cold-air nebulization converts undiluted fragrance oil into a dry, nano-sized mist —
-              no heat, no water, no residue. The same engineering across every Autivara device,
-              calibrated for the space it serves.
+              From a glowing volcano to a spinning astronaut, every Autivara diffuser is built to be
+              displayed, not hidden — pairing a real fragrance oil with a design you actually want to
+              look at. Refill it whenever the mood changes.
             </p>
             <Link
               href="/scents"

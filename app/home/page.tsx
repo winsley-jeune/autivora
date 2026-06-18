@@ -1,19 +1,18 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 import { HOME_ROOMS } from '@/lib/seo-surfaces';
 import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 import ProductGrid from '@/components/ProductGrid';
 
 export const metadata: Metadata = {
-  title: 'Home Diffusers — Cold-Air Fragrance for Every Room',
+  title: 'Home Aroma Diffusers — Flame, Mist & Light-Show Diffusers',
   description:
-    'Whisper-quiet cold-air diffusion designed for living rooms, bedrooms, kitchens, bathrooms, nurseries, and entryways. Zero residue on hardwood, upholstery, or stone.',
+    'Statement home diffusers that turn any room into a mood — flame-effect, jellyfish mist, disco-ball light shows, and minimalist designs. Cool ultrasonic mist, whisper-quiet, auto shut-off.',
   alternates: { canonical: '/home' },
   openGraph: {
-    title: 'Home Diffusers — Cold-Air Fragrance for Every Room',
-    description: 'Whisper-quiet cold-air diffusion designed for every room in your home.',
+    title: 'Autivara Home Diffusers',
+    description: 'Flame-glow, mist, and light-show diffusers that turn any room into a mood.',
     url: '/home',
     type: 'website',
   },
@@ -37,11 +36,11 @@ export default function HomeLanding() {
             For Every Room
           </span>
           <h1 className="text-5xl md:text-7xl font-display font-bold tracking-tighter mb-8 leading-[0.95]">
-            The atmosphere <br /> of home.
+            Ambience you <br /> can switch on.
           </h1>
           <p className="text-lg md:text-xl text-neutral-500 font-light max-w-xl mx-auto leading-relaxed mb-12">
-            Cold-air nebulization engineered for residential spaces. Safe on hardwood, leather,
-            upholstery, and stone. Whisper-quiet operation.
+            Flame-glow, drifting mist, and light-show diffusers that turn any room into a mood — from
+            a cozy fireplace to a full disco. Cool to the touch, whisper-quiet, refill in seconds.
           </p>
           <Link
             href="/home/rooms"
@@ -58,9 +57,9 @@ export default function HomeLanding() {
       {/* Pillars */}
       <section className="py-24 px-6 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
         {[
-          { h: 'Zero residue', p: 'Dry nano-mist with no water carrier. Safe on hardwood floors, upholstery, leather, marble, and wood furniture.' },
-          { h: 'Whisper-quiet', p: 'Near-silent operation — quieter than a refrigerator. Will not disturb sleep, reading, or conversation.' },
-          { h: 'Room-calibrated', p: 'Adjustable intensity from 1 (nursery) to 5 (large kitchen). Pre-loaded room profiles in the app.' },
+          { h: 'Mood, not just scent', p: 'Flame-effect glow, rising mist, and color light shows — ambience and fragrance in one piece.' },
+          { h: 'Cool mist, no heat', p: 'Ultrasonic cool-mist diffusion runs quiet and never hot, with auto shut-off when the tank runs dry.' },
+          { h: 'Made to display', p: 'Volcano, jellyfish, disco-ball, steam-train, wood-grain — designs you will want on the shelf.' },
         ].map((item) => (
           <div key={item.h} className="space-y-3">
             <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-400">{item.h}</h3>
@@ -75,7 +74,7 @@ export default function HomeLanding() {
           <div className="text-center space-y-4">
             <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400">Browse by Room</span>
             <h2 className="text-3xl md:text-4xl font-display font-medium tracking-tight">
-              Different rooms, different needs.
+              Different rooms, different moods.
             </h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

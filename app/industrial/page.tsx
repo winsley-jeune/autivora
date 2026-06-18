@@ -6,13 +6,13 @@ import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 import ProductGrid from '@/components/ProductGrid';
 
 export const metadata: Metadata = {
-  title: 'Commercial Diffusers — Boutique Scenting for SMB Properties',
+  title: 'Commercial Scent Diffusers — HVAC & Smart Scenting for Business',
   description:
-    'Hotel-grade cold-air diffusion at independent-business economics. For boutique hotels, salons, retail boutiques, real estate staging, fitness studios, and medical offices.',
+    'Commercial scenting for boutique hotels, salons, retail, gyms, and offices — HVAC scent machines and Wi-Fi smart diffusers at independent-business prices. Month-to-month, real support.',
   alternates: { canonical: '/industrial' },
   openGraph: {
-    title: 'Commercial Diffusers — Boutique Scenting',
-    description: 'Hotel-grade cold-air diffusion at SMB economics.',
+    title: 'Commercial Scent Diffusers — HVAC & Smart Scenting',
+    description: 'Hotel-grade commercial scenting at SMB economics.',
     url: '/industrial',
     type: 'website',
   },
@@ -53,7 +53,7 @@ export default function IndustrialLanding() {
 
       {/* Commercial & B2B products (live from Shopify) */}
       <ProductGrid
-        tags={['commercial-industrial', 'business']}
+        tags="industrial-scenting"
         eyebrow="The Range"
         heading="Scale your scent."
       />
