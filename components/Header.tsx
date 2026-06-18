@@ -4,12 +4,19 @@ import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import CartButton from '@/components/CartButton';
 
+// Categories match the homepage "Our Collections" + Shop All. /office is retired.
 const NAV_LINKS = [
-  { label: 'Auto', href: '/auto' },
+  { label: 'Car', href: '/auto' },
   { label: 'Home', href: '/home' },
-  { label: 'Office', href: '/office' },
-  { label: 'Industrial', href: '/industrial' },
+  { label: 'Commercial', href: '/industrial' },
   { label: 'Scents', href: '/scents' },
+  { label: 'Shop All', href: '/collection' },
+];
+
+const SECONDARY_LINKS = [
+  { label: 'Journal', href: '/blog' },
+  { label: 'Shipping Policy', href: '/shipping' },
+  { label: 'Returns & Refunds', href: '/returns' },
 ];
 
 export default function Header() {
@@ -46,31 +53,33 @@ export default function Header() {
         </button>
       </div>
 
-      {/* Mobile drawer */}
+      {/* Mobile drawer — full category list, scrollable */}
       {open && (
-        <div className="fixed inset-0 top-[73px] z-40 bg-white flex flex-col px-8 pt-10 pb-16 space-y-8 md:hidden overflow-y-auto">
-          {NAV_LINKS.map(({ label, href }) => (
-            <a
-              key={href}
-              href={href}
-              onClick={() => setOpen(false)}
-              className="text-3xl font-display font-bold tracking-tighter text-black hover:text-neutral-400 transition-colors"
-            >
-              {label}
-            </a>
-          ))}
+        <div className="fixed inset-x-0 bottom-0 top-[73px] z-40 bg-white flex flex-col md:hidden overflow-y-auto">
+          <nav className="flex flex-col px-8 pt-10 gap-6">
+            {NAV_LINKS.map(({ label, href }) => (
+              <a
+                key={href}
+                href={href}
+                onClick={() => setOpen(false)}
+                className="text-3xl font-display font-bold tracking-tighter text-black hover:text-neutral-400 transition-colors"
+              >
+                {label}
+              </a>
+            ))}
+          </nav>
 
-          {/* Bottom strip */}
-          <div className="!mt-auto border-t border-neutral-100 pt-8 space-y-3">
-            <a href="/blog" onClick={() => setOpen(false)} className="block text-xs text-neutral-400 hover:text-black transition-colors">
-              Journal
-            </a>
-            <a href="/shipping" onClick={() => setOpen(false)} className="block text-xs text-neutral-400 hover:text-black transition-colors">
-              Shipping Policy
-            </a>
-            <a href="/returns" onClick={() => setOpen(false)} className="block text-xs text-neutral-400 hover:text-black transition-colors">
-              Returns & Refunds
-            </a>
+          <div className="mt-auto border-t border-neutral-100 px-8 pt-8 pb-16 space-y-3">
+            {SECONDARY_LINKS.map(({ label, href }) => (
+              <a
+                key={href}
+                href={href}
+                onClick={() => setOpen(false)}
+                className="block text-xs text-neutral-400 hover:text-black transition-colors"
+              >
+                {label}
+              </a>
+            ))}
           </div>
         </div>
       )}

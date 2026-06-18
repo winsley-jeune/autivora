@@ -1,5 +1,6 @@
 import { Product } from '@/lib/shopify-types';
 import { getSocialProof } from '@/lib/product-social-proof';
+import { brandName } from '@/lib/brand';
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://autivara.com';
 
@@ -20,7 +21,7 @@ export default function ProductJsonLd({ product }: Props) {
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'Product',
-    name: product.title,
+    name: brandName(product.title),
     description: product.description || undefined,
     image: images,
     url,

@@ -12,6 +12,7 @@ import ProductViewTracker from '@/components/analytics/ProductViewTracker';
 import ProductGallery from '@/components/ProductGallery';
 import ProductGrid from '@/components/ProductGrid';
 import { categoryFromTags, isCarProduct, isOil } from '@/lib/category';
+import { brandName } from '@/lib/brand';
 
 type Props = {
   params: Promise<{ handle: string }>;
@@ -21,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { handle } = await params;
   const product = await getProduct(handle);
   if (!product) return {};
-  const title = product.seo?.title ?? product.title;
+  const title = brandName(product.seo?.title ?? product.title);
   const description =
     product.seo?.description ||
     product.description ||
@@ -57,6 +58,7 @@ export default async function ProductPage({ params }: Props) {
   const category = categoryFromTags(product.tags);
   const carProduct = isCarProduct(product.tags);
   const oilProduct = isOil(product.tags);
+  const displayTitle = brandName(product.title);
 
   // Recommendations: other products from the same collection.
   const COLLECTION_TAGS = ['car-diffusers', 'home-diffusers', 'industrial-scenting'];
@@ -109,12 +111,12 @@ export default async function ProductPage({ params }: Props) {
         items={[
           { name: 'Home', url: '/' },
           { name: 'Shop', url: '/collection' },
-          { name: product.title, url: `/product/${handle}` },
+          { name: displayTitle, url: `/product/${handle}` },
         ]}
       />
       <ProductViewTracker
         id={product.id}
-        name={product.title}
+        name={displayTitle}
         price={parseFloat(product.priceRange.minVariantPrice.amount)}
         currency={product.priceRange.minVariantPrice.currencyCode}
         category={category}
@@ -124,7 +126,7 @@ export default async function ProductPage({ params }: Props) {
       <section className="pt-32 pb-24 px-6 lg:px-12 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
           {/* Left: image gallery — main + clickable thumbnails */}
-          <ProductGallery images={images} title={product.title} />
+          <ProductGallery images={images} title={displayTitle} />
 
           {/* Right: info */}
           <div className="flex flex-col space-y-8">
@@ -133,7 +135,7 @@ export default async function ProductPage({ params }: Props) {
                 {category}
               </span>
               <h1 className="text-5xl lg:text-7xl font-display font-bold tracking-tighter leading-[0.9]">
-                {product.title}
+                {displayTitle}
               </h1>
               <p className="text-xl lg:text-2xl font-display italic text-neutral-400 tracking-tight">
                 Scent. Without Compromise.
