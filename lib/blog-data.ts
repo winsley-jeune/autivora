@@ -553,5 +553,14 @@ const CORE_ARTICLES: BlogArticle[] = [
   },
 ];
 
+// Retired: articles built on tech the catalog doesn't have (whole-house HVAC,
+// waterless-vs-ultrasonic nebulization). 301'd to /blog in next.config.
+const RETIRED_SLUGS = new Set([
+  'whole-house-scent-diffuser-guide',
+  'waterless-vs-ultrasonic-diffuser',
+]);
+
 // Newest first: competitive/comparison set (2026-06-10) ahead of the core set.
-export const BLOG_ARTICLES: BlogArticle[] = [...COMPETITIVE_ARTICLES, ...CORE_ARTICLES];
+export const BLOG_ARTICLES: BlogArticle[] = [...COMPETITIVE_ARTICLES, ...CORE_ARTICLES].filter(
+  (a) => !RETIRED_SLUGS.has(a.slug),
+);

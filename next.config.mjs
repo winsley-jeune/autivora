@@ -94,6 +94,9 @@ const nextConfig = {
       // ── Retired sections (premium-only, no real products) → live category ─
       { source: '/office/:path*', destination: '/home', permanent: true },
       { source: '/fitment/:path*', destination: '/auto', permanent: true },
+      // ── Retired blog posts (tech the catalog doesn't have) → blog index ───
+      { source: '/blog/whole-house-scent-diffuser-guide', destination: '/blog', permanent: true },
+      { source: '/blog/waterless-vs-ultrasonic-diffuser', destination: '/blog', permanent: true },
     ];
   },
 };
