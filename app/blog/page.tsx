@@ -1,11 +1,13 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Metadata } from "next";
 import { BLOG_ARTICLES } from "@/lib/blog-data";
+import { blogImage } from "@/lib/blog-image";
 
 export const metadata: Metadata = {
-  title: "The Autivara Journal — Luxury Car Fragrance Insights",
+  title: "The Autivara Journal — Scent, Design & Ambience",
   description:
-    "Expert guides on car diffuser technology, interior protection, essential oil safety, and the science of automotive fragrance.",
+    "Guides on car, home, and commercial scenting — choosing diffusers, oil safety, scent marketing, room and venue sizing, and getting the most from your fragrance.",
   alternates: { canonical: "/blog" },
   openGraph: {
     title: "The Autivara Journal",
@@ -46,6 +48,15 @@ export default function BlogIndex() {
                 i === 0 ? "md:col-span-2" : ""
               }`}
             >
+              <div className={`relative bg-neutral-50 overflow-hidden ${i === 0 ? "aspect-[21/9]" : "aspect-[16/10]"}`}>
+                <Image
+                  src={blogImage(article)}
+                  alt={article.title}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+              </div>
               <div className="p-8 space-y-4">
                 <div className="flex items-center gap-4 text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-400">
                   <span>{article.category}</span>

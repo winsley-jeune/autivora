@@ -5,6 +5,8 @@ import { BLOG_ARTICLES } from "@/lib/blog-data";
 import BreadcrumbJsonLd from "@/components/BreadcrumbJsonLd";
 import ArticleJsonLd from "@/components/ArticleJsonLd";
 import PuraCostCalculator from "@/components/blog/PuraCostCalculator";
+import Image from "next/image";
+import { blogImage } from "@/lib/blog-image";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -32,11 +34,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url: canonical,
       type: "article",
       publishedTime: article.date,
+      images: [blogImage(article)],
     },
     twitter: {
       card: "summary_large_image",
       title: article.metaTitle,
       description: article.metaDescription,
+      images: [blogImage(article)],
     },
   };
 }
@@ -201,6 +205,7 @@ export default async function BlogArticle({ params }: Props) {
         description={article.metaDescription}
         datePublished={article.date}
         slug={slug}
+        image={blogImage(article)}
       />
       <BreadcrumbJsonLd
         items={[
@@ -237,6 +242,20 @@ export default async function BlogArticle({ params }: Props) {
           {article.excerpt}
         </p>
       </section>
+
+      {/* Hero image — relevant product shot */}
+      <div className="max-w-3xl mx-auto px-6 mb-16">
+        <div className="relative aspect-[16/9] bg-neutral-50 rounded-sm overflow-hidden">
+          <Image
+            src={blogImage(article)}
+            alt={article.title}
+            fill
+            priority
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 768px"
+          />
+        </div>
+      </div>
 
       <div className="w-16 h-[1px] bg-black mx-auto"></div>
 
