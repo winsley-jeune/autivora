@@ -201,8 +201,18 @@ export default async function ProductPage({ params }: Props) {
           tags={collectionTag}
           exclude={handle}
           limit={3}
-          eyebrow="Pairs well with"
+          eyebrow="More from the collection"
           heading="You May Also Like"
+        />
+      )}
+
+      {/* Scent cross-sell — refill oils, shown on device pages (renders only if oils are live) */}
+      {!oilProduct && (
+        <ProductGrid
+          tags="fragrance-oil"
+          limit={4}
+          eyebrow="Refill it"
+          heading="Pairs Well With These Scents"
         />
       )}
 
