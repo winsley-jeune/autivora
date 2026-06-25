@@ -16,7 +16,7 @@ All wiring is in the code; it just needs the IDs as Vercel env vars. **These are
 
 - [ ] **Google Search Console** — add property `https://autivara.com` → HTML-tag verify → set `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` in Vercel → redeploy → Verify → submit `sitemap.xml` → URL-Inspect + Request Indexing on the homepage and top 3 products. — **You** (ping me and I'll confirm the meta tag renders before you hit Verify)
 - [ ] **Bing Webmaster Tools** — same pattern, `NEXT_PUBLIC_BING_SITE_VERIFICATION`. — **You**
-- [ ] **GA4** — create property → Measurement ID `G-XXXX` → set `NEXT_PUBLIC_GA` in Vercel → redeploy. — **You**
+- [ ] **GA4** — create property → Measurement ID `G-XXXX` → set `NEXT_PUBLIC_GA4_ID` in Vercel → redeploy. — **You**
 - [ ] **Meta / TikTok pixels** — set `NEXT_PUBLIC_META_PIXEL_ID` / `NEXT_PUBLIC_TIKTOK_PIXEL_ID` in Vercel (components already wired). — **You**
 
 ## Phase 3 — The profit engine (oil subscription + bundles)
