@@ -15,6 +15,7 @@ export const metadata: Metadata = {
     description: 'Flame-glow, mist, and light-show diffusers that turn any room into a mood.',
     url: '/home',
     type: 'website',
+    images: ['/products/autivora-volcano-flame-diffuser/autivora-volcano-flame-diffuser-1.jpg'],
   },
   twitter: { card: 'summary_large_image' },
 };
@@ -53,7 +54,7 @@ export default function HomeLanding() {
       </section>
 
       {/* Home products (live from Shopify) */}
-      <ProductGrid tags="home-diffusers" eyebrow="The Collection" heading="For every room." />
+      <ProductGrid tags="home-diffusers" eyebrow="The Collection" heading="For every room." emitItemList />
 
       {/* Pillars */}
       <section className="py-24 px-6 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">

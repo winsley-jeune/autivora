@@ -17,6 +17,7 @@ export const metadata: Metadata = {
       'Cold-air nebulization devices and signature fragrance oils engineered for luxury automotive cabins.',
     url: '/collection',
     type: 'website',
+    images: ['/products/autivora-disco-ball-diffuser/autivora-disco-ball-diffuser-1.jpg'],
   },
   twitter: { card: 'summary_large_image' },
 };

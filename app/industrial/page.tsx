@@ -15,6 +15,7 @@ export const metadata: Metadata = {
     description: 'Hotel-grade commercial scenting at SMB economics.',
     url: '/industrial',
     type: 'website',
+    images: ['/products/autivora-atmos-pro-hvac/autivora-atmos-pro-hvac-1.jpg'],
   },
   twitter: { card: 'summary_large_image' },
 };
@@ -56,6 +57,7 @@ export default function IndustrialLanding() {
         tags="industrial-scenting"
         eyebrow="The Range"
         heading="Scale your scent."
+        emitItemList
       />
 
       {/* Pillars */}

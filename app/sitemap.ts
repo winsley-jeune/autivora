@@ -35,6 +35,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: new Date(p.updatedAt),
     changeFrequency: 'weekly' as const,
     priority: 0.85,
+    images: p.featuredImage?.url ? [p.featuredImage.url] : undefined,
   }));
 
   // ── Home rooms ──────────────────────────────────────────────────────────────

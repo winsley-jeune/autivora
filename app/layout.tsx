@@ -89,6 +89,12 @@ const organizationSchema = {
   logo: `${BASE_URL}/icon`,
   description: 'Design-led aroma diffusers — flame-effect, mist, vent-clip, and commercial scent machines for the car, home, and business.',
   email: 'support@autivara.com',
+  contactPoint: {
+    '@type': 'ContactPoint',
+    email: 'support@autivara.com',
+    contactType: 'customer support',
+    availableLanguage: ['en'],
+  },
   // TODO: add real social profile URLs (Instagram, TikTok, etc.) to strengthen the brand entity.
   sameAs: [],
 };
@@ -108,6 +114,8 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
       <head>
+        <link rel="preconnect" href="https://cdn.shopify.com" />
+        <link rel="dns-prefetch" href="https://cdn.shopify.com" />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
       </head>
@@ -127,8 +135,8 @@ export default function RootLayout({
                   Autivara
                 </span>
                 <p className="text-xs text-neutral-400 font-light leading-relaxed max-w-xs">
-                  Precision cold-air nebulization for car, home, office, and commercial
-                  spaces. Waterless. Heat-free.
+                  Design-led aroma diffusers — flame-effect, mist, vent-clip, and commercial scent
+                  machines for the car, the home, and business.
                 </p>
               </div>
 
@@ -139,12 +147,11 @@ export default function RootLayout({
                 </span>
                 <ul className="space-y-3">
                   {[
-                    { label: 'Auto', href: '/auto' },
+                    { label: 'Car', href: '/auto' },
                     { label: 'Home', href: '/home' },
-                    { label: 'Office', href: '/office' },
-                    { label: 'Industrial', href: '/industrial' },
-                    { label: 'All Products', href: '/collection' },
+                    { label: 'Commercial', href: '/industrial' },
                     { label: 'Scents', href: '/scents' },
+                    { label: 'All Products', href: '/collection' },
                     { label: 'Journal', href: '/blog' },
                   ].map(({ label, href }) => (
                     <li key={href}>

@@ -15,6 +15,7 @@ export const metadata: Metadata = {
     description: 'Statement car diffusers — vent clips, solar spinners, and smart diffusers.',
     url: '/auto',
     type: 'website',
+    images: ['/products/autivora-astronaut-car-diffuser/autivora-astronaut-car-diffuser-1.jpg'],
   },
   twitter: { card: 'summary_large_image' },
 };
@@ -77,7 +78,7 @@ export default function AutoLanding() {
       </section>
 
       {/* Car products (live from Shopify) */}
-      <ProductGrid tags="car-diffusers" eyebrow="The Collection" heading="Built for the cabin." />
+      <ProductGrid tags="car-diffusers" eyebrow="The Collection" heading="Built for the cabin." emitItemList />
 
       {/* Closing CTA */}
       <section className="py-32 px-6 text-center max-w-3xl mx-auto space-y-8">

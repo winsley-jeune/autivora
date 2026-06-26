@@ -13,6 +13,7 @@ export const metadata: Metadata = {
     description: 'High-concentration fragrance oils that refill every Autivara diffuser.',
     url: '/scents',
     type: 'website',
+    images: ['/products/autivora-jellyfish-mist-diffuser/autivora-jellyfish-mist-diffuser-1.jpg'],
   },
   twitter: { card: 'summary_large_image' },
 };
