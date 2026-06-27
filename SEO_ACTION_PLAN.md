@@ -23,7 +23,7 @@ Goal is not rankings for their own sake — it's qualified buyers landing on pag
 - [DONE] **/about** page — brand story, what we make, why (experience + expertise signals), linked in footer.
 - [DONE] **/faq** page — central FAQ with FAQPage schema (trust + long-tail).
 - [DONE] **/privacy** and **/terms** pages — trust/legal completeness (search & buyers expect them).
-- [ME] Blog **author entity** (E-E-A-T byline) tied to the brand/about.
+- [DONE] Blog **author entity** — "Autivara Editorial Team" byline (visible + Article schema `author.url` → /about).
 - [HUMAN] Provide **social profile URLs** → I add to `sameAs` (authority signal).
 - [HUMAN] Install a **reviews app** (Judge.me free) + collect first reviews → I wire Product `aggregateRating` schema (do NOT fake it).
 
@@ -32,7 +32,7 @@ Goal is not rankings for their own sake — it's qualified buyers landing on pag
 - [DONE] **Buying-guide pillar pages** for each collection (car / home / commercial) — comprehensive, internally linked, Article + FAQPage schema, linked from category pages.
 - [DONE] Add **per-product FAQ** to product pages (category-aware, FAQPage schema).
 - [DONE] Add **FAQ to category pages** (/auto, /home, /industrial) — FAQPage schema + indexable copy.
-- [ME] New **high-intent/bottom-funnel articles** in batches ("best [x] for [y]", gift guides, comparisons that match the catalog).
+- [DONE — batch 1] **Bottom-funnel articles**: best-diffuser-for-bedroom, how-to-make-your-car-smell-good, best-diffuser-gifts, best-flame-diffuser, how-to-choose-fragrance-oil. (More batches available on request.)
 
 ## E. Conversion (turns traffic into sales)
 - [ME] Trust signals on product pages (shipping/returns/secure-checkout reassurance).

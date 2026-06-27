@@ -23,7 +23,7 @@ export default function ArticleJsonLd({
     datePublished,
     dateModified: datePublished,
     image: image ?? `${BASE_URL}/opengraph-image`,
-    author: { '@type': 'Organization', name: 'Autivara', url: BASE_URL },
+    author: { '@type': 'Organization', name: 'Autivara Editorial Team', url: `${BASE_URL}/about` },
     publisher: {
       '@type': 'Organization',
       name: 'Autivara',

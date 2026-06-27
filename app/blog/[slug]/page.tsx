@@ -242,8 +242,14 @@ export default async function BlogArticle({ params }: Props) {
         <h1 className="text-4xl md:text-5xl font-display font-bold tracking-tighter leading-tight mb-8">
           {article.title}
         </h1>
-        <p className="text-xl text-neutral-500 font-light leading-relaxed italic">
+        <p className="text-xl text-neutral-500 font-light leading-relaxed italic mb-6">
           {article.excerpt}
+        </p>
+        <p className="text-[11px] text-neutral-400 font-light">
+          By the{' '}
+          <Link href="/about" className="font-medium text-neutral-600 hover:text-black transition-colors">
+            Autivara Editorial Team
+          </Link>
         </p>
       </section>
 
