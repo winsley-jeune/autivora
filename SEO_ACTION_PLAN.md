@@ -29,9 +29,9 @@ Goal is not rankings for their own sake — it's qualified buyers landing on pag
 
 ## D. Content volume & depth (drives qualified traffic)
 - [DONE] 21 blog articles rewritten (question-first, FAQ schema, real products).
-- [ME] **Buying-guide pillar pages** for each collection (car / home / commercial) — comprehensive, internally linked.
-- [ME] Add **per-product FAQ + richer copy** to product pages (rank + convert).
-- [ME] Add **intro copy + FAQ** to category pages (currently thin for SEO).
+- [DONE] **Buying-guide pillar pages** for each collection (car / home / commercial) — comprehensive, internally linked, Article + FAQPage schema, linked from category pages.
+- [DONE] Add **per-product FAQ** to product pages (category-aware, FAQPage schema).
+- [DONE] Add **FAQ to category pages** (/auto, /home, /industrial) — FAQPage schema + indexable copy.
 - [ME] New **high-intent/bottom-funnel articles** in batches ("best [x] for [y]", gift guides, comparisons that match the catalog).
 
 ## E. Conversion (turns traffic into sales)
@@ -50,5 +50,6 @@ Goal is not rankings for their own sake — it's qualified buyers landing on pag
 ### Execution order
 **Wave 1 [DONE — 94cae8c]:** A (Organization contactPoint, ItemList, OG images, image sitemap) + B (cdn preconnect, footer).
 **Wave 2 [DONE]:** C trust pages (/about, /faq, /privacy, /terms) shipped + sitemap/footer wired.
-**Wave 3 [in progress]:** D content depth — category intro copy + FAQ (commercial-intent pages first), then per-product FAQ, pillar pages, new articles in batches.
+**Wave 3 [DONE]:** category FAQ (3a), per-product FAQ (3b), three pillar buying guides + category↔guide links (3c).
+**Wave 4 [next]:** new bottom-funnel article batches, blog author byline/entity, SearchAction once a /search page exists.
 Human items are flagged inline — I'll call them out as each wave lands.
