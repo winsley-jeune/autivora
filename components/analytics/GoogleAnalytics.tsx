@@ -10,7 +10,14 @@ export default function GoogleAnalytics({ gaId }: { gaId: string }) {
           function gtag(){dataLayer.push(arguments);}
           window.gtag = gtag;
           gtag('js', new Date());
-          gtag('config', '${gaId}', { send_page_view: true });
+          // Headless cross-domain: decorate links to the Shopify-hosted checkout
+          // so autivara.com -> checkout.autivara.com stays ONE session (no
+          // self-referral, no lost attribution). Harmless if checkout doesn't
+          // yet carry the same tag.
+          gtag('config', '${gaId}', {
+            send_page_view: true,
+            linker: { domains: ['autivara.com', 'checkout.autivara.com'] }
+          });
         `}
       </Script>
     </>
