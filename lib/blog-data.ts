@@ -1,5 +1,6 @@
 import { COMPETITIVE_ARTICLES } from './blog-competitive';
 import { BLOG_REWRITES } from './blog-rewrites';
+import { BUYING_GUIDES } from './blog-guides';
 
 export type BlogArticle = {
   slug: string;
@@ -561,8 +562,12 @@ const RETIRED_SLUGS = new Set([
   'waterless-vs-ultrasonic-diffuser',
 ]);
 
-// Newest first: competitive/comparison set (2026-06-10) ahead of the core set.
-// SEO rewrites (lib/blog-rewrites.ts) override the original article by slug.
-export const BLOG_ARTICLES: BlogArticle[] = [...COMPETITIVE_ARTICLES, ...CORE_ARTICLES]
+// Pillar buying guides lead (hub pages), then the competitive/comparison set,
+// then the core set. SEO rewrites (lib/blog-rewrites.ts) override by slug.
+export const BLOG_ARTICLES: BlogArticle[] = [
+  ...BUYING_GUIDES,
+  ...COMPETITIVE_ARTICLES,
+  ...CORE_ARTICLES,
+]
   .filter((a) => !RETIRED_SLUGS.has(a.slug))
   .map((a) => BLOG_REWRITES[a.slug] ?? a);

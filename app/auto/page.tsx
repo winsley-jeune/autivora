@@ -104,6 +104,22 @@ export default function AutoLanding() {
       {/* Car products (live from Shopify) */}
       <ProductGrid tags="car-diffusers" eyebrow="The Collection" heading="Built for the cabin." emitItemList />
 
+      {/* Buying guide link (pillar) */}
+      <section className="px-6 pb-8">
+        <div className="max-w-3xl mx-auto bg-neutral-50 rounded-sm p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400">New to car diffusers?</span>
+            <p className="text-base font-display font-medium tracking-tight">Read the complete car diffuser buying guide.</p>
+          </div>
+          <Link
+            href="/blog/best-car-diffuser"
+            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] border-b border-black pb-1 hover:text-neutral-500 transition-colors whitespace-nowrap"
+          >
+            Read the Guide <ArrowRight size={14} />
+          </Link>
+        </div>
+      </section>
+
       {/* Category FAQ */}
       <CategoryFaq heading="Car diffuser questions" items={AUTO_FAQ} />
 
