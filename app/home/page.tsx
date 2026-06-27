@@ -4,6 +4,30 @@ import { ArrowRight } from 'lucide-react';
 import { HOME_ROOMS } from '@/lib/seo-surfaces';
 import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 import ProductGrid from '@/components/ProductGrid';
+import CategoryFaq from '@/components/CategoryFaq';
+
+const HOME_FAQ = [
+  {
+    question: 'Is an ultrasonic diffuser the same as a humidifier?',
+    answer:
+      'They share the cool-mist technology, but a diffuser is built for fragrance — a smaller tank, finer mist, and a design meant to be displayed. You add a few drops of oil to the water and it disperses scent and a little moisture into the room without any heat.',
+  },
+  {
+    question: 'Do the flame and light-show diffusers actually use fire?',
+    answer:
+      'No. The "flame" is LED light shining up through the rising mist to mimic a flickering fire, and the light-show models cycle colored LEDs. Everything stays cool to the touch — safe to leave running on a shelf or nightstand.',
+  },
+  {
+    question: 'How quiet are they?',
+    answer:
+      'Ultrasonic diffusion is near-silent — most people only hear a faint hum up close. They are designed to run in bedrooms and offices without being a distraction, and they shut off automatically when the water runs out.',
+  },
+  {
+    question: 'How much oil do I use and how often do I refill?',
+    answer:
+      'Fill the tank with water, add five to ten drops of fragrance oil, and a typical tank runs for several hours. Refill the water when the tank empties and top up the oil to taste — there are no cartridges to replace.',
+  },
+];
 
 export const metadata: Metadata = {
   title: 'Home Aroma Diffusers — Flame, Mist & Light-Show Diffusers',
@@ -101,6 +125,9 @@ export default function HomeLanding() {
           </div>
         </div>
       </section>
+
+      {/* Category FAQ */}
+      <CategoryFaq heading="Home diffuser questions" items={HOME_FAQ} />
     </div>
   );
 }

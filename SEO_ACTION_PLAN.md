@@ -20,9 +20,9 @@ Goal is not rankings for their own sake — it's qualified buyers landing on pag
 - [HUMAN] Run PageSpeed Insights after deploy; send me any failing metric and I'll fix.
 
 ## C. E-E-A-T (Expertise, Experience, Authority, Trust)
-- [ME] **/about** page — brand story, what we make, why (experience + expertise signals), linked in footer + Organization schema.
-- [ME] **/faq** page — central FAQ with FAQPage schema (trust + long-tail).
-- [ME] **/privacy** and **/terms** pages — trust/legal completeness (search & buyers expect them).
+- [DONE] **/about** page — brand story, what we make, why (experience + expertise signals), linked in footer.
+- [DONE] **/faq** page — central FAQ with FAQPage schema (trust + long-tail).
+- [DONE] **/privacy** and **/terms** pages — trust/legal completeness (search & buyers expect them).
 - [ME] Blog **author entity** (E-E-A-T byline) tied to the brand/about.
 - [HUMAN] Provide **social profile URLs** → I add to `sameAs` (authority signal).
 - [HUMAN] Install a **reviews app** (Judge.me free) + collect first reviews → I wire Product `aggregateRating` schema (do NOT fake it).
@@ -48,7 +48,7 @@ Goal is not rankings for their own sake — it's qualified buyers landing on pag
 
 ---
 ### Execution order
-**Wave 1 (now):** A (SearchAction, Organization, ItemList, OG images, image sitemap, hreflang) + B (perf) — pure code, high leverage.
-**Wave 2:** C trust pages (/about, /faq, /privacy, /terms) + author entity.
-**Wave 3:** D content depth (category copy/FAQ, product FAQ, pillar pages, new articles in batches).
+**Wave 1 [DONE — 94cae8c]:** A (Organization contactPoint, ItemList, OG images, image sitemap) + B (cdn preconnect, footer).
+**Wave 2 [DONE]:** C trust pages (/about, /faq, /privacy, /terms) shipped + sitemap/footer wired.
+**Wave 3 [in progress]:** D content depth — category intro copy + FAQ (commercial-intent pages first), then per-product FAQ, pillar pages, new articles in batches.
 Human items are flagged inline — I'll call them out as each wave lands.

@@ -4,6 +4,30 @@ import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 import ProductGrid from '@/components/ProductGrid';
+import CategoryFaq from '@/components/CategoryFaq';
+
+const AUTO_FAQ = [
+  {
+    question: 'Are car vent diffusers better than hanging air fresheners?',
+    answer:
+      'They last far longer and look better. A vent clip diffuser uses refillable fragrance oil and airflow from your vents, so the scent stays consistent for one to two weeks per refill instead of fading in days like a paper tree — and you control the strength with how much oil you add.',
+  },
+  {
+    question: 'Do Autivara car diffusers use water or batteries?',
+    answer:
+      'Most are waterless and need no power at all — you add a few drops of oil and the air from your vent carries the scent. Solar models add a rotor that spins in sunlight, and our rechargeable smart diffuser uses a USB-C battery for adjustable, timed diffusion.',
+  },
+  {
+    question: 'Will the oil damage my dashboard or vents?',
+    answer:
+      'No. Because the diffuser holds the oil in a sealed pad or chamber, there is no liquid sloshing onto your interior — no spills, no oily residue on the vents. Wipe the unit if you over-fill, and that is the extent of the maintenance.',
+  },
+  {
+    question: 'How strong is the scent in a car?',
+    answer:
+      'A car cabin is small, so a little goes a long way. Start with two or three drops and add more if you want it stronger. Clipping the diffuser to an active vent increases throw; moving it to the dash makes it more subtle.',
+  },
+];
 
 export const metadata: Metadata = {
   title: 'Car Diffusers — Vent Clips, Solar & Smart Car Scent',
@@ -79,6 +103,9 @@ export default function AutoLanding() {
 
       {/* Car products (live from Shopify) */}
       <ProductGrid tags="car-diffusers" eyebrow="The Collection" heading="Built for the cabin." emitItemList />
+
+      {/* Category FAQ */}
+      <CategoryFaq heading="Car diffuser questions" items={AUTO_FAQ} />
 
       {/* Closing CTA */}
       <section className="py-32 px-6 text-center max-w-3xl mx-auto space-y-8">

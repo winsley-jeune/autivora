@@ -4,6 +4,30 @@ import { ArrowRight } from 'lucide-react';
 import { INDUSTRIAL_USE_CASES } from '@/lib/seo-surfaces';
 import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 import ProductGrid from '@/components/ProductGrid';
+import CategoryFaq from '@/components/CategoryFaq';
+
+const INDUSTRIAL_FAQ = [
+  {
+    question: 'How does commercial scenting cover a large space?',
+    answer:
+      'Commercial units use cold-air (nebulizing) diffusion to atomize pure fragrance oil into a dry micro-mist that travels much farther than a home diffuser. Standalone units scent a room directly; larger HVAC units connect to your ductwork so the scent distributes evenly through the whole space.',
+  },
+  {
+    question: 'Do I need a long-term contract?',
+    answer:
+      'No. Unlike the large scent-marketing companies, we sell the equipment outright and our oil plans are month-to-month — you can pause or cancel anytime. No three-month lock-in to get started.',
+  },
+  {
+    question: 'Can I schedule when it runs and how strong it is?',
+    answer:
+      'Yes. Our smart commercial units include Wi-Fi scheduling, so you set run times and intensity from an app — full scent during open hours, dialed back or off overnight. That control also keeps oil cost predictable.',
+  },
+  {
+    question: 'What size space can one unit cover?',
+    answer:
+      'It depends on the model and the air volume of the room. Standalone units suit reception areas, salons, and boutiques; HVAC units scale to lobbies, gyms, and multi-room properties. Tell us your square footage at support@autivara.com and we will recommend the right coverage.',
+  },
+];
 
 export const metadata: Metadata = {
   title: 'Commercial Scent Diffusers — HVAC & Smart Scenting for Business',
@@ -108,6 +132,9 @@ export default function IndustrialLanding() {
           </div>
         </div>
       </section>
+
+      {/* Category FAQ */}
+      <CategoryFaq heading="Commercial scenting questions" items={INDUSTRIAL_FAQ} />
     </div>
   );
 }
