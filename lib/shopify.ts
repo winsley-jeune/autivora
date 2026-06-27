@@ -626,6 +626,55 @@ export async function getProductsByTag(
   }
 }
 
+// Free-text catalog search for the on-site /search page (and the WebSite
+// SearchAction target). Returns the same simplified card shape as
+// getProductsByTag so results render through the canonical ProductCard.
+export async function searchProducts(term: string): Promise<CatalogCard[]> {
+  const q = term.trim();
+  if (!q) return [];
+  try {
+    const res = await shopifyFetch<any>({
+      query: `
+        query searchProducts($q: String) {
+          products(first: 100, query: $q, sortKey: RELEVANCE) {
+            edges {
+              node {
+                handle
+                title
+                description
+                tags
+                featuredImage { url altText }
+                images(first: 2) { edges { node { url } } }
+                variants(first: 1) { edges { node { id } } }
+                priceRange { minVariantPrice { amount currencyCode } }
+              }
+            }
+          }
+        }
+      `,
+      // Shopify prefix-matches indexed fields (title, tag, product_type, vendor).
+      variables: { q: `title:*${q}* OR tag:*${q}* OR product_type:*${q}*` },
+    });
+    return (res.body.data.products.edges as any[]).map((e) => {
+      const primary = e.node.featuredImage?.url as string | undefined;
+      const imgs = (e.node.images?.edges ?? []).map((g: any) => g.node.url as string);
+      return {
+        handle: e.node.handle as string,
+        title: e.node.title as string,
+        description: (e.node.description ?? '') as string,
+        price: e.node.priceRange.minVariantPrice.amount as string,
+        currencyCode: e.node.priceRange.minVariantPrice.currencyCode as string,
+        image: (primary ?? imgs[0]) as string | undefined,
+        secondaryImage: imgs.find((u: string) => u !== (primary ?? imgs[0])) as string | undefined,
+        variantId: e.node.variants?.edges?.[0]?.node?.id as string | undefined,
+      };
+    });
+  } catch (e) {
+    console.error('[Shopify] searchProducts failed:', term, e);
+    return [];
+  }
+}
+
 export async function getProducts({
   query,
   reverse,

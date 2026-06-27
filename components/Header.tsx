@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Search } from 'lucide-react';
 import CartButton from '@/components/CartButton';
 
 // Categories match the homepage "Our Collections" + Shop All. /office is retired.
@@ -14,7 +14,10 @@ const NAV_LINKS = [
 ];
 
 const SECONDARY_LINKS = [
+  { label: 'Search', href: '/search' },
   { label: 'Journal', href: '/blog' },
+  { label: 'About', href: '/about' },
+  { label: 'FAQ', href: '/faq' },
   { label: 'Shipping Policy', href: '/shipping' },
   { label: 'Returns & Refunds', href: '/returns' },
 ];
@@ -41,8 +44,15 @@ export default function Header() {
         ))}
       </nav>
 
-      {/* Right: cart + hamburger */}
+      {/* Right: search + cart + hamburger */}
       <div className="flex items-center gap-4">
+        <a
+          href="/search"
+          aria-label="Search"
+          className="p-1 text-black hover:opacity-70 transition-opacity"
+        >
+          <Search size={20} />
+        </a>
         <CartButton />
         <button
           onClick={() => setOpen((o) => !o)}

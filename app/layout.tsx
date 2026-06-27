@@ -104,6 +104,15 @@ const websiteSchema = {
   '@type': 'WebSite',
   name: 'Autivara',
   url: BASE_URL,
+  // Sitelinks Search Box eligibility — points Google at the on-site /search.
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: `${BASE_URL}/search?q={search_term_string}`,
+    },
+    'query-input': 'required name=search_term_string',
+  },
 };
 
 export default function RootLayout({
