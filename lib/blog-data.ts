@@ -1,6 +1,7 @@
 import { COMPETITIVE_ARTICLES } from './blog-competitive';
 import { BLOG_REWRITES } from './blog-rewrites';
 import { BUYING_GUIDES } from './blog-guides';
+import { BATCH4_ARTICLES } from './blog-batch4';
 
 export type BlogArticle = {
   slug: string;
@@ -566,6 +567,7 @@ const RETIRED_SLUGS = new Set([
 // then the core set. SEO rewrites (lib/blog-rewrites.ts) override by slug.
 export const BLOG_ARTICLES: BlogArticle[] = [
   ...BUYING_GUIDES,
+  ...BATCH4_ARTICLES,
   ...COMPETITIVE_ARTICLES,
   ...CORE_ARTICLES,
 ]
