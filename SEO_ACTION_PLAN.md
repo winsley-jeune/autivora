@@ -5,7 +5,7 @@ Goal is not rankings for their own sake — it's qualified buyers landing on pag
 
 ## A. Technical SEO & structured data
 - [DONE] Product, Article, FAQ, Breadcrumb, Organization, WebSite JSON-LD · metadata · canonical (metadataBase) · sitemap · robots · 301 redirects.
-- [ME] `WebSite` **SearchAction** (sitelinks search box eligibility).
+- [DONE] `WebSite` **SearchAction** + on-site `/search` page (product + blog results, header search icon).
 - [ME] Enrich **Organization** schema: `contactPoint` (email/support), keep `sameAs` ready for socials.
 - [ME] **ItemList** schema on category/collection pages (product carousels in SERP).
 - [ME] **OG images** on every category page (/auto, /home, /industrial, /scents, /collection) — currently missing.
@@ -51,5 +51,6 @@ Goal is not rankings for their own sake — it's qualified buyers landing on pag
 **Wave 1 [DONE — 94cae8c]:** A (Organization contactPoint, ItemList, OG images, image sitemap) + B (cdn preconnect, footer).
 **Wave 2 [DONE]:** C trust pages (/about, /faq, /privacy, /terms) shipped + sitemap/footer wired.
 **Wave 3 [DONE]:** category FAQ (3a), per-product FAQ (3b), three pillar buying guides + category↔guide links (3c).
-**Wave 4 [next]:** new bottom-funnel article batches, blog author byline/entity, SearchAction once a /search page exists.
+**Wave 4 [DONE]:** bottom-funnel article batch 1 (5 articles), blog author byline/entity, WebSite SearchAction + /search page.
+**Remaining [ME]:** additional article batches on request. **Remaining [HUMAN]:** GA4 ID, reviews app, social URLs (sameAs), Merchant Center feed, oil subscription/bundles.
 Human items are flagged inline — I'll call them out as each wave lands.
