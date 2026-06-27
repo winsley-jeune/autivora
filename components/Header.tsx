@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Menu, X, Search } from 'lucide-react';
 import CartButton from '@/components/CartButton';
+import SearchOverlay from '@/components/SearchOverlay';
 
 // Categories match the homepage "Our Collections" + Shop All. /office is retired.
 const NAV_LINKS = [
@@ -14,7 +15,6 @@ const NAV_LINKS = [
 ];
 
 const SECONDARY_LINKS = [
-  { label: 'Search', href: '/search' },
   { label: 'Journal', href: '/blog' },
   { label: 'About', href: '/about' },
   { label: 'FAQ', href: '/faq' },
@@ -24,6 +24,7 @@ const SECONDARY_LINKS = [
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   return (
     <header className="py-6 px-8 border-b border-gray-100 flex justify-between items-center bg-white/80 backdrop-blur-md sticky top-0 z-50">
@@ -46,13 +47,14 @@ export default function Header() {
 
       {/* Right: search + cart + hamburger */}
       <div className="flex items-center gap-4">
-        <a
-          href="/search"
+        <button
+          type="button"
+          onClick={() => setSearchOpen(true)}
           aria-label="Search"
           className="p-1 text-black hover:opacity-70 transition-opacity"
         >
           <Search size={20} />
-        </a>
+        </button>
         <CartButton />
         <button
           onClick={() => setOpen((o) => !o)}
@@ -80,6 +82,16 @@ export default function Header() {
           </nav>
 
           <div className="mt-auto border-t border-neutral-100 px-8 pt-8 pb-16 space-y-3">
+            <button
+              type="button"
+              onClick={() => {
+                setOpen(false);
+                setSearchOpen(true);
+              }}
+              className="flex items-center gap-2 text-xs text-neutral-400 hover:text-black transition-colors"
+            >
+              <Search size={14} /> Search
+            </button>
             {SECONDARY_LINKS.map(({ label, href }) => (
               <a
                 key={href}
@@ -93,6 +105,8 @@ export default function Header() {
           </div>
         </div>
       )}
+
+      <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
     </header>
   );
 }
