@@ -9,8 +9,10 @@ import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 import ProductViewTracker from '@/components/analytics/ProductViewTracker';
 import ProductGallery from '@/components/ProductGallery';
 import ProductGrid from '@/components/ProductGrid';
+import CategoryFaq from '@/components/CategoryFaq';
 import { categoryFromTags, isOil } from '@/lib/category';
 import { brandName } from '@/lib/brand';
+import { productFaq } from '@/lib/product-faq';
 
 type Props = {
   params: Promise<{ handle: string }>;
@@ -56,6 +58,7 @@ export default async function ProductPage({ params }: Props) {
   const category = categoryFromTags(product.tags);
   const oilProduct = isOil(product.tags);
   const displayTitle = brandName(product.title);
+  const faqItems = productFaq(product);
 
   // Recommendations: other products from the same collection.
   const COLLECTION_TAGS = ['car-diffusers', 'home-diffusers', 'industrial-scenting'];
@@ -215,6 +218,9 @@ export default async function ProductPage({ params }: Props) {
           heading="Pairs Well With These Scents"
         />
       )}
+
+      {/* Product FAQ — visible + FAQPage schema */}
+      <CategoryFaq heading="Questions about this diffuser" items={faqItems} />
 
       {/* 5️⃣ Final CTA */}
       <section className="py-32 px-6 bg-neutral-900 text-white text-center">
