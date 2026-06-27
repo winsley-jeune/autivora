@@ -95,8 +95,11 @@ const organizationSchema = {
     contactType: 'customer support',
     availableLanguage: ['en'],
   },
-  // TODO: add real social profile URLs (Instagram, TikTok, etc.) to strengthen the brand entity.
-  sameAs: [],
+  // Verified brand profiles (add TikTok/Pinterest once live).
+  sameAs: [
+    'https://www.instagram.com/autivara',
+    'https://www.facebook.com/autivara.shop',
+  ],
 };
 
 const websiteSchema = {
