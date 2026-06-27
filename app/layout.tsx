@@ -173,9 +173,13 @@ export default function RootLayout({
                 </span>
                 <ul className="space-y-3">
                   {[
+                    { label: 'About', href: '/about' },
+                    { label: 'FAQ', href: '/faq' },
                     { label: 'Shipping Policy', href: '/shipping' },
                     { label: 'Returns & Refunds', href: '/returns' },
                     { label: 'Contact Us', href: '/contact' },
+                    { label: 'Privacy', href: '/privacy' },
+                    { label: 'Terms', href: '/terms' },
                   ].map(({ label, href }) => (
                     <li key={href}>
                       <a

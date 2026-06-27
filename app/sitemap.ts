@@ -23,9 +23,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/home/rooms`,          lastModified: CONTENT_UPDATED, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${BASE_URL}/industrial/use-cases`, lastModified: CONTENT_UPDATED, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${BASE_URL}/blog`,                lastModified: CONTENT_UPDATED, changeFrequency: 'weekly',  priority: 0.7 },
+    { url: `${BASE_URL}/about`,               lastModified: CONTENT_UPDATED, changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${BASE_URL}/faq`,                 lastModified: CONTENT_UPDATED, changeFrequency: 'monthly', priority: 0.5 },
     { url: `${BASE_URL}/contact`,             lastModified: CONTENT_UPDATED, changeFrequency: 'yearly',  priority: 0.3 },
     { url: `${BASE_URL}/shipping`,            lastModified: CONTENT_UPDATED, changeFrequency: 'yearly',  priority: 0.3 },
     { url: `${BASE_URL}/returns`,             lastModified: CONTENT_UPDATED, changeFrequency: 'yearly',  priority: 0.3 },
+    { url: `${BASE_URL}/privacy`,             lastModified: CONTENT_UPDATED, changeFrequency: 'yearly',  priority: 0.2 },
+    { url: `${BASE_URL}/terms`,               lastModified: CONTENT_UPDATED, changeFrequency: 'yearly',  priority: 0.2 },
   ];
 
   // ── Shopify product pages ───────────────────────────────────────────────────
