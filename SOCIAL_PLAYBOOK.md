@@ -22,7 +22,17 @@ design-led, never "cheap gadget." NA audience.
 
 ## 2. Profile setup
 
-**Handle:** `@autivara` on all three (check availability; fallbacks: `@autivara.co`, `@shopautivara`, `@autivara.official` — keep it identical across platforms).
+**Live accounts (wired into site `sameAs`):**
+- Instagram — `@autivara` → instagram.com/autivara
+- Facebook — `autivara.shop` → facebook.com/autivara.shop
+- TikTok — `@autivarashop` → tiktok.com/@autivarashop
+- Pinterest — `autivara` → pinterest.com/autivara
+
+**Brand assets** (in `/public/brand`, also live at `autivara.com/brand/…`):
+- `profile-dark-1080.png` — profile pic (black "A"), use everywhere
+- `profile-light-1080.png` — light alt
+- `wordmark-dark-1080.png` — square wordmark (Pinterest/banners)
+- `cover-banner-1640x624.png` — Facebook/social cover
 
 **Profile photo:** the wordmark on white (use `/icon` / logo).
 
@@ -88,6 +98,43 @@ Each row = one core video unless noted. Post IG Reel + TikTok same day; add Pint
 | 12 | Reel/Static | Packaging | "unboxing the diffuser everyone's asking about" | Brand |
 
 > Repeat the structure monthly, swapping products and chasing trending audio. Double down on whatever format gets the most **saves/shares** (those drive reach more than likes).
+
+---
+
+## 4b. Week 1 — shot-by-shot scripts (phone, vertical 9:16)
+
+You only need 3 clips this week. Each is shot on your phone, ~10–15s, repurposed to IG Reel + TikTok.
+
+### Clip 1 — Astronaut car diffuser ("POV")
+- **Gear:** phone, your car, the Astronaut clip, a fragrance oil.
+- **Shots (film each ~3–4s, hold steady):**
+  1. Close-up of the astronaut in hand, slow rotate so it catches light.
+  2. Clipping it onto the car vent (hands in frame).
+  3. Add 2–3 drops of oil onto the pad (satisfying close-up of the drop).
+  4. Pull back to the dash — astronaut sitting on the vent, car interior behind.
+- **On-screen text (first 1s):** "POV: your car finally smells as good as it looks"
+- **Audio:** a trending TikTok sound (check the in-app trending panel). Keep it chill/aesthetic.
+- **End frame:** astronaut on dash, text "Autivara · link in bio".
+
+### Clip 2 — Ember volcano flame (ASMR, no talking)
+- **Gear:** Ember unit, dark-ish room, water + oil.
+- **Shots:**
+  1. Fill the tank with water (close, slow pour).
+  2. Add a few drops of oil.
+  3. Turn it on → the flame glow + mist rising. **Hold this for 5–6s**, slight slow push-in.
+  4. Wide shot: Ember glowing on a shelf/nightstand in the dark.
+- **On-screen text:** "watch this for 8 seconds 🔥" (then nothing — let it breathe)
+- **Audio:** soft/ambient trending sound, or gentle ASMR.
+- **Tip:** shoot in a dim room so the flame effect pops. Lock focus on the mist.
+
+### Clip 3 — "5 diffusers that double as decor" (carousel, photos)
+- **Format:** Instagram **carousel** (5 photos), not video. Pinterest: pin each photo separately.
+- **Use existing product photos** (or shoot each on a clean surface): Ember, Nimbus, Nova, Grove, Express.
+- **Slide 1 text:** "5 diffusers that double as decor →"
+- **Slides 2–6:** one product each, name + one-line vibe ("Ember — fireplace glow, zero fire").
+- **Caption:** see bank below. End with "Which one's you? Save this for later."
+
+> Post order for Week 1: Clip 1 (Mon) → Clip 2 (Wed) → Clip 3 (Fri). Reply to every comment in the first hour — early engagement drives reach.
 
 ---
 
