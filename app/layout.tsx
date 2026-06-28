@@ -95,10 +95,11 @@ const organizationSchema = {
     contactType: 'customer support',
     availableLanguage: ['en'],
   },
-  // Verified brand profiles (add TikTok/Pinterest once live).
+  // Verified brand profiles (add Pinterest once live).
   sameAs: [
     'https://www.instagram.com/autivara',
     'https://www.facebook.com/autivara.shop',
+    'https://www.tiktok.com/@autivarashop',
   ],
 };
 
