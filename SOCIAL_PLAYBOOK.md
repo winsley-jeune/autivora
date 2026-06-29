@@ -11,7 +11,7 @@ design-led, never "cheap gadget." NA audience.
 | Platform | Why | Cadence |
 | --- | --- | --- |
 | **Instagram** (Reels + carousels) | Best fit for design-led visuals; Reels = reach, carousels = saves | 3–4 / week |
-| **TikTok** | Same Reels repurposed; strongest organic reach for satisfying/ASMR product video | 3–4 / week (repost IG Reels) |
+| **TikTok** | Same Reels repurposed; strongest organic reach for satisfying/ASMR product video — **also our primary marketplace via TikTok Shop** (tag products → in-app checkout). See `TIKTOK_SHOP_KIT.md`. | 3–4 / week (repost IG Reels, product-tagged) |
 | **Pinterest** | High buyer-intent for home decor + car; pins have a long shelf life and drive site traffic + SEO | 5–10 pins / week (from product photos) |
 
 **Skip for now:** Facebook (low organic reach), X, YouTube long-form. Revisit once IG/TikTok have traction.
