@@ -34,7 +34,11 @@ export const metadata: Metadata = {
     'luxury fragrance',
     'cold-air nebulization',
   ],
-  alternates: { canonical: '/' },
+  alternates: {
+    canonical: '/',
+    // Single-locale store — declare en-US + x-default so the locale signal is explicit.
+    languages: { 'en-US': '/', 'x-default': '/' },
+  },
   openGraph: {
     siteName: 'Autivara',
     type: 'website',
