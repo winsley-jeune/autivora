@@ -4,6 +4,7 @@ import { BUYING_GUIDES } from './blog-guides';
 import { BATCH4_ARTICLES } from './blog-batch4';
 import { DEMAND_WAVE1 } from './blog-demand-wave1';
 import { DEMAND_WAVE2 } from './blog-demand-wave2';
+import { DEMAND_WAVE3 } from './blog-demand-wave3';
 
 export type BlogArticle = {
   slug: string;
@@ -570,6 +571,7 @@ const RETIRED_SLUGS = new Set([
 export const BLOG_ARTICLES: BlogArticle[] = [
   ...DEMAND_WAVE1,
   ...DEMAND_WAVE2,
+  ...DEMAND_WAVE3,
   ...BUYING_GUIDES,
   ...BATCH4_ARTICLES,
   ...COMPETITIVE_ARTICLES,

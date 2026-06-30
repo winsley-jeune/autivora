@@ -8,6 +8,8 @@ const COMMERCIAL = '/products/autivora-atmos-pro-hvac/autivora-atmos-pro-hvac-1.
 // a hotel" article is a HOME topic, not commercial).
 const IMAGE_OVERRIDES: Record<string, string> = {
   'how-to-make-your-house-smell-like-a-hotel': HOME,
+  'how-to-make-your-home-smell-like-a-spa': HOME,
+  'why-do-boutiques-and-stores-smell-so-good': HOME,
 };
 
 export function blogImage(a: { slug: string; title: string; category?: string }): string {
