@@ -10,6 +10,9 @@ const IMAGE_OVERRIDES: Record<string, string> = {
   'how-to-make-your-house-smell-like-a-hotel': HOME,
   'how-to-make-your-home-smell-like-a-spa': HOME,
   'why-do-boutiques-and-stores-smell-so-good': HOME,
+  // B2B pieces → commercial hero where keyword matching would misroute to home.
+  'what-is-scent-marketing': COMMERCIAL,
+  'how-to-make-your-coffee-shop-smell-good': COMMERCIAL,
 };
 
 export function blogImage(a: { slug: string; title: string; category?: string }): string {

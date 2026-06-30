@@ -5,6 +5,7 @@ import { BATCH4_ARTICLES } from './blog-batch4';
 import { DEMAND_WAVE1 } from './blog-demand-wave1';
 import { DEMAND_WAVE2 } from './blog-demand-wave2';
 import { DEMAND_WAVE3 } from './blog-demand-wave3';
+import { DEMAND_WAVE4 } from './blog-demand-wave4';
 
 export type BlogArticle = {
   slug: string;
@@ -572,6 +573,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
   ...DEMAND_WAVE1,
   ...DEMAND_WAVE2,
   ...DEMAND_WAVE3,
+  ...DEMAND_WAVE4,
   ...BUYING_GUIDES,
   ...BATCH4_ARTICLES,
   ...COMPETITIVE_ARTICLES,
