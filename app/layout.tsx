@@ -13,27 +13,15 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://autivara.com';
 
 export const metadata: Metadata = {
   title: {
-    default: 'Autivara | Excellence in Air — Cold-Air Diffusion for Every Space',
+    default: 'Aroma Diffusers for Car, Home & Business | Autivara',
     template: '%s | Autivara',
   },
   description:
-    'Precision cold-air nebulization across automotive, residential, workplace, and commercial spaces. One technology. Every space.',
+    'Design-led aroma diffusers for car, home & business — flame, mist & vent-clip designs. Refillable, no cartridges, made to be displayed.',
   metadataBase: new URL(BASE_URL),
   applicationName: 'Autivara',
   authors: [{ name: 'Autivara' }],
   generator: 'Next.js',
-  keywords: [
-    'cold air diffuser',
-    'waterless diffuser',
-    'car diffuser',
-    'home diffuser',
-    'office diffuser',
-    'commercial diffuser',
-    'hotel diffuser',
-    'essential oil nebulizer',
-    'luxury fragrance',
-    'cold-air nebulization',
-  ],
   alternates: {
     canonical: '/',
     // Single-locale store — declare en-US + x-default so the locale signal is explicit.
@@ -43,16 +31,16 @@ export const metadata: Metadata = {
     siteName: 'Autivara',
     type: 'website',
     url: BASE_URL,
-    title: 'Autivara | Excellence in Air',
+    title: 'Autivara — Design-Led Aroma Diffusers',
     description:
-      'Precision cold-air nebulization across automotive, residential, workplace, and commercial spaces.',
+      'Design-led aroma diffusers for car, home & business — flame, mist & vent-clip designs. Refillable, no cartridges, made to be displayed.',
     locale: 'en_US',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Autivara | Excellence in Air',
+    title: 'Autivara — Design-Led Aroma Diffusers',
     description:
-      'Precision cold-air nebulization across automotive, residential, workplace, and commercial spaces.',
+      'Design-led aroma diffusers for car, home & business — flame, mist & vent-clip designs. Refillable, no cartridges, made to be displayed.',
   },
   robots: {
     index: true,
