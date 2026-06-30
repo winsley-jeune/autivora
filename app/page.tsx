@@ -5,14 +5,15 @@ import { ArrowRight } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: {
-    absolute: 'Autivara — Design-Led Scent Diffusers for Car, Home & Commercial',
+    absolute: 'Aroma Diffusers for Car, Home & Business | Autivara',
   },
   description:
-    'Statement aroma diffusers with personality — flame-effect, mist, vent-clip, and commercial scent machines for the car, home, and business. Excellence in air.',
+    'Design-led aroma diffusers for car, home & business — flame, mist & vent-clip designs. Refillable, no cartridges, made to be displayed.',
   alternates: { canonical: '/' },
   openGraph: {
-    title: 'Autivara — Design-Led Scent Diffusers',
-    description: 'Statement aroma diffusers for car, home, and commercial spaces.',
+    title: 'Autivara — Design-Led Aroma Diffusers',
+    description:
+      'Design-led aroma diffusers for car, home & business — flame, mist & vent-clip designs. Refillable, no cartridges, made to be displayed.',
     url: '/',
     type: 'website',
   },
