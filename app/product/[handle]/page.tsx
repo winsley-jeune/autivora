@@ -18,6 +18,11 @@ type Props = {
   params: Promise<{ handle: string }>;
 };
 
+// Live Shopify products without real photography/copy yet — e.g. new refill
+// scents queued for the oil-subscription launch. Page stays functional, just
+// kept out of search until real content ships. Remove the handle once ready.
+const NOT_YET_INDEXABLE = new Set(['vanilla-macadamia']);
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { handle } = await params;
   const product = await getProduct(handle);
@@ -33,6 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title,
     description,
     alternates: { canonical },
+    robots: NOT_YET_INDEXABLE.has(handle) ? { index: false, follow: false } : undefined,
     openGraph: {
       title,
       description,
