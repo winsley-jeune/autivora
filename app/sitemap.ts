@@ -33,7 +33,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   // ── Shopify product pages ───────────────────────────────────────────────────
-  const products = await getProducts({}).catch(() => []);
+  // Keep in sync with NOT_YET_INDEXABLE in app/product/[handle]/page.tsx —
+  // a noindexed page shouldn't also be submitted in the sitemap.
+  const NOT_YET_INDEXABLE = new Set(['vanilla-macadamia']);
+  const products = (await getProducts({}).catch(() => [])).filter(
+    (p) => !NOT_YET_INDEXABLE.has(p.handle)
+  );
   const productPages: MetadataRoute.Sitemap = products.map((p) => ({
     url: `${BASE_URL}/product/${p.handle}`,
     lastModified: new Date(p.updatedAt),

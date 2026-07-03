@@ -4,6 +4,11 @@ import { Metadata } from "next";
 import { BLOG_ARTICLES } from "@/lib/blog-data";
 import { blogImage } from "@/lib/blog-image";
 
+// BLOG_ARTICLES is date-gated (lib/blog-schedule.ts) for the weekly release
+// queue — revalidate periodically so newly-released posts appear without a
+// redeploy, matching the cadence used on /auto, /home, /industrial, etc.
+export const revalidate = 900;
+
 export const metadata: Metadata = {
   title: "The Autivara Journal — Scent, Design & Ambience",
   description:

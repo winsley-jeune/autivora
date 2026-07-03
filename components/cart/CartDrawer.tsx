@@ -4,6 +4,7 @@ import { Minus, Plus, Trash2, X } from 'lucide-react';
 import Image from 'next/image';
 import { useCart } from './cart-context';
 import { trackInitiateCheckout } from '@/components/analytics/events';
+import { brandName } from '@/lib/brand';
 
 function formatPrice(amount: string, currencyCode: string) {
   return new Intl.NumberFormat('en-US', {
@@ -69,7 +70,7 @@ export default function CartDrawer() {
                   {item.merchandise.product.featuredImage?.url ? (
                     <Image
                       src={item.merchandise.product.featuredImage.url}
-                      alt={item.merchandise.product.featuredImage.altText ?? item.merchandise.product.title}
+                      alt={item.merchandise.product.featuredImage.altText ?? brandName(item.merchandise.product.title)}
                       fill
                       className="object-contain mix-blend-multiply"
                       sizes="80px"
@@ -82,7 +83,7 @@ export default function CartDrawer() {
                 {/* Details */}
                 <div className="flex-1 min-w-0 space-y-1">
                   <p className="text-xs font-medium leading-tight truncate">
-                    {item.merchandise.product.title}
+                    {brandName(item.merchandise.product.title)}
                   </p>
                   {item.merchandise.title !== 'Default Title' && (
                     <p className="text-[10px] text-neutral-400">{item.merchandise.title}</p>

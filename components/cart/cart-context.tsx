@@ -5,6 +5,7 @@ import { addToCartAction, getCartAction, removeFromCartAction, updateCartAction 
 import { Cart, CartItem } from '@/lib/shopify-types';
 import { trackAddToCart, trackRemoveFromCart } from '@/components/analytics/events';
 import { categoryFromTags } from '@/lib/category';
+import { brandName } from '@/lib/brand';
 
 type CartContextType = {
   cart: Cart | undefined;
@@ -49,7 +50,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     if (line) {
       trackAddToCart({
         id: line.merchandise.product.id,
-        name: line.merchandise.product.title,
+        name: brandName(line.merchandise.product.title),
         price: parseFloat(line.merchandise.product.priceRange.minVariantPrice.amount),
         currency: line.merchandise.product.priceRange.minVariantPrice.currencyCode,
         quantity,
@@ -77,7 +78,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     if (removed) {
       trackRemoveFromCart({
         id: removed.merchandise.product.id,
-        name: removed.merchandise.product.title,
+        name: brandName(removed.merchandise.product.title),
         price: parseFloat(removed.merchandise.product.priceRange.minVariantPrice.amount),
         currency: removed.merchandise.product.priceRange.minVariantPrice.currencyCode,
         quantity: removed.quantity,
