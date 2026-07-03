@@ -6,6 +6,10 @@ import { DEMAND_WAVE1 } from './blog-demand-wave1';
 import { DEMAND_WAVE2 } from './blog-demand-wave2';
 import { DEMAND_WAVE3 } from './blog-demand-wave3';
 import { DEMAND_WAVE4 } from './blog-demand-wave4';
+import { DEMAND_WAVE5 } from './blog-demand-wave5';
+import { DEMAND_WAVE6 } from './blog-demand-wave6';
+import { DEMAND_WAVE7 } from './blog-demand-wave7';
+import { isReleased } from './blog-schedule';
 
 export type BlogArticle = {
   slug: string;
@@ -574,10 +578,17 @@ export const BLOG_ARTICLES: BlogArticle[] = [
   ...DEMAND_WAVE2,
   ...DEMAND_WAVE3,
   ...DEMAND_WAVE4,
+  ...DEMAND_WAVE5,
+  ...DEMAND_WAVE6,
+  ...DEMAND_WAVE7,
   ...BUYING_GUIDES,
   ...BATCH4_ARTICLES,
   ...COMPETITIVE_ARTICLES,
   ...CORE_ARTICLES,
 ]
   .filter((a) => !RETIRED_SLUGS.has(a.slug))
-  .map((a) => BLOG_REWRITES[a.slug] ?? a);
+  .map((a) => BLOG_REWRITES[a.slug] ?? a)
+  // A post's `date` doubles as its release date — anything dated in the
+  // future is excluded entirely (absent from the list, sitemap, and 404s
+  // by URL) until that date arrives. See lib/blog-schedule.ts.
+  .filter((a) => isReleased(a.date));
