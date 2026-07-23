@@ -8,13 +8,10 @@ export type SocialProof = {
   sold: number;
 };
 
-const SOCIAL_PROOF: Record<string, SocialProof> = {
-  'autivora-one': {
-    rating: 4.9,
-    reviewCount: 38,
-    sold: 214,
-  },
-};
+// Empty until real reviews exist — never hardcode a rating/count/sold figure here.
+// This feeds live AggregateRating schema.org markup (components/ProductJsonLd.tsx),
+// which Google treats as a factual claim; a fabricated entry is fake-review markup.
+const SOCIAL_PROOF: Record<string, SocialProof> = {};
 
 /** Returns social proof for a handle, or null if not configured. */
 export function getSocialProof(handle: string): SocialProof | null {
