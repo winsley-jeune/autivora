@@ -1,5 +1,10 @@
-// Picks a real product image for a blog post based on its topic, so every
-// article has a relevant hero/thumbnail. Images are served from /public/products.
+// Picks a hero image for a blog post. Checks for a per-slug generated image first (real product,
+// recontextualized for that specific article — see agents/content/generate-blog-image.mjs) before
+// falling back to one of 3 shared generic product photos. As more per-slug images get generated,
+// this needs no further edits — just drop the file at public/blog/<slug>.jpg.
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+
 const CAR = '/products/autivora-astronaut-car-diffuser/autivora-astronaut-car-diffuser-1.jpg';
 const HOME = '/products/autivora-volcano-flame-diffuser/autivora-volcano-flame-diffuser-1.jpg';
 const COMMERCIAL = '/products/autivora-atmos-pro-hvac/autivora-atmos-pro-hvac-1.jpg';
@@ -15,7 +20,12 @@ const IMAGE_OVERRIDES: Record<string, string> = {
   'how-to-make-your-coffee-shop-smell-good': COMMERCIAL,
 };
 
+function hasGeneratedImage(slug: string): boolean {
+  return existsSync(join(process.cwd(), 'public', 'blog', `${slug}.jpg`));
+}
+
 export function blogImage(a: { slug: string; title: string; category?: string }): string {
+  if (hasGeneratedImage(a.slug)) return `/blog/${a.slug}.jpg`;
   if (IMAGE_OVERRIDES[a.slug]) return IMAGE_OVERRIDES[a.slug];
   const t = `${a.slug} ${a.title} ${a.category ?? ''}`.toLowerCase();
   if (/\bcar\b|vehicle|tesla|\bev\b|drift|pura car|vent|dealership|detailer|driving/.test(t)) return CAR;
