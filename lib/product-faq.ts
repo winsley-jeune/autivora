@@ -14,7 +14,26 @@ function collectionOf(tags: string[] | undefined): string | null {
 // product pages sitting at "Discovered - currently not indexed" (see agents/ARCHITECTURE.md).
 // An override here replaces the generic collection-level fallback with questions genuinely
 // specific to that product (its actual design/theme/differentiator, not just its category).
-export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {};
+export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
+  "autivora-solar-car-diffuser": [
+  {
+    "question": "Does the Autivara Solar need batteries or charging?",
+    "answer": "Neither. A built-in solar cell spins the rotor whenever daylight reaches your dashboard, so there's nothing to charge and no batteries to swap — it just works when the sun's out."
+  },
+  {
+    "question": "Will the rotor still spin on cloudy days or at night?",
+    "answer": "The rotor is powered by light, so it spins fastest in bright sun and slows in low light or after dark. Even when it's still, the waterless oil core keeps giving off a soft scent — the spinning simply pushes it further through the cabin."
+  },
+  {
+    "question": "How is this different from Autivara's airflow-driven vent diffusers?",
+    "answer": "Our propeller and rotating clips need moving air to turn. The Solar spins on sunlight instead, so it keeps working even when the vents are off or you're parked in the sun."
+  },
+  {
+    "question": "Can I refill it and change scents?",
+    "answer": "Yes. It's waterless and refillable — add a few drops of any Autivara fragrance oil, and switch scents whenever you like. There's an optional oil plan, but you're never required to subscribe."
+  }
+],
+};
 
 /**
  * Per-product FAQ. Checks PRODUCT_FAQ_OVERRIDES first (real, product-specific content); falls
