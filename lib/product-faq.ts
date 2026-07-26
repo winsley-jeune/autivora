@@ -14,7 +14,26 @@ function collectionOf(tags: string[] | undefined): string | null {
 // product pages sitting at "Discovered - currently not indexed" (see agents/ARCHITECTURE.md).
 // An override here replaces the generic collection-level fallback with questions genuinely
 // specific to that product (its actual design/theme/differentiator, not just its category).
-export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {};
+export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
+  "autivora-jellyfish-mist-diffuser": [
+  {
+    "question": "What makes the Nimbus different from Autivara's flame-glow diffusers?",
+    "answer": "Instead of a flickering flame, the Nimbus features drifting jellyfish that sway and glow inside the mist column — a calmer, aquarium-like effect that's popular for bedrooms and kids' rooms."
+  },
+  {
+    "question": "What can the remote control do?",
+    "answer": "The handheld remote lets you switch the jellyfish lighting and mist on or off and change the mood from across the room, so you don't have to reach the unit — handy on a nightstand or high shelf."
+  },
+  {
+    "question": "Can I run the jellyfish light without the mist?",
+    "answer": "The light and mist are designed to work together for the drifting-jellyfish effect, but the mist runs cool and whisper-quiet and shuts off on its own when the tank empties, so it's fine to leave glowing as a nightlight."
+  },
+  {
+    "question": "Do I have to buy special oil for it?",
+    "answer": "No. Add five to ten drops of any diffuser-grade fragrance or essential oil to the water tank. We blend Autivara oils for these units and offer an optional recurring refill plan, but you're never required to sign up."
+  }
+],
+};
 
 /**
  * Per-product FAQ. Checks PRODUCT_FAQ_OVERRIDES first (real, product-specific content); falls
