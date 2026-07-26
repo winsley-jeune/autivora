@@ -15,6 +15,25 @@ function collectionOf(tags: string[] | undefined): string | null {
 // An override here replaces the generic collection-level fallback with questions genuinely
 // specific to that product (its actual design/theme/differentiator, not just its category).
 export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
+  "autivora-rocket-flame-diffuser": [
+  {
+    "question": "Where does the mist come out of the Apollo rocket?",
+    "answer": "The cool mist rises from the base of the rocket, so it looks like an engine plume lifting the ship off the pad. The flame-glow light sits underneath it to sell the liftoff effect."
+  },
+  {
+    "question": "Is the Apollo small enough for a desk?",
+    "answer": "Yes — it has a compact footprint made for a desk, shelf, or bookcase, and it runs off USB so you can power it straight from your laptop or a desk hub."
+  },
+  {
+    "question": "Is the flame under the rocket a real flame?",
+    "answer": "No, it's an LED flame-glow effect, so it stays cool and safe to leave running near papers and a monitor. The mist itself is ultrasonic and never hot."
+  },
+  {
+    "question": "Can I use my own oils in the Apollo?",
+    "answer": "Yes. Fill the tank with water, add a few drops of any diffuser-grade fragrance or essential oil, and refill as needed — there are no cartridges and no required subscription."
+  }
+],
+
   "autivora-fireplace-flame-diffuser": [
   {
     "question": "Does the Hearth's flame look real, and is it actually hot?",
