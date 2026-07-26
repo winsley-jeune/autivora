@@ -8,15 +8,26 @@ function collectionOf(tags: string[] | undefined): string | null {
   return tags?.find((t) => (COLLECTION_TAGS as readonly string[]).includes(t)) ?? null;
 }
 
+// Per-product FAQ overrides, keyed by handle — written by agents/product/. Every product in a
+// collection shares the same 3-4 questions below (just the name token swapped), which reads to
+// Google as near-duplicate content across the whole catalog and was a real contributor to most
+// product pages sitting at "Discovered - currently not indexed" (see agents/ARCHITECTURE.md).
+// An override here replaces the generic collection-level fallback with questions genuinely
+// specific to that product (its actual design/theme/differentiator, not just its category).
+export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {};
+
 /**
- * Per-product FAQ generated from the product's collection. Specific enough to
- * add real value (uses the product name, matches the diffusion type) without
- * hardcoding 19 separate FAQ blocks. Powers a visible FAQ + FAQPage schema.
+ * Per-product FAQ. Checks PRODUCT_FAQ_OVERRIDES first (real, product-specific content); falls
+ * back to the collection-level generic template below for any product not yet enriched. Powers
+ * a visible FAQ + FAQPage schema.
  */
 export function productFaq(product: {
+  handle: string;
   title: string;
   tags?: string[];
 }): FaqItem[] {
+  if (PRODUCT_FAQ_OVERRIDES[product.handle]) return PRODUCT_FAQ_OVERRIDES[product.handle];
+
   const name = brandName(product.title);
   const isOil = product.tags?.includes('fragrance-oil');
   const collection = collectionOf(product.tags);
