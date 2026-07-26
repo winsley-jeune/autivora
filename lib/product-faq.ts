@@ -15,6 +15,25 @@ function collectionOf(tags: string[] | undefined): string | null {
 // An override here replaces the generic collection-level fallback with questions genuinely
 // specific to that product (its actual design/theme/differentiator, not just its category).
 export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
+  "autivora-atmos-pro-hvac": [
+  {
+    "question": "How is the Atmos Pro different from the wall-mounted Atmos Wi-Fi?",
+    "answer": "The Wi-Fi model mounts on a wall and scents a single mid-size area. The Atmos Pro instead connects into your building's HVAC ductwork, so one machine pushes fragrance through every vent and covers a whole large venue evenly rather than one room."
+  },
+  {
+    "question": "Does the Atmos Pro need to be tied into my ductwork by a professional?",
+    "answer": "Because it feeds scent into your HVAC system, it's meant to be installed at the ducting rather than plugged into an outlet like our wall units. Email support@autivara.com with your setup and we'll walk you and your installer through the right connection point."
+  },
+  {
+    "question": "How does the waterless design affect the air moving through my vents?",
+    "answer": "It nebulizes pure oil into a dry fragrance — no water, no steam, no residue riding through your ducts. You get scent carried by the air you're already circulating, without adding moisture to the system."
+  },
+  {
+    "question": "Can I control scent by the hour for open and closed times?",
+    "answer": "Yes. The app lets you set schedules and intensity down to the minute, so you can run full strength during business hours and dial it back or shut it off overnight, which also keeps your oil usage predictable."
+  }
+],
+
   "autivora-atmos-wifi-diffuser": [
   {
     "question": "How is the Atmos Wi-Fi different from the HVAC-integrated Atmos Pro?",
