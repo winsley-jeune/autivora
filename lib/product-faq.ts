@@ -15,6 +15,25 @@ function collectionOf(tags: string[] | undefined): string | null {
 // An override here replaces the generic collection-level fallback with questions genuinely
 // specific to that product (its actual design/theme/differentiator, not just its category).
 export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
+  "autivora-disco-ball-diffuser": [
+  {
+    "question": "What kind of light show does the Nova put on?",
+    "answer": "Its mirrored surface throws scattered, disco-ball light across the walls and ceiling, and you can switch between multiple light modes — bright and colourful for a party, or dialled back to a gentle glow for a quiet night in."
+  },
+  {
+    "question": "Can I run the disco lights without the mist, or the mist without the lights?",
+    "answer": "Yes — the light show and the cool mist run independently, so you can set the party mood on its own, scent the room on its own, or run both together as a full centerpiece."
+  },
+  {
+    "question": "Is the Nova a good fit for parties and get-togethers?",
+    "answer": "That's exactly what it's built for. The spinning mirror-ball effect fills the room with moving light while the ultrasonic mist carries your fragrance through the space, so it works as both the lighting and the scent for a gathering."
+  },
+  {
+    "question": "Do I have to buy Autivara oils to keep it going?",
+    "answer": "No. Just top up the tank with water and add a few drops of any diffuser-grade fragrance oil. Our blends are made for these ultrasonic units, but there's no required subscription and you're never locked in."
+  }
+],
+
   "autivora-rocket-flame-diffuser": [
   {
     "question": "Where does the mist come out of the Apollo rocket?",
