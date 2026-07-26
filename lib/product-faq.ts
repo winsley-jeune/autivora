@@ -15,6 +15,25 @@ function collectionOf(tags: string[] | undefined): string | null {
 // An override here replaces the generic collection-level fallback with questions genuinely
 // specific to that product (its actual design/theme/differentiator, not just its category).
 export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
+  "autivora-rechargeable-car-diffuser": [
+  {
+    "question": "How is the Cabin different from Autivara's vent-clip diffusers?",
+    "answer": "Most Autivara car diffusers clip to an air vent and rely on airflow. The Cabin is powered instead — it recharges over USB-C and runs on its own, so you can set it down wherever suits your interior rather than being tied to a vent."
+  },
+  {
+    "question": "How do I recharge it, and does the scent still work while it's charging?",
+    "answer": "It charges with a standard USB-C cable, the same kind you already use for most phones and gadgets. It runs waterless with a few drops of oil, so scent depends on the oil in the core, not the charge — topping up the battery just keeps the diffusion running."
+  },
+  {
+    "question": "Can I control how strong the scent is?",
+    "answer": "Yes. The Cabin has adjustable intensity, so you can turn the output up for a bold first impression or keep it low and subtle on longer drives."
+  },
+  {
+    "question": "Do I have to keep buying refills on a plan?",
+    "answer": "No. The scent core is waterless and refillable with any Autivara fragrance oil, so you top it up whenever the scent fades. There's no required subscription — you're never required to sign up to keep it running."
+  }
+],
+
   "autivora-magnetic-vent-diffuser": [
   {
     "question": "What makes the Disc different from Autivara's novelty car diffusers?",
