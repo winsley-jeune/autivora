@@ -15,6 +15,25 @@ function collectionOf(tags: string[] | undefined): string | null {
 // An override here replaces the generic collection-level fallback with questions genuinely
 // specific to that product (its actual design/theme/differentiator, not just its category).
 export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
+  "autivora-fireplace-flame-diffuser": [
+  {
+    "question": "Does the Hearth's flame look real, and is it actually hot?",
+    "answer": "The flickering flame is a realistic LED effect, so it looks like a real fire but stays completely cool. The mist is ultrasonic and never heats up, making it safe to leave on a mantel, shelf, or nightstand."
+  },
+  {
+    "question": "Can I run the flame glow without the mist?",
+    "answer": "The Hearth is built to pair its fireplace glow with scented mist, but the multiple timer modes let you control how long it runs — set a short cozy session or let it wind down on its own, with auto shut-off when the tank runs dry."
+  },
+  {
+    "question": "How is the Hearth different from Autivara's other flame diffusers like the Ember volcano?",
+    "answer": "Where the Ember volcano lifts a single glowing plume, the Hearth is shaped like a miniature fireplace with a broad flickering flame across the front — designed to bring that classic fireside mood to a room without a real fire."
+  },
+  {
+    "question": "What oils can I use, and do I have to buy refills from Autivara?",
+    "answer": "Add five to ten drops of any diffuser-grade fragrance or essential oil to the water tank. Autivara oils are blended for these units, but there's no required subscription and you're never locked in."
+  }
+],
+
   "autivora-jellyfish-mist-diffuser": [
   {
     "question": "What makes the Nimbus different from Autivara's flame-glow diffusers?",
