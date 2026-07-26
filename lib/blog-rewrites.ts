@@ -508,6 +508,7 @@ export const BLOG_REWRITES: Record<string, BlogArticle> = {
     "## Where it isn’t",
     "If you’d rather **own your scent supply** and not be locked to one brand’s vials, the subscription model works against you. Over a couple of years the recurring cost dwarfs the device — a moderate user spends roughly $267 in year one and about $702 over three years, and a heavy user can clear $1,393 over three years on a $50 device. And you can only ever use Pura’s refills. That’s the trade for the convenience.",
     "## The no-subscription alternative",
+    "If you're weighing a premium subscription system rather than Pura, the same own-your-oil math applies — our [Aroma360 alternative breakdown](/blog/aroma360-alternative) shows how a refillable diffuser compares against Aroma360's proprietary refills.",
     "A refillable diffuser gives you app-free simplicity and your choice of oil: buy the device once, add **any fragrance oil** when it runs low. Autivara’s diffusers are waterless and refillable across [car](/auto) and [home](/home), and a single [oil ($19–$39)](/scents) refills them many times. Want recurring convenience? Opt into an oil plan — but you’re never required to.",
     "[[cta]]Shop refillable diffusers|/collection",
     "## Frequently asked questions",
