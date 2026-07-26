@@ -15,6 +15,25 @@ function collectionOf(tags: string[] | undefined): string | null {
 // An override here replaces the generic collection-level fallback with questions genuinely
 // specific to that product (its actual design/theme/differentiator, not just its category).
 export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
+  "autivora-4l-humidifying-diffuser": [
+  {
+    "question": "How big a room can the 4L tank handle?",
+    "answer": "The 4-litre tank is sized for whole-room use — living rooms and larger bedrooms — rather than a single desk. Turn the mist up to fill a dry room, or ease it down for a gentler background scent."
+  },
+  {
+    "question": "How long does one fill last?",
+    "answer": "That's the point of the 4-litre tank: it runs for hours on a single fill, so you're not topping it up through the day. Actual run time depends on how high you set the mist output."
+  },
+  {
+    "question": "How do I refill it — do I have to tip it over?",
+    "answer": "No. It's a top-fill design, so you just lift the lid and pour water straight in. Add five to ten drops of fragrance oil and you're set."
+  },
+  {
+    "question": "Can I leave it running overnight?",
+    "answer": "Yes. Use the sleep mode and timer to run it while you fall asleep, and it shuts off automatically when the tank runs dry — cool mist, no heat, whisper-quiet."
+  }
+],
+
   "autivora-steam-train-diffuser": [
   {
     "question": "Where does the mist come from on the steam-train diffuser?",
