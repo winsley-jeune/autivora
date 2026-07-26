@@ -33,6 +33,42 @@ export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
     "answer": "Anytime. The core is refillable with any Autivara fragrance oil, so you can change scents whenever you like. There's no cartridge to buy and no required subscription — you own the diffuser outright."
   }
 ],
+
+  "autivora-solar-car-diffuser": [
+  {
+    "question": "Does the Autivara Solar need batteries or charging?",
+    "answer": "Neither. A built-in solar cell spins the rotor whenever daylight reaches your dashboard, so there's nothing to charge and no batteries to swap — it just works when the sun's out."
+  },
+  {
+    "question": "Will the rotor still spin on cloudy days or at night?",
+    "answer": "The rotor is powered by light, so it spins fastest in bright sun and slows in low light or after dark. Even when it's still, the waterless oil core keeps giving off a soft scent — the spinning simply pushes it further through the cabin."
+  },
+  {
+    "question": "How is this different from Autivara's airflow-driven vent diffusers?",
+    "answer": "Our propeller and rotating clips need moving air to turn. The Solar spins on sunlight instead, so it keeps working even when the vents are off or you're parked in the sun."
+  },
+  {
+    "question": "Can I refill it and change scents?",
+    "answer": "Yes. It's waterless and refillable — add a few drops of any Autivara fragrance oil, and switch scents whenever you like. There's an optional oil plan, but you're never required to subscribe."
+  }
+],
+  "autivora-astronaut-car-diffuser": [
+  {
+    "question": "What makes the Astronaut different from Autivara's other novelty car diffusers?",
+    "answer": "It's the original design that defined the line — a finely detailed astronaut figure meant to be displayed on your vent, offered in several colorways so you can pick the one that suits your cabin. It works by simple airflow, no batteries or charging needed."
+  },
+  {
+    "question": "Does the Astronaut need batteries, charging, or sunlight to work?",
+    "answer": "No. Unlike our solar or rechargeable models, the Astronaut is powered by the air already moving through your vent, so it just clips on and works — nothing to charge or plug in."
+  },
+  {
+    "question": "Will the oil spill on my dashboard?",
+    "answer": "No. It's a waterless design — you add a few drops of fragrance oil to the core rather than filling a water tank, so there's nothing to slosh loose or leave an oily film on your interior."
+  },
+  {
+    "question": "Can I refill the Astronaut and change scents?",
+    "answer": "Yes. The scent core is refillable with any Autivara fragrance oil, so you can switch scents whenever you like. You own the diffuser outright, and while we plan to offer an optional recurring oil plan, you're never required to subscribe."  }
+],
 };
 
 /**
