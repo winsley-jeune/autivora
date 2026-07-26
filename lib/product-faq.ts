@@ -15,6 +15,25 @@ function collectionOf(tags: string[] | undefined): string | null {
 // An override here replaces the generic collection-level fallback with questions genuinely
 // specific to that product (its actual design/theme/differentiator, not just its category).
 export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
+  "autivora-smart-spray-diffuser": [
+  {
+    "question": "How is the Pulse different from Autivara's vent-clip diffusers?",
+    "answer": "The Pulse doesn't rely on your air vents. It's an active micro-spray that mists fragrance on a timer you program, so you get scent even when the fan is off — plus three intensity modes and a glowing light ring the clip-on models don't have."
+  },
+  {
+    "question": "How does the timed spray work?",
+    "answer": "You set the interval and the Pulse automatically releases a fine micro-mist on schedule — no button-pressing on every drive. Pick from three intensity modes for a light background scent or a bolder burst."
+  },
+  {
+    "question": "How do I power and recharge it?",
+    "answer": "It's USB-C rechargeable, so you top it up with the same cable as most phones — no disposable batteries and no dangling cord once it's charged."
+  },
+  {
+    "question": "What is the light ring for?",
+    "answer": "The ambient light ring adds a soft glow that suits night drives, so the Pulse works as a subtle cabin accent as well as a scent device."
+  }
+],
+
   "autivora-rechargeable-car-diffuser": [
   {
     "question": "How is the Cabin different from Autivara's vent-clip diffusers?",
