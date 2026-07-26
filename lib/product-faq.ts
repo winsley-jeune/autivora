@@ -15,6 +15,25 @@ function collectionOf(tags: string[] | undefined): string | null {
 // An override here replaces the generic collection-level fallback with questions genuinely
 // specific to that product (its actual design/theme/differentiator, not just its category).
 export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
+  "autivora-guitar-car-diffuser": [
+  {
+    "question": "What makes the Riff move the way it does?",
+    "answer": "The guitar hangs on a 360° clip so it sways gently whenever air flows past your vent — no battery or motor, just the breeze from your fan giving it a little movement while it scents the cabin."
+  },
+  {
+    "question": "Can I angle the guitar to sit upright on my vent?",
+    "answer": "Yes. The clip rotates a full 360°, so you can turn the guitar to hang straight no matter which way your vent slats run — horizontal, vertical, or angled."
+  },
+  {
+    "question": "Do I need water or batteries for the Riff?",
+    "answer": "Neither. It's waterless — you add a few drops of fragrance oil to the core and your vent's airflow carries the scent. No water tank to spill and nothing to charge."
+  },
+  {
+    "question": "Can I refill it and change scents?",
+    "answer": "Anytime. The scent core is refillable with any Autivara fragrance oil, so you can switch scents whenever you like. There's no required subscription — you own the diffuser and top it up when the scent fades."
+  }
+],
+
   "autivora-smart-plug-diffuser": [
   {
     "question": "How does the Autivara Plug install compared to the wall-mounted Atmos units?",
