@@ -14,7 +14,26 @@ function collectionOf(tags: string[] | undefined): string | null {
 // product pages sitting at "Discovered - currently not indexed" (see agents/ARCHITECTURE.md).
 // An override here replaces the generic collection-level fallback with questions genuinely
 // specific to that product (its actual design/theme/differentiator, not just its category).
-export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {};
+export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
+  "autivora-bear-propeller-diffuser": [
+  {
+    "question": "What makes the propeller spin?",
+    "answer": "The airflow from your vent turns it — there are no batteries or charging. When the fan's on, the propeller spins and helps push scent out into the cabin; when it's off, it simply rests."
+  },
+  {
+    "question": "How do I refill the Aviator without making a mess?",
+    "answer": "The bear's top is magnetic, so it lifts straight off with a gentle pull. Add a few drops of oil to the waterless core, snap the top back down, and you're done — no unscrewing, no drips."
+  },
+  {
+    "question": "Is this a spinning gimmick or does it actually help the scent?",
+    "answer": "Both, honestly. It's a fun novelty piece, but the turning propeller does stir the air right at the vent, so the fragrance carries more evenly through the cabin than a static clip would."
+  },
+  {
+    "question": "Can I switch to a different scent later?",
+    "answer": "Anytime. The core is refillable with any Autivara fragrance oil, so you can change scents whenever you like. There's no cartridge to buy and no required subscription — you own the diffuser outright."
+  }
+],
+};
 
 /**
  * Per-product FAQ. Checks PRODUCT_FAQ_OVERRIDES first (real, product-specific content); falls
