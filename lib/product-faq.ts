@@ -15,6 +15,25 @@ function collectionOf(tags: string[] | undefined): string | null {
 // An override here replaces the generic collection-level fallback with questions genuinely
 // specific to that product (its actual design/theme/differentiator, not just its category).
 export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
+  "autivora-atmos-wifi-diffuser": [
+  {
+    "question": "How is the Atmos Wi-Fi different from the HVAC-integrated Atmos Pro?",
+    "answer": "The Atmos Wi-Fi mounts on a wall and scents the room directly, so there's no ductwork to tie into — ideal for a mid-size office, lobby, or showroom. The Atmos Pro connects to your HVAC to push scent through much larger, multi-room venues."
+  },
+  {
+    "question": "Does it need a water tank or plumbing?",
+    "answer": "No. It's fully waterless — it nebulizes pure oil straight into the air, so there's no tank to fill, no water to change, and a cleaner, more consistent scent than a misting unit."
+  },
+  {
+    "question": "How do I control when and how strongly it runs?",
+    "answer": "Everything is set from the Wi-Fi app: schedule full scent during open hours and dial it back or off overnight. That also keeps your oil use predictable."
+  },
+  {
+    "question": "How hard is it to swap oils?",
+    "answer": "The refill bay is magnetic, so it pops open for a quick oil change with no tools. You own the unit and refill it yourself — there's no required subscription to keep it running."
+  }
+],
+
   "autivora-4l-humidifying-diffuser": [
   {
     "question": "How big a room can the 4L tank handle?",
