@@ -15,6 +15,25 @@ function collectionOf(tags: string[] | undefined): string | null {
 // An override here replaces the generic collection-level fallback with questions genuinely
 // specific to that product (its actual design/theme/differentiator, not just its category).
 export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
+  "autivora-smart-plug-diffuser": [
+  {
+    "question": "How does the Autivara Plug install compared to the wall-mounted Atmos units?",
+    "answer": "There's nothing to mount or wire — it plugs straight into a standard wall outlet and it's running. That makes it the easiest way to add scent to a lobby, small office, or guest suite without touching your walls or HVAC."
+  },
+  {
+    "question": "How do I refill the oil?",
+    "answer": "The refill snaps in magnetically, so you just pull the old cartridge and click the new one into place — no tools, no drips. Refills are ownership-first and you're never required to be on a recurring oil plan, though we do offer an optional one."
+  },
+  {
+    "question": "Can I control run times from my phone?",
+    "answer": "Yes. Over Wi-Fi in the Autivara app you can set schedules and intensity levels — full scent during open hours, dialed back or off overnight — which also keeps your oil use predictable."
+  },
+  {
+    "question": "Is the Plug the right pick for a large venue?",
+    "answer": "It's sized for a single room or a small space right at the outlet. For large venues you'll want the HVAC-integrated Atmos Pro, and for mid-size areas the wall-mounted Atmos Wi-Fi — the Plug is the quick, self-contained option for smaller rooms."
+  }
+],
+
   "autivora-atmos-pro-hvac": [
   {
     "question": "How is the Atmos Pro different from the wall-mounted Atmos Wi-Fi?",
