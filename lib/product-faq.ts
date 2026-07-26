@@ -14,7 +14,26 @@ function collectionOf(tags: string[] | undefined): string | null {
 // product pages sitting at "Discovered - currently not indexed" (see agents/ARCHITECTURE.md).
 // An override here replaces the generic collection-level fallback with questions genuinely
 // specific to that product (its actual design/theme/differentiator, not just its category).
-export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {};
+export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
+  "autivora-pear-car-diffuser": [
+  {
+    "question": "Does the Orchard pear have any moving or motorized parts?",
+    "answer": "No — unlike our spinning or propeller diffusers, the pear is a simple sealed shape. Airflow from your vent carries the scent through the cabin, so there's nothing to wind down, recharge, or wear out."
+  },
+  {
+    "question": "Is the pear discreet, or does it look like a novelty toy?",
+    "answer": "It's designed to read as a subtle little fruit rather than a flashy gadget, so it blends into your dash. It's small and lightweight — about the footprint of a real pear on the vent."
+  },
+  {
+    "question": "How do I refill the pear and can I change scents?",
+    "answer": "Pop a few drops of any Autivara fragrance oil into the sealed core when the scent fades — usually every one to two weeks. Switch scents whenever you like; you own the diffuser outright with no required subscription."
+  },
+  {
+    "question": "Will it leak oil onto my dashboard?",
+    "answer": "No. The pear uses a sealed, waterless core that holds the oil in place instead of sloshing loose, so there's no spill risk and no oily film on your interior."
+  }
+],
+};
 
 /**
  * Per-product FAQ. Checks PRODUCT_FAQ_OVERRIDES first (real, product-specific content); falls
