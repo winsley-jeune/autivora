@@ -15,6 +15,25 @@ function collectionOf(tags: string[] | undefined): string | null {
 // An override here replaces the generic collection-level fallback with questions genuinely
 // specific to that product (its actual design/theme/differentiator, not just its category).
 export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
+  "autivora-volcano-flame-diffuser": [
+  {
+    "question": "Does the volcano actually get hot or use a real flame?",
+    "answer": "No. The eruption effect is all LED glow lighting behind ultrasonic mist, so the plume looks molten but stays cool to the touch — safe on a shelf, mantel, or nightstand."
+  },
+  {
+    "question": "How does the Ember create its lava-eruption look?",
+    "answer": "An ultrasonic plate turns water into a fine cool mist that rises from the volcano's crater, lit from within by warm lava-glow LEDs so it reads like a rising eruption rather than plain steam."
+  },
+  {
+    "question": "How is the Ember powered?",
+    "answer": "It's USB powered, so you can run it from a wall adapter, a power bank, or a laptop port — handy for placing it on a mantel or side table without hunting for a free outlet."
+  },
+  {
+    "question": "Can I use my own fragrance oils in it?",
+    "answer": "Yes. Fill the tank with water, add a few drops of any diffuser-grade fragrance or essential oil, and top up as it empties. Our Autivara oils are blended for these units, but there's no required subscription and you're never locked in."
+  }
+],
+
   "autivora-smart-spray-diffuser": [
   {
     "question": "How is the Pulse different from Autivara's vent-clip diffusers?",
