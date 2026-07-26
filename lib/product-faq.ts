@@ -14,7 +14,26 @@ function collectionOf(tags: string[] | undefined): string | null {
 // product pages sitting at "Discovered - currently not indexed" (see agents/ARCHITECTURE.md).
 // An override here replaces the generic collection-level fallback with questions genuinely
 // specific to that product (its actual design/theme/differentiator, not just its category).
-export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {};
+export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
+  "autivora-magnetic-vent-diffuser": [
+  {
+    "question": "What makes the Disc different from Autivara's novelty car diffusers?",
+    "answer": "It's the minimalist grown-up option. Instead of a sculpted figure, the Disc is a plain machined-metal puck — solid, weighty, and understated, so it reads as a quiet design detail on your vent rather than a character piece."
+  },
+  {
+    "question": "How does the magnetic snap work for refills?",
+    "answer": "The two-piece metal body pulls apart and closes with a magnet, so you just snap off the top, add a few drops of oil to the felt pad, and snap it shut. No twisting caps or fiddly clips."
+  },
+  {
+    "question": "Is the metal body heavy enough to stay put on my vent?",
+    "answer": "It clips securely onto any air vent and the solid metal keeps it stable — no rattling loose over bumps. It's more substantial in hand than the plastic diffusers you'll find elsewhere."
+  },
+  {
+    "question": "Do I have to buy Autivara oil refills on a subscription?",
+    "answer": "No — the felt pad is refillable with any fragrance oil you like and you're never required to sign up for a recurring plan. An optional oil plan may be offered later, but you own the diffuser outright."
+  }
+],
+};
 
 /**
  * Per-product FAQ. Checks PRODUCT_FAQ_OVERRIDES first (real, product-specific content); falls
