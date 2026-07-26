@@ -15,6 +15,25 @@ function collectionOf(tags: string[] | undefined): string | null {
 // An override here replaces the generic collection-level fallback with questions genuinely
 // specific to that product (its actual design/theme/differentiator, not just its category).
 export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
+  "autivora-steam-train-diffuser": [
+  {
+    "question": "Where does the mist come from on the steam-train diffuser?",
+    "answer": "Straight out of the smokestack, like a real locomotive letting off steam. The cool ultrasonic mist rises from the funnel, so the scent effect doubles as the train's steam."
+  },
+  {
+    "question": "Is the Express more of a display piece or a working diffuser?",
+    "answer": "Both. It's a finely detailed, collectible locomotive that looks the part on a shelf or desk, and it genuinely diffuses scented mist while it does — no compromise between looks and function."
+  },
+  {
+    "question": "Does it get hot or use flame like a real train?",
+    "answer": "No. The mist is cool ultrasonic mist with no heat and no flame, so it's safe to leave on a shelf, desk, or nightstand. The 'steam' from the stack is fine, cool fragrance mist."
+  },
+  {
+    "question": "Can I use my own oils in the Express, or do I have to buy refills?",
+    "answer": "Use any diffuser-grade fragrance or essential oil — just add a few drops to the water tank. Our Autivara oils are blended for these units, but there's no required subscription and you're never locked in."
+  }
+],
+
   "autivora-wood-grain-diffuser": [
   {
     "question": "Does the Grove have a flame or light-show effect like the other Autivara diffusers?",
