@@ -14,7 +14,26 @@ function collectionOf(tags: string[] | undefined): string | null {
 // product pages sitting at "Discovered - currently not indexed" (see agents/ARCHITECTURE.md).
 // An override here replaces the generic collection-level fallback with questions genuinely
 // specific to that product (its actual design/theme/differentiator, not just its category).
-export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {};
+export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
+  "autivora-wood-grain-diffuser": [
+  {
+    "question": "Does the Grove have a flame or light-show effect like the other Autivara diffusers?",
+    "answer": "No — and that's the point. The Grove skips the flame glow and mirror-ball effects for a single soft ambient light and a natural wood-grain body, so it's the one to pick if you want scent that quietly blends into a room rather than becoming the centerpiece."
+  },
+  {
+    "question": "Where does the wood-grain look fit best?",
+    "answer": "Its warm wood-grain finish suits neutral, minimal, and natural interiors — a bedroom nightstand, a living-room shelf, or an office desk where a bright color or a novelty shape would clash."
+  },
+  {
+    "question": "Is the soft glow bright enough to bother me at night?",
+    "answer": "No. The ambient light is a gentle glow rather than a light show, so it's easy to sleep next to on a nightstand, and it runs cool with auto shut-off when the water runs dry."
+  },
+  {
+    "question": "Can I use my own oils in it?",
+    "answer": "Yes. Add five to ten drops of any diffuser-grade fragrance or essential oil to the water tank. We blend Autivara oils for these ultrasonic units, but there's no required subscription and you're never locked in."
+  }
+],
+};
 
 /**
  * Per-product FAQ. Checks PRODUCT_FAQ_OVERRIDES first (real, product-specific content); falls
