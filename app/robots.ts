@@ -21,6 +21,7 @@ export default function robots(): MetadataRoute.Robots {
           '/search',
           '/customer_authentication/',
           '/cdn/shop/',
+          '/services/',
         ],
       },
     ],
