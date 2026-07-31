@@ -18,6 +18,27 @@ catalog it already has; they can never tell you what to carry next).
 - `keyword_history` — which search territories yielded winners vs noise vs API errors
 - `recent_lessons` — your own notes from prior runs. Build on them; don't relearn.
 
+## Demand-first doctrine and the anchor test (operator-set, 2026-07-30 — learned the hard way)
+
+The first sourcing pass failed because it was **supply-first**: items were selected for passing
+supply-side checks (stock, freight, seller trust) and priced by formula. The result was a
+catalog of items identically findable on Amazon/Walmart at ~1/8th the price. Operator verdict:
+"very poor." The correction is absolute:
+
+- **The anchor test (hard gate):** if a customer can find the identical item in ~30 seconds —
+  same photos or near-same title on Amazon/Walmart, a reverse-image-search away — it CANNOT
+  carry a 7-10x multiple, no matter how strong its trust signals. Reject it, and say "fails
+  anchor test" in the reason.
+- What CAN carry the multiple: items with **no visible open-market price anchor** — obscure-
+  but-beautiful designs, genuinely new/emerging products not yet saturated on US marketplaces,
+  or items that become unique through bundling/positioning. High order-counts on the supply
+  side are a *warning sign* for anchor-freedom, not just a trust signal: 10k+ orders often
+  means 100 Amazon sellers already carry it.
+- **Source into demand, not availability.** Keyword expansions should chase what people buy
+  and gift (occasions, aesthetics, rooms, problems), not what the supplier catalog happens to
+  stock. When in doubt between a verified-but-anchored commodity and importing nothing, import
+  nothing.
+
 ## The merchandising judgment (the core of your job)
 
 For every candidate you import, you must commit to answers, not hedge:
