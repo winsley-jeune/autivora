@@ -6,30 +6,32 @@ import { BLOG_ARTICLES } from '@/lib/blog-data';
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://autivara.com';
 
-// Bump when page content meaningfully changes. A stable date Google can trust
-// beats a per-request `new Date()` — an always-"now" lastmod gets ignored.
-const CONTENT_UPDATED = new Date('2026-06-14');
+// Bump a page's date here when its content meaningfully changes. Real per-page dates (not one
+// shared constant) — Google uses lastmod as a freshness signal between URLs, so every static
+// page claiming the exact same instant tells it nothing. Values below reflect each page's actual
+// last substantive edit.
+const ROOMS_USE_CASES_UPDATED = new Date('2026-07-20'); // HOME_ROOMS/INDUSTRIAL_USE_CASES content rewrite
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // ── Top-level pages ─────────────────────────────────────────────────────────
   // /office and /fitment retired (premium-only, no real products) — 301'd in next.config.
   const staticPages: MetadataRoute.Sitemap = [
-    { url: BASE_URL,                          lastModified: CONTENT_UPDATED, changeFrequency: 'weekly',  priority: 1.0 },
-    { url: `${BASE_URL}/auto`,                lastModified: CONTENT_UPDATED, changeFrequency: 'weekly',  priority: 0.9 },
-    { url: `${BASE_URL}/home`,                lastModified: CONTENT_UPDATED, changeFrequency: 'weekly',  priority: 0.9 },
-    { url: `${BASE_URL}/industrial`,          lastModified: CONTENT_UPDATED, changeFrequency: 'weekly',  priority: 0.9 },
-    { url: `${BASE_URL}/scents`,              lastModified: CONTENT_UPDATED, changeFrequency: 'weekly',  priority: 0.9 },
-    { url: `${BASE_URL}/collection`,          lastModified: CONTENT_UPDATED, changeFrequency: 'weekly',  priority: 0.8 },
-    { url: `${BASE_URL}/home/rooms`,          lastModified: CONTENT_UPDATED, changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${BASE_URL}/industrial/use-cases`, lastModified: CONTENT_UPDATED, changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${BASE_URL}/blog`,                lastModified: CONTENT_UPDATED, changeFrequency: 'weekly',  priority: 0.7 },
-    { url: `${BASE_URL}/about`,               lastModified: CONTENT_UPDATED, changeFrequency: 'monthly', priority: 0.5 },
-    { url: `${BASE_URL}/faq`,                 lastModified: CONTENT_UPDATED, changeFrequency: 'monthly', priority: 0.5 },
-    { url: `${BASE_URL}/contact`,             lastModified: CONTENT_UPDATED, changeFrequency: 'yearly',  priority: 0.3 },
-    { url: `${BASE_URL}/shipping`,            lastModified: CONTENT_UPDATED, changeFrequency: 'yearly',  priority: 0.3 },
-    { url: `${BASE_URL}/returns`,             lastModified: CONTENT_UPDATED, changeFrequency: 'yearly',  priority: 0.3 },
-    { url: `${BASE_URL}/privacy`,             lastModified: CONTENT_UPDATED, changeFrequency: 'yearly',  priority: 0.2 },
-    { url: `${BASE_URL}/terms`,               lastModified: CONTENT_UPDATED, changeFrequency: 'yearly',  priority: 0.2 },
+    { url: BASE_URL,                          lastModified: new Date('2026-06-30'), changeFrequency: 'weekly',  priority: 1.0 },
+    { url: `${BASE_URL}/auto`,                lastModified: new Date('2026-06-26'), changeFrequency: 'weekly',  priority: 0.9 },
+    { url: `${BASE_URL}/home`,                lastModified: new Date('2026-06-26'), changeFrequency: 'weekly',  priority: 0.9 },
+    { url: `${BASE_URL}/industrial`,          lastModified: new Date('2026-06-26'), changeFrequency: 'weekly',  priority: 0.9 },
+    { url: `${BASE_URL}/scents`,              lastModified: new Date('2026-06-26'), changeFrequency: 'weekly',  priority: 0.9 },
+    { url: `${BASE_URL}/collection`,          lastModified: new Date('2026-06-26'), changeFrequency: 'weekly',  priority: 0.8 },
+    { url: `${BASE_URL}/home/rooms`,          lastModified: ROOMS_USE_CASES_UPDATED, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${BASE_URL}/industrial/use-cases`, lastModified: ROOMS_USE_CASES_UPDATED, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${BASE_URL}/blog`,                lastModified: new Date('2026-07-03'), changeFrequency: 'weekly',  priority: 0.7 },
+    { url: `${BASE_URL}/about`,               lastModified: new Date('2026-06-26'), changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${BASE_URL}/faq`,                 lastModified: new Date('2026-06-26'), changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${BASE_URL}/contact`,             lastModified: new Date('2026-06-15'), changeFrequency: 'yearly',  priority: 0.3 },
+    { url: `${BASE_URL}/shipping`,            lastModified: new Date('2026-06-15'), changeFrequency: 'yearly',  priority: 0.3 },
+    { url: `${BASE_URL}/returns`,             lastModified: new Date('2026-06-15'), changeFrequency: 'yearly',  priority: 0.3 },
+    { url: `${BASE_URL}/privacy`,             lastModified: new Date('2026-06-26'), changeFrequency: 'yearly',  priority: 0.2 },
+    { url: `${BASE_URL}/terms`,               lastModified: new Date('2026-06-26'), changeFrequency: 'yearly',  priority: 0.2 },
   ];
 
   // ── Shopify product pages ───────────────────────────────────────────────────
@@ -50,7 +52,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // ── Home rooms ──────────────────────────────────────────────────────────────
   const homeRoomPages: MetadataRoute.Sitemap = HOME_ROOMS.map((r) => ({
     url: `${BASE_URL}/home/rooms/${r.slug}`,
-    lastModified: CONTENT_UPDATED,
+    lastModified: ROOMS_USE_CASES_UPDATED,
     changeFrequency: 'monthly' as const,
     priority: 0.7,
   }));
@@ -58,7 +60,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // ── Industrial use cases ────────────────────────────────────────────────────
   const industrialUseCasePages: MetadataRoute.Sitemap = INDUSTRIAL_USE_CASES.map((u) => ({
     url: `${BASE_URL}/industrial/use-cases/${u.slug}`,
-    lastModified: CONTENT_UPDATED,
+    lastModified: ROOMS_USE_CASES_UPDATED,
     changeFrequency: 'monthly' as const,
     priority: 0.7,
   }));
@@ -66,7 +68,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // ── Scent catalog (coming-soon refill line — kept indexed) ──────────────────
   const scentPages: MetadataRoute.Sitemap = SCENTS.map((s) => ({
     url: `${BASE_URL}/scents/${s.id}`,
-    lastModified: CONTENT_UPDATED,
+    lastModified: new Date('2026-06-15'),
     changeFrequency: 'monthly' as const,
     priority: 0.75,
   }));
