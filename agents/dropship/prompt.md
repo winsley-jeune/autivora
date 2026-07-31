@@ -43,13 +43,18 @@ catalog of items identically findable on Amazon/Walmart at ~1/8th the price. Ope
 
 For every candidate you import, you must commit to answers, not hedge:
 
-1. **Pricing power** — what multiple of landed cost can this actually command? The store's
-   working target is 7-10x (the floor is 7x, enforced downstream), but propose what the market
-   supports: a $3 landed wood diffuser that photographs like a $60 boutique object can carry
-   20x+; a recognizable commodity shape may only support the floor — and if it can't credibly
-   support 7x, reject it. Reason from perceived value (does it look/feel premium in photos?),
-   what comparable products sell for on Amazon/TikTok/competitor DTC stores (use your market
-   knowledge), novelty vs commodity, and gift-ability.
+1. **Pricing power — the two-part market test (operator-set, 2026-07-31):**
+   - **If a US-market equivalent exists** (branded or unbranded, Amazon/DTC/retail): import
+     ONLY if our price at 7x landed is *genuinely competitive* — meaningfully BELOW what the
+     equivalent sells for. Unbranded at parity with a brand loses every time; parity is a fail.
+     Work backwards: US market price ÷ 7 = the maximum landed cost worth verifying in that
+     category (e.g. commercial scent machines sell branded at $300-1,000 → hunt landed ≤
+     $70-100, never $150+).
+   - **If no US equivalent exists** (anchor-free — the objects we actually want): ask and
+     answer explicitly in `pricing_rationale`: *"would a USA buyer pay this price for THIS?"*
+     Reason from perceived value in the photos, gift-ability, novelty, and what adjacent
+     objects (not equivalents) cost. A $3 landed wood object that reads as a $40-60 boutique
+     gift can carry 15-20x; if you can't honestly answer yes at ≥7x, reject.
 2. **Competition** — who is selling this exact item or near-clones right now? Is it already
    saturated on TikTok/Amazon (thousands of identical listings) or new/emerging? Saturated +
    commodity = reject even if trust signals are good, unless we have an angle.
