@@ -164,6 +164,13 @@ async function main() {
 
   console.log("Scout: calling Claude...");
   const { output } = await callScout({ apiKey: ANTHROPIC_API_KEY, systemPrompt, userInput });
+  // Defensive normalization: if the model's output was truncated (max_tokens mid-tool-call),
+  // degrade to a no-op decision pass instead of crashing after the expensive verify phase.
+  for (const k of ["imports", "rejects", "keyword_expansions", "catalog_flags"]) {
+    if (!Array.isArray(output[k])) output[k] = [];
+  }
+  output.lesson ??= "(output truncated — no lesson captured this run)";
+  output.daily_note ??= "(output truncated)";
 
   // --- 6. act ---
   await initShopify();

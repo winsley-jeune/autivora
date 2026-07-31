@@ -95,7 +95,7 @@ export async function callScout({ apiKey, systemPrompt, userInput }) {
       description: "Emit Scout's sourcing decisions: imports with full merchandising judgment, rejects, keyword expansions, catalog flags, lesson, and operator note.",
       input_schema: SCOUT_OUTPUT_SCHEMA,
     },
-    maxTokens: 16000,
+    maxTokens: 32000,
     label: "Scout",
   });
 }
