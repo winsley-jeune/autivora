@@ -78,7 +78,11 @@ async function main() {
   const unseen = new Map(); // itemId -> {searchHit, tier}
   for (const tier of Object.keys(TIERS)) {
     const queue = catalog.keywordQueue[tier] ?? [];
-    const batch = queue.slice(0, SCAN_KEYWORDS_PER_TIER);
+    const history = catalog.keywordHistory[tier] ?? {};
+    // Never-scanned keywords first — Scout's fresh expansions are the highest-information
+    // scans; without this, new territory waits behind a full rotation of exhausted terms.
+    const prioritized = [...queue].sort((a, b) => (history[a] ? 1 : 0) - (history[b] ? 1 : 0));
+    const batch = prioritized.slice(0, SCAN_KEYWORDS_PER_TIER);
     for (const keyword of batch) {
       const res = await searchKeyword({ keyword, tier, auth });
       scanResults.push({ tier, keyword, ok: res.ok, totalCount: res.totalCount, returned: res.products.length });
@@ -91,15 +95,29 @@ async function main() {
       await sleep(700);
     }
     // rotate scanned keywords to the back of the queue
-    catalog.keywordQueue[tier] = [...queue.slice(batch.length), ...batch];
+    catalog.keywordQueue[tier] = [...queue.filter((k) => !batch.includes(k)), ...batch];
   }
 
   // --- 4. verify the most promising unseen candidates ---
-  // Rank by market proof (order volume) — verification is the expensive step, spend it well.
-  const ranked = [...unseen.values()]
-    .filter(({ hit, tier }) => passesTrust(tier, { rating: hit.rating, reviews: 0, orders: hit.orders }) || tier === "us-fast")
-    .sort((a, b) => b.hit.orders - a.hit.orders)
-    .slice(0, VERIFY_CAP_PER_RUN);
+  // Per-tier verification quotas (bug fix, found by Scout itself run 3: global rank-by-orders
+  // let 10k-order value-china commodities take every slot, so us-fast candidates — the whole
+  // premium anchor-free hunting ground — never got verified). Also, per the anchor doctrine,
+  // mega order-counts signal Amazon saturation: value-china ranking now prefers the
+  // validated-but-not-saturated band instead of raw max-orders.
+  const byTier = {};
+  for (const entry of unseen.values()) {
+    const { hit, tier } = entry;
+    if (tier === "value-china" && hit.orders < 100 && !passesTrust(tier, { rating: hit.rating, reviews: 0, orders: hit.orders })) continue;
+    (byTier[tier] ??= []).push(entry);
+  }
+  const vcScore = (o) => (o > 5000 ? o / 100 : o); // dampen saturated mega-sellers, keep them possible
+  byTier["us-fast"]?.sort((a, b) => b.hit.orders - a.hit.orders);
+  byTier["value-china"]?.sort((a, b) => vcScore(b.hit.orders) - vcScore(a.hit.orders));
+  const usSlots = Math.min(byTier["us-fast"]?.length ?? 0, Math.ceil(VERIFY_CAP_PER_RUN / 2));
+  const ranked = [
+    ...(byTier["us-fast"] ?? []).slice(0, usSlots),
+    ...(byTier["value-china"] ?? []).slice(0, VERIFY_CAP_PER_RUN - usSlots),
+  ];
 
   console.log(`Scout: verifying ${ranked.length} of ${unseen.size} unseen candidate(s)...`);
   const candidates = [];
@@ -193,6 +211,10 @@ async function main() {
       if (p.verifyHistory.length > 30) p.verifyHistory = p.verifyHistory.slice(-30);
     }
     for (const r of [...autoRejects, ...output.rejects]) store.rejected[String(r.itemId)] = { reason: r.reason, on: today() };
+    // Persist the ROTATED queues (bug fix: rotation previously happened on the local copy only,
+    // so every run re-scanned the same first N keywords and Scout's expansions never reached
+    // the front — it was steering with the wheel disconnected).
+    for (const tier of Object.keys(catalog.keywordQueue)) store.keywordQueue[tier] = [...catalog.keywordQueue[tier]];
     for (const exp of output.keyword_expansions) {
       const q = (store.keywordQueue[exp.tier] ??= []);
       if (!q.includes(exp.keyword)) q.push(exp.keyword);
@@ -202,7 +224,6 @@ async function main() {
       Object.assign(h, { lastRun: today(), totalCount: s.totalCount, returned: s.returned, ok: s.ok });
       h.imported = (h.imported ?? 0) + imported.filter((i) => i.tier === s.tier).length; // coarse per-tier credit
     }
-    store.keywordQueue = { ...store.keywordQueue };
     store.lessons.push({ on: today(), lesson: output.lesson });
     if (store.lessons.length > 60) store.lessons = store.lessons.slice(-60);
   });

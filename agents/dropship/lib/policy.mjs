@@ -48,8 +48,10 @@ export const TIERS = {
     maxDeliveryDays: 30,
     maxLandedCost: 12,
     minMultiple: 7,
-    // Deep pool = we can afford to be picky. Real social proof is abundant here.
-    minTrust: { minRating: 4.2, minReviews: 500, orAlternative: { minOrders: 1000 } },
+    // Quality bar without selecting FOR saturation: the old 500-review floor guaranteed every
+    // candidate was already an Amazon-saturated commodity (anchor-test failure by construction).
+    // Emerging anchor-free items have modest review counts with strong ratings.
+    minTrust: { minRating: 4.3, minReviews: 50, orAlternative: { minOrders: 1000 } },
     importCapPerRun: 5,
   },
 };
