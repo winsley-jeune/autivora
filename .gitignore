@@ -37,3 +37,37 @@ yarn-error.log*
 # Proprietary business research — keep local, never commit
 files/
 content-drafts/
+
+# Analytics agent — real traffic/search data snapshots, plus any stray service-account key
+agents/analytics/output/*
+!agents/analytics/output/.gitkeep
+*serviceaccount*.json
+*service-account*.json
+
+# Signal agent — task queue + query history embed real traffic/search data as task evidence
+agents/signal/state/*
+!agents/signal/state/.gitkeep
+agents/signal/output/*
+!agents/signal/output/.gitkeep
+
+# Visual agent — local cache of already-paid-for GPT-image-2 generations, so a crash after a
+# real charge (see agents/visual/run.mjs) never needs to pay twice. Never publish; cleared
+# automatically once a run ships or exhausts its retries.
+agents/visual/.cache/
+
+# Dropship/Scout agent — state dir holds live OAuth tokens + the sourcing catalog (business
+# data); output holds daily digests. Legacy scratch dotfiles from the pre-Scout one-off scripts
+# also stay ignored until cleaned up.
+agents/dropship/state/*
+!agents/dropship/state/.gitkeep
+agents/dropship/output/*
+!agents/dropship/output/.gitkeep
+agents/dropship/.*token-cache*.json
+agents/dropship/.sweep-results.json
+agents/dropship/.cheap-tier-sweep.json
+agents/dropship/.cheap-tier-full-detail.json
+agents/dropship/.delivery-check-results.json
+agents/dropship/.winners-full-detail.json
+agents/dropship/.car-winners-full-detail.json
+agents/dropship/.batch2-full-detail.json
+agents/dropship/.mini-humidifier-detail.json
