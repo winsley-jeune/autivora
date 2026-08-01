@@ -79,7 +79,11 @@ export function finishTaskPR({ task, files, commitMessage, cwd, startBranch }) {
     run("git", ["commit", "-m", commitMessage ?? `${task.agent}: ${task.action} on ${task.target_url}`], { cwd });
     run("git", ["push", "-u", "origin", branchNameForTask(task)], { cwd });
 
-    const prTitle = `[${task.agent}] ${task.action} — ${task.target_url}`;
+    // Signal writes verbose multi-sentence `action` fields; GitHub caps PR titles at 256 chars
+    // and rejects the whole create beyond it (bit tasks #26/#28: branch pushed, no PR). Keep
+    // the title a summary; the full action already lives in the PR body.
+    const rawTitle = `[${task.agent}] ${task.action} — ${task.target_url}`;
+    const prTitle = rawTitle.length > 240 ? `[${task.agent}] task #${task.id} — ${task.target_url}`.slice(0, 240) : rawTitle;
     return run("gh", ["pr", "create", "--title", prTitle, "--body", prBody(task), "--head", branchNameForTask(task), "--base", PRODUCTION_BRANCH], { cwd });
   } finally {
     if (startBranch) run("git", ["checkout", startBranch], { cwd });
