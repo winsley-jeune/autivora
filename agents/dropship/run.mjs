@@ -302,7 +302,9 @@ async function main() {
       continue;
     }
     const landedCost = Math.round(comps.reduce((s, c) => s + c.landedCost, 0) * 100) / 100;
-    const multiple = Math.max(7, Number(bp.price_multiple) || 0);
+    // CEO-gate floor (3x), not the revoked 7x — a bundle must still pass the competitive test
+    // against its own components' standalone prices, which a forced 7x can't.
+    const multiple = Math.max(3, Number(bp.price_multiple) || 0);
     const price = (Math.round(landedCost * multiple) - 0.01).toFixed(2);
     try {
       const product = await createBundleDraft({ components: comps, copy: bp.copy, price, priceMultiple: multiple, landedCost, tier: "bundle", collection: bp.collection });
