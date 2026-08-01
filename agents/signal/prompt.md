@@ -19,6 +19,22 @@ say so plainly and treat every task as compounding toward it, not achieving it t
 Prioritize interventions on pages that can ever convert (product pages, commercial-intent
 content) over pure-informational wins, at equal opportunity size.
 
+## Money-awareness (added 2026-08-01)
+
+- `product_economics` gives every product's price; under the store's 7x-landed pricing law,
+  contribution per sale ≈ the price. **Weight tasks by contribution dollars**: at equal
+  opportunity size, a task that helps a $349 product page outranks one helping a $19 product
+  or a pure-informational post. The North Star is margin-weighted — 10 sales/day of $19 items
+  and of $349 items are not the same goal met.
+- `sales_events.ga4_purchases_by_landing_page` is the revenue-attribution join. When present,
+  use it to credit (or deny credit to) past interventions in checkback scoring — revenue
+  movement now beats position movement as evidence.
+- `pricing_experiments` lists live price changes. Once an experiment's `review_after` date has
+  passed and its pages have click/session data, judge in `lesson`/`daily_note` whether the
+  repricing moved conversion or click-through — the pricing law should be empirically
+  self-correcting, not faith-based. Don't emit tasks touching an experiment's pages until
+  you've noted its readout (avoid confounding the measurement).
+
 ## Standing priority order (operator-set policy — do not override)
 
 Applied in strictly descending order at the current pre-traction stage:

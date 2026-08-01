@@ -21,9 +21,10 @@ import { readEnv } from "../analytics/lib/env.mjs";
 import { getFreshSession } from "./lib/aliexpress-auth.mjs";
 import { searchKeyword, verifyCandidate } from "./lib/market.mjs";
 import { loadCatalog, mutateCatalog } from "./lib/catalog-store.mjs";
+import { loadBands, saveBands, matchBand, maxLandedOf } from "./lib/market-bands.mjs";
 import { TIERS, computePrice, isNoise, passesTrust, SCAN_KEYWORDS_PER_TIER, VERIFY_CAP_PER_RUN, REJECT_COOLDOWN_DAYS } from "./lib/policy.mjs";
 import { callScout } from "./lib/anthropic.mjs";
-import { initShopify, createDraftProduct } from "./lib/shopify.mjs";
+import { initShopify, createDraftProduct, createBundleDraft } from "./lib/shopify.mjs";
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
@@ -50,6 +51,25 @@ async function main() {
   const verificationUpdates = [];
   for (const p of catalog.products) {
     if (p.status === "retired") continue;
+    if (p.type === "bundle") {
+      // A bundle lives or dies with its weakest component — re-verify each part.
+      const parts = [];
+      for (const c of p.components ?? []) {
+        try {
+          parts.push(await verifyCandidate({ itemId: c.itemId, tier: "us-fast", auth }));
+        } catch (e) {
+          parts.push({ ok: false, reason: `verify error: ${e.message.slice(0, 80)}` });
+        }
+        await sleep(700);
+      }
+      const ok = parts.length > 0 && parts.every((x) => x.ok);
+      const minStock = ok ? Math.min(...parts.map((x) => x.stock)) : 0;
+      verificationUpdates.push({
+        itemId: p.itemId, title: p.title, previousStock: p.stock, ok, stock: minStock,
+        note: ok ? `bundle ok, limiting component stock ${minStock}` : `bundle broken: ${parts.filter((x) => !x.ok).map((x) => x.reason).join("; ")}`,
+      });
+      continue;
+    }
     try {
       const v = await verifyCandidate({ itemId: p.itemId, tier: p.tier, auth });
       verificationUpdates.push({
@@ -67,6 +87,8 @@ async function main() {
   }
 
   // --- 3. scan keyword territories ---
+  const bands = loadBands();
+  let bandGated = 0;
   const knownIds = new Set(catalog.products.map((p) => p.itemId));
   const cooldownMs = REJECT_COOLDOWN_DAYS * 86400_000;
   const rejectedRecently = (id) => {
@@ -90,7 +112,13 @@ async function main() {
       for (const hit of res.products) {
         if (knownIds.has(hit.itemId) || rejectedRecently(hit.itemId) || unseen.has(hit.itemId)) continue;
         if (isNoise(hit.title)) continue;
-        unseen.set(hit.itemId, { hit, tier });
+        // THE MECHANICAL 7x GATE (CEO change #1): a strong-anchor band caps landed cost at
+        // usTypical/7 — anything priced above the cap can never satisfy the law, so it never
+        // reaches the expensive verify stage. Unknown/weak-band items pass through for the
+        // model's willingness-to-pay judgment.
+        const band = matchBand(bands, hit.title);
+        if (band?.maxLanded != null && hit.price > band.maxLanded) { bandGated++; continue; }
+        unseen.set(hit.itemId, { hit, tier, band });
       }
       await sleep(700);
     }
@@ -98,21 +126,22 @@ async function main() {
     catalog.keywordQueue[tier] = [...queue.filter((k) => !batch.includes(k)), ...batch];
   }
 
+  console.log(`Scout: mechanical 7x gate dropped ${bandGated} candidate(s) pre-verify (price > band maxLanded).`);
+
   // --- 4. verify the most promising unseen candidates ---
-  // Per-tier verification quotas (bug fix, found by Scout itself run 3: global rank-by-orders
-  // let 10k-order value-china commodities take every slot, so us-fast candidates — the whole
-  // premium anchor-free hunting ground — never got verified). Also, per the anchor doctrine,
-  // mega order-counts signal Amazon saturation: value-china ranking now prefers the
-  // validated-but-not-saturated band instead of raw max-orders.
+  // Per-tier quotas (Scout-found starvation bug, run 3) + MARGIN-DOLLAR RANKING (CEO change #4):
+  // at a fixed 7x, margin ∝ landed cost, so among band-gated survivors we verify the PRICIEST
+  // first, not the highest-order-count — order volume is a saturation warning, not the
+  // objective. It survives only as a mild damp against mega-sellers.
   const byTier = {};
   for (const entry of unseen.values()) {
     const { hit, tier } = entry;
     if (tier === "value-china" && hit.orders < 100 && !passesTrust(tier, { rating: hit.rating, reviews: 0, orders: hit.orders })) continue;
     (byTier[tier] ??= []).push(entry);
   }
-  const vcScore = (o) => (o > 5000 ? o / 100 : o); // dampen saturated mega-sellers, keep them possible
-  byTier["us-fast"]?.sort((a, b) => b.hit.orders - a.hit.orders);
-  byTier["value-china"]?.sort((a, b) => vcScore(b.hit.orders) - vcScore(a.hit.orders));
+  const marginScore = ({ hit }) => hit.price * (hit.orders > 5000 ? 0.5 : 1); // $ headroom, damped when saturated
+  byTier["us-fast"]?.sort((a, b) => marginScore(b) - marginScore(a));
+  byTier["value-china"]?.sort((a, b) => marginScore(b) - marginScore(a));
   const usSlots = Math.min(byTier["us-fast"]?.length ?? 0, Math.ceil(VERIFY_CAP_PER_RUN / 2));
   const ranked = [
     ...(byTier["us-fast"] ?? []).slice(0, usSlots),
@@ -122,15 +151,23 @@ async function main() {
   console.log(`Scout: verifying ${ranked.length} of ${unseen.size} unseen candidate(s)...`);
   const candidates = [];
   const autoRejects = [];
-  for (const { hit, tier } of ranked) {
+  for (const { hit, tier, band } of ranked) {
     try {
       const v = await verifyCandidate({ itemId: hit.itemId, tier, auth });
       if (v.ok) {
         // Second trust gate on full detail (search "orders" and detail "reviews" differ)
         if (tier === "value-china" && !passesTrust(tier, { rating: v.rating, reviews: v.reviews, orders: hit.orders })) {
           autoRejects.push({ itemId: hit.itemId, reason: `trust below tier floor (${v.rating}★/${v.reviews} reviews/${hit.ordersRaw} orders)` });
+        } else if (band?.maxLanded != null && v.landedCost > band.maxLanded) {
+          // Re-check the mechanical gate on TRUE landed cost (search price excludes shipping)
+          autoRejects.push({ itemId: hit.itemId, reason: `landed $${v.landedCost.toFixed(2)} > band "${band.key}" maxLanded $${band.maxLanded} (7x law, mechanical)` });
         } else {
-          candidates.push({ ...v, marketOrders: hit.ordersRaw });
+          candidates.push({
+            ...v,
+            marketOrders: hit.ordersRaw,
+            marketBand: band ? { key: band.key, usTypical: band.usTypical, anchor: band.anchor, maxLanded: band.maxLanded } : null,
+            maxMarginAt7x: Math.round(v.landedCost * 6 * 100) / 100,
+          });
         }
       } else {
         autoRejects.push({ itemId: hit.itemId, reason: v.reason });
@@ -143,10 +180,27 @@ async function main() {
   console.log(`Scout: ${candidates.length} candidate(s) passed verification, ${autoRejects.length} auto-rejected.`);
 
   // --- 5. think ---
+  // SALES→SOURCING FEEDBACK (CEO change #2): the analytics snapshot's per-product sales reach
+  // Scout every run — sourcing steered by what actually sells, never by site SEO data.
+  let productSales = { note: "no analytics snapshot found", topProducts: [] };
+  try {
+    const snap = JSON.parse(readFileSync(join(__dir, "..", "analytics", "output", "snapshot-latest.json"), "utf8"));
+    productSales = {
+      windowDays: snap.shopify?.windowDays,
+      totalOrders: snap.shopify?.orderCount ?? 0,
+      totalRevenue: snap.shopify?.revenue ?? 0,
+      topProducts: snap.shopify?.topProducts ?? [],
+      note: "Real Shopify sales, test orders excluded. Steer imports toward patterns that SELL; flag catalog items with zero sales 30d after going live.",
+    };
+  } catch {}
+
   const systemPrompt = readFileSync(join(__dir, "prompt.md"), "utf8");
   const userInput = {
     date: today(),
     policy: TIERS,
+    market_bands: Object.fromEntries(Object.entries(bands).map(([k, b]) => [k, { usTypical: b.usTypical, anchor: b.anchor, maxLanded: maxLandedOf(b), note: b.note }])),
+    band_gate_drops_this_run: bandGated,
+    product_sales_28d: productSales,
     catalog: {
       counts: countByTierAndStatus(catalog.products),
       products: catalog.products.map((p) => ({
@@ -166,7 +220,7 @@ async function main() {
   const { output } = await callScout({ apiKey: ANTHROPIC_API_KEY, systemPrompt, userInput });
   // Defensive normalization: if the model's output was truncated (max_tokens mid-tool-call),
   // degrade to a no-op decision pass instead of crashing after the expensive verify phase.
-  for (const k of ["imports", "rejects", "keyword_expansions", "catalog_flags"]) {
+  for (const k of ["imports", "rejects", "keyword_expansions", "catalog_flags", "bundle_proposals", "market_band_updates"]) {
     if (!Array.isArray(output[k])) output[k] = [];
   }
   output.lesson ??= "(output truncated — no lesson captured this run)";
@@ -231,8 +285,59 @@ async function main() {
     await sleep(500);
   }
 
+  // BUNDLE ENGINE (CEO change #3): manufacture anchor-free composites from verified parts.
+  // Code owns the arithmetic — summed landed, floor-clamped multiple — the model owns the
+  // taste (which components form a coherent offer a USA buyer wants as a SET).
+  const bundles = [];
+  for (const bp of output.bundle_proposals.slice(0, 2)) {
+    const comps = (bp.component_item_ids ?? []).map((id) => {
+      const c = candidateById.get(String(id));
+      if (c) return { itemId: String(c.itemId), skuId: String(c.skuId), landedCost: c.landedCost, images: c.images ?? [] };
+      const p = catalog.products.find((x) => x.itemId === String(id) && x.status !== "retired");
+      if (p) return { itemId: p.itemId, skuId: p.skuId, landedCost: p.landedCost, images: [] };
+      return null;
+    });
+    if (comps.length < 2 || comps.some((c) => !c)) {
+      console.warn(`Scout: dropping bundle "${bp.title}" — components must be >=2 known items`);
+      continue;
+    }
+    const landedCost = Math.round(comps.reduce((s, c) => s + c.landedCost, 0) * 100) / 100;
+    const multiple = Math.max(7, Number(bp.price_multiple) || 0);
+    const price = (Math.round(landedCost * multiple) - 0.01).toFixed(2);
+    try {
+      const product = await createBundleDraft({ components: comps, copy: bp.copy, price, priceMultiple: multiple, landedCost, tier: "bundle", collection: bp.collection });
+      bundles.push({
+        itemId: `bundle-${product.id}`, skuId: null, type: "bundle", tier: "bundle", collection: bp.collection,
+        title: bp.copy.title, shopifyId: product.id, status: "draft",
+        landedCost, price, priceMultiple: multiple,
+        components: comps.map(({ itemId, skuId, landedCost: lc }) => ({ itemId, skuId, landedCost: lc, qty: 1 })),
+        pricingRationale: bp.rationale,
+        importedOn: today(), lastVerifiedOn: today(),
+        verifyHistory: [{ on: today(), ok: true, note: "bundle created from verified components" }],
+      });
+      console.log(`Scout: created BUNDLE draft "${bp.copy.title}" — $${price} (${multiple}x on summed landed $${landedCost})`);
+    } catch (e) {
+      console.error(`Scout: bundle creation failed for "${bp.title}": ${e.message.slice(0, 200)}`);
+    }
+    await sleep(500);
+  }
+
+  // Band updates from the model's market knowledge move the mechanical caps — conservatively.
+  if (output.market_band_updates.length) {
+    const b = loadBands();
+    for (const u of output.market_band_updates) {
+      if (b[u.category]) {
+        Object.assign(b[u.category], { usTypical: u.us_typical_price, anchor: u.anchor, note: u.rationale, source: "model", updatedOn: today() });
+      } else if (u.match) {
+        b[u.category] = { match: u.match, usTypical: u.us_typical_price, anchor: u.anchor, note: u.rationale, source: "model", updatedOn: today() };
+      }
+      console.log(`Scout: market band "${u.category}" -> usTypical $${u.us_typical_price} (${u.anchor}) — ${u.rationale.slice(0, 100)}`);
+    }
+    saveBands(b);
+  }
+
   await mutateCatalog((store) => {
-    store.products.push(...imported);
+    store.products.push(...imported, ...bundles);
     // fold re-verification results into catalog records
     const vuById = new Map(verificationUpdates.map((u) => [u.itemId, u]));
     for (const p of store.products) {
@@ -268,6 +373,9 @@ async function main() {
   const digest = {
     date: today(),
     imported: imported.map(({ itemId, title, tier, collection, price, priceMultiple, channelEligibility }) => ({ itemId, title, tier, collection, price, priceMultiple, channelEligibility })),
+    bundles: bundles.map(({ title, price, priceMultiple, landedCost, components }) => ({ title, price, priceMultiple, landedCost, componentCount: components.length })),
+    band_gate_drops: bandGated,
+    market_band_updates: output.market_band_updates,
     rejected: [...autoRejects, ...output.rejects],
     catalog_flags: output.catalog_flags,
     keyword_expansions: output.keyword_expansions,

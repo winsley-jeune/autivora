@@ -70,6 +70,47 @@ export const SCOUT_OUTPUT_SCHEMA = {
       },
       description: "New keyword territory to scan on future runs — adjacent niches, angles the current queue misses. This is how the agent decides WHAT to source next.",
     },
+    bundle_proposals: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          title: { type: "string" },
+          component_item_ids: { type: "array", items: { type: "string" }, description: "2-4 itemIds drawn ONLY from this run's verified candidates and/or active catalog products" },
+          collection: { type: "string", enum: ["business", "home", "car"] },
+          price_multiple: { type: "number", description: "Multiple of the SUMMED component landed cost; must be >= 7 (bundles are anchor-free composites — code enforces the floor)" },
+          rationale: { type: "string", description: "Why these components form a coherent offer and why a USA buyer pays this price for the SET" },
+          copy: {
+            type: "object",
+            properties: {
+              title: { type: "string" },
+              product_type: { type: "string" },
+              seo_title: { type: "string" },
+              seo_description: { type: "string" },
+              body_html: { type: "string" },
+            },
+            required: ["title", "product_type", "seo_title", "seo_description", "body_html"],
+          },
+        },
+        required: ["title", "component_item_ids", "collection", "price_multiple", "rationale", "copy"],
+      },
+      description: "Anchor-free composite offers manufactured from verified components — the primary way to CREATE 7x-qualifying SKUs instead of hunting rare ones. Max 2 per run.",
+    },
+    market_band_updates: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          category: { type: "string", description: "Band key from the market_bands input, or a new kebab-case key for a genuinely new category" },
+          us_typical_price: { type: "number" },
+          match: { type: "string", description: "Only for NEW categories: a case-insensitive regex of title terms" },
+          anchor: { type: "string", enum: ["strong", "weak"] },
+          rationale: { type: "string" },
+        },
+        required: ["category", "us_typical_price", "anchor", "rationale"],
+      },
+      description: "Corrections/additions to the market-price oracle from your US-market knowledge. These move the mechanical maxLanded sourcing caps — be conservative and evidence-based.",
+    },
     catalog_flags: {
       type: "array",
       items: {
@@ -81,7 +122,7 @@ export const SCOUT_OUTPUT_SCHEMA = {
     },
     daily_note: { type: "string", description: "Short operator-facing digest of what happened and what needs a human decision" },
   },
-  required: ["lesson", "imports", "rejects", "keyword_expansions", "catalog_flags", "daily_note"],
+  required: ["lesson", "imports", "rejects", "keyword_expansions", "bundle_proposals", "market_band_updates", "catalog_flags", "daily_note"],
 };
 
 export async function callScout({ apiKey, systemPrompt, userInput }) {

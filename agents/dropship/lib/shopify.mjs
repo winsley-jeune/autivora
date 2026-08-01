@@ -56,6 +56,36 @@ export async function createDraftProduct({ v, copy, price, priceMultiple, tier, 
   return res.product;
 }
 
+// Bundle drafts: an anchor-free composite SKU manufactured from verified components. The
+// dropship.bundle_components metafield carries the machine-readable component list so the
+// future order-relay can place one AliExpress order per component.
+export async function createBundleDraft({ components, copy, price, priceMultiple, landedCost, tier, collection }) {
+  const images = components.flatMap((c) => (c.images ?? []).slice(0, 2)).slice(0, 6).map((src) => ({ src }));
+  const skuTail = components.map((c) => String(c.itemId).slice(-5)).join("-");
+  const payload = {
+    product: {
+      title: copy.title,
+      body_html:
+        copy.body_html +
+        `<!-- internal review notes: BUNDLE of ${components.length} components, summed landed $${landedCost.toFixed(2)}, ${priceMultiple}x. Components: ${components.map((c) => `${c.itemId}/${c.skuId} ($${c.landedCost})`).join("; ")} -->`,
+      vendor: "Autivara Dropship",
+      product_type: copy.product_type,
+      tags: `dropship,bundle,${tier},${collection},scout`,
+      status: "draft",
+      images,
+      variants: [{ price, sku: `BND-${skuTail}`, inventory_management: null }],
+      metafields: [
+        { namespace: "global", key: "title_tag", value: copy.seo_title, type: "single_line_text_field" },
+        { namespace: "global", key: "description_tag", value: copy.seo_description, type: "multi_line_text_field" },
+        { namespace: "dropship", key: "bundle_components", value: JSON.stringify(components.map((c) => ({ itemId: c.itemId, skuId: c.skuId, qty: 1 }))), type: "single_line_text_field" },
+        { namespace: "dropship", key: "landed_cost_usd", value: landedCost.toFixed(2), type: "single_line_text_field" },
+      ],
+    },
+  };
+  const res = await shopifyApi("POST", "products.json", payload);
+  return res.product;
+}
+
 export async function listDropshipProducts() {
   const out = [];
   for (const status of ["draft", "active"]) {

@@ -172,8 +172,29 @@ export async function buildInputs({ baseUrl, skipCrawl = false } = {}) {
     open_tasks: openTasks(store),
     checkbacks_due: dueTasks,
     outcome_history: { recent: history, mean_by_action: meanByAction(history) },
-    sales_events: salesEvents(shopify),
+    sales_events: {
+      ...salesEvents(shopify),
+      // Revenue attribution (added 2026-08-01): GA4 purchases joined to landing pages. An empty
+      // array is a real "no attributed purchases yet"; a string note means the snapshot predates
+      // the attribution lane — rerun analytics.
+      ga4_purchases_by_landing_page:
+        ga4.purchasesByLandingPage ?? "not in this snapshot yet — analytics:run predates the attribution lane",
+    },
+    product_economics: productEconomics(),
+    pricing_experiments: readJson(join(__dir, "..", "state", "pricing-experiments.json")) ?? [],
     _store: store,
     _searchConsoleQueries: searchConsole.queries,
+  };
+}
+
+// Contribution-weighted prioritization (2026-08-01): under the store's 7x-landed pricing law,
+// contribution per sale ≈ ~85% of price, so price is a faithful margin proxy — Signal weights
+// tasks by dollars, not just traffic opportunity.
+function productEconomics() {
+  const cat = readJson(join(__dir, "..", "..", "..", "product-pipeline", "catalog-novelty.json"));
+  if (!cat) return { note: "catalog not found", products: [] };
+  return {
+    note: "Contribution per sale ≈ price (7x-landed pricing law). Weight product/commercial-page tasks by this, not just traffic.",
+    products: cat.products.map((p) => ({ url: `/product/${p.handle}`, title: p.title, price: p.price, collection: p.collection })),
   };
 }

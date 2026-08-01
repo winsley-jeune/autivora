@@ -45,7 +45,7 @@ export async function pullGA4() {
   const token = await getAccessToken(GOOGLE_SERVICE_ACCOUNT_KEY_PATH, SCOPE);
   const dateRanges = [{ startDate: `${DAYS}daysAgo`, endDate: "yesterday" }];
 
-  const [byChannelReport, byLandingPageReport] = await Promise.all([
+  const [byChannelReport, byLandingPageReport, purchasesByLandingPageReport] = await Promise.all([
     runReport(GA4_PROPERTY_ID, token, {
       dateRanges,
       dimensions: [{ name: "sessionDefaultChannelGroup" }],
@@ -57,6 +57,15 @@ export async function pullGA4() {
       metrics: [{ name: "sessions" }, { name: "conversions" }],
       limit: 50,
     }),
+    // Revenue attribution (CEO change #5): which landing page actually produced purchases —
+    // the join Signal has been flagging as missing every run. Zero rows is a valid result on
+    // a young store; the point is the lane exists so checkbacks can score revenue impact.
+    runReport(GA4_PROPERTY_ID, token, {
+      dateRanges,
+      dimensions: [{ name: "landingPage" }],
+      metrics: [{ name: "transactions" }, { name: "purchaseRevenue" }, { name: "sessions" }],
+      limit: 50,
+    }),
   ]);
 
   return {
@@ -64,6 +73,7 @@ export async function pullGA4() {
     windowDays: DAYS,
     byChannel: rowsToObjects(byChannelReport),
     byLandingPage: rowsToObjects(byLandingPageReport),
+    purchasesByLandingPage: rowsToObjects(purchasesByLandingPageReport).filter((r) => r.transactions > 0),
   };
 }
 
