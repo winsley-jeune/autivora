@@ -28,7 +28,7 @@
     "waterless",
     "solar"
    ],
-   "price": 29.0,
+   "price": 19,
    "compare_at": 39.0,
    "sku": "AV-SOLAR",
    "body_html": "<p>A solar-driven rotor spins the moment sunlight hits your dash, fanning fragrance through the cabin with zero batteries, zero cords, and nothing to plug in or charge.</p><ul><li>Solar-powered rotor \u2014 no batteries, no charging</li><li>Secure fit on any air vent</li><li>Waterless \u2014 just a few drops of oil, no spills</li><li>Refillable scent core you can top up anytime</li></ul>",
@@ -48,7 +48,7 @@
     "waterless",
     "novelty"
    ],
-   "price": 24.0,
+   "price": 19,
    "compare_at": 34.0,
    "sku": "AV-ASTRO",
    "body_html": "<p>The finely sculpted astronaut that started the whole line \u2014 a display-worthy figure that clips to your vent and turns plain airflow into your signature scent.</p><ul><li>Detailed collectible figure, offered in several colorways</li><li>Clips securely onto any air vent</li><li>Waterless core \u2014 a few drops of oil, no water tank, no spills</li><li>Refillable, so you can swap scents whenever the mood changes</li></ul>",
@@ -73,7 +73,7 @@
     "waterless",
     "novelty"
    ],
-   "price": 24.0,
+   "price": 19,
    "compare_at": 34.0,
    "sku": "AV-AVTR",
    "body_html": "<p>A precision pilot bear car diffuser whose propeller actually spins on your vent's airflow \u2014 the moving part, not just a sculpt, is what fans scent evenly through the cabin.</p><ul><li>Working propeller that spins on airflow</li><li>Soft-touch silicone clip fits any vent</li><li>Magnetic top lifts off for quick, mess-free refills</li><li>Waterless core \u2014 a few drops of oil, no spills</li></ul>",
@@ -173,7 +173,7 @@
     "ultrasonic",
     "ambient"
    ],
-   "price": 44.0,
+   "price": 34,
    "compare_at": 59.0,
    "sku": "AV-EMBER",
    "body_html": "<p>A sculptural volcano that erupts a glowing plume of cool mist \u2014 the drama of molten lava with none of the heat, equal parts diffuser and tabletop centerpiece.</p><ul><li>Lava-glow lighting that makes the mist plume look like a rising eruption</li><li>Ultrasonic cool mist \u2014 runs cool to the touch, never hot</li><li>Auto shut-off the moment the tank runs dry</li><li>USB powered, so it plugs in anywhere</li></ul>",
@@ -197,7 +197,7 @@
     "ultrasonic",
     "remote"
    ],
-   "price": 44.0,
+   "price": 34,
    "compare_at": 59.0,
    "sku": "AV-NIMBUS",
    "body_html": "<p>Backlit jellyfish drift and sway inside a column of cool mist \u2014 a living aquarium of light and scent you steer from the couch with the included remote.</p><ul><li>Dynamic jellyfish light effect that shifts through color</li><li>Handheld remote to change the mood without getting up</li><li>Cool, whisper-quiet ultrasonic mist \u2014 never hot</li><li>Auto shut-off when the water runs dry</li></ul>",
@@ -222,7 +222,7 @@
     "ultrasonic",
     "ambient"
    ],
-   "price": 39.0,
+   "price": 29,
    "compare_at": 49.0,
    "sku": "AV-HEARTH",
    "body_html": "<p>A miniature fireplace whose flickering flame looks convincingly real \u2014 all the cozy glow of a hearth, with cool mist instead of heat.</p><ul><li>Strikingly realistic flame effect for a fireplace glow</li><li>Ultrasonic cool mist \u2014 never hot to the touch</li><li>Multiple timer modes to match your evening</li><li>Auto shut-off when the water runs dry</li></ul>",
@@ -247,7 +247,7 @@
     "ultrasonic",
     "desk"
    ],
-   "price": 39.0,
+   "price": 29,
    "compare_at": 49.0,
    "sku": "AV-APOLLO",
    "body_html": "<p>A poised desk rocket that appears to lift off on its own glowing plume of mist \u2014 a small statement piece for a workspace that could use a little liftoff.</p><ul><li>Rocket-shaped build sized for a desk, shelf, or bookcase</li><li>Flame-glow lighting mimics an engine burn beneath the mist</li><li>Ultrasonic cool mist \u2014 quiet, never hot</li><li>USB powered, so it plugs straight into your laptop or desk hub</li></ul>",
@@ -272,7 +272,7 @@
     "ultrasonic",
     "party"
    ],
-   "price": 44.0,
+   "price": 34,
    "compare_at": 59.0,
    "sku": "AV-NOVA",
    "body_html": "<p>A mirrored disco ball that scatters spinning light across the whole room while it diffuses \u2014 the diffuser that turns any gathering into a party.</p><ul><li>Rotating mirror-ball light show</li><li>Multiple light modes to match the mood</li><li>Ultrasonic cool mist \u2014 no heat</li><li>USB powered</li></ul>",
@@ -297,7 +297,7 @@
     "minimal",
     "ambient"
    ],
-   "price": 34.0,
+   "price": 24,
    "compare_at": 44.0,
    "sku": "AV-GROVE",
    "body_html": "<p>A warm wood-grain column that reads more like a natural-material objet than a gadget \u2014 the diffuser for people who want scent without a flame effect or a light show stealing the room.</p><ul><li>Wood-grain finish that blends into shelves, mantels, and nightstands</li><li>Ultrasonic cool mist \u2014 no heat, whisper-quiet</li><li>Soft ambient glow for gentle nighttime light</li><li>Auto shut-off when the tank runs dry</li></ul>",
@@ -449,7 +449,7 @@
     "waterless",
     "novelty"
    ],
-   "price": 24.0,
+   "price": 19,
    "compare_at": 34.0,
    "sku": "AV-RIFF",
    "body_html": "<p>A finely formed guitar that sways on its 360\u00b0 clip as air moves past it \u2014 a music-lover's detail that carries scent hands-free through the cabin.</p><ul><li>Sways gently with the airflow for a bit of movement on the dash</li><li>360\u00b0 rotating silicone clip angles it however your vent sits</li><li>Waterless \u2014 a few drops of oil, no water and no spills</li><li>Refillable scent core fits any air vent</li></ul>",
@@ -474,7 +474,7 @@
     "waterless",
     "novelty"
    ],
-   "price": 24.0,
+   "price": 19,
    "compare_at": 34.0,
    "sku": "AV-ORCH",
    "body_html": "<p>A softly sculpted pear that clips into your vent and quietly perfumes the cabin \u2014 no gimmick, no spinning parts, just a calm piece of fruit that happens to smell wonderful.</p><ul><li>Sealed no-spill design \u2014 a few drops of oil, no leaks</li><li>Clips securely onto any air vent</li><li>Refillable waterless scent core</li><li>Compact and lightweight \u2014 barely bigger than the real thing</li></ul>",
