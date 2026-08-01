@@ -55,6 +55,12 @@ For every candidate you import, you must commit to answers, not hedge:
      Reason from perceived value in the photos, gift-ability, novelty, and what adjacent
      objects (not equivalents) cost. A $3 landed wood object that reads as a $40-60 boutique
      gift can carry 15-20x; if you can't honestly answer yes at ≥7x, reject.
+   - **Exception lane (operator-approved 2026-08-01):** when a find can't hold the floor but
+     the absolute dollars are real (≥ ~$50/unit profit at a genuinely competitive price), you
+     MAY propose it below floor via `price_multiple` — it will be routed to the operator for
+     explicit approval, never auto-imported. Use it for strong objects only (the first
+     approved case: a $44.50-landed cedar humidor at 3x/$134 vs an $80-220 branded band);
+     don't use it to smuggle in commodity items the floor correctly rejects.
 2. **Competition** — who is selling this exact item or near-clones right now? Is it already
    saturated on TikTok/Amazon (thousands of identical listings) or new/emerging? Saturated +
    commodity = reject even if trust signals are good, unless we have an angle.

@@ -21,7 +21,7 @@ import { readEnv } from "../analytics/lib/env.mjs";
 import { getFreshSession } from "./lib/aliexpress-auth.mjs";
 import { searchKeyword, verifyCandidate } from "./lib/market.mjs";
 import { loadCatalog, mutateCatalog } from "./lib/catalog-store.mjs";
-import { TIERS, computePrice, isNoise, passesTrust, SCAN_KEYWORDS_PER_TIER, VERIFY_CAP_PER_RUN, REJECT_COOLDOWN_DAYS } from "./lib/policy.mjs";
+import { TIERS, computePrice, isNoise, passesTrust, SCAN_KEYWORDS_PER_TIER, VERIFY_CAP_PER_RUN, REJECT_COOLDOWN_DAYS, EXCEPTION_MIN_PROFIT_USD } from "./lib/policy.mjs";
 import { callScout } from "./lib/anthropic.mjs";
 import { initShopify, createDraftProduct } from "./lib/shopify.mjs";
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
@@ -171,16 +171,46 @@ async function main() {
   }
   output.lesson ??= "(output truncated — no lesson captured this run)";
   output.daily_note ??= "(output truncated)";
+  // Twice now the model has leaked literal tool-call markup (and sometimes whole sibling
+  // fields) into the tail of a string field — truncate at the first leaked tag so state and
+  // digests stay clean.
+  for (const k of ["lesson", "daily_note"]) {
+    if (typeof output[k] === "string" && output[k].includes("</parameter")) output[k] = output[k].split("</parameter")[0].trim();
+  }
 
   // --- 6. act ---
   await initShopify();
   const candidateById = new Map(candidates.map((c) => [String(c.itemId), c]));
   const imported = [];
+  const exceptionProposals = [];
   for (const imp of output.imports) {
     const v = candidateById.get(String(imp.itemId));
     if (!v) { console.warn(`Scout: skipping import of unknown/unverified itemId ${imp.itemId}`); continue; }
     if (imported.filter((i) => i.tier === v.tier).length >= TIERS[v.tier].importCapPerRun) {
       console.warn(`Scout: import cap reached for tier ${v.tier}, skipping ${imp.itemId}`);
+      continue;
+    }
+    // Exception lane: sub-floor proposals with real absolute profit are routed to the operator,
+    // never auto-imported (operator-approved lane, 2026-08-01). Weak sub-floor ideas just die.
+    const floor = TIERS[v.tier].minMultiple;
+    if (imp.price_multiple && imp.price_multiple < floor) {
+      const unitProfit = v.landedCost * (imp.price_multiple - 1);
+      if (unitProfit >= EXCEPTION_MIN_PROFIT_USD) {
+        exceptionProposals.push({
+          proposedOn: today(),
+          itemId: String(v.itemId), skuId: String(v.skuId), tier: v.tier, collection: imp.collection,
+          landedCost: v.landedCost, proposedMultiple: imp.price_multiple,
+          proposedPrice: (Math.round(v.landedCost * imp.price_multiple) - 0.01).toFixed(2),
+          estUnitProfit: Math.round(unitProfit * 100) / 100,
+          pricingRationale: imp.pricing_rationale, competition: imp.competition,
+          marketingAngle: imp.marketing_angle, channelEligibility: imp.channel_eligibility,
+          copy: imp.copy, stock: v.stock, deliveryMin: v.deliveryMin, deliveryMax: v.deliveryMax,
+          rating: v.rating, reviews: v.reviews, images: v.images,
+        });
+        console.log(`Scout: EXCEPTION PROPOSAL (needs operator) [${v.tier}/${imp.collection}] "${imp.copy.title}" — $${(Math.round(v.landedCost * imp.price_multiple) - 0.01).toFixed(2)} at ${imp.price_multiple}x (~$${Math.round(unitProfit)}/unit profit), below the ${floor}x floor`);
+      } else {
+        console.warn(`Scout: dropping sub-floor import ${imp.itemId} — ${imp.price_multiple}x yields only ~$${Math.round(unitProfit)}/unit, under the $${EXCEPTION_MIN_PROFIT_USD} exception threshold`);
+      }
       continue;
     }
     const { price, multiple } = computePrice(v.landedCost, v.tier, imp.price_multiple);
@@ -206,6 +236,7 @@ async function main() {
 
   await mutateCatalog((store) => {
     store.products.push(...imported);
+    (store.pendingApprovals ??= []).push(...exceptionProposals);
     // fold re-verification results into catalog records
     const vuById = new Map(verificationUpdates.map((u) => [u.itemId, u]));
     for (const p of store.products) {
@@ -241,6 +272,7 @@ async function main() {
   const digest = {
     date: today(),
     imported: imported.map(({ itemId, title, tier, collection, price, priceMultiple, channelEligibility }) => ({ itemId, title, tier, collection, price, priceMultiple, channelEligibility })),
+    exception_proposals: exceptionProposals.map(({ itemId, tier, collection, proposedPrice, proposedMultiple, estUnitProfit, copy }) => ({ itemId, tier, collection, proposedPrice, proposedMultiple, estUnitProfit, title: copy.title })),
     rejected: [...autoRejects, ...output.rejects],
     catalog_flags: output.catalog_flags,
     keyword_expansions: output.keyword_expansions,
