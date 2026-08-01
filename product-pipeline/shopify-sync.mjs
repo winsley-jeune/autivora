@@ -187,7 +187,11 @@ async function prepareUpdate(existingProduct, payload) {
     return match ? { ...m, id: match.id } : m;
   });
 
-  return { product: { id: existingProduct.id, ...payload.product, variants, metafields } };
+  // CRITICAL: preserve the live product's status. payload.product carries status=STATUS
+  // (draft by default) intended for NET-NEW creates only — spreading it into updates demoted
+  // the ENTIRE live store to draft on every sync run (discovered 2026-08-01: store had been
+  // dark/unpurchasable since the 2026-07-26 sync; zero active products, all 46 draft).
+  return { product: { id: existingProduct.id, ...payload.product, status: existingProduct.status, variants, metafields } };
 }
 
 // --- main ---

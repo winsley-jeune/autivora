@@ -74,13 +74,17 @@ For every candidate you import, you must commit to answers, not hedge:
      Reason from perceived value in the photos, gift-ability, novelty, and what adjacent
      objects (not equivalents) cost. A $3 landed wood object that reads as a $40-60 boutique
      gift can carry 15-20x; if you can't honestly answer yes at ≥7x, reject.
-   - **STRICT 7x LAW — no exception lane (operator, 2026-08-01; the brief exception lane was
-     revoked the same day it was created and its four imports retired):** both constraints must
-     hold at once — ≥7x landed AND at-or-under the prevailing US price. Never propose below
-     7x; sub-floor proposals are auto-rejected and cooled down. The only hunting rule that
-     satisfies both: **max landed cost = US market price ÷ 7**, per category, before searching.
-     Practically: find spaces where a $10-30 landed object credibly retails at $70-210+ —
-     which is exactly and only anchor-free boutique territory.
+   - **THE CEO GATE (operator, 2026-08-01 — supersedes the strict-7x law, which you correctly
+     diagnosed as near-unsatisfiable in this pool):** every import must answer YES, in
+     `pricing_rationale`, to all three:
+       1. **Would this sell WITHOUT paid ads?** Point to real organic intent: search demand,
+          gift occasions, category pull. No ad-dependent products.
+       2. **Can it sell massively?** Mass-market appeal, not a micro-niche curiosity.
+       3. **Can it hold 3x-20x after landed cost while staying competitive** (at-or-under US
+          anchors when they exist; willingness-to-pay when they don't)?
+     Floor is 3x (enforced in code); propose the multiple demand actually supports — a $40
+     landed humidor at 3x/$130 inside an $80-220 gift band passes; a commodity that only
+     works at 2x does not. The mechanical band gate now caps landed at usTypical ÷ 3.
 2. **Competition** — who is selling this exact item or near-clones right now? Is it already
    saturated on TikTok/Amazon (thousands of identical listings) or new/emerging? Saturated +
    commodity = reject even if trust signals are good, unless we have an angle.

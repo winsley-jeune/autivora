@@ -26,14 +26,15 @@ export const TIERS = {
   "us-fast": {
     shipFromUSVariantPreferred: true,
     searchShipFromFilter: "US",
-    // Module-1 (autivara.com) economics, operator directive 2026-07-30: delivery time is
-    // FLEXIBLE (strict 2-5d fulfillment belongs to the future Amazon module, not here); what's
-    // non-negotiable is profit — target 7-10x on landed cost, floor 7x. Scout still judges the
-    // exact multiple per product (and may exceed 10x when perceived value supports it), but
-    // nothing imports below 7x-viable.
+    // CEO GATE (operator, 2026-08-01, supersedes the strict-7x law after Scout proved it
+    // near-unsatisfiable in this supplier pool): every import must answer YES to three
+    // questions — (1) would it sell WITHOUT paid ads (real organic search/gift intent)?
+    // (2) can it sell massively? (3) can it hold 3x-20x after landed cost while staying
+    // competitive vs US anchors? Floor 3x; the model judges the exact multiple by demand.
+    // Delivery stays flexible (strict 2-5d belongs to the future Amazon module).
     maxDeliveryDays: 20,
     maxLandedCost: 500,
-    minMultiple: 7,
+    minMultiple: 3,
     // The real US pool is thin; hard trust gates would empty it. Low-trust items import anyway
     // but MUST carry a visible review-risk note (Scout's copy rules enforce this).
     minTrust: { minRating: 0, minReviews: 0 },
@@ -42,12 +43,11 @@ export const TIERS = {
   "value-china": {
     shipFromUSVariantPreferred: false,
     searchShipFromFilter: null,
-    // Flexible delivery per Module-1 directive; 30d is a sanity cap, not a target. Profit floor
-    // 7x with a 7-10x working target; Scout may go far higher (20x/50x — "$2 item priced at
-    // $40" remains a real reference point) when perceived value and competitive gap support it.
+    // Same CEO gate as us-fast; "$2 item priced at $40" (20x) remains the reference point for
+    // what genuinely anchor-free cheap objects can carry.
     maxDeliveryDays: 30,
     maxLandedCost: 12,
-    minMultiple: 7,
+    minMultiple: 3,
     // Quality bar without selecting FOR saturation: the old 500-review floor guaranteed every
     // candidate was already an Amazon-saturated commodity (anchor-test failure by construction).
     // Emerging anchor-free items have modest review counts with strong ratings.

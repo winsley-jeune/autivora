@@ -76,7 +76,10 @@ export function saveBands(bands) {
 }
 
 export function maxLandedOf(band) {
-  return band.anchor === "strong" ? Math.round((band.usTypical / 7) * 100) / 100 : null;
+  // CEO gate floor is 3x (2026-08-01): anything landed above usTypical/3 can never be both
+  // profitable at the floor AND competitive, so it dies here mechanically. The model judges
+  // the exact multiple (3x-20x) above this line.
+  return band.anchor === "strong" ? Math.round((band.usTypical / 3) * 100) / 100 : null;
 }
 
 // First strong-anchor band wins (order matters: oils before generic diffuser terms); falls back
