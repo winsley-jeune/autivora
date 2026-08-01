@@ -85,12 +85,11 @@ export function computePrice(landedCost, tier, proposedMultiple) {
   return { price: (Math.round(landedCost * multiple) - 0.01).toFixed(2), multiple };
 }
 
-// Exception lane (operator-approved 2026-08-01, first case: SCOTTE cedar humidor at 3x/$134):
-// Scout may PROPOSE sub-floor imports when the absolute profit is strong and the price is
-// genuinely competitive — but they are never auto-imported. They land in pendingApprovals for
-// an explicit operator yes/no. Default floor discipline stays; this is the pressure valve for
-// real-dollar finds the floor would otherwise kill.
-export const EXCEPTION_MIN_PROFIT_USD = 50;
+// STRICT 7x LAW (operator, 2026-08-01 — REVOKES the same-day exception lane after one day and
+// four sub-floor imports, all since retired): every import must hold >=7x landed AND sit
+// at-or-under the prevailing US market price, simultaneously. Corollary: the only viable hunt
+// rule is maxLanded = USMarketPrice / 7 per category, computed BEFORE searching. No sub-floor
+// proposals, no exceptions.
 
 // Per-run work caps: keep the daily run bounded (API quota, runtime) and the import stream
 // reviewable by a human — a firehose of drafts is as useless as none.
