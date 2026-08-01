@@ -152,6 +152,7 @@ export const BLOG_REWRITES: Record<string, BlogArticle> = {
     "**Scent quality over scent strength.** Luxury car owners want their cabin to smell like a high-end hotel lobby, not a Bath & Body Works store. They gravitate toward oud, sandalwood, vetiver, leather, amber — complex, layered fragrances that evolve over time.",
     "**Design matters.** A plastic clip-on freshener in a Porsche 911 cockpit is jarring. The diffuser itself needs to match the interior’s material quality and design language. Machined aluminum, minimal branding, and a form factor that looks intentional.",
     "## The Bottom Line",
+    "If you want that baseline in the most unobtrusive form, the [magnetic vent car diffuser — refillable, waterless, no subscription](/product/autivora-magnetic-vent-diffuser) is a machined-metal disc that clips to a vent and matches a premium cabin's material quality without a plastic clip-on look.",
     "If you drive a vehicle with a premium interior, a traditional air freshener is actively working against you. It’s depositing synthetic chemicals on surfaces designed to last decades. It’s creating a scent profile that fades unpredictably. And it’s visually undermining an interior that someone designed with intention.",
     "A nebulizing car diffuser isn’t a luxury upgrade. It’s the baseline standard for anyone who takes their driving environment seriously."
   ]
@@ -214,6 +215,7 @@ export const BLOG_REWRITES: Record<string, BlogArticle> = {
     "## What the Numbers Actually Mean",
     "A refillable nebulizing diffuser costs roughly the same over 3 years as a luxury vent clip (Diptyque/Acqua di Parma) but delivers dramatically superior technology: cold-air nebulization vs. passive evaporation, unlimited scent variety vs. 3-5 options, and zero interior risk.",
     "Compared to a $3 cardboard tree, the nebulizer costs 6-10x more. But you’re comparing a smartphone to a rotary phone. They technically do the same thing, but the experience isn’t comparable.",
+    "For drivers who want a refillable diffuser that makes zero physical contact with interior surfaces, the [magnetic vent car diffuser — refillable, waterless, no subscription](/product/autivora-magnetic-vent-diffuser) delivers dry, waterless vapor with no proprietary refill lock-in and no lease-return risk.",
     "**The real question isn’t “can I afford a premium diffuser?” It’s “can I justify spending $80K on a car and then fragrancing it with a $3 chemical-soaked cardboard cutout?”**",
     "## The Lease Return Factor",
     "If you lease your vehicle (and most luxury car owners do), interior condition at return directly affects your residual value. Water spots on leather from an ultrasonic diffuser, oil stains from a spilled reed diffuser, or vent slat scratches from a clip-on freshener can all result in “excess wear” charges of $200-500+ at lease return.",
@@ -310,37 +312,36 @@ export const BLOG_REWRITES: Record<string, BlogArticle> = {
     ],
   },
 
-  'pura-car-alternatives-no-subscription': {
-    slug: 'pura-car-alternatives-no-subscription',
-    title: 'Pura Car Alternatives Without a Subscription (2026 Buyer’s Guide)',
-    metaTitle: 'Pura Car Alternatives Without a Subscription (2026) | Autivara',
-    metaDescription:
-      'Want Pura Car’s fresh cabin without the recurring vial subscription? The best no-subscription car diffuser alternatives — refillable, design-led, one-time price.',
-    date: '2026-06-16',
-    readTime: '5 min read',
-    category: 'Car',
-    excerpt:
-      'Pura Car is genuinely good — until the recurring vial subscription. Here are the best car diffusers that give you the same fresh cabin without locking you into a plan.',
-    content: [
-      '## What’s the catch with Pura Car?',
-      'The Pura Car ($34.99) and Car Pro ($64.99) are well-made smart diffusers. The catch is the model: they run on **proprietary fragrance vials** you top up through a subscription. It’s convenient, but you don’t own your scent supply — you rent it, and you’re tied to one brand’s refills indefinitely.',
-      '## The alternative: own your oil, refill freely',
-      'A refillable diffuser flips that. You buy the device once, then add **any fragrance oil you like** — no proprietary vials, no required plan. Autivara’s car diffusers are built this way: waterless, refillable, and yours to fill however you choose.',
-      '| Car diffuser | Style | Subscription required? | Price |\n| --- | --- | --- | --- |\n| [Autivara Cabin](/product/autivora-rechargeable-car-diffuser) | USB-C rechargeable, adjustable | No | $39 |\n| [Autivara Pulse](/product/autivora-smart-spray-diffuser) | Timed auto-spray + ambient light | No | $44 |\n| [Autivara Disc](/product/autivora-magnetic-vent-diffuser) | Machined metal, magnetic | No | $34 |\n| Pura Car | Smart vial diffuser | Yes (vials) | $34.99 |',
-      '[[cta]]Shop refillable car diffusers|/auto',
-      '## Does skipping the subscription cost more over time?',
-      'It’s usually the opposite. With a refillable diffuser you buy oil only when you run out, and a single [10ml Autivara oil ($19)](/scents) refreshes a car diffuser many times. There’s no monthly charge ticking away whether you drive or not — and if you want recurring convenience, you can opt into an oil refill plan instead of being required to.',
-      '## What you give up (and what you don’t)',
-      'Pura’s app and auto-on accelerometer are nice touches. If you want smart features without the vial lock-in, the **Autivara Pulse** offers timed automatic spraying and an ambient light ring. If you just want a beautiful, low-fuss diffuser, the **Disc** or **Cabin** deliver a fresh cabin with nothing to manage but the occasional refill.',
-      '## Frequently asked questions',
-      '### Can I use my own fragrance oil instead of branded vials?',
-      'Yes — that’s the whole point of a refillable diffuser. Autivara car diffusers take a few drops of any [Autivara fragrance oil](/scents); you’re never locked to proprietary cartridges.',
-      '### Is there a no-subscription smart car diffuser?',
-      'The Autivara Pulse gives you timed automatic spraying and an ambient light ring with no required subscription — smart behavior, one-time price.',
-      '### How does the cost compare to Pura over a year?',
-      'A refillable diffuser plus occasional $19 oils typically costs less over 12 months than a vial subscription, because you only buy oil when you actually run out.',
-    ],
-  },
+  "pura-car-alternatives-no-subscription": {
+  "slug": "pura-car-alternatives-no-subscription",
+  "title": "Pura Car Alternatives Without a Subscription (2026 Buyer’s Guide)",
+  "metaTitle": "Pura Car Alternatives Without a Subscription (2026) | Autivara",
+  "metaDescription": "Want Pura Car’s fresh cabin without the recurring vial subscription? The best no-subscription car diffuser alternatives — refillable, design-led, one-time price.",
+  "date": "2026-06-16",
+  "readTime": "5 min read",
+  "category": "Car",
+  "excerpt": "Pura Car is genuinely good — until the recurring vial subscription. Here are the best car diffusers that give you the same fresh cabin without locking you into a plan.",
+  "content": [
+    "## What’s the catch with Pura Car?",
+    "The Pura Car ($34.99) and Car Pro ($64.99) are well-made smart diffusers. The catch is the model: they run on **proprietary fragrance vials** you top up through a subscription. It’s convenient, but you don’t own your scent supply — you rent it, and you’re tied to one brand’s refills indefinitely.",
+    "## The alternative: own your oil, refill freely",
+    "A refillable diffuser flips that. You buy the device once, then add **any fragrance oil you like** — no proprietary vials, no required plan. Autivara’s car diffusers are built this way: waterless, refillable, and yours to fill however you choose.",
+    "| Car diffuser | Style | Subscription required? | Price |\n| --- | --- | --- | --- |\n| [Autivara Cabin](/product/autivora-rechargeable-car-diffuser) | USB-C rechargeable, adjustable | No | $39 |\n| [Autivara Pulse](/product/autivora-smart-spray-diffuser) | Timed auto-spray + ambient light | No | $44 |\n| [Autivara Disc](/product/autivora-magnetic-vent-diffuser) | Machined metal, magnetic | No | $34 |\n| Pura Car | Smart vial diffuser | Yes (vials) | $34.99 |",
+    "[[cta]]Shop refillable car diffusers|/auto",
+    "## Does skipping the subscription cost more over time?",
+    "It’s usually the opposite. With a refillable diffuser you buy oil only when you run out, and a single [10ml Autivara oil ($19)](/scents) refreshes a car diffuser many times. There’s no monthly charge ticking away whether you drive or not — and if you want recurring convenience, you can opt into an oil refill plan instead of being required to.",
+    "## What you give up (and what you don’t)",
+    "For the simplest no-fuss option, the [magnetic vent car diffuser — refillable, waterless, no subscription](/product/autivora-magnetic-vent-diffuser) is a machined-metal Disc that snaps onto a vent and takes any oil you like, with nothing to manage but the occasional refill.",
+    "Pura’s app and auto-on accelerometer are nice touches. If you want smart features without the vial lock-in, the **Autivara Pulse** offers timed automatic spraying and an ambient light ring. If you just want a beautiful, low-fuss diffuser, the **Disc** or **Cabin** deliver a fresh cabin with nothing to manage but the occasional refill.",
+    "## Frequently asked questions",
+    "### Can I use my own fragrance oil instead of branded vials?",
+    "Yes — that’s the whole point of a refillable diffuser. Autivara car diffusers take a few drops of any [Autivara fragrance oil](/scents); you’re never locked to proprietary cartridges.",
+    "### Is there a no-subscription smart car diffuser?",
+    "The Autivara Pulse gives you timed automatic spraying and an ambient light ring with no required subscription — smart behavior, one-time price.",
+    "### How does the cost compare to Pura over a year?",
+    "A refillable diffuser plus occasional $19 oils typically costs less over 12 months than a vial subscription, because you only buy oil when you actually run out."
+  ]
+},
 
   'how-long-does-diffuser-oil-last': {
     slug: 'how-long-does-diffuser-oil-last',
