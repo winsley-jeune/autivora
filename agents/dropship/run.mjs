@@ -171,9 +171,22 @@ async function main() {
   }
   output.lesson ??= "(output truncated — no lesson captured this run)";
   output.daily_note ??= "(output truncated)";
-  // Twice now the model has leaked literal tool-call markup (and sometimes whole sibling
-  // fields) into the tail of a string field — truncate at the first leaked tag so state and
-  // digests stay clean.
+  // Recurring model failure mode (3x now): the entire imports payload gets serialized as
+  // literal tool-call markup INSIDE the lesson string, leaving output.imports empty. Recover
+  // the leaked JSON before sanitizing — silently discarding it loses real sourcing decisions
+  // (run 7 lost two operator-approvable humidor proposals this way).
+  if (typeof output.lesson === "string" && output.imports.length === 0) {
+    const leak = output.lesson.match(/<parameter name="imports">\s*(\[[\s\S]*?)\s*(?:<\/parameter|$)/);
+    if (leak) {
+      try {
+        const arr = JSON.parse(leak[1]);
+        if (Array.isArray(arr)) {
+          output.imports = arr;
+          console.warn(`Scout: recovered ${arr.length} import decision(s) leaked into the lesson field`);
+        }
+      } catch {}
+    }
+  }
   for (const k of ["lesson", "daily_note"]) {
     if (typeof output[k] === "string" && output[k].includes("</parameter")) output[k] = output[k].split("</parameter")[0].trim();
   }
