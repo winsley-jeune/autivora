@@ -17,7 +17,7 @@ import { callHerald } from "./lib/anthropic.mjs";
 const __dir = dirname(fileURLToPath(import.meta.url));
 const STATE_DIR = join(__dir, "state");
 const QUEUE_PATH = join(STATE_DIR, "post-queue.json");
-const QUEUE_TARGET = 3; // unposted drafts to keep waiting for the operator
+const QUEUE_TARGET = 5; // unposted drafts to keep waiting for the operator (5 platforms)
 const REDRAFT_COOLDOWN_DAYS = 14;
 const today = () => new Date().toISOString().slice(0, 10);
 
@@ -77,7 +77,7 @@ async function main() {
   const userInput = {
     date: today(),
     draft_count_requested: wanted,
-    platforms: ["pinterest", "instagram"],
+    platforms: ["pinterest", "instagram", "facebook", "facebook-group", "tiktok-photo"],
     products,
     articles: articlesFromRewrites(),
     channel_data: ga4Channels,

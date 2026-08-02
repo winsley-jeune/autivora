@@ -11,7 +11,7 @@ export const HERALD_OUTPUT_SCHEMA = {
       items: {
         type: "object",
         properties: {
-          platform: { type: "string", enum: ["pinterest", "instagram"] },
+          platform: { type: "string", enum: ["pinterest", "instagram", "facebook", "facebook-group", "tiktok-photo"] },
           subject_url: { type: "string", description: "The real product or article path this post is about" },
           title: { type: "string", description: "Pinterest: keyword-rich pin title. Instagram: unused (empty string)." },
           caption: { type: "string", description: "Pinterest: ~300-char keyword-rich description. Instagram: hook-first caption with line breaks." },

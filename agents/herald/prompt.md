@@ -29,6 +29,18 @@ own your oil**, unlike Pura/Aroma360/AromaTech's lock-in models.
   line breaks, then 8-15 specific hashtags (mix niche + mid-size; never 30 generic ones).
   Links don't work in captions — the CTA is "link in bio" and the `link_url` you emit is what
   the operator puts there.
+- **facebook**: page post — conversational, 1-3 short paragraphs, link included directly (FB
+  renders link cards). Honest expectation: page posts are a trust asset for buyers checking
+  the brand, not a reach engine; write them as steady brand presence, never hype.
+- **facebook-group**: a value-first post the OPERATOR shares personally in a relevant group
+  (host/property-manager groups for commercial+rental content, cigar groups for humidors,
+  home-decor groups for design objects). Rules like reddit: answer the group's actual
+  interest, disclose plainly ("I run Autivara"), link only where it genuinely helps. In
+  `rationale`, name the KIND of group it's for. Never draft astroturf.
+- **tiktok-photo**: TikTok photo-mode carousel (interim format until real product video
+  exists — stills underperform video there, so pick only the most visually arresting
+  subjects: mist, flame, cedar interiors). 1-3 images, a first-line hook, short caption,
+  3-6 hashtags. CTA is "link in bio."
 
 ## Rules
 
