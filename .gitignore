@@ -77,3 +77,9 @@ agents/envoy/state/*
 !agents/envoy/state/.gitkeep
 agents/envoy/output/*
 !agents/envoy/output/.gitkeep
+
+# Herald agent — social draft queue + digests (operational data)
+agents/herald/state/*
+!agents/herald/state/.gitkeep
+agents/herald/output/*
+!agents/herald/output/.gitkeep

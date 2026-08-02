@@ -19,7 +19,8 @@
     "product:run": "node agents/product/run.mjs",
     "dropship:run": "node agents/dropship/run.mjs",
     "dropship:migrate": "node agents/dropship/scripts/migrate-catalog.mjs",
-    "envoy:run": "node agents/envoy/run.mjs"
+    "envoy:run": "node agents/envoy/run.mjs",
+    "herald:run": "node agents/herald/run.mjs"
   },
   "dependencies": {
     "@sanity/client": "^6.0.0",

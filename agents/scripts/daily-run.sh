@@ -32,6 +32,10 @@ cd "$REPO_DIR"
   npm run analytics:run
   echo "--- signal:run ---"
   npm run signal:run
+  echo "--- herald:run ---"
+  # Herald (social drafter). Tops the approval queue up to 3 unposted drafts; exits instantly
+  # when topped up. Drafts only — the operator approves and posts.
+  npm run herald:run || echo "herald:run FAILED — see above"
   echo "--- envoy:run ---"
   # Envoy (outreach drafter). Exits instantly when Signal has queued no envoy tasks; drafts
   # only — sending is always the operator. Guarded like Scout so a failure can't kill the loop.
