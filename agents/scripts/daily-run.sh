@@ -32,6 +32,10 @@ cd "$REPO_DIR"
   npm run analytics:run
   echo "--- signal:run ---"
   npm run signal:run
+  echo "--- envoy:run ---"
+  # Envoy (outreach drafter). Exits instantly when Signal has queued no envoy tasks; drafts
+  # only — sending is always the operator. Guarded like Scout so a failure can't kill the loop.
+  npm run envoy:run || echo "envoy:run FAILED — see above"
   echo "--- dropship:run ---"
   # Scout (sourcing agent). Guarded so a Scout failure (e.g. AliExpress re-auth needed — Test-
   # status refresh tokens die after ~2 missed daily runs) can't kill the SEO loop above it.

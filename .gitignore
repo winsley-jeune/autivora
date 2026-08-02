@@ -71,3 +71,9 @@ agents/dropship/.winners-full-detail.json
 agents/dropship/.car-winners-full-detail.json
 agents/dropship/.batch2-full-detail.json
 agents/dropship/.mini-humidifier-detail.json
+
+# Envoy agent — outreach queue holds discovered contact info; digests are operational data
+agents/envoy/state/*
+!agents/envoy/state/.gitkeep
+agents/envoy/output/*
+!agents/envoy/output/.gitkeep
