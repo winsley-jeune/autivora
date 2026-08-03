@@ -144,6 +144,10 @@ export async function buildInputs({ baseUrl, skipCrawl = false } = {}) {
 
   const strategicState = {
     window_days: searchConsole.windowDays,
+    // Freshest date Google returned Search Console data for. GSC finalizes with a 2-3 day
+    // lag; rows past the finalized window are partial and may revise upward — treat this,
+    // not "yesterday", as the search-data horizon when reasoning about recent movement.
+    search_data_through: searchConsole.dataThrough ?? null,
     search_console_impressions: totalImpressions,
     search_console_clicks: totalClicks,
     search_console_ctr: totalImpressions ? Number((totalClicks / totalImpressions).toFixed(4)) : 0,
