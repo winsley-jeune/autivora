@@ -3,9 +3,58 @@
 // judgment (what multiple the product commands and why), a competition read (who sells it,
 // saturated or emerging), the marketing challenge, and channel eligibility (Amazon/TikTok/
 // autivara-only) — merchandising decisions, not just product picking.
-import { callWithForcedTool } from "../../lib/anthropic-fetch.mjs";
+import { callWithForcedTool, callWithSearchThenTool } from "../../lib/anthropic-fetch.mjs";
 
 const MODEL = "claude-opus-4-8";
+
+// The demand-research pass (prompt-demand.md): live web search over observed market demand,
+// emitting sourcing hypotheses with cited evidence. Runs only when the active-hypothesis pool
+// is below target — a topping-up cost, not a per-run cost.
+export const DEMAND_RESEARCH_SCHEMA = {
+  type: "object",
+  properties: {
+    hypotheses: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          hypothesis: { type: "string", description: "The demand claim: WHO buys WHAT, for WHAT occasion/need, right now" },
+          demand_evidence: { type: "string", description: "What was OBSERVED via web search and where (site/listing/article) — velocity, trend, sold-out signals. Never speculation." },
+          us_anchor_price: { type: "number", description: "Typical US retail observed for this object class; the pipeline caps landed cost at this /3" },
+          anchor: { type: "string", enum: ["strong", "weak"], description: "strong = identical item findable on Amazon/Walmart in ~30s (usually disqualifying); weak = boutique/emerging/no direct comparable" },
+          aliexpress_keywords: { type: "array", items: { type: "string" }, description: "2-4 supply-side search terms in supplier vocabulary to reverse-source this demand" },
+          tier: { type: "string", enum: ["us-fast", "value-china"] },
+          collection: { type: "string", enum: ["business", "home", "car"] },
+        },
+        required: ["hypothesis", "demand_evidence", "us_anchor_price", "anchor", "aliexpress_keywords", "tier", "collection"],
+      },
+    },
+    retire_hypothesis_ids: {
+      type: "array",
+      items: { type: "string" },
+      description: "ids of existing hypotheses whose scan yields prove them dead — retire decisively",
+    },
+    research_note: { type: "string", description: "<600 chars: what was observed this pass, for the operator digest" },
+  },
+  required: ["hypotheses", "retire_hypothesis_ids", "research_note"],
+};
+
+export async function callDemandResearch({ apiKey, systemPrompt, userInput }) {
+  return callWithSearchThenTool({
+    apiKey,
+    model: MODEL,
+    systemPrompt,
+    userContent: JSON.stringify(userInput, null, 2),
+    tool: {
+      name: "emit_demand_hypotheses",
+      description: "Emit new evidence-backed demand hypotheses, retirements of dead ones, and a research note.",
+      input_schema: DEMAND_RESEARCH_SCHEMA,
+    },
+    maxTokens: 16000,
+    maxSearches: 15,
+    label: "Scout/demand",
+  });
+}
 
 export const SCOUT_OUTPUT_SCHEMA = {
   type: "object",
@@ -78,7 +127,7 @@ export const SCOUT_OUTPUT_SCHEMA = {
           title: { type: "string" },
           component_item_ids: { type: "array", items: { type: "string" }, description: "2-4 itemIds drawn ONLY from this run's verified candidates and/or active catalog products" },
           collection: { type: "string", enum: ["business", "home", "car"] },
-          price_multiple: { type: "number", description: "Multiple of the SUMMED component landed cost; must be >= 7 (bundles are anchor-free composites — code enforces the floor)" },
+          price_multiple: { type: "number", description: "Multiple of the SUMMED component landed cost; floor is 3 (code-enforced) — propose what the composed offer genuinely commands" },
           rationale: { type: "string", description: "Why these components form a coherent offer and why a USA buyer pays this price for the SET" },
           copy: {
             type: "object",

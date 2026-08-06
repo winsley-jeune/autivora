@@ -8,7 +8,13 @@
 //   2. re-verify  live freight/stock check on every catalog item — search results and listing
 //                 stock lie; freight.query is truth, and thin-stock items (1-20 units) go stale
 //                 fast
-//   3. scan       rotate through the keyword queue per tier, collect unseen candidates
+//   2.5 observe   demand-first inversion (operator, 2026-08-06): when the active-hypothesis
+//                 pool is below target, a web-search research pass (prompt-demand.md) observes
+//                 demand already happening in the market and emits cited hypotheses. Discovery
+//                 starts from observed demand, never from what AliExpress search happens to
+//                 surface — its ranking IS the saturation we must reject.
+//   3. scan       hypothesis keywords lead every batch (reverse-sourcing supply for observed
+//                 demand); the operator-seeded queue is fallback territory, not the strategy
 //   4. verify     freight-check the most promising unseen candidates (capped per run)
 //   5. think      Claude (prompt.md) makes the merchandising judgments: what to import at what
 //                 multiple, competition/channel calls, keyword territory for future runs
@@ -23,7 +29,8 @@ import { searchKeyword, verifyCandidate } from "./lib/market.mjs";
 import { loadCatalog, mutateCatalog } from "./lib/catalog-store.mjs";
 import { loadBands, saveBands, matchBand, maxLandedOf } from "./lib/market-bands.mjs";
 import { TIERS, computePrice, isNoise, passesTrust, SCAN_KEYWORDS_PER_TIER, VERIFY_CAP_PER_RUN, REJECT_COOLDOWN_DAYS } from "./lib/policy.mjs";
-import { callScout } from "./lib/anthropic.mjs";
+import { callScout, callDemandResearch } from "./lib/anthropic.mjs";
+import { HYPOTHESIS_TARGET, mineSearchDemand, provenSales, WINNER_DEFINITION, activeHypotheses, staleHypotheses, applyResearchOutput } from "./lib/demand.mjs";
 import { initShopify, createDraftProduct, createBundleDraft } from "./lib/shopify.mjs";
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -86,7 +93,45 @@ async function main() {
     await sleep(700);
   }
 
-  // --- 3. scan keyword territories ---
+  // --- 2.5 observe demand (see header) ---
+  // The analytics snapshot is loaded once here and reused by the think phase below.
+  let snapshot = null;
+  try {
+    snapshot = JSON.parse(readFileSync(join(__dir, "..", "analytics", "output", "snapshot-latest.json"), "utf8"));
+  } catch {}
+
+  let researchNote = null;
+  const activeBefore = activeHypotheses(catalog);
+  if (activeBefore.length < HYPOTHESIS_TARGET) {
+    console.log(`Scout: ${activeBefore.length}/${HYPOTHESIS_TARGET} active demand hypotheses — running live demand research...`);
+    try {
+      const demandPrompt = readFileSync(join(__dir, "prompt-demand.md"), "utf8");
+      const { output: research } = await callDemandResearch({
+        apiKey: ANTHROPIC_API_KEY,
+        systemPrompt: demandPrompt,
+        userInput: {
+          date: today(),
+          winner_definition: WINNER_DEFINITION,
+          search_demand: mineSearchDemand(snapshot),
+          proven_sales: provenSales(snapshot),
+          current_hypotheses: activeBefore,
+          stale_hypotheses: staleHypotheses(catalog).map((h) => h.id),
+          market_bands: Object.fromEntries(Object.entries(loadBands()).map(([k, b]) => [k, { usTypical: b.usTypical, anchor: b.anchor }])),
+          catalog_summary: countByTierAndStatus(catalog.products),
+          recent_lessons: catalog.lessons.slice(-5),
+        },
+      });
+      const added = applyResearchOutput(catalog, research, today());
+      researchNote = research.research_note;
+      console.log(`Scout: demand research added ${added.length} hypothesis(es), retired ${(research.retire_hypothesis_ids ?? []).length}.`);
+      for (const h of added) console.log(`  [${h.id}] ${h.hypothesis.slice(0, 110)} (US anchor ~$${h.usAnchorPrice}, ${h.anchor})`);
+    } catch (e) {
+      // Research failing must not kill sourcing — the run degrades to queue-only scanning.
+      console.error(`Scout: demand research failed (continuing with existing hypotheses): ${e.message.slice(0, 160)}`);
+    }
+  }
+
+  // --- 3. scan — hypothesis-led, queue-backed ---
   const bands = loadBands();
   let bandGated = 0;
   const knownIds = new Set(catalog.products.map((p) => p.itemId));
@@ -96,34 +141,58 @@ async function main() {
     return r && Date.now() - new Date(r.on).getTime() < cooldownMs;
   };
 
+  const activeHyps = activeHypotheses(catalog);
+  const hypById = new Map(activeHyps.map((h) => [h.id, h]));
   const scanResults = [];
-  const unseen = new Map(); // itemId -> {searchHit, tier}
+  const unseen = new Map(); // itemId -> {hit, tier, band, hypothesisId}
   for (const tier of Object.keys(TIERS)) {
     const queue = catalog.keywordQueue[tier] ?? [];
     const history = catalog.keywordHistory[tier] ?? {};
-    // Never-scanned keywords first — Scout's fresh expansions are the highest-information
-    // scans; without this, new territory waits behind a full rotation of exhausted terms.
-    const prioritized = [...queue].sort((a, b) => (history[a] ? 1 : 0) - (history[b] ? 1 : 0));
-    const batch = prioritized.slice(0, SCAN_KEYWORDS_PER_TIER);
-    for (const keyword of batch) {
-      const res = await searchKeyword({ keyword, tier, auth });
-      scanResults.push({ tier, keyword, ok: res.ok, totalCount: res.totalCount, returned: res.products.length });
-      console.log(`Scout: scan [${tier}] "${keyword}" -> ${res.ok ? `${res.totalCount} total` : "API error after retries"}`);
+    // Hypothesis-derived keywords lead every batch — they reverse-source observed demand and
+    // carry their own US anchor. The operator-seeded queue fills remaining slots. Within each
+    // group, never-scanned terms first (fresh territory is the highest-information scan).
+    const freshness = (e) => (history[e.keyword] ? 1 : 0);
+    const hypEntries = activeHyps
+      .filter((h) => h.tier === tier)
+      .flatMap((h) => (h.keywords ?? []).map((keyword) => ({
+        keyword,
+        hypothesisId: h.id,
+        // The hypothesis's observed US price fills gaps in the band oracle: same /3 landed
+        // cap the CEO gate implies, applied mechanically pre-verify.
+        anchorMaxLanded: h.usAnchorPrice > 0 ? Math.round((h.usAnchorPrice / 3) * 100) / 100 : null,
+      })))
+      .sort((a, b) => freshness(a) - freshness(b));
+    const queueEntries = queue
+      .map((keyword) => ({ keyword, hypothesisId: null, anchorMaxLanded: null }))
+      .sort((a, b) => freshness(a) - freshness(b));
+    const batch = [...hypEntries, ...queueEntries]
+      .filter((e, i, arr) => arr.findIndex((x) => x.keyword === e.keyword) === i)
+      .slice(0, SCAN_KEYWORDS_PER_TIER);
+
+    for (const entry of batch) {
+      const res = await searchKeyword({ keyword: entry.keyword, tier, auth });
+      scanResults.push({ tier, keyword: entry.keyword, hypothesisId: entry.hypothesisId, ok: res.ok, totalCount: res.totalCount, returned: res.products.length });
+      const tag = entry.hypothesisId ? `${tier}|${entry.hypothesisId}` : tier;
+      console.log(`Scout: scan [${tag}] "${entry.keyword}" -> ${res.ok ? `${res.totalCount} total` : "API error after retries"}`);
+      if (entry.hypothesisId) hypById.get(entry.hypothesisId).yields.scans++;
       for (const hit of res.products) {
         if (knownIds.has(hit.itemId) || rejectedRecently(hit.itemId) || unseen.has(hit.itemId)) continue;
         if (isNoise(hit.title)) continue;
-        // THE MECHANICAL 7x GATE (CEO change #1): a strong-anchor band caps landed cost at
-        // usTypical/7 — anything priced above the cap can never satisfy the law, so it never
-        // reaches the expensive verify stage. Unknown/weak-band items pass through for the
-        // model's willingness-to-pay judgment.
+        // THE MECHANICAL BAND GATE (CEO gate, 3x floor): a strong-anchor band caps landed cost
+        // at usTypical/3 — anything above the cap can never satisfy the law, so it never
+        // reaches the expensive verify stage. Hypothesis anchors cover items the band oracle
+        // doesn't know; items with neither pass through for the model's judgment.
         const band = matchBand(bands, hit.title);
-        if (band?.maxLanded != null && hit.price > band.maxLanded) { bandGated++; continue; }
-        unseen.set(hit.itemId, { hit, tier, band });
+        const cap = band?.maxLanded ?? entry.anchorMaxLanded;
+        if (cap != null && hit.price > cap) { bandGated++; continue; }
+        if (entry.hypothesisId) hypById.get(entry.hypothesisId).yields.candidates++;
+        unseen.set(hit.itemId, { hit, tier, band, hypothesisId: entry.hypothesisId });
       }
       await sleep(700);
     }
-    // rotate scanned keywords to the back of the queue
-    catalog.keywordQueue[tier] = [...queue.filter((k) => !batch.includes(k)), ...batch];
+    // rotate scanned QUEUE keywords to the back (hypothesis keywords live on the hypothesis)
+    const scannedQueueKws = batch.filter((e) => !e.hypothesisId).map((e) => e.keyword);
+    catalog.keywordQueue[tier] = [...queue.filter((k) => !scannedQueueKws.includes(k)), ...scannedQueueKws];
   }
 
   console.log(`Scout: mechanical 7x gate dropped ${bandGated} candidate(s) pre-verify (price > band maxLanded).`);
@@ -151,7 +220,7 @@ async function main() {
   console.log(`Scout: verifying ${ranked.length} of ${unseen.size} unseen candidate(s)...`);
   const candidates = [];
   const autoRejects = [];
-  for (const { hit, tier, band } of ranked) {
+  for (const { hit, tier, band, hypothesisId } of ranked) {
     try {
       const v = await verifyCandidate({ itemId: hit.itemId, tier, auth });
       if (v.ok) {
@@ -166,7 +235,8 @@ async function main() {
             ...v,
             marketOrders: hit.ordersRaw,
             marketBand: band ? { key: band.key, usTypical: band.usTypical, anchor: band.anchor, maxLanded: band.maxLanded } : null,
-            maxMarginAt7x: Math.round(v.landedCost * 6 * 100) / 100,
+            hypothesisId: hypothesisId ?? null,
+            demandHypothesis: hypothesisId ? hypById.get(hypothesisId)?.hypothesis : null,
           });
         }
       } else {
@@ -180,27 +250,17 @@ async function main() {
   console.log(`Scout: ${candidates.length} candidate(s) passed verification, ${autoRejects.length} auto-rejected.`);
 
   // --- 5. think ---
-  // SALES→SOURCING FEEDBACK (CEO change #2): the analytics snapshot's per-product sales reach
-  // Scout every run — sourcing steered by what actually sells, never by site SEO data.
-  let productSales = { note: "no analytics snapshot found", topProducts: [] };
-  try {
-    const snap = JSON.parse(readFileSync(join(__dir, "..", "analytics", "output", "snapshot-latest.json"), "utf8"));
-    productSales = {
-      windowDays: snap.shopify?.windowDays,
-      totalOrders: snap.shopify?.orderCount ?? 0,
-      totalRevenue: snap.shopify?.revenue ?? 0,
-      topProducts: snap.shopify?.topProducts ?? [],
-      note: "Real Shopify sales, test orders excluded. Steer imports toward patterns that SELL; flag catalog items with zero sales 30d after going live.",
-    };
-  } catch {}
-
+  // SALES→SOURCING FEEDBACK: real orders reach Scout every run (see provenSales contract —
+  // a sale is a lead to exploit, not a validated winner). Snapshot loaded in phase 2.5.
   const systemPrompt = readFileSync(join(__dir, "prompt.md"), "utf8");
   const userInput = {
     date: today(),
     policy: TIERS,
+    winner_definition: WINNER_DEFINITION,
     market_bands: Object.fromEntries(Object.entries(bands).map(([k, b]) => [k, { usTypical: b.usTypical, anchor: b.anchor, maxLanded: maxLandedOf(b), note: b.note }])),
     band_gate_drops_this_run: bandGated,
-    product_sales_28d: productSales,
+    demand_hypotheses: activeHypotheses(catalog),
+    proven_sales: provenSales(snapshot),
     catalog: {
       counts: countByTierAndStatus(catalog.products),
       products: catalog.products.map((p) => ({
@@ -256,8 +316,9 @@ async function main() {
       console.warn(`Scout: import cap reached for tier ${v.tier}, skipping ${imp.itemId}`);
       continue;
     }
-    // STRICT 7x LAW (operator, 2026-08-01 — the short-lived exception lane is revoked): any
-    // sub-floor proposal is rejected outright and cooled down like any other failed candidate.
+    // CEO-GATE FLOOR (operator, 2026-08-01 — supersedes the strict-7x law; the exception lane
+    // stays revoked): sub-floor proposals are rejected outright and cooled down like any other
+    // failed candidate. The floor is minMultiple (3x); the multiple above it is market-set.
     const floor = TIERS[v.tier].minMultiple;
     if (imp.price_multiple && imp.price_multiple < floor) {
       console.warn(`Scout: rejecting sub-floor import ${imp.itemId} — proposed ${imp.price_multiple}x, strict ${floor}x law, no exception lane`);
@@ -267,7 +328,9 @@ async function main() {
     const { price, multiple } = computePrice(v.landedCost, v.tier, imp.price_multiple);
     try {
       const product = await createDraftProduct({ v, copy: imp.copy, price, priceMultiple: multiple, tier: v.tier, collection: imp.collection });
+      if (v.hypothesisId && hypById.has(v.hypothesisId)) hypById.get(v.hypothesisId).yields.imports++;
       imported.push({
+        hypothesisId: v.hypothesisId ?? null,
         itemId: String(v.itemId), skuId: String(v.skuId), tier: v.tier, collection: imp.collection,
         title: imp.copy.title, shopifyId: product.id, status: "draft",
         landedCost: v.landedCost, price, priceMultiple: multiple,
@@ -365,6 +428,9 @@ async function main() {
       Object.assign(h, { lastRun: today(), totalCount: s.totalCount, returned: s.returned, ok: s.ok });
       h.imported = (h.imported ?? 0) + imported.filter((i) => i.tier === s.tier).length; // coarse per-tier credit
     }
+    // Persist the hypothesis pool: research additions/retirements and this run's yield
+    // counters (mutated in place on catalog.demandHypotheses via hypById references).
+    store.demandHypotheses = catalog.demandHypotheses;
     store.lessons.push({ on: today(), lesson: output.lesson });
     if (store.lessons.length > 60) store.lessons = store.lessons.slice(-60);
   });
@@ -374,7 +440,9 @@ async function main() {
   mkdirSync(OUT_DIR, { recursive: true });
   const digest = {
     date: today(),
-    imported: imported.map(({ itemId, title, tier, collection, price, priceMultiple, channelEligibility }) => ({ itemId, title, tier, collection, price, priceMultiple, channelEligibility })),
+    demand_research_note: researchNote,
+    demand_hypotheses: activeHypotheses(catalog).map(({ id, hypothesis, usAnchorPrice, anchor, tier, yields }) => ({ id, hypothesis, usAnchorPrice, anchor, tier, yields })),
+    imported: imported.map(({ itemId, title, tier, collection, price, priceMultiple, channelEligibility, hypothesisId }) => ({ itemId, title, tier, collection, price, priceMultiple, channelEligibility, hypothesisId })),
     bundles: bundles.map(({ title, price, priceMultiple, landedCost, components }) => ({ title, price, priceMultiple, landedCost, componentCount: components.length })),
     band_gate_drops: bandGated,
     market_band_updates: output.market_band_updates,
