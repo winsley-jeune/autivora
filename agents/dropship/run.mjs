@@ -152,16 +152,25 @@ async function main() {
     // carry their own US anchor. The operator-seeded queue fills remaining slots. Within each
     // group, never-scanned terms first (fresh territory is the highest-information scan).
     const freshness = (e) => (history[e.keyword] ? 1 : 0);
-    const hypEntries = activeHyps
-      .filter((h) => h.tier === tier)
-      .flatMap((h) => (h.keywords ?? []).map((keyword) => ({
-        keyword,
-        hypothesisId: h.id,
-        // The hypothesis's observed US price fills gaps in the band oracle: same /3 landed
-        // cap the CEO gate implies, applied mechanically pre-verify.
-        anchorMaxLanded: h.usAnchorPrice > 0 ? Math.round((h.usAnchorPrice / 3) * 100) / 100 : null,
-      })))
-      .sort((a, b) => freshness(a) - freshness(b));
+    // Round-robin across hypotheses (first keyword of each, then second of each, ...) so every
+    // active thesis gets scanned each run — run 1 of v3 starved two hypotheses because one
+    // thesis's four keywords filled the whole batch.
+    const tierHyps = activeHyps.filter((h) => h.tier === tier);
+    const hypEntries = [];
+    for (let round = 0; round < Math.max(0, ...tierHyps.map((h) => (h.keywords ?? []).length)); round++) {
+      for (const h of tierHyps) {
+        const keyword = (h.keywords ?? [])[round];
+        if (!keyword) continue;
+        hypEntries.push({
+          keyword,
+          hypothesisId: h.id,
+          // The hypothesis's observed US price fills gaps in the band oracle: same /3 landed
+          // cap the CEO gate implies, applied mechanically pre-verify.
+          anchorMaxLanded: h.usAnchorPrice > 0 ? Math.round((h.usAnchorPrice / 3) * 100) / 100 : null,
+        });
+      }
+    }
+    hypEntries.sort((a, b) => freshness(a) - freshness(b));
     const queueEntries = queue
       .map((keyword) => ({ keyword, hypothesisId: null, anchorMaxLanded: null }))
       .sort((a, b) => freshness(a) - freshness(b));
