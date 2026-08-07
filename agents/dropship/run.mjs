@@ -31,6 +31,7 @@ import { loadBands, saveBands, matchBand, maxLandedOf } from "./lib/market-bands
 import { TIERS, computePrice, isNoise, passesTrust, SCAN_KEYWORDS_PER_TIER, VERIFY_CAP_PER_RUN, REJECT_COOLDOWN_DAYS } from "./lib/policy.mjs";
 import { callScout, callDemandResearch, callAnchorCheck } from "./lib/anthropic.mjs";
 import { HYPOTHESIS_TARGET, mineSearchDemand, provenSales, WINNER_DEFINITION, activeHypotheses, staleHypotheses, applyResearchOutput } from "./lib/demand.mjs";
+import { demandMovers, categoryPulse } from "./lib/observatory.mjs";
 import { initShopify, createDraftProduct, createBundleDraft } from "./lib/shopify.mjs";
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -112,6 +113,10 @@ async function main() {
         userInput: {
           date: today(),
           winner_definition: WINNER_DEFINITION,
+          // Measured demand from the observatory: order-count deltas across the marketplace
+          // panel. This is TRANSACTION data, not articles — weight it above web search.
+          market_movers: safeMovers(),
+          category_pulse: safePulse(),
           search_demand: mineSearchDemand(snapshot),
           proven_sales: provenSales(snapshot),
           current_hypotheses: activeBefore,
@@ -506,6 +511,14 @@ async function main() {
   }
   console.log(`\nOperator note: ${output.daily_note}`);
   console.log(`\nSaved → agents/dropship/output/scout-latest.json`);
+}
+
+// Observatory reads must never kill a sourcing run (fresh DB = no movers yet).
+function safeMovers() {
+  try { return demandMovers({ limit: 25 }); } catch { return { note: "observatory empty — needs 2+ days of snapshots" }; }
+}
+function safePulse() {
+  try { return categoryPulse({ limit: 15 }); } catch { return []; }
 }
 
 function countByTierAndStatus(products) {

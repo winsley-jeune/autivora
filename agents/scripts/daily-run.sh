@@ -40,6 +40,10 @@ cd "$REPO_DIR"
   # Envoy (outreach drafter). Exits instantly when Signal has queued no envoy tasks; drafts
   # only — sending is always the operator. Guarded like Scout so a failure can't kill the loop.
   npm run envoy:run || echo "envoy:run FAILED — see above"
+  echo "--- dropship:observe ---"
+  # Market observatory: daily order-count snapshots across the keyword panel. Runs BEFORE
+  # Scout so sourcing reasons over fresh demand velocity. Compounds daily — never skip.
+  npm run dropship:observe || echo "dropship:observe FAILED — see above"
   echo "--- dropship:run ---"
   # Scout (sourcing agent). Guarded so a Scout failure (e.g. AliExpress re-auth needed — Test-
   # status refresh tokens die after ~2 missed daily runs) can't kill the SEO loop above it.

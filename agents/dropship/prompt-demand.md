@@ -15,6 +15,14 @@ lookup second.
 
 ## What you receive
 
+- `market_movers` — MEASURED demand from the marketplace observatory: per-item order-count
+  deltas (velocity) and low-base momentum across a wide category panel, computed from daily
+  snapshots of real transaction counts. This is purchasing behavior, not articles — weight it
+  ABOVE anything web search tells you. The profile we hunt: accelerating from a LOW base
+  (emerging, pre-saturation). High-base items with velocity are already-anchored commodities.
+- `category_pulse` — aggregate order growth per panel keyword: which TERRITORIES are heating
+  up even when no single item stands out yet. Use it to direct your web-search verification
+  and to propose new panel keywords worth tracking.
 - `search_demand` — OUR OWN Search Console queries (real people, real impressions) and which
   page currently serves each. Gaps between what people ask and what we answer are sourcing
   and merchandising signals.
