@@ -39,6 +39,57 @@ export const DEMAND_RESEARCH_SCHEMA = {
   required: ["hypotheses", "retire_hypothesis_ids", "research_note"],
 };
 
+// PRE-IMPORT ANCHOR CHECK (run.mjs, before any draft is created): the 2026-08-08 fresh-eyes
+// audit archived 28/28 dropship imports because identical units were findable on Amazon/
+// Walmart in seconds — a check that must happen BEFORE import, not in a later audit. One
+// web-search call per run covers every proposed import; a candidate only becomes a draft if
+// no identical/near-identical unit undercuts its proposed price.
+export const ANCHOR_CHECK_SCHEMA = {
+  type: "object",
+  properties: {
+    checks: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          itemId: { type: "string" },
+          anchored: { type: "boolean", description: "true if an identical or near-identical unit is findable on Amazon/Walmart/eBay at or below the proposed price" },
+          evidence: { type: "string", description: "What was searched and found: site, brand names it sells under, observed price range. Cite even for anchored=false (what you looked for and didn't find)." },
+          anchor_price: { type: "number", description: "Lowest credible price found for the identical class; 0 if none found" },
+        },
+        required: ["itemId", "anchored", "evidence", "anchor_price"],
+      },
+    },
+  },
+  required: ["checks"],
+};
+
+const ANCHOR_CHECK_PROMPT = `You are a pre-import anchor checker for an e-commerce brand. For each proposed product
+(title, proposed retail price, supplier photos described by title), search Amazon, Walmart,
+and eBay for the IDENTICAL or near-identical unit — generic dropship goods typically sell
+under multiple no-name brands. Be adversarial: your job is to find the anchor, not to clear
+the import. A product is anchored if a buyer searching its obvious keywords would find the
+same unit at or below the proposed price within ~30 seconds. Cite what you found (or what
+you searched and did not find) for every item. History: 28 of 28 past imports that skipped
+this check were later archived as anchored.`;
+
+export async function callAnchorCheck({ apiKey, imports }) {
+  return callWithSearchThenTool({
+    apiKey,
+    model: MODEL,
+    systemPrompt: ANCHOR_CHECK_PROMPT,
+    userContent: JSON.stringify({ proposed_imports: imports }, null, 2),
+    tool: {
+      name: "emit_anchor_checks",
+      description: "Emit the anchor-check verdicts for every proposed import.",
+      input_schema: ANCHOR_CHECK_SCHEMA,
+    },
+    maxTokens: 8000,
+    maxSearches: 12,
+    label: "AnchorCheck",
+  });
+}
+
 // Fresh-eyes catalog audit (audit-catalog.mjs): per-product verdicts from live market
 // evidence, plus fully rebuilt listing assets. Deliberately fed no internal history.
 export const CATALOG_AUDIT_SCHEMA = {

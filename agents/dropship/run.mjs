@@ -29,7 +29,7 @@ import { searchKeyword, verifyCandidate } from "./lib/market.mjs";
 import { loadCatalog, mutateCatalog } from "./lib/catalog-store.mjs";
 import { loadBands, saveBands, matchBand, maxLandedOf } from "./lib/market-bands.mjs";
 import { TIERS, computePrice, isNoise, passesTrust, SCAN_KEYWORDS_PER_TIER, VERIFY_CAP_PER_RUN, REJECT_COOLDOWN_DAYS } from "./lib/policy.mjs";
-import { callScout, callDemandResearch } from "./lib/anthropic.mjs";
+import { callScout, callDemandResearch, callAnchorCheck } from "./lib/anthropic.mjs";
 import { HYPOTHESIS_TARGET, mineSearchDemand, provenSales, WINNER_DEFINITION, activeHypotheses, staleHypotheses, applyResearchOutput } from "./lib/demand.mjs";
 import { initShopify, createDraftProduct, createBundleDraft } from "./lib/shopify.mjs";
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
@@ -315,8 +315,44 @@ async function main() {
   }
 
   // --- 6. act ---
-  await initShopify();
+  // PRE-IMPORT ANCHOR CHECK (2026-08-08 law): every proposed import faces a live web search
+  // for its identical unit BEFORE a draft is created. The fresh-eyes audit archived 28/28
+  // past imports as anchored — this gate exists so that can never happen again. Check
+  // failure = block ALL imports this run (fail closed; next run retries).
   const candidateById = new Map(candidates.map((c) => [String(c.itemId), c]));
+  if (output.imports.length) {
+    try {
+      const proposed = output.imports
+        .filter((imp) => candidateById.has(String(imp.itemId)))
+        .map((imp) => {
+          const v = candidateById.get(String(imp.itemId));
+          const { price } = computePrice(v.landedCost, v.tier, imp.price_multiple);
+          return { itemId: String(imp.itemId), title: v.title, proposed_price: price };
+        });
+      const { output: anchor } = await callAnchorCheck({ apiKey: ANTHROPIC_API_KEY, imports: proposed });
+      const verdicts = new Map((anchor.checks ?? []).map((c) => [String(c.itemId), c]));
+      output.imports = output.imports.filter((imp) => {
+        const c = verdicts.get(String(imp.itemId));
+        // No verdict = fail closed, but WITHOUT the 30-day reject cooldown — the candidate
+        // deserves a retry next run, not a month in jail for our check's gap.
+        if (!c) { console.warn(`Scout: anchor check returned no verdict for ${imp.itemId} — blocked fail-closed, retry next run`); return false; }
+        if (c.anchored) {
+          // A confirmed anchor IS a real reject: cooldown applies, evidence recorded.
+          autoRejects.push({ itemId: String(imp.itemId), reason: `PRE-IMPORT ANCHOR FAIL: ${c.evidence.slice(0, 180)} (anchor ~$${c.anchor_price})` });
+          console.log(`Scout: anchor check BLOCKED ${imp.itemId} — ${c.evidence.slice(0, 120)}`);
+          return false;
+        }
+        console.log(`Scout: anchor check cleared ${imp.itemId} (searched, no anchor found)`);
+        return true;
+      });
+    } catch (e) {
+      // Check unavailable = block everything this run, fail closed, no cooldowns.
+      console.error(`Scout: anchor check FAILED (${e.message.slice(0, 120)}) — blocking all ${output.imports.length} import(s) this run, retry next run.`);
+      output.imports = [];
+    }
+  }
+
+  await initShopify();
   const imported = [];
   for (const imp of output.imports) {
     const v = candidateById.get(String(imp.itemId));
