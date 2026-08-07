@@ -39,6 +39,52 @@ export const DEMAND_RESEARCH_SCHEMA = {
   required: ["hypotheses", "retire_hypothesis_ids", "research_note"],
 };
 
+// Fresh-eyes catalog audit (audit-catalog.mjs): per-product verdicts from live market
+// evidence, plus fully rebuilt listing assets. Deliberately fed no internal history.
+export const CATALOG_AUDIT_SCHEMA = {
+  type: "object",
+  properties: {
+    verdicts: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          id: { type: "number", description: "Shopify product id from the input, verbatim" },
+          current_title: { type: "string" },
+          current_price: { type: "number" },
+          verdict: { type: "string", enum: ["keep_active", "reprice", "go_live", "archive"] },
+          new_price: { type: "number", description: "Required when verdict is reprice; also set when go_live needs a different price than current" },
+          rationale: { type: "string", description: "Concrete market evidence: sites searched, observed price ranges, anchor findings" },
+          title: { type: "string", description: "Rebuilt customer-facing title (<=70 chars). Omit for archive." },
+          seo_title: { type: "string", description: "<=60 chars. Omit for archive." },
+          seo_description: { type: "string", description: "<=155 chars. Omit for archive." },
+          image_alts: { type: "array", items: { type: "string" }, description: "One alt text per image, in position order (<=125 chars each). Omit for archive." },
+        },
+        required: ["id", "current_title", "current_price", "verdict", "rationale"],
+      },
+    },
+    batch_note: { type: "string", description: "<400 chars: cross-product observations for this category batch" },
+  },
+  required: ["verdicts", "batch_note"],
+};
+
+export async function callCatalogAudit({ apiKey, systemPrompt, userInput }) {
+  return callWithSearchThenTool({
+    apiKey,
+    model: MODEL,
+    systemPrompt,
+    userContent: JSON.stringify(userInput, null, 2),
+    tool: {
+      name: "emit_audit_verdicts",
+      description: "Emit the per-product audit verdicts with rebuilt listing assets and a batch note.",
+      input_schema: CATALOG_AUDIT_SCHEMA,
+    },
+    maxTokens: 30000,
+    maxSearches: 15,
+    label: "Audit",
+  });
+}
+
 export async function callDemandResearch({ apiKey, systemPrompt, userInput }) {
   return callWithSearchThenTool({
     apiKey,
