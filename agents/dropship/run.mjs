@@ -184,7 +184,15 @@ async function main() {
       .slice(0, SCAN_KEYWORDS_PER_TIER);
 
     for (const entry of batch) {
-      const res = await searchKeyword({ keyword: entry.keyword, tier, auth });
+      // Keyword grammar: "positive phrase -excluded -tokens". AliExpress search does NOT
+      // support negative operators (it matches "-humidor" literally), so the positive part
+      // goes to the API and exclusions filter hit titles client-side. This exists because
+      // token-matching pulled a bento box for "walnut memory box" and a motorcycle battery
+      // tray for "valet tray" — object semantics have to be enforced on our side.
+      const exclusions = [...entry.keyword.matchAll(/(?:^|\s)-(\S+)/g)].map((m) => m[1].toLowerCase());
+      const query = entry.keyword.replace(/(?:^|\s)-\S+/g, "").trim();
+      const res = await searchKeyword({ keyword: query, tier, auth });
+      if (exclusions.length) res.products = res.products.filter((p) => !exclusions.some((x) => p.title.toLowerCase().includes(x)));
       scanResults.push({ tier, keyword: entry.keyword, hypothesisId: entry.hypothesisId, ok: res.ok, totalCount: res.totalCount, returned: res.products.length });
       const tag = entry.hypothesisId ? `${tier}|${entry.hypothesisId}` : tier;
       console.log(`Scout: scan [${tag}] "${entry.keyword}" -> ${res.ok ? `${res.totalCount} total` : "API error after retries"}`);
@@ -277,7 +285,10 @@ async function main() {
     proven_sales: provenSales(snapshot),
     catalog: {
       counts: countByTierAndStatus(catalog.products),
-      products: catalog.products.map((p) => ({
+      // Retired/archived items are excluded from the model's view (counts above still show
+      // them): run 7 recommended "index the live humidors" a day after they were archived —
+      // the model reasoned from retired records + old lessons instead of current status.
+      products: catalog.products.filter((p) => p.status !== "retired").map((p) => ({
         itemId: p.itemId, tier: p.tier, collection: p.collection, title: p.title,
         status: p.status, price: p.price, landedCost: p.landedCost, stock: p.stock,
         lastVerifiedOn: p.lastVerifiedOn,
