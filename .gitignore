@@ -41,6 +41,9 @@ content-drafts/
 # Analytics agent — real traffic/search data snapshots, plus any stray service-account key
 agents/analytics/output/*
 !agents/analytics/output/.gitkeep
+
+# Shared agent state database (agents/lib/db.mjs) — live business state, never committed
+agents/state/
 *serviceaccount*.json
 *service-account*.json
 
@@ -56,21 +59,11 @@ agents/signal/output/*
 agents/visual/.cache/
 
 # Dropship/Scout agent — state dir holds live OAuth tokens + the sourcing catalog (business
-# data); output holds daily digests. Legacy scratch dotfiles from the pre-Scout one-off scripts
-# also stay ignored until cleaned up.
+# data); output holds daily digests.
 agents/dropship/state/*
 !agents/dropship/state/.gitkeep
 agents/dropship/output/*
 !agents/dropship/output/.gitkeep
-agents/dropship/.*token-cache*.json
-agents/dropship/.sweep-results.json
-agents/dropship/.cheap-tier-sweep.json
-agents/dropship/.cheap-tier-full-detail.json
-agents/dropship/.delivery-check-results.json
-agents/dropship/.winners-full-detail.json
-agents/dropship/.car-winners-full-detail.json
-agents/dropship/.batch2-full-detail.json
-agents/dropship/.mini-humidifier-detail.json
 
 # Envoy agent — outreach queue holds discovered contact info; digests are operational data
 agents/envoy/state/*
