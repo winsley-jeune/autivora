@@ -7,31 +7,18 @@
 // Topping-up model: keeps up to QUEUE_TARGET unposted drafts waiting. Runs daily in the loop
 // but exits instantly when the queue is already topped up — so cadence is controlled by how
 // fast the operator approves/posts, not by the cron.
-import { readFileSync, writeFileSync, mkdirSync, existsSync, renameSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { readEnv } from "../analytics/lib/env.mjs";
-import { initShopify, shopifyApi } from "../dropship/lib/shopify.mjs";
+import { readEnv } from "../lib/env.mjs";
+import { initShopify, shopifyApi } from "../lib/shopify.mjs";
+import { listDrafts, addDrafts, countUnposted } from "../lib/drafts-store.mjs";
 import { callHerald } from "./lib/anthropic.mjs";
 
 const __dir = dirname(fileURLToPath(import.meta.url));
-const STATE_DIR = join(__dir, "state");
-const QUEUE_PATH = join(STATE_DIR, "post-queue.json");
 const QUEUE_TARGET = 5; // unposted drafts to keep waiting for the operator (5 platforms)
 const REDRAFT_COOLDOWN_DAYS = 14;
 const today = () => new Date().toISOString().slice(0, 10);
-
-function loadQueue() {
-  if (!existsSync(QUEUE_PATH)) return [];
-  return JSON.parse(readFileSync(QUEUE_PATH, "utf8"));
-}
-
-function saveQueue(queue) {
-  mkdirSync(STATE_DIR, { recursive: true });
-  const tmp = QUEUE_PATH + ".tmp";
-  writeFileSync(tmp, JSON.stringify(queue, null, 2));
-  renameSync(tmp, QUEUE_PATH);
-}
 
 function articlesFromRewrites() {
   // Light extraction — slugs/titles only, as idea fodder; no need to transpile the module.
@@ -46,11 +33,10 @@ function articlesFromRewrites() {
 async function main() {
   const { ANTHROPIC_API_KEY } = readEnv(["ANTHROPIC_API_KEY"]);
 
-  const queue = loadQueue();
-  const unposted = queue.filter((p) => p.status === "needs_approval" || p.status === "approved");
-  const wanted = QUEUE_TARGET - unposted.length;
+  const unposted = countUnposted("herald");
+  const wanted = QUEUE_TARGET - unposted;
   if (wanted <= 0) {
-    console.log(`Herald: queue already holds ${unposted.length} unposted draft(s) — nothing to do.`);
+    console.log(`Herald: queue already holds ${unposted} unposted draft(s) — nothing to do.`);
     return;
   }
 
@@ -71,7 +57,7 @@ async function main() {
   } catch {}
 
   const cutoff = new Date(Date.now() - REDRAFT_COOLDOWN_DAYS * 86400_000).toISOString().slice(0, 10);
-  const recentSubjects = queue.filter((p) => p.queuedOn >= cutoff).map((p) => ({ platform: p.platform, subject_url: p.subject_url }));
+  const recentSubjects = listDrafts("herald").filter((p) => p.queuedOn >= cutoff).map((p) => ({ platform: p.platform, subject_url: p.subject_url }));
 
   const systemPrompt = readFileSync(join(__dir, "prompt.md"), "utf8");
   const userInput = {
@@ -92,14 +78,14 @@ async function main() {
   const entries = posts
     .filter((p) => validImage.has(p.image_url) || p.subject_url.startsWith("/blog/"))
     .map((p) => ({ ...p, status: "needs_approval", queuedOn: today() }));
-  saveQueue([...queue, ...entries]);
+  addDrafts("herald", entries);
 
   mkdirSync(join(__dir, "output"), { recursive: true });
   writeFileSync(join(__dir, "output", "herald-latest.json"), JSON.stringify({ date: today(), queued: entries, lesson: output.lesson, daily_note: output.daily_note }, null, 2));
 
   console.log(`\nLesson: ${output.lesson}\n`);
   console.log(`Operator note: ${output.daily_note}`);
-  console.log(`\n${entries.length} draft(s) awaiting your approval → agents/herald/state/post-queue.json`);
+  console.log(`\n${entries.length} draft(s) awaiting your approval → npm run queue`);
   for (const e of entries) {
     console.log(`\n  [${e.platform}] ${e.subject_url}${e.needs_retouch ? "  (image needs retouch before posting)" : ""}`);
     console.log(`  ${e.title || e.caption.split("\n")[0]}`);

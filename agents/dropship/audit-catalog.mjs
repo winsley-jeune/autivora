@@ -15,8 +15,9 @@
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { readEnv } from "../analytics/lib/env.mjs";
-import { initShopify, shopifyApi } from "./lib/shopify.mjs";
+import { readEnv } from "../lib/env.mjs";
+import { initShopify, shopifyApi } from "../lib/shopify.mjs";
+import { loadCatalog } from "./lib/catalog-store.mjs";
 import { callCatalogAudit } from "./lib/anthropic.mjs";
 
 const __dir = dirname(fileURLToPath(import.meta.url));
@@ -40,8 +41,7 @@ async function main() {
   // 3x floor. Everything else from internal state (flags, lessons, verdicts) stays out.
   let landedByAe = new Map();
   try {
-    const state = JSON.parse(readFileSync(join(__dir, "state", "catalog.json"), "utf8"));
-    landedByAe = new Map(state.products.map((p) => [p.itemId, p.landedCost]));
+    landedByAe = new Map(loadCatalog().products.map((p) => [p.itemId, p.landedCost]));
   } catch {}
 
   const products = [];

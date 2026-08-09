@@ -1,28 +1,13 @@
-// Reads the analytics agent's dated snapshot history (agents/analytics/output/history/) so
+// Reads the analytics agent's dated snapshot history (agents.db, analytics_snapshots) so
 // Signal can score a checkback against the actual metric trail for a page+query, instead of
 // comparing a single before number (frozen in the task's `evidence` at creation time) against
 // a single after number. Without this, the only "after" data point is whatever snapshot-latest
 // happens to be on the day Signal runs — no trend, no way to tell a real step-change from noise.
-import { readdirSync, readFileSync, existsSync } from "node:fs";
-import { fileURLToPath } from "node:url";
-import { dirname, join } from "node:path";
-
-const __dir = dirname(fileURLToPath(import.meta.url));
-const HISTORY_DIR = join(__dir, "..", "..", "analytics", "output", "history");
+import { snapshotDates, loadSnapshot } from "../../lib/snapshot-store.mjs";
 
 let cachedDates = null;
 function listDates() {
-  if (cachedDates) return cachedDates;
-  if (!existsSync(HISTORY_DIR)) return (cachedDates = []);
-  cachedDates = readdirSync(HISTORY_DIR)
-    .filter((f) => /^snapshot-\d{4}-\d{2}-\d{2}\.json$/.test(f))
-    .map((f) => f.slice("snapshot-".length, -".json".length))
-    .sort();
-  return cachedDates;
-}
-
-function loadSnapshot(date) {
-  return JSON.parse(readFileSync(join(HISTORY_DIR, `snapshot-${date}.json`), "utf8"));
+  return (cachedDates ??= snapshotDates());
 }
 
 function metricForPageQuery(snapshot, targetUrl, targetQuery) {

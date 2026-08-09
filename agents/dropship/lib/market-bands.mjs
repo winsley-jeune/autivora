@@ -11,12 +11,11 @@
 // Pura/Drift, Case Elegance/Mantello, Amazon clone shelves). Scout may propose usTypical
 // updates from its market knowledge (source: "model"), and the future Amazon API integration
 // upgrades them to measured data (source: "amazon-api").
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+import { openDb, transactionSync, importLegacyJson } from "../../lib/db.mjs";
 
-const STATE_DIR = join(dirname(fileURLToPath(import.meta.url)), "..", "state");
-const BANDS_PATH = join(STATE_DIR, "market-bands.json");
+const LEGACY_PATH = join(dirname(fileURLToPath(import.meta.url)), "..", "state", "market-bands.json");
 
 const SEED = {
   "essential-fragrance-oils": {
@@ -61,18 +60,46 @@ const SEED = {
   },
 };
 
-export function loadBands() {
-  if (!existsSync(BANDS_PATH)) {
-    mkdirSync(STATE_DIR, { recursive: true });
+// Stored in agents/state/agents.db (dropship_market_bands, one row per category); the legacy
+// market-bands.json is auto-imported on first open, and the SEED only applies to a truly
+// empty table.
+let ready = false;
+function ensureStore() {
+  const d = openDb();
+  if (ready) return d;
+  d.exec(`
+    CREATE TABLE IF NOT EXISTS dropship_market_bands (
+      category_key TEXT PRIMARY KEY,
+      doc          TEXT NOT NULL
+    ) WITHOUT ROWID;
+  `);
+  importLegacyJson("migrated.dropship_market_bands", LEGACY_PATH, (parsed) => persist(parsed));
+  if (d.prepare("SELECT COUNT(*) n FROM dropship_market_bands").get().n === 0) {
     const seeded = {};
     for (const [k, v] of Object.entries(SEED)) seeded[k] = { ...v, source: "session-research-2026-07", updatedOn: "2026-08-01" };
-    writeFileSync(BANDS_PATH, JSON.stringify(seeded, null, 2));
+    persist(seeded);
   }
-  return JSON.parse(readFileSync(BANDS_PATH, "utf8"));
+  ready = true;
+  return d;
+}
+
+function persist(bands) {
+  const d = openDb();
+  d.prepare("DELETE FROM dropship_market_bands").run();
+  const ins = d.prepare("INSERT INTO dropship_market_bands (category_key, doc) VALUES (?, ?)");
+  for (const [k, v] of Object.entries(bands)) ins.run(k, JSON.stringify(v));
+}
+
+export function loadBands() {
+  const d = ensureStore();
+  const bands = {};
+  for (const r of d.prepare("SELECT category_key, doc FROM dropship_market_bands").all()) bands[r.category_key] = JSON.parse(r.doc);
+  return bands;
 }
 
 export function saveBands(bands) {
-  writeFileSync(BANDS_PATH, JSON.stringify(bands, null, 2));
+  ensureStore();
+  transactionSync(() => persist(bands));
 }
 
 export function maxLandedOf(band) {

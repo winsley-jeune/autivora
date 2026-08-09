@@ -3,7 +3,7 @@
 // whenever the refresh token dies (Test-status apps: refresh lives 48h; missing ~2 daily runs
 // kills it and Scout's run.mjs prints the authorize URL to redo this).
 // Run: node agents/dropship/scripts/exchange-code.mjs <code-from-callback-url>
-import { readEnv } from "../../analytics/lib/env.mjs";
+import { readEnv } from "../../lib/env.mjs";
 import { createTokenFromCode } from "../lib/aliexpress-auth.mjs";
 
 const code = process.argv[2];
@@ -18,4 +18,4 @@ const { ALIEXPRESS_APP_KEY: appKey, ALIEXPRESS_APP_SECRET: appSecret } = readEnv
 ]);
 
 const result = await createTokenFromCode({ appKey, appSecret, code });
-console.log(`Token saved to agents/dropship/state/aliexpress-token.json (account: ${result.account}, expires: ${new Date(result.expire_time).toISOString()})`);
+console.log(`Token saved to agents.db (account: ${result.account}, expires: ${new Date(result.expire_time).toISOString()})`);

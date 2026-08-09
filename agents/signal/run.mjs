@@ -10,7 +10,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { readEnv } from "../analytics/lib/env.mjs";
+import { readEnv } from "../lib/env.mjs";
 import { buildInputs } from "./lib/inputs.mjs";
 import { callSignal } from "./lib/anthropic.mjs";
 import { mutateTaskStore, applyCheckbackScores, appendTasks, isOnCooldown, expireStaleTasks } from "./lib/task-store.mjs";

@@ -15,7 +15,7 @@ import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { readEnv } from "../analytics/lib/env.mjs";
+import { readEnv } from "../lib/env.mjs";
 import { resolveArticle } from "../lib/blog-source.mjs";
 import { planVisual, verifyVisual } from "./lib/anthropic.mjs";
 import { editImage } from "../content/lib/openai-image.mjs";

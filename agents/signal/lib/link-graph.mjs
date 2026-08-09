@@ -1,14 +1,11 @@
 // Builds the internal link graph for blog posts from a live crawl (not the TS source files —
 // crawling the rendered site is simpler and can't drift from what's actually published, since
 // blog-data.ts resolves rewrites/retirements/release-scheduling before a page ever ships).
-// Cached for a week (state/link-graph-cache.json) since this doesn't need to run daily — a
-// linker task only fires on a new page or a detected orphan, not on a fixed cadence.
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
-import { fileURLToPath } from "node:url";
-import { dirname, join } from "node:path";
+// Cached for a week (agents.db kv "signal.link_graph_cache") since this doesn't need to run
+// daily — a linker task only fires on a new page or a detected orphan, not on a fixed cadence.
+import { kvGet, kvSet } from "../../lib/db.mjs";
 
-const __dir = dirname(fileURLToPath(import.meta.url));
-const CACHE_PATH = join(__dir, "..", "state", "link-graph-cache.json");
+const CACHE_KEY = "signal.link_graph_cache";
 const CACHE_TTL_MS = 6 * 24 * 60 * 60 * 1000;
 const CONCURRENCY = 5;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -90,13 +87,9 @@ export async function buildLinkGraph(baseUrl) {
 }
 
 export async function getLinkGraph(baseUrl, { forceRefresh = false } = {}) {
-  if (!forceRefresh && existsSync(CACHE_PATH)) {
-    const cached = JSON.parse(readFileSync(CACHE_PATH, "utf8"));
-    const age = Date.now() - new Date(cached.crawledAt).getTime();
-    if (age < CACHE_TTL_MS) return cached;
-  }
+  const cached = forceRefresh ? null : kvGet(CACHE_KEY);
+  if (cached && Date.now() - new Date(cached.crawledAt).getTime() < CACHE_TTL_MS) return cached;
   const fresh = await buildLinkGraph(baseUrl);
-  mkdirSync(dirname(CACHE_PATH), { recursive: true });
-  writeFileSync(CACHE_PATH, JSON.stringify(fresh, null, 2));
+  kvSet(CACHE_KEY, fresh);
   return fresh;
 }

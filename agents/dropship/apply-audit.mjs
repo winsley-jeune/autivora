@@ -11,15 +11,18 @@
 // Consistency side-effects (so later automation can't silently undo this):
 //   - product-pipeline/catalog-novelty.json: owned (AV-) SKUs get the rebuilt title/SEO/price
 //     written back — shopify-sync pushes those fields on every run and would revert
-//     Shopify-only edits.
-//   - state/catalog.json: archived dropship items get status "retired" so Scout stops
-//     re-verifying them daily.
+//     Shopify-only edits. Written via agents/lib/catalog-source.mjs (surgical splice), never a
+//     naive parse/stringify round-trip — that file's escaping and .0 conventions don't survive one.
+//   - Scout catalog (agents.db): archived dropship items get status "retired" so Scout stops
+//     re-verifying them daily. Written via mutateCatalog(), the single sanctioned write path.
 //
 // Usage: node agents/dropship/apply-audit.mjs [--dry]
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { initShopify, shopifyApi } from "./lib/shopify.mjs";
+import { initShopify, shopifyApi } from "../lib/shopify.mjs";
+import { upsertCatalogProduct, resolveHandleBySku } from "../lib/catalog-source.mjs";
+import { mutateCatalog } from "./lib/catalog-store.mjs";
 
 const __dir = dirname(fileURLToPath(import.meta.url));
 const DRY = process.argv.includes("--dry");
@@ -76,37 +79,36 @@ async function main() {
     }
   }
 
-  // Owned-catalog write-back (sync source of truth).
-  const novPath = join(__dir, "..", "..", "product-pipeline", "catalog-novelty.json");
-  const nov = JSON.parse(readFileSync(novPath, "utf8"));
-  const items = Array.isArray(nov) ? nov : (nov.products ?? nov.items);
+  // Owned-catalog write-back (sync source of truth), via the surgical splice writer.
   let patched = 0;
   for (const patch of ownedPatches) {
-    const item = items.find((p) => p.sku === patch.sku);
-    if (!item) continue;
-    if (patch.title) item.title = patch.title;
-    if (patch.seo_title) item.seo_title = patch.seo_title;
-    if (patch.seo_description) item.seo_description = patch.seo_description;
-    if (patch.price != null) item.price = Number(patch.price);
+    const handle = resolveHandleBySku(patch.sku);
+    if (!handle) continue;
+    const fields = {};
+    if (patch.title) fields.title = patch.title;
+    if (patch.seo_title) fields.seo_title = patch.seo_title;
+    if (patch.seo_description) fields.seo_description = patch.seo_description;
+    if (patch.price != null) fields.price = Number(patch.price);
+    if (!Object.keys(fields).length) continue;
+    if (!DRY) upsertCatalogProduct(handle, fields);
     patched++;
   }
-  if (!DRY && patched) writeFileSync(novPath, JSON.stringify(nov, null, 2));
   console.log(`\ncatalog-novelty.json: ${patched} owned SKU(s) written back (sync source of truth).`);
 
   // Scout state write-back: stop re-verifying archived dropship items.
-  const statePath = join(__dir, "state", "catalog.json");
-  const state = JSON.parse(readFileSync(statePath, "utf8"));
-  let retired = 0;
-  for (const p of state.products) {
-    if (archivedIds.has(String(p.shopifyId)) && p.status !== "retired") {
-      p.status = "retired";
-      p.retiredOn = today();
-      p.retiredReason = "fresh-eyes audit: fails anchor test / 3x floor vs live US market";
-      retired++;
+  const retired = DRY ? 0 : await mutateCatalog((store) => {
+    let n = 0;
+    for (const p of store.products) {
+      if (archivedIds.has(String(p.shopifyId)) && p.status !== "retired") {
+        p.status = "retired";
+        p.retiredOn = today();
+        p.retiredReason = "fresh-eyes audit: fails anchor test / 3x floor vs live US market";
+        n++;
+      }
     }
-  }
-  if (!DRY && retired) writeFileSync(statePath, JSON.stringify(state, null, 2));
-  console.log(`state/catalog.json: ${retired} dropship item(s) marked retired.`);
+    return n;
+  });
+  console.log(`Scout catalog: ${retired} dropship item(s) marked retired.`);
 
   console.log(`\n${DRY ? "[DRY RUN] " : ""}Done: ${counts.archived} archived, ${counts.published} published, ${counts.repriced} repriced, ${counts.copyUpdated} listings rebuilt, ${counts.failed} failed.`);
 }

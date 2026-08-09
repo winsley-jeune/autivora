@@ -1,4 +1,7 @@
-// AliExpress OAuth for the Scout agent. Canonical token lives in state/aliexpress-token.json.
+// AliExpress OAuth for the Scout agent. Canonical token lives in agents/state/agents.db (kv
+// key "dropship.aliexpress_token"); the legacy state/aliexpress-token.json is auto-imported on
+// first read. kv writes are single-statement UPSERTs, so a crash can never leave a torn token
+// — a torn write here used to cost a human browser re-consent.
 //
 // Token lifetimes are the critical operational constraint while the app is in "Test" status:
 // access_token 24h, refresh_token 48h. The daily 7am run refreshes unconditionally, so each
@@ -6,13 +9,13 @@
 // token dies and a human must redo the browser consent flow once. getFreshSession() fails LOUD
 // with the exact re-auth URL for that case ("Apply Online" in the App Console lifts this to
 // 30/60 days).
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { callAliExpressApi } from "./aliexpress-client.mjs";
+import { kvGet, kvSet, importLegacyJson } from "../../lib/db.mjs";
 
-const STATE_DIR = join(dirname(fileURLToPath(import.meta.url)), "..", "state");
-const TOKEN_PATH = join(STATE_DIR, "aliexpress-token.json");
+const LEGACY_PATH = join(dirname(fileURLToPath(import.meta.url)), "..", "state", "aliexpress-token.json");
+const TOKEN_KEY = "dropship.aliexpress_token";
 const REFRESH_MARGIN_MS = 6 * 3600 * 1000; // refresh whenever less than 6h of access life remains
 
 export function getAuthorizeUrl({ appKey, redirectUri }) {
@@ -26,13 +29,12 @@ export function getAuthorizeUrl({ appKey, redirectUri }) {
 }
 
 function save(tokenResponse) {
-  mkdirSync(STATE_DIR, { recursive: true });
-  writeFileSync(TOKEN_PATH, JSON.stringify(tokenResponse, null, 2));
+  kvSet(TOKEN_KEY, tokenResponse);
 }
 
 export function loadToken() {
-  if (!existsSync(TOKEN_PATH)) return null;
-  return JSON.parse(readFileSync(TOKEN_PATH, "utf8"));
+  importLegacyJson("migrated.dropship_aliexpress_token", LEGACY_PATH, (parsed) => kvSet(TOKEN_KEY, parsed));
+  return kvGet(TOKEN_KEY);
 }
 
 export async function createTokenFromCode({ appKey, appSecret, code }) {

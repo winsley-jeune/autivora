@@ -79,6 +79,13 @@ export function resolveCatalogProduct(handle) {
   return product;
 }
 
+// Read-only: handle lookup by SKU (audit flows key on the Shopify variant SKU, not the handle).
+// Returns null rather than throwing — callers decide whether an unknown SKU is an error.
+export function resolveHandleBySku(sku) {
+  const catalog = JSON.parse(readFileSync(CATALOG_PATH, "utf8"));
+  return catalog.products.find((p) => p.sku === sku)?.handle ?? null;
+}
+
 // Every other product sharing this product's `collection`, excluding itself — the real grounding
 // an agent needs to write content that's genuinely distinct from its siblings, not just
 // differently-worded. Returns the same fields resolveCatalogProduct would, per sibling.
@@ -89,22 +96,35 @@ export function getCollectionSiblings(handle) {
   return catalog.products.filter((p) => p.handle !== handle && p.collection === product.collection);
 }
 
-// Surgical write: `fields` may include body_html, seo_title, seo_description (any subset) — the
-// only fields this catalog agent is allowed to touch. Applies each replacement in sequence against
-// the same located span, writes the whole file back, then re-parses the result to confirm the
-// write produced valid JSON and the new values round-trip exactly — the same verification the
-// splice technique was validated with before this module existed.
-const ALLOWED_FIELDS = ["body_html", "seo_title", "seo_description"];
+// Replaces one numeric field's value within `objectText`, same byte-preserving contract as
+// replaceStringField. Whole numbers are written with a trailing .0 to match this file's own
+// convention for float fields (which JSON.parse would otherwise silently drop).
+function replaceNumberField(objectText, fieldName, newValue) {
+  const re = new RegExp(`("${fieldName}"\\s*:\\s*)(-?\\d+(?:\\.\\d+)?)`);
+  if (!re.test(objectText)) throw new Error(`Field "${fieldName}" not found as a number field in this product object`);
+  const formatted = Number.isInteger(Number(newValue)) ? `${Number(newValue)}.0` : String(Number(newValue));
+  return objectText.replace(re, (_, pre) => pre + formatted);
+}
+
+// Surgical write: `fields` may include title, body_html, seo_title, seo_description, price
+// (any subset) — the only fields catalog agents are allowed to touch. Applies each replacement
+// in sequence against the same located span, writes the whole file back, then re-parses the
+// result to confirm the write produced valid JSON and the new values round-trip exactly — the
+// same verification the splice technique was validated with before this module existed.
+const ALLOWED_STRING_FIELDS = ["title", "body_html", "seo_title", "seo_description"];
+const ALLOWED_NUMBER_FIELDS = ["price"];
 
 export function upsertCatalogProduct(handle, fields) {
-  const unknown = Object.keys(fields).filter((k) => !ALLOWED_FIELDS.includes(k));
-  if (unknown.length) throw new Error(`upsertCatalogProduct: not allowed to write field(s) ${unknown.join(", ")} — only ${ALLOWED_FIELDS.join(", ")}`);
+  const unknown = Object.keys(fields).filter((k) => !ALLOWED_STRING_FIELDS.includes(k) && !ALLOWED_NUMBER_FIELDS.includes(k));
+  if (unknown.length) throw new Error(`upsertCatalogProduct: not allowed to write field(s) ${unknown.join(", ")} — only ${[...ALLOWED_STRING_FIELDS, ...ALLOWED_NUMBER_FIELDS].join(", ")}`);
 
   const source = readFileSync(CATALOG_PATH, "utf8");
   const span = findProductSpan(source, handle);
   let objectText = source.slice(span.start, span.end);
   for (const [field, value] of Object.entries(fields)) {
-    objectText = replaceStringField(objectText, field, value);
+    objectText = ALLOWED_NUMBER_FIELDS.includes(field)
+      ? replaceNumberField(objectText, field, value)
+      : replaceStringField(objectText, field, value);
   }
   const newSource = source.slice(0, span.start) + objectText + source.slice(span.end);
 

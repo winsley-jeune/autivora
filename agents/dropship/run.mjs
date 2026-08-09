@@ -23,7 +23,7 @@
 //
 // Products only ever land as drafts. Scout never touches a live product — it flags, the
 // operator decides. That's the human-approval gate for anything customer-facing.
-import { readEnv } from "../analytics/lib/env.mjs";
+import { readEnv } from "../lib/env.mjs";
 import { getFreshSession } from "./lib/aliexpress-auth.mjs";
 import { searchKeyword, verifyCandidate } from "./lib/market.mjs";
 import { loadCatalog, mutateCatalog } from "./lib/catalog-store.mjs";

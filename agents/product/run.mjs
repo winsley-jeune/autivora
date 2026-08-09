@@ -27,7 +27,7 @@ import { readFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { readEnv } from "../analytics/lib/env.mjs";
+import { readEnv } from "../lib/env.mjs";
 import { resolveCatalogProduct, getCollectionSiblings, upsertCatalogProduct } from "../lib/catalog-source.mjs";
 import { upsertRewriteEntry } from "../lib/blog-source.mjs";
 import { loadProductFaqFn, hasFaqOverride } from "../lib/product-faq-source.mjs";

@@ -40,11 +40,10 @@ not left to memory.
 | | Path | Committed? |
 |---|---|---|
 | Reads | `agents/analytics/output/snapshot-latest.json` | no (real traffic data) |
-| Reads | `agents/analytics/output/history/snapshot-<date>.json` — one dated snapshot per day, never overwritten; feeds `metric_series` on checkbacks | no |
-| Reads/writes | `agents/signal/state/tasks.json` — the task queue + decision history | no (real traffic data as task evidence) |
-| Reads/writes | `agents/signal/state/tasks.lock` — filesystem mutex around task-store writes (see below) | no, transient |
-| Reads/writes | `agents/signal/state/query-history.json` — last-seen query impressions, for week-over-week `new_queries` | no |
-| Reads/writes | `agents/signal/state/link-graph-cache.json` — live crawl of blog internal links, cached 6 days | no |
+| Reads | `agents/state/agents.db` `analytics_snapshots` — one dated snapshot per day, never overwritten; feeds `metric_series` on checkbacks | no |
+| Reads/writes | `agents/state/agents.db` `signal_tasks` — the task queue + decision history (writes are SQLite transactions; no lock files) | no (real traffic data as task evidence) |
+| Reads/writes | `agents/state/agents.db` `signal_query_history` — last-seen query impressions, for week-over-week `new_queries` | no |
+| Reads/writes | `agents/state/agents.db` kv `signal.link_graph_cache` — live crawl of blog internal links, cached 6 days | no |
 | Writes | `agents/signal/output/signal-latest.json` — the day's full result (tasks, scores, note) | no |
 
 All of the above are gitignored for the same reason as the analytics agent's output: they're
@@ -52,7 +51,7 @@ real business data, not code.
 
 ## Task schema
 
-Each task in `state/tasks.json`:
+Each task in the `signal_tasks` table (agents/state/agents.db):
 
 ```json
 {
@@ -112,7 +111,7 @@ there's nothing to measure.
 ## Single-writer rule (read before building an executor)
 
 `agents/signal/lib/task-store.mjs` is the **only** code allowed to touch
-`agents/signal/state/tasks.json`. Every executor must go through it:
+the task store (`signal_tasks` in agents/state/agents.db). Every executor must go through it:
 
 ```js
 import { claimTask, completeTask } from "../signal/lib/task-store.mjs";
@@ -122,11 +121,11 @@ await claimTask(taskId, "ctr-agent");     // open -> in_progress
 await completeTask(taskId, { prUrl });     // in_progress -> done
 ```
 
-Both go through `mutateTaskStore()` internally — a filesystem lock (`state/tasks.lock`) around
-the whole read-modify-write cycle, atomic write via temp-file-rename. Never call `loadTasks()`,
-mutate the result, and write it back yourself from outside `task-store.mjs` — with more than one
-process touching the file, that's a lost-update bug (a claim silently reverts, the task runs
-twice).
+Both go through `mutateTaskStore()` internally — the whole read-modify-write cycle runs inside
+one SQLite write transaction (`agents/lib/db.mjs`), so concurrent writers queue instead of
+clobbering each other. Never call `loadTasks()`, mutate the result, and write it back yourself
+from outside `task-store.mjs` — with more than one process touching the store, that's a
+lost-update bug (a claim silently reverts, the task runs twice).
 
 ## Enforcement lives in code, not the prompt
 
@@ -152,7 +151,7 @@ with the prompt's hard rules.
 ## Specialist agents (not yet built)
 
 `ctr`, `uplift`, `linker`, `envoy`, `author`, `social`, and `qa` don't exist yet — Signal emits
-tasks for them into `state/tasks.json`, but nothing currently consumes that queue. Per
+tasks for them into the task store, but nothing currently consumes that queue. Per
 `agents/ARCHITECTURE.md`'s revised build order: `uplift`+`linker` are next — not `ctr`, since
 `ctr_lane_active` is false on real data today and will stay false until Uplift/Linker earn
 enough organic impressions for CTR deltas to be measurable. Then `author`+`qa`, then

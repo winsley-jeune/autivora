@@ -43,7 +43,7 @@ at most monthly, since churning it too fast hurts with Google).
 |-------|------------------------|-------------------|---------|----------|--------|
 | **Market Validator** | Demand, competitors, margins, product picks | product-pipeline docs | ad hoc | full (read-only) | ✅ `product-pipeline/` |
 | **Catalog/SEO** | Listings, handles, meta, per-scent SEO pages | `catalog.json`, Shopify products | ad hoc | human OK before publish | ✅ `product-pipeline/` |
-| **Signal** | Interpret all incoming data, emit prioritized tasks | task queue only (`agents/signal/state/tasks.json`) | daily/on-demand | full — writes nothing public | ✅ `agents/signal/` |
+| **Signal** | Interpret all incoming data, emit prioritized tasks | task queue only (`signal_tasks`, agents/state/agents.db) | daily/on-demand | full — writes nothing public | ✅ `agents/signal/` |
 | **Index** | Keep every page crawlable, indexed, schema-valid | sitemap, schema, robots | daily coverage check | full | partial — `agents/analytics/index-coverage.mjs` audits; no auto-fix yet |
 | **CTR** | Rewrite title+meta on pages with impressions but low CTR | title/meta fields only | Signal dispatches a `ctr` task | full | not built — waiting on `ctr_lane_active` |
 | **Uplift** | Upgrade pages ranking 8–20 (depth, freshness, intent match) | body content of existing pages | Signal dispatches an `uplift` task | full | ✅ `agents/uplift/` |
@@ -127,9 +127,9 @@ guardrail that came out of the fabrication incident.
   `agents/analytics/search-console.mjs`, plus real indexing status via `index-coverage.mjs`.
 - **Ad platform APIs** — Meta / TikTok / Google Ads (spend, CTR, ROAS). Not wired yet.
 - **Repo state** — `product-pipeline/catalog.json` (source of truth), analysis docs,
-  `agents/signal/state/tasks.json` (Signal's decision queue + history).
+  the `signal_tasks` table in `agents/state/agents.db` (Signal's decision queue + history).
 
-Snapshots aren't just "latest" — `agents/analytics/output/history/snapshot-<date>.json` archives
+Snapshots aren't just "latest" — the `analytics_snapshots` table (agents/state/agents.db) archives
 one dated file per day, never overwritten. This is load-bearing: Signal's checkback scoring
 (14/28 days after a task ships) needs the actual metric trail for that page+query between task
 creation and today, not a guess reconstructed from whatever `snapshot-latest.json` happens to
@@ -148,11 +148,11 @@ the "draft → review → publish" guardrail from the Guardrails section — no 
 queue system to build. Trust ramp per agent: auto-merge after one-click operator approval for
 the first two weeks, then let that agent commit directly once it's earned trust.
 
-**Single-writer rule for `tasks.json`.** `agents/signal/lib/task-store.mjs` is the *only* code
-allowed to mutate `agents/signal/state/tasks.json` — every executor goes through its
-`mutateTaskStore()` (filesystem-locked, atomic temp-file-rename write) instead of hand-rolling a
-read-modify-write. Without this, two processes racing on one JSON file produces a lost update: a
-task silently reverts to `open` and gets executed twice. Task status flow is
+**Single-writer rule for the task store.** `agents/signal/lib/task-store.mjs` is the *only* code
+allowed to mutate the `signal_tasks` table in `agents/state/agents.db` — every executor goes
+through its `mutateTaskStore()` (one SQLite write transaction around the whole read-modify-write)
+instead of hand-rolling one. Without this, two processes racing on shared state produce a lost
+update: a task silently reverts to `open` and gets executed twice. Task status flow is
 `open → in_progress → done → scored` — an executor calls `claimTask()` then `completeTask()`;
 Signal owns the `open`→append step and the `done`→`scored` step, never the middle.
 
@@ -233,7 +233,7 @@ forced-tool schema → deterministic execution against caps, all on the daily `l
    same model-proposes/code-disposes guardrail as Signal), update the catalog store, record
    rejects with 30-day cooldowns, persist the run's lesson.
 
-**State** (`agents/dropship/state/catalog.json`, single-writer lock like Signal's task store):
+**State** (`dropship_*` tables in `agents/state/agents.db`, single-writer transactions like Signal's task store):
 products with full merchandising rationale + verification history, rejected/cooldown list,
 keyword queue + per-keyword yield history, lessons. **Economics floors** live in
 `lib/policy.mjs` (per-tier landed-cost/delivery caps, minimum viable multiples: `us-fast` ≥3x,

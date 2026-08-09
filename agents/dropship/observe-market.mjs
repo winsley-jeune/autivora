@@ -5,22 +5,23 @@
 // only to local state. Velocity needs ≥2 days of snapshots, so this earns its keep silently
 // for the first day and compounds every day after.
 //
-// The panel (state/keyword-panel.json) is a WIDE consumer-category net, deliberately broader
-// than Scout's sourcing queues: the observatory's job is seeing demand move anywhere in the
-// space Autivara could credibly play, not just where we already source. Operator-editable;
-// Scout's demand researcher may also propose panel additions over time.
+// The panel (agents.db, dropship_keyword_panel) is a WIDE consumer-category net, deliberately
+// broader than Scout's sourcing queues: the observatory's job is seeing demand move anywhere
+// in the space Autivara could credibly play, not just where we already source. Operator-
+// editable (sqlite3 agents/state/agents.db); Scout's demand researcher may also propose panel
+// additions over time.
 //
 // Usage: node agents/dropship/observe-market.mjs
-import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { readEnv } from "../analytics/lib/env.mjs";
+import { readEnv } from "../lib/env.mjs";
+import { openDb, importLegacyJson } from "../lib/db.mjs";
 import { getFreshSession } from "./lib/aliexpress-auth.mjs";
 import { searchKeyword } from "./lib/market.mjs";
 import { recordSnapshots, observatoryStats, demandMovers } from "./lib/observatory.mjs";
 
 const __dir = dirname(fileURLToPath(import.meta.url));
-const PANEL_PATH = join(__dir, "state", "keyword-panel.json");
+const LEGACY_PANEL_PATH = join(__dir, "state", "keyword-panel.json");
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const today = () => new Date().toISOString().slice(0, 10);
 
@@ -63,13 +64,30 @@ const DEFAULT_PANEL = [
   { keyword: "waterless diffuser nebulizer", tier: "value-china" },
 ];
 
+function loadPanel() {
+  const d = openDb();
+  d.exec(`
+    CREATE TABLE IF NOT EXISTS dropship_keyword_panel (
+      keyword TEXT PRIMARY KEY,
+      tier    TEXT NOT NULL
+    ) WITHOUT ROWID;
+  `);
+  const ins = d.prepare("INSERT OR REPLACE INTO dropship_keyword_panel (keyword, tier) VALUES (?, ?)");
+  importLegacyJson("migrated.dropship_keyword_panel", LEGACY_PANEL_PATH, (parsed) => {
+    for (const e of parsed) ins.run(e.keyword, e.tier);
+  });
+  if (d.prepare("SELECT COUNT(*) n FROM dropship_keyword_panel").get().n === 0) {
+    for (const e of DEFAULT_PANEL) ins.run(e.keyword, e.tier);
+  }
+  return d.prepare("SELECT keyword, tier FROM dropship_keyword_panel ORDER BY keyword").all();
+}
+
 async function main() {
   const { ALIEXPRESS_APP_KEY, ALIEXPRESS_APP_SECRET } = readEnv(["ALIEXPRESS_APP_KEY", "ALIEXPRESS_APP_SECRET"]);
   const session = await getFreshSession({ appKey: ALIEXPRESS_APP_KEY, appSecret: ALIEXPRESS_APP_SECRET });
   const auth = { appKey: ALIEXPRESS_APP_KEY, appSecret: ALIEXPRESS_APP_SECRET, session };
 
-  if (!existsSync(PANEL_PATH)) writeFileSync(PANEL_PATH, JSON.stringify(DEFAULT_PANEL, null, 2));
-  const panel = JSON.parse(readFileSync(PANEL_PATH, "utf8"));
+  const panel = loadPanel();
 
   const day = today();
   let recorded = 0, failed = 0;

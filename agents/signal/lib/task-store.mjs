@@ -2,87 +2,75 @@
 // every task carries the evidence that triggered it and a check-back date; Signal reads its own
 // past check-backs to score whether interventions worked, which is how its judgment improves.
 //
-// SINGLE-WRITER RULE: this module is the only code allowed to mutate state/tasks.json. Every
+// SINGLE-WRITER RULE: this module is the only code allowed to mutate the task store. Every
 // executor (Signal, CTR, Uplift, ...) must go through mutateTaskStore() — never loadTasks() +
-// manual edit + saveTasks() from outside this file. Once more than one process can read-modify-
-// write the same file, an unguarded read-modify-write is a lost-update bug waiting to happen
-// (task A claims a task, task B's stale read overwrites A's claim, the task silently reverts to
-// "open" and runs twice). mutateTaskStore() takes a filesystem lock around the whole
-// read-modify-write cycle and writes atomically (temp file + rename) so a crash mid-write can't
-// corrupt the store.
-import { readFileSync, writeFileSync, mkdirSync, existsSync, openSync, closeSync, unlinkSync, statSync, renameSync } from "node:fs";
+// manual edit from outside this file. Persistence is a SQLite table in agents/state/agents.db
+// (see agents/lib/db.mjs); a whole read-modify-write cycle runs inside one write transaction,
+// so the lock files, tmp+rename dances, and lost-update windows of the old tasks.json are gone.
+// Task documents stay schemaless JSON (the model emits evolving fields); id/status are real
+// columns for queries and integrity.
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+import { openDb, withTransaction, kvGet, kvSet, importLegacyJson } from "../../lib/db.mjs";
 
 const __dir = dirname(fileURLToPath(import.meta.url));
-const STORE_PATH = join(__dir, "..", "state", "tasks.json");
-const LOCK_PATH = join(__dir, "..", "state", "tasks.lock");
-const LOCK_STALE_MS = 60_000; // a lock older than this is assumed to belong to a crashed process
-const LOCK_RETRY_MS = 100;
-const LOCK_TIMEOUT_MS = 10_000;
+const LEGACY_PATH = join(__dir, "..", "state", "tasks.json");
+const NEXT_ID_KEY = "signal.next_task_id";
 
 // check_back_on offset per agent (also doubles as the re-targeting cooldown for that agent —
 // don't re-touch a page you're still measuring the last change on). envoy/social have no
 // defined cooldown: they target prospects/themes, not a single page, so collision risk is low.
 export const CHECK_BACK_DAYS = { ctr: 14, uplift: 28, linker: 21, author: 35 };
 
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-
-async function acquireLock() {
-  mkdirSync(dirname(LOCK_PATH), { recursive: true });
-  const deadline = Date.now() + LOCK_TIMEOUT_MS;
-  for (;;) {
-    try {
-      closeSync(openSync(LOCK_PATH, "wx"));
-      return;
-    } catch (e) {
-      if (e.code !== "EEXIST") throw e;
-      const age = (() => { try { return Date.now() - statSync(LOCK_PATH).mtimeMs; } catch { return Infinity; } })();
-      if (age > LOCK_STALE_MS) { try { unlinkSync(LOCK_PATH); } catch {} continue; }
-      if (Date.now() > deadline) throw new Error("tasks.json lock timed out — a previous run may have crashed while holding it. Check agents/signal/state/tasks.lock.");
-      await sleep(LOCK_RETRY_MS);
-    }
-  }
+let ready = false;
+function ensureStore() {
+  const d = openDb();
+  if (ready) return d;
+  d.exec(`
+    CREATE TABLE IF NOT EXISTS signal_tasks (
+      id     INTEGER PRIMARY KEY,
+      status TEXT NOT NULL,
+      doc    TEXT NOT NULL
+    );
+    CREATE INDEX IF NOT EXISTS idx_signal_tasks_status ON signal_tasks(status);
+  `);
+  importLegacyJson("migrated.signal_tasks", LEGACY_PATH, (parsed) => persist(parsed));
+  ready = true;
+  return d;
 }
 
-function releaseLock() {
-  try { unlinkSync(LOCK_PATH); } catch {}
+function persist(store) {
+  const d = openDb();
+  d.prepare("DELETE FROM signal_tasks").run();
+  const ins = d.prepare("INSERT INTO signal_tasks (id, status, doc) VALUES (?, ?, ?)");
+  for (const t of store.tasks) ins.run(t.id, t.status, JSON.stringify(t));
+  kvSet(NEXT_ID_KEY, store.nextId ?? (store.tasks.reduce((m, t) => Math.max(m, t.id), 0) + 1));
 }
 
-function empty() {
-  return { nextId: 1, tasks: [] };
-}
-
-function readStoreFile() {
-  if (!existsSync(STORE_PATH)) return empty();
-  return JSON.parse(readFileSync(STORE_PATH, "utf8"));
-}
-
-function writeStoreFileAtomic(store) {
-  mkdirSync(dirname(STORE_PATH), { recursive: true });
-  const tmpPath = `${STORE_PATH}.tmp-${process.pid}`;
-  writeFileSync(tmpPath, JSON.stringify(store, null, 2));
-  renameSync(tmpPath, STORE_PATH);
+function materialize() {
+  const d = ensureStore();
+  const tasks = d.prepare("SELECT doc FROM signal_tasks ORDER BY id").all().map((r) => JSON.parse(r.doc));
+  return { nextId: kvGet(NEXT_ID_KEY) ?? tasks.reduce((m, t) => Math.max(m, t.id), 0) + 1, tasks };
 }
 
 // The only sanctioned write path. `mutator(store)` may mutate `store` in place and/or return a
 // replacement object; whichever comes back is what gets persisted. Returns whatever `mutator`
-// returns, so callers can read back e.g. newly-assigned task IDs.
+// returns, so callers can read back e.g. newly-assigned task IDs. The whole cycle is one
+// SQLite write transaction.
 export async function mutateTaskStore(mutator) {
-  await acquireLock();
-  try {
-    const store = readStoreFile();
+  ensureStore();
+  return withTransaction(async () => {
+    const store = materialize();
     const result = await mutator(store);
-    writeStoreFileAtomic(result && typeof result === "object" && result.tasks ? result : store);
+    persist(result && typeof result === "object" && result.tasks ? result : store);
     return result;
-  } finally {
-    releaseLock();
-  }
+  });
 }
 
-// Read-only snapshot — safe to call without the lock since nothing here writes.
+// Read-only snapshot — safe to call without a transaction since nothing here writes.
 export function loadTasks() {
-  return readStoreFile();
+  ensureStore();
+  return materialize();
 }
 
 export function openTasks(store) {
@@ -174,7 +162,7 @@ export function expireStaleTasks(store, nowISO, maxOpenDays = 14) {
 
 // --- Executor-facing helpers (for CTR/Uplift/Linker/etc. — not used by Signal itself) ---
 // Both go through mutateTaskStore, so an executor never needs to hand-write a read-modify-write
-// against tasks.json. See agents/lib/git-task-pr.mjs for the paired git write-path helper.
+// against the store. See agents/lib/git-task-pr.mjs for the paired git write-path helper.
 
 export async function claimTask(taskId, executorName) {
   return mutateTaskStore((store) => {

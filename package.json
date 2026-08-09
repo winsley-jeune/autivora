@@ -18,10 +18,13 @@
     "visual:run": "node agents/visual/run.mjs",
     "product:run": "node agents/product/run.mjs",
     "dropship:run": "node agents/dropship/run.mjs",
-    "dropship:migrate": "node agents/dropship/scripts/migrate-catalog.mjs",
+    "dropship:observe": "node agents/dropship/observe-market.mjs",
+    "dropship:audit": "node agents/dropship/audit-catalog.mjs",
+    "dropship:apply-audit": "node agents/dropship/apply-audit.mjs",
     "envoy:run": "node agents/envoy/run.mjs",
     "herald:run": "node agents/herald/run.mjs",
-    "dropship:observe": "node agents/dropship/observe-market.mjs"
+    "queue": "node agents/scripts/queue.mjs",
+    "scoreboard": "node agents/analytics/scoreboard.mjs"
   },
   "dependencies": {
     "@sanity/client": "^6.0.0",

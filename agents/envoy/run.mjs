@@ -1,35 +1,22 @@
 #!/usr/bin/env node
 // Envoy's run — external-link outreach DRAFTER. Finds real link targets via server-side web
 // search and queues personalized pitch drafts for the operator. Sending is always human: this
-// agent's write-path ends at state/outreach-queue.json + a digest, never at an outbox (the
-// standing automation-tier rule: drafting is autonomous, external publishing is a human act).
+// agent's write-path ends at the drafts store (npm run queue) + a digest, never at an outbox
+// (the standing automation-tier rule: drafting is autonomous, external publishing is a human act).
 //
 // Usage: node agents/envoy/run.mjs [--all]   # default: up to 2 tasks/run (search-heavy);
 //                                            # --all processes every open envoy task
-import { readFileSync, writeFileSync, mkdirSync, existsSync, renameSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { readEnv } from "../analytics/lib/env.mjs";
+import { readEnv } from "../lib/env.mjs";
 import { loadTasks, claimTask, completeTask, releaseTask } from "../signal/lib/task-store.mjs";
+import { listDrafts, addDrafts } from "../lib/drafts-store.mjs";
 import { callEnvoy } from "./lib/anthropic.mjs";
 
 const __dir = dirname(fileURLToPath(import.meta.url));
-const STATE_DIR = join(__dir, "state");
-const QUEUE_PATH = join(STATE_DIR, "outreach-queue.json");
 const TASK_CAP = process.argv.includes("--all") ? Infinity : 2;
 const today = () => new Date().toISOString().slice(0, 10);
-
-function loadQueue() {
-  if (!existsSync(QUEUE_PATH)) return [];
-  return JSON.parse(readFileSync(QUEUE_PATH, "utf8"));
-}
-
-function saveQueue(queue) {
-  mkdirSync(STATE_DIR, { recursive: true });
-  const tmp = QUEUE_PATH + ".tmp";
-  writeFileSync(tmp, JSON.stringify(queue, null, 2));
-  renameSync(tmp, QUEUE_PATH);
-}
 
 async function main() {
   const { ANTHROPIC_API_KEY } = readEnv(["ANTHROPIC_API_KEY"]);
@@ -60,7 +47,7 @@ async function main() {
   // One task per API request: a 4-asset combined call ran long enough to hit socket timeouts
   // even before streaming; per-task calls are shorter, cheaper to retry, and fail independently.
   for (const t of claimed) {
-    const queue = loadQueue();
+    const queue = listDrafts("envoy");
     const pitchedDomains = [...new Set(queue.map((q) => { try { return new URL(q.target_url).hostname; } catch { return null; } }).filter(Boolean))];
     const userInput = {
       date: today(),
@@ -77,10 +64,10 @@ async function main() {
         try { return !pitchedDomains.includes(new URL(x.target_url).hostname); } catch { return false; }
       });
       const entries = fresh.map((x) => ({ ...x, task_id: t.id, status: "needs_approval", queuedOn: today() }));
-      saveQueue([...queue, ...entries]);
+      addDrafts("envoy", entries);
       allEntries.push(...entries);
       notes.push(`#${t.id}: ${output.daily_note}`);
-      await completeTask(t.id, { note: `${entries.length} pitch draft(s) queued for operator review (outreach-queue.json)` });
+      await completeTask(t.id, { note: `${entries.length} pitch draft(s) queued for operator review (npm run queue)` });
       console.log(`Envoy: task #${t.id} done — ${entries.length} draft(s) queued.`);
     } catch (e) {
       await releaseTask(t.id, `envoy call failed: ${e.message.slice(0, 120)}`);
@@ -91,7 +78,7 @@ async function main() {
   mkdirSync(join(__dir, "output"), { recursive: true });
   writeFileSync(join(__dir, "output", "envoy-latest.json"), JSON.stringify({ date: today(), queued: allEntries, notes }, null, 2));
 
-  console.log(`\n${allEntries.length} draft(s) awaiting your review → agents/envoy/state/outreach-queue.json`);
+  console.log(`\n${allEntries.length} draft(s) awaiting your review → npm run queue`);
   for (const e of allEntries) console.log(`  [#${e.task_id}] ${e.site_name} — ${e.target_url}\n     contact: ${e.contact_method} | subject: ${e.pitch_subject}`);
 }
 
