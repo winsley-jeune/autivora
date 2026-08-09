@@ -5,7 +5,6 @@
 // autivara-only) — merchandising decisions, not just product picking.
 import { callWithForcedTool, callWithSearchThenTool } from "../../lib/anthropic-fetch.mjs";
 
-const MODEL = "claude-opus-4-8";
 
 // The demand-research pass (prompt-demand.md): live web search over observed market demand,
 // emitting sourcing hypotheses with cited evidence. Runs only when the active-hypothesis pool
@@ -76,7 +75,6 @@ this check were later archived as anchored.`;
 export async function callAnchorCheck({ apiKey, imports }) {
   return callWithSearchThenTool({
     apiKey,
-    model: MODEL,
     systemPrompt: ANCHOR_CHECK_PROMPT,
     userContent: JSON.stringify({ proposed_imports: imports }, null, 2),
     tool: {
@@ -122,7 +120,6 @@ export const CATALOG_AUDIT_SCHEMA = {
 export async function callCatalogAudit({ apiKey, systemPrompt, userInput }) {
   return callWithSearchThenTool({
     apiKey,
-    model: MODEL,
     systemPrompt,
     userContent: JSON.stringify(userInput, null, 2),
     tool: {
@@ -139,7 +136,6 @@ export async function callCatalogAudit({ apiKey, systemPrompt, userInput }) {
 export async function callDemandResearch({ apiKey, systemPrompt, userInput }) {
   return callWithSearchThenTool({
     apiKey,
-    model: MODEL,
     systemPrompt,
     userContent: JSON.stringify(userInput, null, 2),
     tool: {
@@ -274,7 +270,6 @@ export const SCOUT_OUTPUT_SCHEMA = {
 export async function callScout({ apiKey, systemPrompt, userInput }) {
   return callWithForcedTool({
     apiKey,
-    model: MODEL,
     systemPrompt,
     userContent: JSON.stringify(userInput, null, 2),
     tool: {

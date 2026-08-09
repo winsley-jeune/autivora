@@ -2,7 +2,6 @@
 // in agents/lib/anthropic-fetch.mjs (callWithSearchThenTool).
 import { callWithSearchThenTool } from "../../lib/anthropic-fetch.mjs";
 
-const MODEL = "claude-opus-4-8";
 
 export const ENVOY_OUTPUT_SCHEMA = {
   type: "object",
@@ -34,7 +33,6 @@ export const ENVOY_OUTPUT_SCHEMA = {
 export async function callEnvoy({ apiKey, systemPrompt, userInput }) {
   return callWithSearchThenTool({
     apiKey,
-    model: MODEL,
     systemPrompt,
     userContent: JSON.stringify(userInput, null, 2),
     tool: {

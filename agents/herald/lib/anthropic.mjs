@@ -1,7 +1,6 @@
 // Herald's structured-output call — standard forced tool (no web search needed).
 import { callWithForcedTool } from "../../lib/anthropic-fetch.mjs";
 
-const MODEL = "claude-opus-4-8";
 
 export const HERALD_OUTPUT_SCHEMA = {
   type: "object",
@@ -33,7 +32,6 @@ export const HERALD_OUTPUT_SCHEMA = {
 export async function callHerald({ apiKey, systemPrompt, userInput }) {
   return callWithForcedTool({
     apiKey,
-    model: MODEL,
     systemPrompt,
     userContent: JSON.stringify(userInput, null, 2),
     tool: {

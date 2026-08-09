@@ -2,11 +2,14 @@
 // missing, so scripts fail fast with an actionable message instead of a confusing API 401
 // later. readOptionalEnv() is the same parse without the presence check, for knobs that are
 // legitimately blank most of the time (e.g. a test-customer exclude list).
+//
+// The single env reader for every agent — lives in agents/lib/ so no agent has to reach into
+// a peer agent's directory for it.
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
-const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 
 function parseEnvFile(keys) {
   const raw = readFileSync(join(ROOT, ".env"), "utf8");

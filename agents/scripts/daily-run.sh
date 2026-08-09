@@ -48,5 +48,8 @@ cd "$REPO_DIR"
   # Scout (sourcing agent). Guarded so a Scout failure (e.g. AliExpress re-auth needed — Test-
   # status refresh tokens die after ~2 missed daily runs) can't kill the SEO loop above it.
   npm run dropship:run || echo "dropship:run FAILED — see above (likely AliExpress re-auth needed)"
+  echo "--- scoreboard ---"
+  # The operator's one daily number: live sales vs the North Star, as a Mac notification.
+  npm run scoreboard || echo "scoreboard FAILED — see above"
   echo "=== $(date -u +%Y-%m-%dT%H:%M:%SZ) — daily-run done ==="
 } >> "$LOG_FILE" 2>&1

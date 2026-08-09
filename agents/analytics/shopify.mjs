@@ -13,12 +13,11 @@
 import { writeFileSync, mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { readEnv, readOptionalEnv } from "./lib/env.mjs";
-import { getShopifyAdminToken } from "./lib/shopify-auth.mjs";
+import { readOptionalEnv } from "../lib/env.mjs";
+import { initShopify, shopifyApi } from "../lib/shopify.mjs";
 
 const __dir = dirname(fileURLToPath(import.meta.url));
 const DAYS = Number(process.argv[2]) || 28;
-const API = "2024-10";
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -28,20 +27,14 @@ function dateNDaysAgo(n) {
   return d.toISOString().slice(0, 10);
 }
 
-async function listOrders(domain, token, sinceISO) {
+async function listOrders(sinceISO) {
   const all = [];
   let url = `orders.json?status=any&created_at_min=${encodeURIComponent(sinceISO)}` +
     `&limit=250&fields=id,created_at,total_price,currency,financial_status,cancelled_at,test,email,line_items`;
   while (url) {
-    const res = await fetch(`https://${domain}/admin/api/${API}/${url}`, {
-      headers: { "X-Shopify-Access-Token": token },
-    });
-    if (!res.ok) throw new Error(`orders list → ${res.status}: ${(await res.text()).slice(0, 300)}`);
-    const json = await res.json();
+    const json = await shopifyApi("GET", url);
     all.push(...(json.orders || []));
-    const link = res.headers.get("link") || "";
-    const next = link.match(/<[^>]*[?&]page_info=([^>&]+)[^>]*>;\s*rel="next"/);
-    url = next ? `orders.json?limit=250&page_info=${next[1]}` : null;
+    url = json._linkNext ? `orders.json?limit=250&page_info=${json._linkNext}` : null;
     await sleep(550); // throttle: stay under 2 req/sec (Basic plan)
   }
   return all;
@@ -91,17 +84,15 @@ function aggregate(orders, testCustomerEmails) {
 }
 
 export async function pullShopify() {
-  const { SHOPIFY_STORE_DOMAIN, SHOPIFY_ADMIN_CLIENT_ID, SHOPIFY_ADMIN_CLIENT_SECRET } =
-    readEnv(["SHOPIFY_STORE_DOMAIN", "SHOPIFY_ADMIN_CLIENT_ID", "SHOPIFY_ADMIN_CLIENT_SECRET"]);
   // Own/friend/family checkout-flow tests don't set Shopify's `test` flag (that's only real
   // test-mode orders) — this is the manual escape hatch for "I bought it myself to check
   // checkout" so those don't get read by Signal as market/demand signal.
-  const { SIGNAL_TEST_CUSTOMER_EMAILS } = readOptionalEnv(["SIGNAL_TEST_CUSTOMER_EMAILS"]);
+  const { SIGNAL_TEST_CUSTOMER_EMAILS, SHOPIFY_STORE_DOMAIN } = readOptionalEnv(["SIGNAL_TEST_CUSTOMER_EMAILS", "SHOPIFY_STORE_DOMAIN"]);
   const testCustomerEmails = new Set(
     (SIGNAL_TEST_CUSTOMER_EMAILS || "").split(",").map((e) => e.trim().toLowerCase()).filter(Boolean)
   );
-  const token = await getShopifyAdminToken(SHOPIFY_STORE_DOMAIN, SHOPIFY_ADMIN_CLIENT_ID, SHOPIFY_ADMIN_CLIENT_SECRET);
-  const orders = await listOrders(SHOPIFY_STORE_DOMAIN, token, dateNDaysAgo(DAYS));
+  await initShopify();
+  const orders = await listOrders(dateNDaysAgo(DAYS));
   return { storeDomain: SHOPIFY_STORE_DOMAIN, windowDays: DAYS, ...aggregate(orders, testCustomerEmails) };
 }
 

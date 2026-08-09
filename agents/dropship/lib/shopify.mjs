@@ -1,31 +1,10 @@
 // Shopify executor for Scout — the only module that writes to the store. Products always land
 // as DRAFTS: publishing (and anything touching a live product) stays a human decision, matching
 // the growth-loop principle of human approval on customer-facing/spend actions.
-import { readEnv } from "../../analytics/lib/env.mjs";
-import { getShopifyAdminToken } from "../../analytics/lib/shopify-auth.mjs";
+// Client/auth lives in agents/lib/shopify.mjs; this module owns only Scout's write payloads.
+import { initShopify, shopifyApi } from "../../lib/shopify.mjs";
 
-const API = "2024-10";
-let token = null;
-let domain = null;
-
-export async function initShopify() {
-  const env = readEnv(["SHOPIFY_STORE_DOMAIN", "SHOPIFY_ADMIN_CLIENT_ID", "SHOPIFY_ADMIN_CLIENT_SECRET"]);
-  domain = env.SHOPIFY_STORE_DOMAIN;
-  token = await getShopifyAdminToken(domain, env.SHOPIFY_ADMIN_CLIENT_ID, env.SHOPIFY_ADMIN_CLIENT_SECRET);
-}
-
-export async function shopifyApi(method, path, body) {
-  const res = await fetch(`https://${domain}/admin/api/${API}/${path}`, {
-    method,
-    headers: { "X-Shopify-Access-Token": token, "Content-Type": "application/json" },
-    body: body ? JSON.stringify(body) : undefined,
-  });
-  const text = await res.text();
-  let json;
-  try { json = text ? JSON.parse(text) : {}; } catch { json = { _raw: text }; }
-  if (!res.ok) throw new Error(`${method} ${path} → ${res.status}: ${text.slice(0, 300)}`);
-  return json;
-}
+export { initShopify, shopifyApi };
 
 // Idempotency comes from the catalog store (itemId -> shopifyId), not from searching Shopify:
 // callers must not invoke this for items that already carry a shopifyId.

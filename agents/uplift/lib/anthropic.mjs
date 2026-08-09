@@ -2,7 +2,6 @@
 // retry/forced-tool-call plumbing every agent's Claude call goes through.
 import { callWithForcedTool } from "../../lib/anthropic-fetch.mjs";
 
-const MODEL = "claude-opus-4-8";
 
 export const UPLIFT_OUTPUT_SCHEMA = {
   type: "object",
@@ -18,7 +17,6 @@ export async function callUplift({ apiKey, systemPrompt, task, article, catalog,
   const userContent = JSON.stringify({ task, article, catalog, competitor_grounding: competitorGrounding ?? null }, null, 2);
   return callWithForcedTool({
     apiKey,
-    model: MODEL,
     systemPrompt,
     userContent,
     tool: {

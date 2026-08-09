@@ -2,7 +2,6 @@
 // retry/forced-tool-call plumbing every agent's Claude call goes through.
 import { callWithForcedTool } from "../../lib/anthropic-fetch.mjs";
 
-const MODEL = "claude-opus-4-8";
 
 export const SIGNAL_OUTPUT_SCHEMA = {
   type: "object",
@@ -46,7 +45,6 @@ export const SIGNAL_OUTPUT_SCHEMA = {
 export async function callSignal({ apiKey, systemPrompt, userInput }) {
   return callWithForcedTool({
     apiKey,
-    model: MODEL,
     systemPrompt,
     userContent: JSON.stringify(userInput, null, 2),
     tool: {

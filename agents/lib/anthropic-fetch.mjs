@@ -3,6 +3,8 @@
 // than pulling in the SDK. `callWithForcedTool` forces a single tool call so the response is
 // always valid JSON matching the given schema — no free-text parsing, ever.
 const API_URL = "https://api.anthropic.com/v1/messages";
+// The one place the agent fleet's model is chosen — a model migration is this line only.
+export const MODEL = "claude-opus-4-8";
 const MAX_ATTEMPTS = 3;
 const RETRYABLE_STATUS = new Set([429, 500, 529]);
 
@@ -30,7 +32,7 @@ async function postWithRetry(url, options, label) {
 // no search-API keys) and then finishes by calling the structured output tool. tool_choice must
 // stay "auto" for the search phase, so the output tool isn't API-guaranteed — one nudge turn
 // recovers the case where the model stops after researching without emitting.
-export async function callWithSearchThenTool({ apiKey, model, systemPrompt, userContent, tool, maxTokens = 16000, maxSearches = 12, effort = "high", label = "agent" }) {
+export async function callWithSearchThenTool({ apiKey, model = MODEL, systemPrompt, userContent, tool, maxTokens = 16000, maxSearches = 12, effort = "high", label = "agent" }) {
   const tools = [{ type: "web_search_20260209", name: "web_search", max_uses: maxSearches }, tool];
   const baseBody = {
     model,
@@ -124,7 +126,7 @@ async function streamMessage(url, headers, body, label) {
 // parse. Forced tool_choice + adaptive thinking together is fine on the first-party Claude API
 // (this call) and Vertex AI — the "thinking must be disabled with forced tool_choice" restriction
 // is Bedrock-only. If this ever 400s, the full response body is surfaced via the thrown error.
-export async function callWithForcedTool({ apiKey, model, systemPrompt, userContent, tool, maxTokens = 8000, effort = "high", label = "agent" }) {
+export async function callWithForcedTool({ apiKey, model = MODEL, systemPrompt, userContent, tool, maxTokens = 8000, effort = "high", label = "agent" }) {
   const body = {
     model,
     max_tokens: maxTokens,

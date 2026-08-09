@@ -21,7 +21,7 @@
 import { writeFileSync, mkdirSync, existsSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join, basename } from "node:path";
-import { readEnv } from "./lib/env.mjs";
+import { readEnv } from "../lib/env.mjs";
 import { editImage } from "./lib/openai-image.mjs";
 
 const __dir = dirname(fileURLToPath(import.meta.url));

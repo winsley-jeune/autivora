@@ -10,7 +10,7 @@
 import { writeFileSync, mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { readEnv } from "./lib/env.mjs";
+import { readEnv } from "../lib/env.mjs";
 import { getAccessToken } from "./lib/google-auth.mjs";
 
 const __dir = dirname(fileURLToPath(import.meta.url));

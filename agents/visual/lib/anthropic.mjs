@@ -6,7 +6,6 @@
 // shipping something wrong) — never in reasoning less carefully about quality/safety.
 import { callWithForcedTool } from "../../lib/anthropic-fetch.mjs";
 
-const MODEL = "claude-opus-4-8";
 
 export const VISUAL_PLAN_SCHEMA = {
   type: "object",
@@ -23,7 +22,6 @@ export async function planVisual({ apiKey, systemPrompt, article, targetQuery, c
   const userContent = JSON.stringify({ article, target_query: targetQuery ?? null, catalog }, null, 2);
   return callWithForcedTool({
     apiKey,
-    model: MODEL,
     systemPrompt,
     userContent,
     tool: {
@@ -59,7 +57,6 @@ export async function verifyVisual({ apiKey, referenceImageBase64, referenceMedi
   ];
   return callWithForcedTool({
     apiKey,
-    model: MODEL,
     systemPrompt: VERIFY_SYSTEM_PROMPT,
     userContent,
     tool: {

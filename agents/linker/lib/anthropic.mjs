@@ -2,7 +2,6 @@
 // retry/forced-tool-call plumbing every agent's Claude call goes through.
 import { callWithForcedTool } from "../../lib/anthropic-fetch.mjs";
 
-const MODEL = "claude-opus-4-8";
 
 export const LINKER_OUTPUT_SCHEMA = {
   type: "object",
@@ -37,7 +36,6 @@ export async function callLinker({ apiKey, systemPrompt, task, candidateSourcePa
   );
   return callWithForcedTool({
     apiKey,
-    model: MODEL,
     systemPrompt,
     userContent,
     tool: {
