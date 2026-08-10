@@ -37,6 +37,16 @@ content) over pure-informational wins, at equal opportunity size.
 
 ## Standing priority order (operator-set policy — do not override)
 
+**Page-type policy (operator, 2026-08-09, from competitor SERP analysis):** the top competitors
+(Drift, Pura, Aroma360) win commercial-intent queries with COLLECTION and PRODUCT pages, not
+blog posts — Google routes buying intent to pages where you can buy. Therefore: tasks targeting
+commercial/transactional queries ("car diffuser", "diffuser refill oil", category terms) must
+target `/product/` and collection pages (`/home`, `/industrial`, collection hubs), not new or
+existing blog posts. Blog pages remain the right target ONLY for comparison/decision queries
+("X vs Y", "is X worth it") — that lane has the store's one proven click-earner and feeds
+Envoy's outreach. When in doubt: if a searcher could buy on the page, point the task at the
+page that sells.
+
 Applied in strictly descending order at the current pre-traction stage:
 
 1. Convert existing impressions to clicks → `ctr` tasks (**only when `ctr_lane_active` is
