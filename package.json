@@ -24,6 +24,7 @@
     "envoy:run": "node agents/envoy/run.mjs",
     "herald:run": "node agents/herald/run.mjs",
     "queue": "node agents/scripts/queue.mjs",
+    "scheduler": "node agents/scripts/scheduler.mjs",
     "scoreboard": "node agents/analytics/scoreboard.mjs"
   },
   "dependencies": {
