@@ -30,6 +30,7 @@ import { loadCatalog, mutateCatalog } from "./lib/catalog-store.mjs";
 import { loadBands, saveBands, matchBand, maxLandedOf } from "./lib/market-bands.mjs";
 import { TIERS, computePrice, isNoise, passesTrust, SCAN_KEYWORDS_PER_TIER, VERIFY_CAP_PER_RUN, REJECT_COOLDOWN_DAYS } from "./lib/policy.mjs";
 import { callScout, callDemandResearch, callAnchorCheck } from "./lib/anthropic.mjs";
+import { competitorIntel } from "../lib/espionage.mjs";
 import { HYPOTHESIS_TARGET, mineSearchDemand, provenSales, WINNER_DEFINITION, activeHypotheses, staleHypotheses, applyResearchOutput } from "./lib/demand.mjs";
 import { demandMovers, categoryPulse } from "./lib/observatory.mjs";
 import { initShopify, createDraftProduct, createBundleDraft } from "./lib/shopify.mjs";
@@ -117,6 +118,10 @@ async function main() {
           // panel. This is TRANSACTION data, not articles — weight it above web search.
           market_movers: safeMovers(),
           category_pulse: safePulse(),
+          // What ESTABLISHED competitors monetize (keywords they win with product/collection
+          // pages) — the "next product to incorporate" signal. Map gaps vs our catalog into
+          // hypotheses; never propose fighting their brand terms head-on.
+          competitor_product_keywords: (() => { try { return competitorIntel({ limit: 20, productPagesOnly: true }); } catch { return null; } })(),
           search_demand: mineSearchDemand(snapshot),
           proven_sales: provenSales(snapshot),
           current_hypotheses: activeBefore,

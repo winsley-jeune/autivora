@@ -9,6 +9,16 @@ import { getLinkGraph } from "./link-graph.mjs";
 import { loadTasks, openTasks, checkbacksDue, outcomeHistory, meanByAction } from "./task-store.mjs";
 import { getMetricSeries } from "./snapshot-history.mjs";
 import { loadCatalog } from "../../dropship/lib/catalog-store.mjs";
+import { sweepIfStale, competitorIntel } from "../../lib/espionage.mjs";
+
+async function competitorIntelSafe() {
+  try {
+    await sweepIfStale();
+    return competitorIntel({ limit: 40 });
+  } catch (e) {
+    return { note: `competitor intel unavailable: ${String(e.message).slice(0, 120)}` };
+  }
+}
 
 const __dir = dirname(fileURLToPath(import.meta.url));
 const ANALYTICS_OUT = join(__dir, "..", "..", "analytics", "output");
@@ -188,6 +198,7 @@ export async function buildInputs({ baseUrl, skipCrawl = false } = {}) {
     product_economics: productEconomics(),
     pricing_experiments: readJson(join(__dir, "..", "state", "pricing-experiments.json")) ?? [],
     sourcing_state: sourcingState(),
+    competitor_intel: await competitorIntelSafe(),
     _store: store,
     _searchConsoleQueries: searchConsole.queries,
   };
