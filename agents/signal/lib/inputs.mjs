@@ -11,6 +11,28 @@ import { getMetricSeries } from "./snapshot-history.mjs";
 import { loadCatalog } from "../../dropship/lib/catalog-store.mjs";
 import { sweepIfStale, competitorIntel } from "../../lib/espionage.mjs";
 
+// Latest HarborRank technical audit (kv "harborrank.last_audit" holds {auditId, projectId},
+// set whenever the operator runs an audit). Fail-soft: HarborRank is a local dev app and an
+// enrichment source — absence must never block a run.
+async function siteAuditSafe() {
+  try {
+    const { kvGet } = await import("../../lib/db.mjs");
+    const ref = kvGet("harborrank.last_audit");
+    if (!ref) return { note: "no audit on record" };
+    const { getAuditResults } = await import("../../lib/harborrank.mjs");
+    const r = await getAuditResults(ref.auditId, ref.projectId);
+    if (!r) return { note: "HarborRank not reachable — using no audit data this run" };
+    return {
+      note: "HarborRank technical crawl of autivara.com. Few/minor issues = indexation problem is authority/crawl-priority, not technical — internal linking and page quality are the levers.",
+      status: r.audit?.status,
+      pages_crawled: r.audit?.pagesCrawled ?? null,
+      issues: (r.issues ?? []).map((i) => ({ type: i.type ?? i.issueType ?? i.name, url: i.url ?? i.pageUrl ?? null })),
+    };
+  } catch (e) {
+    return { note: `site audit unavailable: ${String(e.message).slice(0, 120)}` };
+  }
+}
+
 async function competitorIntelSafe() {
   try {
     await sweepIfStale();
@@ -199,6 +221,7 @@ export async function buildInputs({ baseUrl, skipCrawl = false } = {}) {
     pricing_experiments: readJson(join(__dir, "..", "state", "pricing-experiments.json")) ?? [],
     sourcing_state: sourcingState(),
     competitor_intel: await competitorIntelSafe(),
+    site_audit: await siteAuditSafe(),
     _store: store,
     _searchConsoleQueries: searchConsole.queries,
   };
