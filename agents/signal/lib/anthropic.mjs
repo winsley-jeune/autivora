@@ -38,6 +38,10 @@ export const SIGNAL_OUTPUT_SCHEMA = {
       },
     },
     daily_note: { type: "string" },
+    sourcing_guidance: {
+      type: "string",
+      description: "OPTIONAL, most days empty. One short directive to Scout (the sourcing agent) ONLY when the funnel data changes what it should source or stop sourcing — e.g. a product page converting, a vein proven dead, a demand signal Scout can't see. It lands in Scout's lessons feed verbatim.",
+    },
   },
   required: ["checkback_scores", "lesson", "tasks", "daily_note"],
 };

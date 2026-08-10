@@ -8,6 +8,7 @@ import { computeNewQueries, loadQueryHistory } from "./query-history.mjs";
 import { getLinkGraph } from "./link-graph.mjs";
 import { loadTasks, openTasks, checkbacksDue, outcomeHistory, meanByAction } from "./task-store.mjs";
 import { getMetricSeries } from "./snapshot-history.mjs";
+import { loadCatalog } from "../../dropship/lib/catalog-store.mjs";
 
 const __dir = dirname(fileURLToPath(import.meta.url));
 const ANALYTICS_OUT = join(__dir, "..", "..", "analytics", "output");
@@ -186,9 +187,38 @@ export async function buildInputs({ baseUrl, skipCrawl = false } = {}) {
     },
     product_economics: productEconomics(),
     pricing_experiments: readJson(join(__dir, "..", "state", "pricing-experiments.json")) ?? [],
+    sourcing_state: sourcingState(),
     _store: store,
     _searchConsoleQueries: searchConsole.queries,
   };
+}
+
+// Scout's side of the funnel (added 2026-08-09, operator directive): Signal's constraint
+// analysis must account for sourcing reality — what the catalog actually holds, which demand
+// hypotheses died and why, and what Scout concluded on its last run. Without this, Signal
+// reasons about GSC/GA4/Shopify while blind to whether the product side can even respond
+// (e.g. 9 zero-import runs proved the artisan-wood vein unsourceable while Signal kept
+// optimizing pages for it). Read-only from the shared catalog store + Scout's latest digest.
+function sourcingState() {
+  try {
+    const cat = loadCatalog();
+    const scout = readJson(join(__dir, "..", "..", "dropship", "output", "scout-latest.json"));
+    const byStatus = {};
+    for (const p of cat.products) {
+      const k = `${p.tier}/${p.status}`;
+      byStatus[k] = (byStatus[k] ?? 0) + 1;
+    }
+    return {
+      note: "Scout's sourcing reality. Weigh this in your binding-constraint call — do not emit tasks that assume products the pipeline has proven it cannot source. You may steer Scout via the optional sourcing_guidance output field.",
+      catalog_counts: byStatus,
+      active_hypotheses: cat.demandHypotheses.filter((h) => h.status === "active").map(({ id, hypothesis, tier, yields }) => ({ id, hypothesis, tier, yields })),
+      retired_hypotheses: cat.demandHypotheses.filter((h) => h.status === "retired").map(({ id, retiredOn, retiredReason }) => ({ id, retiredOn, retiredReason })),
+      recent_scout_lessons: cat.lessons.slice(-3),
+      last_scout_run: scout ? { date: scout.date, imported: scout.imported?.length ?? 0, lesson: scout.lesson, daily_note: scout.daily_note } : null,
+    };
+  } catch (e) {
+    return { note: `sourcing state unavailable: ${e.message.slice(0, 120)}` };
+  }
 }
 
 // Contribution-weighted prioritization (2026-08-01): under the store's 7x-landed pricing law,

@@ -15,6 +15,7 @@ import { buildInputs } from "./lib/inputs.mjs";
 import { callSignal } from "./lib/anthropic.mjs";
 import { mutateTaskStore, applyCheckbackScores, appendTasks, isOnCooldown, expireStaleTasks } from "./lib/task-store.mjs";
 import { updateQueryHistory, saveQueryHistory } from "./lib/query-history.mjs";
+import { mutateCatalog } from "../dropship/lib/catalog-store.mjs";
 
 const __dir = dirname(fileURLToPath(import.meta.url));
 const args = process.argv.slice(2);
@@ -97,8 +98,18 @@ function enforceCaps(tasks, { authorGateMet, store, now }) {
     console.log("Signal: --dry-run, not persisting task store or query history.");
   }
 
+  // Signal -> Scout channel (2026-08-09): a non-empty sourcing_guidance is appended to Scout's
+  // lessons feed, which Scout already reads at the top of every run — the funnel's constraint
+  // verdict steers the next sourcing strategy without a new protocol.
+  if (!dryRun && output.sourcing_guidance?.trim()) {
+    await mutateCatalog((cat) => {
+      cat.lessons.push({ on: nowISO.slice(0, 10), lesson: `SIGNAL GUIDANCE (funnel-constraint analysis): ${output.sourcing_guidance.trim()}` });
+    });
+    console.log(`\nSourcing guidance → Scout: ${output.sourcing_guidance.trim()}`);
+  }
+
   mkdirSync(join(__dir, "output"), { recursive: true });
-  const result = { generatedAt: nowISO, usage, checkback_scores: output.checkback_scores, lesson: output.lesson, tasks: kept, dropped, daily_note: output.daily_note };
+  const result = { generatedAt: nowISO, usage, checkback_scores: output.checkback_scores, lesson: output.lesson, tasks: kept, dropped, daily_note: output.daily_note, sourcing_guidance: output.sourcing_guidance ?? null };
   writeFileSync(join(__dir, "output", "signal-latest.json"), JSON.stringify(result, null, 2));
 
   console.log(`\nLesson: ${output.lesson}`);

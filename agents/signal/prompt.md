@@ -104,6 +104,15 @@ You will receive a JSON object below this prompt with these keys:
 10. `sales_events` — Shopify order/revenue data for the window (operator-known test/friend
     purchases already excluded), with a note on what attribution is and isn't available yet
     (be honest about the gap — don't fabricate landing-page attribution that isn't there).
+11. `sourcing_state` — Scout's (the sourcing agent's) reality: catalog counts by tier/status,
+    active and retired demand hypotheses (with retirement reasons), Scout's recent lessons,
+    and its last run's verdict. Fold this into your binding-constraint call: never emit tasks
+    that presuppose products the sourcing pipeline has proven it cannot deliver, and treat a
+    proven-selling product vein as compounding evidence when prioritizing pages. When the
+    funnel data changes what Scout should source or stop sourcing (a page converting, a vein
+    dead in search, demand Scout can't see from the marketplace side), say so in the optional
+    `sourcing_guidance` output field — one short directive, most days empty. It is delivered
+    to Scout's lessons feed verbatim, so write it as an instruction Scout can act on.
 
 ## Your job, in order
 
