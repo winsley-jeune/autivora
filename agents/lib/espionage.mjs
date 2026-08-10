@@ -8,7 +8,11 @@
 import { openDb, kvGet, kvSet } from "./db.mjs";
 import { domainRankedKeywords } from "./dataforseo.mjs";
 
-const COMPETITORS = ["pura.com", "aroma360.com", "aromatech.com", "hotelcollection.com"];
+const COMPETITORS = ["pura.com", "aroma360.com", "aromatech.com", "hotelcollection.com", "vitruvi.com"];
+// Ourselves, swept identically — intel is a HEAD-TO-HEAD (their position vs ours per keyword),
+// not a scouting report about strangers. Sales happen on collection/product pages; the job is
+// beating the top of the top there, with blogs as support.
+const SELF = "autivara.com";
 const SWEEP_KEY = "espionage.last_sweep";
 const SWEEP_DAYS = 7;
 
@@ -26,7 +30,7 @@ export async function sweepIfStale() {
   if (last && Date.now() - Date.parse(last) < SWEEP_DAYS * 864e5) return false;
   const day = new Date().toISOString().slice(0, 10);
   let swept = 0;
-  for (const domain of COMPETITORS) {
+  for (const domain of [SELF, ...COMPETITORS]) {
     const rows = await domainRankedKeywords(domain, { limit: 100 });
     if (!rows) continue; // fail-soft: keep old rows for this domain
     d.prepare("DELETE FROM competitor_keywords WHERE domain = ?").run(domain);
@@ -43,11 +47,18 @@ export async function sweepIfStale() {
 export function competitorIntel({ limit = 40, productPagesOnly = false } = {}) {
   const d = ensure();
   const rows = d.prepare(`SELECT domain, keyword, volume, position, url FROM competitor_keywords
-    ${productPagesOnly ? "WHERE url LIKE '%/products/%' OR url LIKE '%/collections/%' OR url LIKE '%/product/%'" : ""}
-    ORDER BY volume DESC LIMIT ?`).all(limit);
+    WHERE domain != ? ${productPagesOnly ? "AND (url LIKE '%/products/%' OR url LIKE '%/collections/%' OR url LIKE '%/product/%')" : ""}
+    ORDER BY volume DESC LIMIT ?`).all(SELF, limit);
+  const ours = new Map(d.prepare("SELECT keyword, position, url FROM competitor_keywords WHERE domain = ?").all(SELF).map((r) => [r.keyword, r]));
   return {
-    note: "Keywords ESTABLISHED competitors rank top-20 for (DataForSEO, weekly sweep). Use to pick organic content for our collection/product/blog pages and to spot products they monetize that we do not carry. Learn the map; do not target their brand terms head-on.",
+    note: "HEAD-TO-HEAD: keywords ESTABLISHED competitors rank top-20 for (DataForSEO, weekly sweep), each annotated with OUR current position (our_position null = we are absent — the gap). Sales happen on collection/product pages: beat the top of the top there; blogs are support. Spot products they monetize that we do not carry. Never target their brand terms head-on.",
     sweptAt: kvGet(SWEEP_KEY),
-    keywords: rows,
+    our_ranked_keyword_count: ours.size,
+    keywords: rows.map((r) => ({ ...r, our_position: ours.get(r.keyword)?.position ?? null, our_url: ours.get(r.keyword)?.url ?? null })),
   };
+}
+
+// Our own top-20 rankings from the same sweep — what Autivara actually holds today.
+export function ourRankings({ limit = 50 } = {}) {
+  return ensure().prepare("SELECT keyword, volume, position, url FROM competitor_keywords WHERE domain = ? ORDER BY volume DESC LIMIT ?").all(SELF, limit);
 }
