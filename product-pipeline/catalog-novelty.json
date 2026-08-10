@@ -14,6 +14,10 @@
     {
       "handle": "industrial-scenting",
       "title": "Industrial & Commercial Scenting"
+    },
+    {
+      "handle": "therapeutic-oils",
+      "title": "Therapeutic Oils & Refills"
     }
   ],
   "products": [
@@ -484,6 +488,132 @@
         "https://autivara.com/products/autivora-pear-car-diffuser/autivora-pear-car-diffuser-1.jpg",
         "https://autivara.com/products/autivora-pear-car-diffuser/autivora-pear-car-diffuser-2.jpg"
       ],
+      "ready": false
+    },
+    {
+      "handle": "autivara-drive-calm-refill-trio",
+      "title": "Drive Calm - Car Diffuser Refill Trio (3x10ml)",
+      "collection": "therapeutic-oils",
+      "type": "Essential Oil Refill",
+      "tags": [
+        "refill",
+        "essential-oil",
+        "car",
+        "no-subscription",
+        "stocked"
+      ],
+      "price": 24,
+      "compare_at": 36,
+      "sku": "AV-OIL-DRIVE",
+      "body_html": "<p>Three therapeutic-grade oils blended for the driver's seat: lavender to settle the commute, cedarwood to ground it, sweet orange to keep you awake to the good part. Made to refill the Autivara Cabin diffuser and magnetic vent disc - a few drops on the scent core, no subscription, no proprietary pods, ever.</p><ul><li>3 x 10ml amber glass bottles with dropper caps: Lavender, Cedarwood, Sweet Orange</li><li>Pure single-note oils - blend to taste or run them solo</li><li>Fits every Autivara waterless diffuser (and any pad or core-based diffuser)</li><li>Bottled in the USA from therapeutic-grade botanicals</li><li>Own your oil: this trio replaces months of scent-pod subscriptions</li></ul>",
+      "seo_title": "Car Diffuser Refill Oil Trio | Drive Calm 3x10ml",
+      "seo_description": "Three therapeutic-grade refill oils for car diffusers: lavender, cedarwood, sweet orange. Fits any pad or core diffuser. No subscription-own your oil.",
+      "images": [],
+      "ready": false
+    },
+    {
+      "handle": "autivara-fresh-focus-refill-trio",
+      "title": "Fresh Focus - Car Diffuser Refill Trio (3x10ml)",
+      "collection": "therapeutic-oils",
+      "type": "Essential Oil Refill",
+      "tags": [
+        "refill",
+        "essential-oil",
+        "car",
+        "no-subscription",
+        "stocked"
+      ],
+      "price": 24,
+      "compare_at": 36,
+      "sku": "AV-OIL-FOCUS",
+      "body_html": "<p>The alert-and-clear trio for long drives and early starts: peppermint for the wake-up, eucalyptus for the deep breath, lemon for the bright finish. Made to refill the Autivara Cabin diffuser and magnetic vent disc - a few drops on the scent core, no subscription, no proprietary pods.</p><ul><li>3 x 10ml amber glass bottles with dropper caps: Peppermint, Eucalyptus, Lemon</li><li>Pure single-note oils - blend to taste or run them solo</li><li>Fits every Autivara waterless diffuser (and any pad or core-based diffuser)</li><li>Bottled in the USA from therapeutic-grade botanicals</li><li>Own your oil: this trio replaces months of scent-pod subscriptions</li></ul>",
+      "seo_title": "Car Diffuser Refill Oil Trio | Fresh Focus 3x10ml",
+      "seo_description": "Peppermint, eucalyptus and lemon refill oils for car diffusers. Therapeutic-grade, fits any pad or core diffuser. No subscription-own your oil.",
+      "images": [],
+      "ready": false
+    },
+    {
+      "handle": "autivara-unwind-diffuser-blend",
+      "title": "Unwind - Evening Diffuser Blend (30ml)",
+      "collection": "therapeutic-oils",
+      "type": "Diffuser Blend",
+      "tags": [
+        "blend",
+        "essential-oil",
+        "home",
+        "no-subscription",
+        "stocked"
+      ],
+      "price": 19,
+      "compare_at": 28,
+      "sku": "AV-OIL-UNWIND",
+      "body_html": "<p>The end-of-day blend: lavender softened with cedarwood and lifted with a trace of bergamot. Pre-mixed and ready to pour into any Autivara home diffuser - the jellyfish, the flame series, the ultrasonic line - or any diffuser you already own.</p><ul><li>30ml amber glass bottle with dropper cap - weeks of evening sessions</li><li>Pre-blended: lavender, cedarwood, bergamot in tested proportions</li><li>Works in ultrasonic, waterless and reed diffusers</li><li>Bottled in the USA from therapeutic-grade botanicals</li><li>No subscription, no pods - one bottle, your pace</li></ul>",
+      "seo_title": "Unwind Diffuser Blend | Lavender Cedarwood 30ml",
+      "seo_description": "Pre-mixed evening diffuser blend: lavender, cedarwood, bergamot. 30ml, works in any ultrasonic or waterless diffuser. No subscription needed.",
+      "images": [],
+      "ready": false
+    },
+    {
+      "handle": "autivara-fireside-diffuser-blend",
+      "title": "Fireside - Warm Spice Diffuser Blend (30ml)",
+      "collection": "therapeutic-oils",
+      "type": "Diffuser Blend",
+      "tags": [
+        "blend",
+        "essential-oil",
+        "home",
+        "no-subscription",
+        "stocked"
+      ],
+      "price": 19,
+      "compare_at": 28,
+      "sku": "AV-OIL-FIRESIDE",
+      "body_html": "<p>Built for the flame diffusers: cinnamon leaf and clove bud wrapped in sweet orange, so the room smells the way the fireplace glow looks. Pour a few drops into any Autivara flame or volcano diffuser and the light finally has its scent.</p><ul><li>30ml amber glass bottle with dropper cap</li><li>Pre-blended: cinnamon leaf, clove bud, sweet orange in tested proportions</li><li>The natural companion to the fireplace, volcano and rocket flame diffusers</li><li>Bottled in the USA from therapeutic-grade botanicals</li><li>No subscription, no pods - one bottle, your pace</li></ul>",
+      "seo_title": "Fireside Diffuser Blend | Warm Spice Oil 30ml",
+      "seo_description": "Warm spice diffuser blend: cinnamon, clove, sweet orange. Made for flame-effect diffusers. 30ml, therapeutic-grade, no subscription.",
+      "images": [],
+      "ready": false
+    },
+    {
+      "handle": "autivara-cabin-air-diffuser-blend",
+      "title": "Cabin Air - Forest Diffuser Blend (30ml)",
+      "collection": "therapeutic-oils",
+      "type": "Diffuser Blend",
+      "tags": [
+        "blend",
+        "essential-oil",
+        "home",
+        "no-subscription",
+        "stocked"
+      ],
+      "price": 19,
+      "compare_at": 28,
+      "sku": "AV-OIL-CABIN",
+      "body_html": "<p>A walk in a conifer forest, bottled: fir needle and black spruce over a cedarwood base. The house blend of the Autivara cedar line - it pairs with the humidor trio and every wood-grain diffuser we make, and it turns any room into somewhere quieter.</p><ul><li>30ml amber glass bottle with dropper cap</li><li>Pre-blended: fir needle, black spruce, cedarwood in tested proportions</li><li>Works in ultrasonic, waterless and reed diffusers</li><li>Bottled in the USA from therapeutic-grade botanicals</li><li>No subscription, no pods - one bottle, your pace</li></ul>",
+      "seo_title": "Cabin Air Diffuser Blend | Fir Spruce Cedar 30ml",
+      "seo_description": "Forest diffuser blend: fir needle, black spruce, cedarwood. 30ml, works in any diffuser. Therapeutic-grade, no subscription-own your oil.",
+      "images": [],
+      "ready": false
+    },
+    {
+      "handle": "autivara-therapeutic-discovery-set",
+      "title": "Therapeutic Discovery Set - 6 Essential Oils (6x10ml)",
+      "collection": "therapeutic-oils",
+      "type": "Essential Oil Set",
+      "tags": [
+        "set",
+        "essential-oil",
+        "gift",
+        "no-subscription",
+        "stocked"
+      ],
+      "price": 39,
+      "compare_at": 54,
+      "sku": "AV-OIL-DISCO6",
+      "body_html": "<p>The six oils every diffuser owner reaches for first: lavender, peppermint, eucalyptus, lemon, cedarwood and sweet orange. One set covers calm evenings, clear mornings and everything the car ride needs - in any Autivara diffuser or any diffuser at all.</p><ul><li>6 x 10ml amber glass bottles with dropper caps</li><li>Lavender, Peppermint, Eucalyptus, Lemon, Cedarwood, Sweet Orange</li><li>Fits every diffuser type: ultrasonic, waterless, reed, pad and core</li><li>Bottled in the USA from therapeutic-grade botanicals</li><li>The gift-ready starter for anyone leaving scent subscriptions behind</li></ul>",
+      "seo_title": "Essential Oil Discovery Set | 6x10ml Therapeutic Grade",
+      "seo_description": "Six therapeutic-grade essential oils: lavender, peppermint, eucalyptus, lemon, cedarwood, orange. Works in any diffuser. Gift-ready, no subscription.",
+      "images": [],
       "ready": false
     }
   ]

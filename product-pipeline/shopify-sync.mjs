@@ -22,7 +22,7 @@
 //
 // Reads credentials from .env: SHOPIFY_STORE_DOMAIN, SHOPIFY_ADMIN_CLIENT_ID,
 // SHOPIFY_ADMIN_CLIENT_SECRET — same Dev Dashboard app + OAuth client-credentials grant the
-// analytics agent already uses for orders (agents/analytics/lib/shopify-auth.mjs). The legacy
+// analytics agent already uses for orders (agents/lib/shopify.mjs). The legacy
 // static "Private access token" this script used before was a Storefront API credential (from
 // the store's Headless channel), not an Admin API token — it could never have written products
 // regardless of any scope setting, which is why this needed fixing rather than just re-pasting a
@@ -30,7 +30,7 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { getShopifyAdminToken } from "../agents/analytics/lib/shopify-auth.mjs";
+import { getShopifyAdminToken } from "../agents/lib/shopify.mjs";
 
 const __dir = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dir, "..");
