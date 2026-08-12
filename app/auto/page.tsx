@@ -79,7 +79,7 @@ export default function AutoLanding() {
             rechargeable smart diffusers. Waterless, refillable, and made to be seen.
           </p>
           <Link
-            href="/product/autivora-astronaut-car-diffuser"
+            href="/product/autivara-astronaut-car-diffuser"
             className="inline-block bg-white text-black px-12 py-5 text-[11px] font-bold uppercase tracking-[0.3em] hover:bg-neutral-200 transition-all rounded-sm"
           >
             Shop Now

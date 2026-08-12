@@ -15,7 +15,7 @@ function collectionOf(tags: string[] | undefined): string | null {
 // An override here replaces the generic collection-level fallback with questions genuinely
 // specific to that product (its actual design/theme/differentiator, not just its category).
 export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
-  "autivora-pear-car-diffuser": [
+  "autivara-pear-car-diffuser": [
   {
     "question": "Does the Orchard pear have any moving or motorized parts?",
     "answer": "No — unlike our spinning or propeller diffusers, the pear is a simple sealed shape. Airflow from your vent carries the scent through the cabin, so there's nothing to wind down, recharge, or wear out."
@@ -34,7 +34,7 @@ export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
   }
 ],
 
-  "autivora-guitar-car-diffuser": [
+  "autivara-guitar-car-diffuser": [
   {
     "question": "What makes the Riff move the way it does?",
     "answer": "The guitar hangs on a 360° clip so it sways gently whenever air flows past your vent — no battery or motor, just the breeze from your fan giving it a little movement while it scents the cabin."
@@ -53,7 +53,7 @@ export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
   }
 ],
 
-  "autivora-smart-plug-diffuser": [
+  "autivara-smart-plug-diffuser": [
   {
     "question": "How does the Autivara Plug install compared to the wall-mounted Atmos units?",
     "answer": "There's nothing to mount or wire — it plugs straight into a standard wall outlet and it's running. That makes it the easiest way to add scent to a lobby, small office, or guest suite without touching your walls or HVAC."
@@ -72,7 +72,7 @@ export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
   }
 ],
 
-  "autivora-atmos-pro-hvac": [
+  "autivara-atmos-pro-hvac": [
   {
     "question": "How is the Atmos Pro different from the wall-mounted Atmos Wi-Fi?",
     "answer": "The Wi-Fi model mounts on a wall and scents a single mid-size area. The Atmos Pro instead connects into your building's HVAC ductwork, so one machine pushes fragrance through every vent and covers a whole large venue evenly rather than one room."
@@ -91,7 +91,7 @@ export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
   }
 ],
 
-  "autivora-atmos-wifi-diffuser": [
+  "autivara-atmos-wifi-diffuser": [
   {
     "question": "How is the Atmos Wi-Fi different from the HVAC-integrated Atmos Pro?",
     "answer": "The Atmos Wi-Fi mounts on a wall and scents the room directly, so there's no ductwork to tie into — ideal for a mid-size office, lobby, or showroom. The Atmos Pro connects to your HVAC to push scent through much larger, multi-room venues."
@@ -110,7 +110,7 @@ export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
   }
 ],
 
-  "autivora-4l-humidifying-diffuser": [
+  "autivara-4l-humidifying-diffuser": [
   {
     "question": "How big a room can the 4L tank handle?",
     "answer": "The 4-litre tank is sized for whole-room use — living rooms and larger bedrooms — rather than a single desk. Turn the mist up to fill a dry room, or ease it down for a gentler background scent."
@@ -129,7 +129,7 @@ export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
   }
 ],
 
-  "autivora-steam-train-diffuser": [
+  "autivara-steam-train-diffuser": [
   {
     "question": "Where does the mist come from on the steam-train diffuser?",
     "answer": "Straight out of the smokestack, like a real locomotive letting off steam. The cool ultrasonic mist rises from the funnel, so the scent effect doubles as the train's steam."
@@ -148,7 +148,7 @@ export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
   }
 ],
 
-  "autivora-wood-grain-diffuser": [
+  "autivara-wood-grain-diffuser": [
   {
     "question": "Does the Grove have a flame or light-show effect like the other Autivara diffusers?",
     "answer": "No — and that's the point. The Grove skips the flame glow and mirror-ball effects for a single soft ambient light and a natural wood-grain body, so it's the one to pick if you want scent that quietly blends into a room rather than becoming the centerpiece."
@@ -167,7 +167,7 @@ export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
   }
 ],
 
-  "autivora-disco-ball-diffuser": [
+  "autivara-disco-ball-diffuser": [
   {
     "question": "What kind of light show does the Nova put on?",
     "answer": "Its mirrored surface throws scattered, disco-ball light across the walls and ceiling, and you can switch between multiple light modes — bright and colourful for a party, or dialled back to a gentle glow for a quiet night in."
@@ -186,7 +186,7 @@ export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
   }
 ],
 
-  "autivora-rocket-flame-diffuser": [
+  "autivara-rocket-flame-diffuser": [
   {
     "question": "Where does the mist come out of the Apollo rocket?",
     "answer": "The cool mist rises from the base of the rocket, so it looks like an engine plume lifting the ship off the pad. The flame-glow light sits underneath it to sell the liftoff effect."
@@ -205,7 +205,7 @@ export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
   }
 ],
 
-  "autivora-fireplace-flame-diffuser": [
+  "autivara-fireplace-flame-diffuser": [
   {
     "question": "Does the Hearth's flame look real, and is it actually hot?",
     "answer": "The flickering flame is a realistic LED effect, so it looks like a real fire but stays completely cool. The mist is ultrasonic and never heats up, making it safe to leave on a mantel, shelf, or nightstand."
@@ -224,7 +224,7 @@ export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
   }
 ],
 
-  "autivora-jellyfish-mist-diffuser": [
+  "autivara-jellyfish-mist-diffuser": [
   {
     "question": "What makes the Nimbus different from Autivara's flame-glow diffusers?",
     "answer": "Instead of a flickering flame, the Nimbus features drifting jellyfish that sway and glow inside the mist column — a calmer, aquarium-like effect that's popular for bedrooms and kids' rooms."
@@ -243,7 +243,7 @@ export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
   }
 ],
 
-  "autivora-volcano-flame-diffuser": [
+  "autivara-volcano-flame-diffuser": [
   {
     "question": "Does the volcano actually get hot or use a real flame?",
     "answer": "No. The eruption effect is all LED glow lighting behind ultrasonic mist, so the plume looks molten but stays cool to the touch — safe on a shelf, mantel, or nightstand."
@@ -262,7 +262,7 @@ export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
   }
 ],
 
-  "autivora-smart-spray-diffuser": [
+  "autivara-smart-spray-diffuser": [
   {
     "question": "How is the Pulse different from Autivara's vent-clip diffusers?",
     "answer": "The Pulse doesn't rely on your air vents. It's an active micro-spray that mists fragrance on a timer you program, so you get scent even when the fan is off — plus three intensity modes and a glowing light ring the clip-on models don't have."
@@ -281,7 +281,7 @@ export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
   }
 ],
 
-  "autivora-rechargeable-car-diffuser": [
+  "autivara-rechargeable-car-diffuser": [
   {
     "question": "How is the Cabin different from Autivara's vent-clip diffusers?",
     "answer": "Most Autivara car diffusers clip to an air vent and rely on airflow. The Cabin is powered instead — it recharges over USB-C and runs on its own, so you can set it down wherever suits your interior rather than being tied to a vent."
@@ -300,7 +300,7 @@ export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
   }
 ],
 
-  "autivora-magnetic-vent-diffuser": [
+  "autivara-magnetic-vent-diffuser": [
   {
     "question": "What makes the Disc different from Autivara's novelty car diffusers?",
     "answer": "It's the minimalist grown-up option. Instead of a sculpted figure, the Disc is a plain machined-metal puck — solid, weighty, and understated, so it reads as a quiet design detail on your vent rather than a character piece."
@@ -319,7 +319,7 @@ export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
   }
 ],
 
-  "autivora-bear-propeller-diffuser": [
+  "autivara-bear-propeller-diffuser": [
   {
     "question": "What makes the propeller spin?",
     "answer": "The airflow from your vent turns it — there are no batteries or charging. When the fan's on, the propeller spins and helps push scent out into the cabin; when it's off, it simply rests."
@@ -338,7 +338,7 @@ export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
   }
 ],
 
-  "autivora-solar-car-diffuser": [
+  "autivara-solar-car-diffuser": [
   {
     "question": "Does the Autivara Solar need batteries or charging?",
     "answer": "Neither. A built-in solar cell spins the rotor whenever daylight reaches your dashboard, so there's nothing to charge and no batteries to swap — it just works when the sun's out."
@@ -356,7 +356,7 @@ export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
     "answer": "Yes. It's waterless and refillable — add a few drops of any Autivara fragrance oil, and switch scents whenever you like. There's an optional oil plan, but you're never required to subscribe."
   }
 ],
-  "autivora-astronaut-car-diffuser": [
+  "autivara-astronaut-car-diffuser": [
   {
     "question": "What makes the Astronaut different from Autivara's other novelty car diffusers?",
     "answer": "It's the original design that defined the line — a finely detailed astronaut figure meant to be displayed on your vent, offered in several colorways so you can pick the one that suits your cabin. It works by simple airflow, no batteries or charging needed."

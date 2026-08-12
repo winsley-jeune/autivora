@@ -15,10 +15,19 @@ const nextConfig = {
   },
   async redirects() {
     return [
-      // Old flagship product retired → real car hero
+      // Old flagship product retired → real car hero (canonical spelling). Must precede the
+      // parameterized autivora-:slug rule below or it would 301 to a nonexistent autivara-one.
       {
         source: '/product/autivora-one',
-        destination: '/product/autivora-rechargeable-car-diffuser',
+        destination: '/product/autivara-rechargeable-car-diffuser',
+        permanent: true,
+      },
+      // Brand canonicalization (2026-08-12 ruling): the domain spelling wins — every legacy
+      // autivora-* product slug 301s to its autivara-* twin. One parameterized rule covers all
+      // 19 renamed handles and any future stragglers.
+      {
+        source: '/product/autivora-:slug',
+        destination: '/product/autivara-:slug',
         permanent: true,
       },
       // ── Legacy Shopify-storefront URLs (still in Google's index) ──────────
