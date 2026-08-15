@@ -19,7 +19,7 @@ export default function SurfacePage({
   categoryHref,
   surfaceHubLabel,
   surfaceHubHref,
-  productHref = '/product/autivora-rechargeable-car-diffuser',
+  productHref = '/product/autivara-rechargeable-car-diffuser',
   productCta = 'Shop the Device',
 }: Props) {
   return (

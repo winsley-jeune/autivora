@@ -47,6 +47,40 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+// Shared inline formatter for **bold**, *italic*, and [text](/link) — used by every paragraph
+// variant below so a link inside a bold-lead-in callout renders as a real <Link>, not literal
+// bracket text.
+function renderInline(text: string, keyPrefix: string) {
+  return text
+    .split(/(\*\*[^*]+\*\*|\*[^*]+\*|\[[^\]]+\]\([^)]+\))/)
+    .map((seg, i) => {
+      const key = `${keyPrefix}-${i}`;
+      if (seg.startsWith("**") && seg.endsWith("**")) {
+        return (
+          <strong key={key} className="text-black font-medium">
+            {seg.slice(2, -2)}
+          </strong>
+        );
+      }
+      if (seg.startsWith("*") && seg.endsWith("*")) {
+        return <em key={key}>{seg.slice(1, -1)}</em>;
+      }
+      const link = seg.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+      if (link) {
+        return (
+          <Link
+            key={key}
+            href={link[2]}
+            className="text-black underline underline-offset-2 decoration-neutral-300 hover:decoration-black transition-colors"
+          >
+            {link[1]}
+          </Link>
+        );
+      }
+      return <span key={key}>{seg}</span>;
+    });
+}
+
 function renderBlock(block: string, index: number) {
   // Heading
   if (block.startsWith("## ")) {
@@ -139,54 +173,17 @@ function renderBlock(block: string, index: number) {
 
   // Bold-start paragraph (key point)
   if (block.startsWith("**")) {
-    const parts = block.split("**");
     return (
       <p key={index} className="text-gray-700 leading-relaxed mb-4">
-        {parts.map((part, i) =>
-          i % 2 === 1 ? (
-            <strong key={i} className="text-black font-medium">
-              {part}
-            </strong>
-          ) : (
-            <span key={i}>{part}</span>
-          )
-        )}
+        {renderInline(block, `b${index}`)}
       </p>
     );
   }
 
   // Regular paragraph with inline bold, italic, and [text](/link)
-  const formatted = block
-    .split(/(\*\*[^*]+\*\*|\*[^*]+\*|\[[^\]]+\]\([^)]+\))/)
-    .map((seg, i) => {
-      if (seg.startsWith("**") && seg.endsWith("**")) {
-        return (
-          <strong key={i} className="text-black font-medium">
-            {seg.slice(2, -2)}
-          </strong>
-        );
-      }
-      if (seg.startsWith("*") && seg.endsWith("*")) {
-        return <em key={i}>{seg.slice(1, -1)}</em>;
-      }
-      const link = seg.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
-      if (link) {
-        return (
-          <Link
-            key={i}
-            href={link[2]}
-            className="text-black underline underline-offset-2 decoration-neutral-300 hover:decoration-black transition-colors"
-          >
-            {link[1]}
-          </Link>
-        );
-      }
-      return <span key={i}>{seg}</span>;
-    });
-
   return (
     <p key={index} className="text-gray-600 leading-relaxed mb-4">
-      {formatted}
+      {renderInline(block, `p${index}`)}
     </p>
   );
 }
@@ -286,7 +283,7 @@ export default async function BlogArticle({ params }: Props) {
             Zero residue.
           </p>
           <Link
-            href="/product/autivora-rechargeable-car-diffuser"
+            href="/product/autivara-rechargeable-car-diffuser"
             className="inline-block px-16 py-5 bg-white text-black text-[11px] font-bold uppercase tracking-[0.3em] hover:bg-neutral-200 transition-all rounded-sm"
           >
             Shop Autivara

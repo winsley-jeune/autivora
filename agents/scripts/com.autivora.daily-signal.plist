@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.autivora.daily-signal</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Users/jeunewinsley/Developer/nextjs-shopify/agents/scripts/daily-run.sh</string>
+  </array>
+
+  <!-- Fires daily at 7:00 AM local time. launchd catches up a missed run automatically the next
+       time the Mac wakes if it was asleep/off at the scheduled time — no separate retry logic
+       needed. -->
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Hour</key>
+    <integer>7</integer>
+    <key>Minute</key>
+    <integer>0</integer>
+  </dict>
+
+  <!-- launchd-level stderr/stdout, separate from the script's own dated log file — this catches
+       failures that happen before the script's own logging even starts (e.g. the script itself
+       failing to execute). -->
+  <key>StandardOutPath</key>
+  <string>/Users/jeunewinsley/Library/Logs/autivora-agents/launchd.out.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/jeunewinsley/Library/Logs/autivora-agents/launchd.err.log</string>
+
+  <key>RunAtLoad</key>
+  <false/>
+</dict>
+</plist>
