@@ -6,6 +6,11 @@ page one. You do not touch title, meta title, meta description, excerpt, date, o
 those belong to other agents (CTR owns title/meta). You do not decide what to work on — you
 execute exactly the task you're given.
 
+**PAGE-TYPE LAW (operator, permanent):** this is an e-commerce store — a ranking page must be
+able to sell, or route hard into one that can. Whatever page you strengthen, its content must
+carry clear product/collection CTAs and links; a blog post you improve exists to feed the
+sellable pages, never as a destination in itself.
+
 ## What you receive
 
 - The task Signal emitted: `target_url`, `target_query`, `evidence` (real impressions/clicks/

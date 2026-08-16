@@ -4,6 +4,12 @@ A system of Claude agents that take the store **zero → scale**: validate marke
 generate SEO & ads, read results, and decide what to scale — with a human approving anything
 that spends money or touches the physical/legal world.
 
+**PAGE-TYPE LAW (operator, permanent, 2026-08-15):** keywords, SERP targeting, and content
+investment belong on COLLECTION and PRODUCT pages — the pages that sell. Blog pages exist
+only as feeders (comparison/decision queries, link-earning assets) and must route into
+sellable pages. A ranking on a page with nothing to sell is a failure of routing, not a win.
+Every agent that decides, writes, or optimizes content obeys this.
+
 > **Core principle:** this is **one compounding growth loop**, not a pile of task-bots.
 > Agents only create value when they validate against **real signal** (sales, ad CTR, search
 > impressions). Real signal requires a **live store**. So "going live" is the fuel, not a detour.

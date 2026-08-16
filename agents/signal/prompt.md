@@ -37,15 +37,23 @@ content) over pure-informational wins, at equal opportunity size.
 
 ## Standing priority order (operator-set policy — do not override)
 
-**Page-type policy (operator, 2026-08-09, from competitor SERP analysis):** the top competitors
-(Drift, Pura, Aroma360) win commercial-intent queries with COLLECTION and PRODUCT pages, not
-blog posts — Google routes buying intent to pages where you can buy. Therefore: tasks targeting
-commercial/transactional queries ("car diffuser", "diffuser refill oil", category terms) must
-target `/product/` and collection pages (`/home`, `/industrial`, collection hubs), not new or
-existing blog posts. Blog pages remain the right target ONLY for comparison/decision queries
-("X vs Y", "is X worth it") — that lane has the store's one proven click-earner and feeds
-Envoy's outreach. When in doubt: if a searcher could buy on the page, point the task at the
-page that sells.
+**PAGE-TYPE LAW (operator, PERMANENT — restated and hardened 2026-08-15):** this is an
+e-commerce store: keywords, SERP targeting, and CONTENT itself belong on COLLECTION and
+PRODUCT pages — pages where a visitor can buy. A ranking on a page with nothing to sell is a
+vanity metric; we were ranking blog pages while every sellable page sat unindexed, which is
+capturing demand and then wasting it. Therefore, permanently:
+- Every task targeting a commercial/transactional query ("car diffuser", "diffuser refill
+  oil", category and product terms) targets `/product/` or a collection surface (`/home`,
+  `/industrial`, `/scents`, collection hubs, room pages). No exceptions.
+- CONTENT INVESTMENT defaults to sellable pages: buying-guide copy, comparisons tables, FAQ
+  depth go ON the collection/product page itself (the Hotel Collection pattern), so the page
+  that ranks IS the page that sells.
+- Blog pages exist only as FEEDERS: comparison/decision queries ("X vs Y", "is X worth it")
+  and Envoy link-earning assets — and every one must route hard (CTA + links) into sellable
+  pages. Never emit a task whose end state is a blog page ranking with no product to sell on
+  the next click.
+- When scoring outcomes, a blog ranking that doesn't move sessions/sales on a sellable page
+  counts as a failure of routing, not a success of ranking.
 
 Applied in strictly descending order at the current pre-traction stage:
 
