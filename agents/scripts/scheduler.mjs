@@ -10,7 +10,7 @@
 // extra state and no double runs). A missed morning (laptop asleep, scheduler restarted later)
 // is caught on the first tick after wake — the property that keeps the AliExpress 48h refresh
 // token alive. All pipeline output still lands in ~/Library/Logs/autivora-agents/.
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { execFile } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
@@ -28,11 +28,23 @@ function localDay() {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
+const MAX_ATTEMPTS_PER_DAY = 5;
+
 function tick() {
   if (running) return;
   const day = localDay();
   if (new Date().getHours() < RUN_HOUR) return;
-  if (existsSync(join(LOG_DIR, `daily-run-${day}.log`))) return;
+  // A day only counts as done when its log says so — a run that died on the wake-race
+  // ("fetch failed" before Wi-Fi is up) or mid-pipeline gets retried on a later tick.
+  // Capped so a persistently broken day can't burn API calls all day; Signal's own
+  // one-batch-per-day guard makes retries safe against double-emitting.
+  const logPath = join(LOG_DIR, `daily-run-${day}.log`);
+  if (existsSync(logPath)) {
+    const log = readFileSync(logPath, "utf8");
+    if (log.includes("daily-run done")) return;
+    if ((log.match(/daily-run start/g) ?? []).length >= MAX_ATTEMPTS_PER_DAY) return;
+    console.log(`[scheduler ${new Date().toISOString()}] previous attempt for ${day} incomplete — retrying.`);
+  }
   running = true;
   console.log(`[scheduler ${new Date().toISOString()}] starting daily run for ${day}...`);
   execFile(SCRIPT, { timeout: 60 * 60 * 1000 }, (err) => {
