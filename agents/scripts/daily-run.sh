@@ -30,6 +30,11 @@ cd "$REPO_DIR"
   echo "=== $(date -u +%Y-%m-%dT%H:%M:%SZ) — daily-run start ==="
   echo "--- analytics:run ---"
   npm run analytics:run
+  echo "--- analytics:reindex ---"
+  # Reindex routine: pushes NEW sitemap URLs + unindexed money pages at Google (Indexing API
+  # + sitemap resubmit). Change-driven — no-ops most days. Guarded: an API refusal must not
+  # kill the decision loop below.
+  npm run analytics:reindex || echo "analytics:reindex FAILED — see above"
   echo "--- signal:run ---"
   npm run signal:run
   echo "--- herald:run ---"

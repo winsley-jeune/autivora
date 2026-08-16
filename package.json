@@ -11,6 +11,7 @@
     "analytics:ga4": "node agents/analytics/ga4.mjs",
     "analytics:shopify": "node agents/analytics/shopify.mjs",
     "analytics:index": "node agents/analytics/index-coverage.mjs",
+    "analytics:reindex": "node agents/analytics/reindex.mjs",
     "analytics:run": "node agents/analytics/run.mjs",
     "signal:run": "node agents/signal/run.mjs",
     "uplift:run": "node agents/uplift/run.mjs",
