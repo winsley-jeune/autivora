@@ -1,7 +1,6 @@
 #!/usr/bin/env node
-// Reindex routine — pushes changed/unindexed money pages at Google instead of waiting to be
-// discovered. Runs in the daily loop right after the analytics snapshot (and safe to run
-// manually anytime): it acts only when something actually changed, so most days it's a no-op.
+// Recrawl routine — resubmits the sitemap when commercial URLs are new or remain unindexed.
+// Runs in the daily loop right after analytics and is change/cooldown driven.
 //
 // What counts as "changed" (the triggers, checked in order):
 //   1. NEW URLs in the live sitemap since the last run (e.g. the autivara-* slug renames, a
@@ -9,16 +8,12 @@
 //   2. Known-unindexed product/collection pages from the freshest index-coverage audit that
 //      haven't been (re)submitted within the cooldown.
 //
-// How it pushes (both via the existing service-account JWT client):
-//   - Google Indexing API urlNotifications:publish (URL_UPDATED). Google documents this API
-//     for job-posting/livestream pages; in practice it accepts other URLs but may ignore
-//     them, and the service account must be a verified OWNER of the GSC property or every
-//     call 403s. Treated as a nudge, not a guarantee.
-//   - Search Console sitemaps.submit — re-submits sitemap.xml so changed URLs re-enter the
-//     crawl queue the officially supported way.
+// Uses Search Console sitemaps.submit so changed URLs re-enter Google's crawl queue through the
+// supported ecommerce path. The Indexing API is deliberately not used: Google restricts it to
+// JobPosting and livestream BroadcastEvent pages, not product/category URLs.
 //
 // State lives in agents.db (reindex_log + kv sitemap snapshot) per the no-JSON-stores rule.
-// Caps: MAX_PER_RUN 30 (Indexing API default quota is 200/day), COOLDOWN_DAYS 7 per URL.
+// Caps: MAX_PER_RUN 30 candidate records, COOLDOWN_DAYS 7 per URL.
 //
 // Requires .env: GOOGLE_SERVICE_ACCOUNT_KEY_PATH, GSC_SITE_URL
 import { readFileSync, existsSync } from "node:fs";
@@ -33,7 +28,6 @@ const BASE_URL = "https://autivara.com";
 const MAX_PER_RUN = 30;
 const COOLDOWN_DAYS = 7;
 const SEEN_KEY = "reindex.sitemap_urls";
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 // Money pages first: product and collection surfaces are where sales happen (operator
 // page-type policy) — blogs ride the sitemap resubmit instead of spending API quota.
@@ -93,33 +87,7 @@ async function main() {
     return;
   }
 
-  // Push 1 — Indexing API notifications.
-  const token = await getAccessToken(GOOGLE_SERVICE_ACCOUNT_KEY_PATH, "https://www.googleapis.com/auth/indexing");
-  const ins = d.prepare("INSERT OR REPLACE INTO reindex_log (url, submitted_at, reason) VALUES (?, ?, ?)");
-  let ok = 0, failed = 0;
-  for (const c of candidates) {
-    const res = await fetch("https://indexing.googleapis.com/v3/urlNotifications:publish", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ url: c.url, type: "URL_UPDATED" }),
-    });
-    if (res.ok) {
-      ok++;
-      ins.run(c.url, new Date().toISOString(), c.reason);
-      console.log(`  submitted [${c.reason}] ${c.url.replace(BASE_URL, "")}`);
-    } else {
-      failed++;
-      const body = (await res.text()).slice(0, 160);
-      console.warn(`  FAILED ${res.status} ${c.url.replace(BASE_URL, "")} — ${body}`);
-      if (res.status === 403) {
-        console.warn("  (403 = the service account is not an OWNER of the GSC property — add it under Settings → Users and permissions → Add user as Owner, then re-run.)");
-        break; // every further call will 403 too
-      }
-    }
-    await sleep(300);
-  }
-
-  // Push 2 — official sitemap resubmit so everything re-enters the crawl queue.
+  // Official sitemap resubmit: the supported crawl-discovery action for ecommerce pages.
   const gscToken = await getAccessToken(GOOGLE_SERVICE_ACCOUNT_KEY_PATH, "https://www.googleapis.com/auth/webmasters");
   const feed = encodeURIComponent(`${BASE_URL}/sitemap.xml`);
   const site = encodeURIComponent(GSC_SITE_URL);
@@ -127,7 +95,11 @@ async function main() {
     method: "PUT",
     headers: { Authorization: `Bearer ${gscToken}` },
   });
-  console.log(`Reindex: ${ok} URL(s) submitted, ${failed} failed | sitemap resubmit → ${smRes.status}${smRes.ok ? " ok" : ""}`);
+  if (!smRes.ok) throw new Error(`sitemap resubmit failed → ${smRes.status}: ${(await smRes.text()).slice(0, 200)}`);
+  const ins = d.prepare("INSERT OR REPLACE INTO reindex_log (url, submitted_at, reason) VALUES (?, ?, ?)");
+  const submittedAt = new Date().toISOString();
+  for (const candidate of candidates) ins.run(candidate.url, submittedAt, candidate.reason);
+  console.log(`Recrawl: sitemap resubmitted (${smRes.status}); ${candidates.length} commercial URL candidate(s) recorded for cooldown.`);
 }
 
 main().catch((e) => { console.error(`reindex failed: ${e.message}`); process.exit(1); });
