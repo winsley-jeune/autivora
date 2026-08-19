@@ -44,7 +44,9 @@ cd "$REPO_DIR"
   # kill the decision loop below.
   npm run analytics:reindex || echo "analytics:reindex FAILED — see above"
   echo "--- signal:run ---"
-  npm run signal:run
+  # Budget exhaustion or a temporary model outage must not prevent deterministic downstream
+  # monitoring/distribution stages from running. Signal emits no task when it cannot reason.
+  npm run signal:run || echo "signal:run DEFERRED — AI budget/provider unavailable; downstream stages continue"
   echo "--- herald:run ---"
   # Herald (social drafter). Tops the approval queue up to 3 unposted drafts; exits instantly
   # when topped up. Drafts only — the operator approves and posts.

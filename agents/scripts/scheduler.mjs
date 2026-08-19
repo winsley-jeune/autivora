@@ -30,7 +30,14 @@ function localDay() {
 
 const MAX_ATTEMPTS_PER_DAY = 5;
 
-function tick() {
+async function networkReady() {
+  try {
+    const response = await fetch("https://autivara.com/robots.txt", { method: "HEAD", signal: AbortSignal.timeout(15_000) });
+    return response.ok;
+  } catch { return false; }
+}
+
+async function tick() {
   if (running) return;
   const day = localDay();
   if (new Date().getHours() < RUN_HOUR) return;
@@ -46,6 +53,11 @@ function tick() {
     console.log(`[scheduler ${new Date().toISOString()}] previous attempt for ${day} incomplete — retrying.`);
   }
   running = true;
+  if (!(await networkReady())) {
+    running = false;
+    console.log(`[scheduler ${new Date().toISOString()}] network not ready — retrying next tick without consuming a run attempt.`);
+    return;
+  }
   console.log(`[scheduler ${new Date().toISOString()}] starting daily run for ${day}...`);
   execFile(SCRIPT, { timeout: 60 * 60 * 1000 }, (err) => {
     running = false;

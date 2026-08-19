@@ -75,7 +75,7 @@ async function main() {
   const systemPrompt = readFileSync(join(__dir, "prompt-audit.md"), "utf8");
   const results = [];
   for (const [category, batch] of Object.entries(batches)) {
-    console.log(`Audit: [${category}] auditing ${batch.length} product(s) with live search...`);
+    console.log(`Audit: [${category}] auditing ${batch.length} product(s) with supplied DataForSEO market evidence...`);
     try {
       const { output } = await callCatalogAudit({
         apiKey: ANTHROPIC_API_KEY,
