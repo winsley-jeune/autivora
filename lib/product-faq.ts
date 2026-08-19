@@ -375,6 +375,49 @@ export const PRODUCT_FAQ_OVERRIDES: Record<string, FaqItem[]> = {
 ],
 };
 
+// Product FAQs approved during the one-time published-catalog editorial migration.
+// A live product that has not passed this review intentionally receives no FAQ rather than
+// inheriting broad claims about compatibility, runtime, safety, or refills.
+const MANUALLY_REVIEWED_FAQ: Record<string, FaqItem[]> = {
+  'autivara-rechargeable-car-diffuser': [
+    {
+      question: 'Does this rechargeable car diffuser need to attach to an air vent?',
+      answer:
+        'No. It is powered by its rechargeable battery rather than by vent airflow. Place it upright in a stable location where it cannot obstruct driving controls, airbags, or visibility.',
+    },
+    {
+      question: 'How is the diffuser charged?',
+      answer:
+        'The diffuser has a USB-C charging connection. Charging time, battery runtime, and operation while connected should be confirmed in the instructions supplied with the product.',
+    },
+    {
+      question: 'Can I adjust the fragrance output?',
+      answer:
+        'The diffuser provides adjustable output settings. Begin with the lowest setting and follow the product instructions for compatible fragrance, filling, and cleaning.',
+    },
+  ],
+};
+
+const PRODUCTS_PENDING_MANUAL_REVIEW = new Set([
+  'autivara-4l-humidifying-diffuser',
+  'autivara-astronaut-car-diffuser',
+  'autivara-atmos-pro-hvac',
+  'autivara-atmos-wifi-diffuser',
+  'autivara-bear-propeller-diffuser',
+  'autivara-rocket-flame-diffuser',
+  'autivara-disco-ball-diffuser',
+  'autivara-guitar-car-diffuser',
+  'autivara-jellyfish-mist-diffuser',
+  'autivara-magnetic-vent-diffuser',
+  'autivara-fireplace-flame-diffuser',
+  'autivara-pear-car-diffuser',
+  'autivara-smart-spray-diffuser',
+  'autivara-smart-plug-diffuser',
+  'autivara-steam-train-diffuser',
+  'autivara-volcano-flame-diffuser',
+  'autivara-wood-grain-diffuser',
+]);
+
 /**
  * Per-product FAQ. Checks PRODUCT_FAQ_OVERRIDES first (real, product-specific content); falls
  * back to the collection-level generic template below for any product not yet enriched. Powers
@@ -385,6 +428,8 @@ export function productFaq(product: {
   title: string;
   tags?: string[];
 }): FaqItem[] {
+  if (MANUALLY_REVIEWED_FAQ[product.handle]) return MANUALLY_REVIEWED_FAQ[product.handle];
+  if (PRODUCTS_PENDING_MANUAL_REVIEW.has(product.handle)) return [];
   if (PRODUCT_FAQ_OVERRIDES[product.handle]) return PRODUCT_FAQ_OVERRIDES[product.handle];
 
   const name = brandName(product.title);

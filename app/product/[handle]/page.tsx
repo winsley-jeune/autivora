@@ -143,9 +143,6 @@ export default async function ProductPage({ params }: Props) {
               <h1 className="text-5xl lg:text-7xl font-display font-bold tracking-tighter leading-[0.9]">
                 {displayTitle}
               </h1>
-              <p className="text-xl lg:text-2xl font-display italic text-neutral-400 tracking-tight">
-                Scent. Without Compromise.
-              </p>
             </div>
 
             <p className="text-neutral-500 text-lg font-light leading-relaxed max-w-md">
@@ -173,37 +170,6 @@ export default async function ProductPage({ params }: Props) {
         </div>
       </section>
 
-      {/* 2️⃣ Trust strip — brand-universal, true for every product */}
-      <section className="border-y border-neutral-100 py-16 px-6">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
-          <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-neutral-400 text-center flex-1">
-            Refillable Oils
-          </span>
-          <div className="hidden md:block w-[1px] h-4 bg-neutral-100" />
-          <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-neutral-400 text-center flex-1">
-            No Cartridges · No Waste
-          </span>
-          <div className="hidden md:block w-[1px] h-4 bg-neutral-100" />
-          <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-neutral-400 text-center flex-1">
-            Designed to Display
-          </span>
-        </div>
-      </section>
-
-      {/* 3️⃣ Brand ethos — true across the whole line */}
-      <section className="py-32 px-6 bg-white">
-        <div className="max-w-3xl mx-auto text-center space-y-6">
-          <h2 className="text-4xl lg:text-5xl font-display font-medium tracking-tight">
-            Made to be seen.
-          </h2>
-          <p className="text-neutral-500 text-lg font-light leading-relaxed">
-            {oilProduct
-              ? 'A real fragrance oil, refillable into any Autivara diffuser — change your scent as often as your mood.'
-              : 'Every Autivara diffuser pairs a real fragrance oil with a design built to be displayed — refill it in seconds and change the mood whenever you like.'}
-          </p>
-        </div>
-      </section>
-
       {/* Recommendations — more from the same collection */}
       {collectionTag && (
         <ProductGrid
@@ -228,11 +194,11 @@ export default async function ProductPage({ params }: Props) {
       {/* Product FAQ — visible + FAQPage schema */}
       <CategoryFaq heading="Questions about this diffuser" items={faqItems} />
 
-      {/* 5️⃣ Final CTA */}
+      {/* Final purchase CTA */}
       <section className="py-32 px-6 bg-neutral-900 text-white text-center">
         <div className="max-w-4xl mx-auto space-y-12">
-          <h2 className="text-5xl lg:text-8xl font-display font-bold tracking-tighter leading-tight">
-            The Atmosphere Is Yours.
+          <h2 className="text-4xl lg:text-6xl font-display font-bold tracking-tighter leading-tight">
+            Ready to add this diffuser to your space?
           </h2>
           {firstVariantId ? (
             <UpsellModal
