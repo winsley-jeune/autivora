@@ -19,7 +19,7 @@ import { readEnv } from "../lib/env.mjs";
 import { pullCompleteShopifyCatalog, recordShopifyCatalogSnapshot } from "../lib/shopify-catalog.mjs";
 import { loadCatalog } from "./lib/catalog-store.mjs";
 import { callCatalogAudit } from "./lib/anthropic.mjs";
-import { seoEvidenceForProduct } from "../lib/product-seo-evidence.mjs";
+import { compactSeoEvidence, seoCategoryForProduct, seoEvidenceForProduct } from "../lib/product-seo-evidence.mjs";
 import { managedCatalogScope } from "../lib/catalog-scope.mjs";
 
 const __dir = dirname(fileURLToPath(import.meta.url));
@@ -68,7 +68,7 @@ async function main() {
       collections: p.collections,
       variants: p.variants,
       images: p.images.map((i) => ({ id: i.id, position: i.position, src: i.src, current_alt: i.alt })),
-      seo_evidence: seoEvidenceForProduct(p, snapshot),
+      seo_evidence_ref: seoCategoryForProduct(p),
     });
   }
 
@@ -80,7 +80,13 @@ async function main() {
       const { output } = await callCatalogAudit({
         apiKey: ANTHROPIC_API_KEY,
         systemPrompt,
-        userInput: { date: today(), category, products: batch },
+        userInput: { date: today(), category,
+          market_evidence: [...new Map(batch.map((product) => {
+            const live = products.find((p) => String(p.id) === String(product.id));
+            const evidence = compactSeoEvidence(seoEvidenceForProduct(live, snapshot));
+            return [product.seo_evidence_ref, evidence];
+          })).values()].filter(Boolean),
+          products: batch },
       });
       for (const v of output.verdicts ?? []) results.push({ category, ...v });
       console.log(`Audit: [${category}] ${output.verdicts?.length ?? 0} verdict(s). ${output.batch_note ?? ""}`);

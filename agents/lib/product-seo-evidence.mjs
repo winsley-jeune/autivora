@@ -49,6 +49,18 @@ export function isMarketEvidenceComplete({ seeds, keywords, serp }) {
     && Object.values(serp ?? {}).some((results) => Array.isArray(results) && results.length));
 }
 
+export function compactSeoEvidence(evidence) {
+  if (!evidence) return null;
+  return {
+    category: evidence.category, evidenceScope: evidence.evidenceScope,
+    observed_at: evidence.observedAt, expires_at: evidence.expiresAt, seeds: evidence.seeds,
+    keywords: (evidence.keywords ?? []).slice(0, 8).map(({ keyword, volume, intent, difficulty, cpc, opportunityScore }) => ({ keyword, volume, intent, difficulty, cpc, opportunityScore })),
+    serp: Object.fromEntries(Object.entries(evidence.serp ?? {}).slice(0, 3).map(([query, rows]) => [query,
+      rows.slice(0, 5).map(({ rank_group, rank_absolute, title, domain, url }) => ({ rank_group, rank_absolute, title, domain, url }))])),
+    shopping: (evidence.shopping ?? []).slice(0, 10).map(({ title, seller, price, currency }) => ({ title, seller, price, currency })),
+  };
+}
+
 export function canonicalKeyword(keyword) {
   const stop = new Set(["a", "an", "the", "for", "in", "of", "to"]);
   return String(keyword).toLowerCase().replace(/[^a-z0-9 ]/g, " ").split(/\s+/)

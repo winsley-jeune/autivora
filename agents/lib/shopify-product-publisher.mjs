@@ -37,36 +37,56 @@ function validatePatch(patch) {
   if (forbidden.length) throw new Error(`Product publisher cannot change: ${forbidden.join(", ")}`);
 }
 
-function matches(product, patch) {
-  return Object.entries(patch).every(([field, expected]) => {
+function fieldMatches(product, field, expected) {
     if (field === "seo_title") return String(product.seo_title ?? "") === String(expected ?? "");
     if (field === "seo_description") return String(product.seo_description ?? "") === String(expected ?? "");
     if (field === "variant_prices") return Object.entries(expected).every(([id, price]) => String(product.variants?.find((v) => String(v.id) === String(id))?.price ?? "") === String(price));
     if (field === "image_alts") return expected.every((alt, index) => String(product.images?.[index]?.alt ?? "") === String(alt ?? ""));
+    if (field === "body_html") {
+      const normalizeHtml = (value) => String(value ?? "").replace(/\r?\n/g, "").replace(/>\s+</g, "><").replace(/\s+/g, " ").trim();
+      return normalizeHtml(product.body_html) === normalizeHtml(expected);
+    }
     const actual = product[field];
     if (field === "tags") {
       const normalize = (value) => (Array.isArray(value) ? value : String(value ?? "").split(",")).map((x) => x.trim()).filter(Boolean).sort();
       return JSON.stringify(normalize(actual)) === JSON.stringify(normalize(expected));
     }
     return String(actual ?? "") === String(expected ?? "");
-  });
+}
+
+function mismatchFields(product, patch) {
+  return Object.entries(patch).filter(([field, expected]) => !fieldMatches(product, field, expected)).map(([field]) => field);
+}
+
+function matches(product, patch) {
+  return mismatchFields(product, patch).length === 0;
 }
 
 async function readProduct(productId) {
   const response = await shopifyApi("GET", `products/${productId}.json`);
   if (!response.product) throw new Error(`Shopify returned no product ${productId}`);
   const meta = await shopifyApi("GET", `products/${productId}/metafields.json?limit=250`);
-  const value = (key) => (meta.metafields ?? []).find((m) => m.namespace === "global" && m.key === key)?.value ?? null;
-  return { ...response.product, seo_title: value("title_tag"), seo_description: value("description_tag") };
+  const find = (key) => (meta.metafields ?? []).find((m) => m.namespace === "global" && m.key === key) ?? null;
+  const title = find("title_tag");
+  const description = find("description_tag");
+  return { ...response.product, seo_title: title?.value ?? null, seo_description: description?.value ?? null,
+    _seo_metafields: { title_tag: title, description_tag: description } };
+}
+
+async function writeSeoMetafield(productId, current, key, value) {
+  const existing = current._seo_metafields?.[key];
+  const metafield = { namespace: "global", key, type: existing?.type ?? "single_line_text_field", value: String(value ?? "") };
+  if (existing?.id) await shopifyApi("PUT", `metafields/${existing.id}.json`, { metafield: { ...metafield, id: existing.id } });
+  else await shopifyApi("POST", `products/${productId}/metafields.json`, { metafield });
 }
 
 async function writePatch(productId, patch, current) {
   const product = { id: productId };
   for (const field of ["title", "body_html", "vendor", "product_type", "tags", "status"]) if (field in patch) product[field] = patch[field];
-  if ("seo_title" in patch) product.metafields_global_title_tag = patch.seo_title;
-  if ("seo_description" in patch) product.metafields_global_description_tag = patch.seo_description;
   if ("image_alts" in patch) product.images = current.images.map((image, i) => ({ id: image.id, alt: patch.image_alts[i] }));
   if (Object.keys(product).length > 1) await shopifyApi("PUT", `products/${productId}.json`, { product });
+  if ("seo_title" in patch) await writeSeoMetafield(productId, current, "title_tag", patch.seo_title);
+  if ("seo_description" in patch) await writeSeoMetafield(productId, current, "description_tag", patch.seo_description);
   for (const [variantId, price] of Object.entries(patch.variant_prices ?? {})) {
     await shopifyApi("PUT", `variants/${variantId}.json`, { variant: { id: variantId, price } });
   }
@@ -104,10 +124,14 @@ export async function publishVerifiedProductPatch({ productId, patch, artifactKe
     return result;
   }
 
-  const versionId = randomUUID();
+  const existingVersion = ensure().prepare("SELECT id FROM shopify_publish_versions WHERE operation_key=?").get(operationKey);
+  const versionId = existingVersion?.id ?? randomUUID();
   ensure().prepare(`INSERT INTO shopify_publish_versions
     (id,operation_key,product_id,artifact_key,artifact_hash,before_doc,intended_doc,status,created_at)
-    VALUES(?,?,?,?,?,?,?,'publishing',?)`)
+    VALUES(?,?,?,?,?,?,?,'publishing',?)
+    ON CONFLICT(operation_key) DO UPDATE SET before_doc=excluded.before_doc,
+      intended_doc=excluded.intended_doc,live_doc=NULL,status='publishing',created_at=excluded.created_at,
+      completed_at=NULL,error=NULL`)
     .run(versionId, operationKey, String(productId), artifactKey, artifactHash, JSON.stringify(before), JSON.stringify(patch), new Date().toISOString());
 
   let wrote = false;
@@ -115,7 +139,8 @@ export async function publishVerifiedProductPatch({ productId, patch, artifactKe
     await writePatch(productId, patch, before);
     wrote = true;
     const live = await readProduct(productId);
-    if (!matches(live, patch)) throw new Error("Live Shopify read-after-write did not match intended product patch");
+    const mismatches = mismatchFields(live, patch);
+    if (mismatches.length) throw new Error(`Live Shopify read-after-write mismatch: ${mismatches.join(", ")}`);
     ensure().prepare("UPDATE shopify_publish_versions SET status='verified',live_doc=?,completed_at=? WHERE id=?")
       .run(JSON.stringify(live), new Date().toISOString(), versionId);
     const result = { productId, operationKey, versionId, reconciled: false, product: live };

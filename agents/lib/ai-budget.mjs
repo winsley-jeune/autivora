@@ -2,7 +2,7 @@ import { costToday, recordCost } from "./store-state.mjs";
 import { openDb } from "./db.mjs";
 import { readOptionalEnv } from "./env.mjs";
 
-const DEFAULT_DAILY_USD = 1.5;
+const DEFAULT_DAILY_USD = 2;
 const DEFAULT_MONTHLY_USD = 15;
 const budgetEnv = readOptionalEnv(["AI_DAILY_BUDGET_USD", "AI_MONTHLY_BUDGET_USD"]);
 

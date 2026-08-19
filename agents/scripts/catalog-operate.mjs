@@ -10,10 +10,10 @@ import { readEnv } from "../lib/env.mjs";
 import { latestShopifyCatalogSnapshot } from "../lib/shopify-catalog.mjs";
 import { acquireWorkflowLease, finishWorkflow } from "../lib/control-plane.mjs";
 import { buildCatalogPatch } from "../lib/catalog-policy.mjs";
-import { recordVerification } from "../lib/verification-store.mjs";
+import { latestVerification, recordVerification } from "../lib/verification-store.mjs";
 import { publishVerifiedProductPatch } from "../lib/shopify-product-publisher.mjs";
 import { callCatalogVerification } from "../dropship/lib/anthropic.mjs";
-import { categorySeoCoverage, seoEvidenceForProduct } from "../lib/product-seo-evidence.mjs";
+import { categorySeoCoverage, compactSeoEvidence, seoEvidenceForProduct } from "../lib/product-seo-evidence.mjs";
 import { managedCatalogScope } from "../lib/catalog-scope.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -46,13 +46,45 @@ try {
     try { candidates.push({ product, verdict, patch: buildCatalogPatch(product, verdict, { requireSeoEvidence: verdict.verdict !== "archive" }) }); }
     catch (error) { quarantined.push({ id: verdict.id, stage: "policy", error: error.message }); }
   }
-  const { output } = await callCatalogVerification({ apiKey: ANTHROPIC_API_KEY, systemPrompt: prompt, userInput: { catalog_hash: snapshot.hash, candidates } });
-  const decisions = new Map(output.decisions.map((d) => [String(d.id), d]));
+  const priority = { archive: 0, reprice: 1, go_live: 2, keep_active: 3 };
+  const verifyLimit = Number(process.env.CATALOG_VERIFY_MAX_CANDIDATES ?? 6);
+  const selectedCandidates = [...candidates].sort((a, b) => (priority[a.verdict.verdict] ?? 9) - (priority[b.verdict.verdict] ?? 9)).slice(0, verifyLimit);
+  for (const candidate of candidates.filter((candidate) => !selectedCandidates.includes(candidate))) {
+    quarantined.push({ id: candidate.product.id, stage: "deferred", error: `Verifier batch cap reached (${verifyLimit}); reconsidered after the next managed-catalog change` });
+  }
+  for (const candidate of selectedCandidates) {
+    candidate.artifactKey = `shopify:catalog:${candidate.product.id}`;
+    candidate.artifactHash = createHash("sha256").update(JSON.stringify(candidate.patch)).digest("hex");
+  }
+  const decisions = new Map();
+  for (const candidate of selectedCandidates) {
+    const cached = latestVerification({ artifactKey: candidate.artifactKey, artifactHash: candidate.artifactHash, kind: "catalog" });
+    if (cached?.passed) decisions.set(String(candidate.product.id), { passed: true, checks: cached.checks, notes: cached.notes, cached: true });
+  }
+  const unverified = selectedCandidates.filter((candidate) => !decisions.has(String(candidate.product.id)));
+  const verificationCandidates = unverified.map(({ product, verdict, patch }) => ({
+    product: {
+      id: product.id, status: product.status, title: product.title, body_html: product.body_html,
+      seo: product.seo, variants: product.variants,
+      images: product.images.map(({ id, position, alt }) => ({ id, position, alt })),
+    },
+    market_evidence: compactSeoEvidence(product.seo_evidence), verdict, patch,
+  }));
+  if (verificationCandidates.length) {
+    try {
+      const { output } = await callCatalogVerification({ apiKey: ANTHROPIC_API_KEY, systemPrompt: prompt,
+        userInput: { catalog_hash: snapshot.hash, candidates: verificationCandidates } });
+      for (const decision of output.decisions) decisions.set(String(decision.id), decision);
+    } catch (error) {
+      if (!/AI (daily|monthly) budget gate/.test(error.message)) throw error;
+      for (const candidate of unverified) quarantined.push({ id: candidate.product.id, stage: "ai_budget", error: error.message });
+    }
+  }
   const published = [];
   const maxChanges = Number(process.env.CATALOG_MAX_CHANGES_PER_RUN ?? 5);
   const maxStatusChanges = Number(process.env.CATALOG_MAX_STATUS_CHANGES_PER_RUN ?? 1);
   let statusChanges = 0;
-  for (const candidate of candidates) {
+  for (const candidate of selectedCandidates) {
     const decision = decisions.get(String(candidate.product.id));
     if (!decision?.passed || Object.values(decision.checks ?? {}).some((v) => v !== true)) {
       quarantined.push({ id: candidate.product.id, stage: "verification", error: decision?.notes ?? "Verifier returned no decision" });
@@ -69,10 +101,8 @@ try {
       }
       statusChanges += 1;
     }
-    const artifactKey = `shopify:catalog:${candidate.product.id}`;
-    const artifactHash = createHash("sha256").update(JSON.stringify(candidate.patch)).digest("hex");
-    recordVerification({ artifactKey, artifactHash, producer: "catalog-auditor/claude", verifier: "catalog-verifier/claude", kind: "catalog", passed: true, checks: decision.checks, notes: decision.notes });
-    const result = await publishVerifiedProductPatch({ productId: candidate.product.id, patch: candidate.patch, artifactKey, artifactHash, verificationKind: "catalog" });
+    if (!decision.cached) recordVerification({ artifactKey: candidate.artifactKey, artifactHash: candidate.artifactHash, producer: "catalog-auditor/claude", verifier: "catalog-verifier/claude", kind: "catalog", passed: true, checks: decision.checks, notes: decision.notes });
+    const result = await publishVerifiedProductPatch({ productId: candidate.product.id, patch: candidate.patch, artifactKey: candidate.artifactKey, artifactHash: candidate.artifactHash, verificationKind: "catalog" });
     published.push({ id: candidate.product.id, versionId: result.versionId ?? null, reconciled: result.reconciled });
   }
   const report = { completedAt: new Date().toISOString(), catalogHash: snapshot.hash, published, quarantined };

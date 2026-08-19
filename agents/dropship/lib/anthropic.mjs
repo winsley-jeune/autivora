@@ -119,7 +119,7 @@ export const CATALOG_AUDIT_SCHEMA = {
 };
 
 export async function callCatalogAudit({ apiKey, systemPrompt, userInput }) {
-  return callWithSearchThenTool({
+  return callWithForcedTool({
     apiKey, model: GENERATOR_MODEL,
     systemPrompt,
     userContent: JSON.stringify(userInput, null, 2),
@@ -129,7 +129,6 @@ export async function callCatalogAudit({ apiKey, systemPrompt, userInput }) {
       input_schema: CATALOG_AUDIT_SCHEMA,
     },
     maxTokens: 8000,
-    maxSearches: 5,
     effort: "medium",
     label: "Audit",
   });
@@ -162,7 +161,7 @@ export async function callCatalogVerification({ apiKey, systemPrompt, userInput 
   return callWithForcedTool({
     apiKey, model: VERIFIER_MODEL, systemPrompt, userContent: JSON.stringify(userInput, null, 2),
     tool: { name: "verify_catalog_decisions", description: "Independently verify every proposed Shopify catalog mutation.", input_schema: CATALOG_VERIFICATION_SCHEMA },
-    maxTokens: 4000, effort: "high", label: "CatalogVerifier",
+    maxTokens: 2500, effort: "high", label: "CatalogVerifier",
   });
 }
 
