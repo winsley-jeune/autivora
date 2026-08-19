@@ -5,7 +5,7 @@ import { SIGNATURE_OILS } from '@/lib/upsell-products';
 import ProductCard from '@/components/ProductCard';
 
 export const metadata: Metadata = {
-  title: 'Aroma Diffusers for Car, Home & Business | Autivara',
+  title: 'Aroma Diffusers for Car, Home & Business',
   description:
     'Shop Autivara aroma diffusers for car vents, home ambience, and commercial spaces. Compare waterless, ultrasonic, USB-C, and HVAC-compatible designs.',
   alternates: { canonical: '/collection' },
