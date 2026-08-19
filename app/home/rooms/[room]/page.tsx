@@ -15,6 +15,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!entry) return { title: 'Home Diffuser' };
   const canonical = `/home/rooms/${room}`;
   return {
+    robots: { index: false, follow: true },
     title: entry.metaTitle,
     description: entry.metaDescription,
     alternates: { canonical },

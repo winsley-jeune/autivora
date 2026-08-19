@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-import { INDUSTRIAL_USE_CASES } from '@/lib/seo-surfaces';
 import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 import ProductGrid from '@/components/ProductGrid';
 import CategoryFaq from '@/components/CategoryFaq';
@@ -10,33 +9,33 @@ const INDUSTRIAL_FAQ = [
   {
     question: 'How does commercial scenting cover a large space?',
     answer:
-      'Commercial units use cold-air (nebulizing) diffusion to atomize pure fragrance oil into a dry micro-mist that travels much farther than a home diffuser. Standalone units scent a room directly; larger HVAC units connect to your ductwork so the scent distributes evenly through the whole space.',
+      'Commercial models may use waterless nebulizing technology, direct room placement, or an HVAC connection. Check the individual product specifications for the required liquid, installation method, and stated coverage.',
   },
   {
     question: 'Do I need a long-term contract?',
     answer:
-      'No. Unlike the large scent-marketing companies, we sell the equipment outright and our oil plans are month-to-month — you can pause or cancel anytime. No three-month lock-in to get started.',
+      'The listed devices are sold as products rather than advertised equipment leases. Review the current product, payment, shipping, and return terms before purchasing.',
   },
   {
     question: 'Can I schedule when it runs and how strong it is?',
     answer:
-      'Yes. Our smart commercial units include Wi-Fi scheduling, so you set run times and intensity from an app — full scent during open hours, dialed back or off overnight. That control also keeps oil cost predictable.',
+      'Selected models list Wi-Fi or app scheduling. Confirm the controls and compatibility on the individual product page before selecting a unit.',
   },
   {
     question: 'What size space can one unit cover?',
     answer:
-      'It depends on the model and the air volume of the room. Standalone units suit reception areas, salons, and boutiques; HVAC units scale to lobbies, gyms, and multi-room properties. Tell us your square footage at support@autivara.com and we will recommend the right coverage.',
+      'It depends on the model, room volume, airflow, operating schedule, and placement. Use the stated product specifications as a starting point and confirm installation requirements before purchasing.',
   },
 ];
 
 export const metadata: Metadata = {
   title: 'Commercial Scent Diffusers — HVAC & Smart Scenting for Business',
   description:
-    'Commercial scenting for boutique hotels, salons, retail, gyms, and offices — HVAC scent machines and Wi-Fi smart diffusers at independent-business prices. Month-to-month, real support.',
+    'Compare commercial scent diffusers for hospitality, retail, salons, gyms, and offices, including waterless HVAC and Wi-Fi models.',
   alternates: { canonical: '/industrial' },
   openGraph: {
     title: 'Commercial Scent Diffusers — HVAC & Smart Scenting',
-    description: 'Hotel-grade commercial scenting at SMB economics.',
+    description: 'Compare commercial scent diffusers by installation type, controls, and listed specifications.',
     url: '/industrial',
     type: 'website',
     images: ['/products/autivora-atmos-pro-hvac/autivora-atmos-pro-hvac-1.jpg'],
@@ -61,17 +60,17 @@ export default function IndustrialLanding() {
             For Commercial Spaces
           </span>
           <h1 className="text-5xl md:text-7xl font-display font-bold tracking-tighter mb-8 leading-[0.95]">
-            Hotel-grade. <br /> Indie price.
+            Commercial scenting, <br /> clearly compared.
           </h1>
           <p className="text-lg md:text-xl text-white/70 font-light max-w-xl mx-auto leading-relaxed mb-12">
-            Commercial scenting designed for the businesses Aroma360 and Hotel Collection ignore.
-            Month-to-month plans. Real customer support. Transparent pricing.
+            Compare waterless HVAC, wall-mounted, and plug-in scent diffusers by installation type,
+            controls, and listed price.
           </p>
           <Link
-            href="/industrial/use-cases"
+            href="/collection"
             className="inline-block bg-white text-black px-12 py-5 text-[11px] font-bold uppercase tracking-[0.3em] hover:bg-neutral-200 transition-all rounded-sm"
           >
-            Find Your Use Case
+            Shop Diffusers
           </Link>
         </div>
       </section>
@@ -87,50 +86,15 @@ export default function IndustrialLanding() {
       {/* Pillars */}
       <section className="py-24 px-6 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
         {[
-          { h: 'No 3-month lock-in', p: 'Hotel Collection requires a 3-month contract before you can cancel. We do not. Pay monthly. Leave anytime.' },
-          { h: 'Real customer support', p: 'Email a real person. Get an answer in under 24 hours. Returns honored without escalation.' },
-          { h: 'Multi-unit pricing', p: 'Built-in volume pricing for 5+, 10+, and 25+ unit deployments. No "talk to sales" wall on small properties.' },
+          { h: 'Choose an installation', p: 'Compare standalone, wall-mounted, plug-in, and HVAC-connected formats using the product specifications.' },
+          { h: 'Check the controls', p: 'Scheduling, intensity settings, Wi-Fi, and app support vary by model and are stated on each product page.' },
+          { h: 'Plan for the space', p: 'Room layout, airflow, operating hours, and placement affect performance; confirm fit before purchasing.' },
         ].map((item) => (
           <div key={item.h} className="space-y-3">
             <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-400">{item.h}</h3>
             <p className="text-neutral-600 text-sm font-light leading-relaxed">{item.p}</p>
           </div>
         ))}
-      </section>
-
-      {/* Use cases */}
-      <section className="bg-neutral-50 py-24 px-6">
-        <div className="max-w-6xl mx-auto space-y-12">
-          <div className="text-center space-y-4">
-            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400">Browse by Use Case</span>
-            <h2 className="text-3xl md:text-4xl font-display font-medium tracking-tight">
-              From boutique hotel to dental office.
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {INDUSTRIAL_USE_CASES.map((u) => (
-              <Link
-                key={u.slug}
-                href={`/industrial/use-cases/${u.slug}`}
-                className="group block bg-white border border-neutral-100 rounded-sm p-6 hover:border-black transition-colors space-y-2"
-              >
-                <h3 className="text-lg font-display font-medium tracking-tight group-hover:underline">{u.title}</h3>
-                <p className="text-xs text-neutral-500 font-light line-clamp-2">{u.intro}</p>
-                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-400">
-                  {u.coverage}
-                </span>
-              </Link>
-            ))}
-          </div>
-          <div className="text-center pt-8">
-            <Link
-              href="/industrial/use-cases"
-              className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] border-b border-black pb-1 hover:text-neutral-500 transition-colors"
-            >
-              All Use Cases <ArrowRight size={14} />
-            </Link>
-          </div>
-        </div>
       </section>
 
       {/* Buying guide link (pillar) */}

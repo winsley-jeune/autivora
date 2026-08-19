@@ -4,9 +4,10 @@ import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 import ProductCard from '@/components/ProductCard';
 
 export const metadata: Metadata = {
-  title: 'The Scent Catalog — Refill Oils for Every Autivara Diffuser',
+  title: 'Autivara Diffuser Oils & Refills — Coming Soon',
   description:
-    'The full Autivara fragrance-oil catalog — high-concentration blends that refill any Autivara diffuser, from the car vent to the commercial scent machine.',
+    'Autivara diffuser oils and refills are being prepared. Compatibility, sizes, ingredients, and availability will be published with each verified product.',
+  robots: { index: false, follow: true },
   alternates: { canonical: '/scents' },
   openGraph: {
     title: 'The Scent Catalog',
@@ -41,9 +42,8 @@ export default async function ScentsCatalog() {
           One catalog. <br /> Every space.
         </h1>
         <p className="text-xl text-neutral-500 font-light max-w-2xl mx-auto leading-relaxed">
-          Every Autivara fragrance oil is a refined, high-concentration blend — refill any diffuser
-          in the range, from the car vent to the commercial machine, and change your scent whenever
-          the mood does.
+          Verified refill products will appear here when inventory, images, size, and device
+          compatibility are confirmed. Until then, no oil is presented as universally compatible.
         </p>
       </section>
 

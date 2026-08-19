@@ -15,6 +15,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!entry) return { title: 'Industrial Diffuser' };
   const canonical = `/industrial/use-cases/${type}`;
   return {
+    robots: { index: false, follow: true },
     title: entry.metaTitle,
     description: entry.metaDescription,
     alternates: { canonical },

@@ -1,20 +1,18 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import Image from 'next/image';
-import { ArrowRight } from 'lucide-react';
 import { getProducts } from '@/lib/shopify';
 import { SIGNATURE_OILS } from '@/lib/upsell-products';
 import ProductCard from '@/components/ProductCard';
 
 export const metadata: Metadata = {
-  title: 'The Collection — Precision Automotive Fragrance',
+  title: 'Aroma Diffusers for Car, Home & Business | Autivara',
   description:
-    'The full Autivara collection: cold-air nebulization devices and signature fragrance oils engineered for luxury automotive cabins.',
+    'Shop Autivara aroma diffusers for car vents, home ambience, and commercial spaces. Compare waterless, ultrasonic, USB-C, and HVAC-compatible designs.',
   alternates: { canonical: '/collection' },
   openGraph: {
     title: 'The Autivara Collection',
     description:
-      'Cold-air nebulization devices and signature fragrance oils engineered for luxury automotive cabins.',
+      'Aroma diffusers for cars, rooms, and commercial spaces.',
     url: '/collection',
     type: 'website',
     images: ['/products/autivora-disco-ball-diffuser/autivora-disco-ball-diffuser-1.jpg'],
@@ -39,23 +37,19 @@ export default async function CollectionPage() {
           The Collection
         </span>
         <h1 className="mt-4 text-5xl lg:text-7xl font-display font-bold tracking-tighter leading-[0.9]">
-          Precision Scent.
+          Aroma diffusers for every space.
         </h1>
-        {/* Trust strip */}
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-2">
-          <span className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400">
-            <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block" />
-            Ships in 24 h
-          </span>
-          <span className="text-neutral-200 hidden sm:block">·</span>
-          <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400">
-            Free Shipping Over $100
-          </span>
-          <span className="text-neutral-200 hidden sm:block">·</span>
-          <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400">
-            30-Day Returns
-          </span>
-        </div>
+        <p className="mt-8 text-neutral-500 font-light leading-relaxed max-w-2xl mx-auto">
+          Compare refillable car vent diffusers, cool-mist home designs, and waterless commercial
+          scent machines. Product pages show the power source, format, and features for each model.
+        </p>
+        <nav aria-label="Shop diffuser categories" className="mt-10 flex flex-wrap justify-center gap-3">
+          {[['Car diffusers', '/auto'], ['Home diffusers', '/home'], ['Commercial diffusers', '/industrial']].map(([label, href]) => (
+            <Link key={href} href={href} className="border border-neutral-200 px-5 py-3 text-xs font-bold uppercase tracking-[0.15em] hover:border-black transition-colors">
+              {label}
+            </Link>
+          ))}
+        </nav>
       </section>
 
       {/* ── The Device ── */}
@@ -63,7 +57,7 @@ export default async function CollectionPage() {
         <section className="max-w-7xl mx-auto px-6 pt-24 pb-16">
           <div className="flex items-center gap-6 mb-12">
             <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-neutral-400">
-              The Device
+              Available diffusers
             </span>
             <div className="flex-1 h-[1px] bg-neutral-100" />
           </div>
@@ -95,7 +89,7 @@ export default async function CollectionPage() {
             <div className="flex-1 h-[1px] bg-neutral-100" />
           </div>
           <p className="text-xs text-neutral-400 font-light mb-12">
-            20ml cold-air compatible refills — formulated exclusively for the Autivara device.
+            Available refill oils. Check each product page for size and device compatibility.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">

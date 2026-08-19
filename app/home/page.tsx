@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-import { HOME_ROOMS } from '@/lib/seo-surfaces';
 import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 import ProductGrid from '@/components/ProductGrid';
 import CategoryFaq from '@/components/CategoryFaq';
@@ -15,24 +14,24 @@ const HOME_FAQ = [
   {
     question: 'Do the flame and light-show diffusers actually use fire?',
     answer:
-      'No. The "flame" is LED light shining up through the rising mist to mimic a flickering fire, and the light-show models cycle colored LEDs. Everything stays cool to the touch — safe to leave running on a shelf or nightstand.',
+      'No. On flame-effect models, LED light shines through the mist to create the visual effect. Follow the individual model instructions, placement guidance, and automatic shut-off information.',
   },
   {
     question: 'How quiet are they?',
     answer:
-      'Ultrasonic diffusion is near-silent — most people only hear a faint hum up close. They are designed to run in bedrooms and offices without being a distraction, and they shut off automatically when the water runs out.',
+      'Ultrasonic models generally produce a low operating hum, but measured noise and shut-off features vary by model. Check the product page and manual before choosing one for sleep or work.',
   },
   {
     question: 'How much oil do I use and how often do I refill?',
     answer:
-      'Fill the tank with water, add five to ten drops of fragrance oil, and a typical tank runs for several hours. Refill the water when the tank empties and top up the oil to taste — there are no cartridges to replace.',
+      'Capacity, compatible liquids, and recommended oil quantity vary by model. Follow the product instructions rather than using one dosage across the entire range.',
   },
 ];
 
 export const metadata: Metadata = {
   title: 'Home Aroma Diffusers — Flame, Mist & Light-Show Diffusers',
   description:
-    'Statement home diffusers that turn any room into a mood — flame-effect, jellyfish mist, disco-ball light shows, and minimalist designs. Cool ultrasonic mist, whisper-quiet, auto shut-off.',
+    'Shop home aroma diffusers with flame-effect mist, sculptural designs, light features, and large-capacity options. Compare features on each product page.',
   alternates: { canonical: '/home' },
   openGraph: {
     title: 'Autivara Home Diffusers',
@@ -65,14 +64,14 @@ export default function HomeLanding() {
           </h1>
           <p className="text-lg md:text-xl text-neutral-500 font-light max-w-xl mx-auto leading-relaxed mb-12">
             Flame-glow, drifting mist, and light-show diffusers that turn any room into a mood — from
-            a fireplace glow to a mirror-ball light show. Cool to the touch, whisper-quiet, refilled
-            in seconds.
+            a fireplace glow to a mirror-ball light show. Compare capacity, controls, and operating
+            instructions on each product page.
           </p>
           <Link
-            href="/home/rooms"
+            href="/collection"
             className="inline-block bg-black text-white px-12 py-5 text-[11px] font-bold uppercase tracking-[0.3em] hover:bg-neutral-800 transition-all rounded-sm"
           >
-            Find Your Room
+            Shop Diffusers
           </Link>
         </div>
       </section>
@@ -84,7 +83,7 @@ export default function HomeLanding() {
       <section className="py-24 px-6 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
         {[
           { h: 'Mood, not just scent', p: 'Flame-effect glow, rising mist, and color light shows — ambience and fragrance in one piece.' },
-          { h: 'Cool mist, no heat', p: 'Ultrasonic cool-mist diffusion runs quiet and never hot, with auto shut-off when the tank runs dry.' },
+          { h: 'Cool-mist options', p: 'The ultrasonic models use mist and LED light rather than an open flame. Features vary by product.' },
           { h: 'Made to display', p: 'Volcano, jellyfish, mirror-ball, steam-train, wood-grain — pieces you will want on display.' },
         ].map((item) => (
           <div key={item.h} className="space-y-3">
@@ -92,38 +91,6 @@ export default function HomeLanding() {
             <p className="text-neutral-600 text-sm font-light leading-relaxed">{item.p}</p>
           </div>
         ))}
-      </section>
-
-      {/* Featured rooms */}
-      <section className="bg-neutral-50 py-24 px-6">
-        <div className="max-w-6xl mx-auto space-y-12">
-          <div className="text-center space-y-4">
-            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400">Browse by Room</span>
-            <h2 className="text-3xl md:text-4xl font-display font-medium tracking-tight">
-              Different rooms, different moods.
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {HOME_ROOMS.slice(0, 6).map((r) => (
-              <Link
-                key={r.slug}
-                href={`/home/rooms/${r.slug}`}
-                className="group block bg-white border border-neutral-100 rounded-sm p-6 hover:border-black transition-colors space-y-2"
-              >
-                <h3 className="text-lg font-display font-medium tracking-tight group-hover:underline">{r.title}</h3>
-                <p className="text-xs text-neutral-500 font-light line-clamp-2">{r.intro}</p>
-              </Link>
-            ))}
-          </div>
-          <div className="text-center pt-8">
-            <Link
-              href="/home/rooms"
-              className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] border-b border-black pb-1 hover:text-neutral-500 transition-colors"
-            >
-              All Room Guides <ArrowRight size={14} />
-            </Link>
-          </div>
-        </div>
       </section>
 
       {/* Buying guide link (pillar) */}

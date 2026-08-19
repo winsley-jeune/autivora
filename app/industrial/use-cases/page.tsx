@@ -4,6 +4,7 @@ import { INDUSTRIAL_USE_CASES } from '@/lib/seo-surfaces';
 import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 
 export const metadata: Metadata = {
+  robots: { index: false, follow: true },
   title: 'Commercial Scenting Use Cases — Hotels, Salons, Retail, Real Estate & More',
   description:
     'Autivara for commercial scenting. Hotel-grade cold-air diffusion at SMB economics — boutique hotels, salons, retail, real estate staging, fitness studios, medical offices.',

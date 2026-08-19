@@ -18,6 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!scent) return { title: 'Scent' };
   const canonical = `/scents/${handle}`;
   return {
+    robots: { index: false, follow: true },
     // metaTitle already includes the "| Autivara" brand suffix — bypass the
     // layout's "%s | Autivara" template to avoid doubling it.
     title: { absolute: scent.metaTitle },

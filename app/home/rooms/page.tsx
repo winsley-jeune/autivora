@@ -4,6 +4,7 @@ import { HOME_ROOMS } from '@/lib/seo-surfaces';
 import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 
 export const metadata: Metadata = {
+  robots: { index: false, follow: true },
   title: 'Diffusers by Room — Living Room, Bedroom, Kitchen & More',
   description:
     'Browse Autivara diffuser recommendations by room. Scent pairings, intensity, and placement guides for every space in your home.',
