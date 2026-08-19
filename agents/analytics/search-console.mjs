@@ -23,18 +23,26 @@ function dateNDaysAgo(n) {
   return d.toISOString().slice(0, 10);
 }
 
-async function fetchSearchAnalytics(siteUrl, token, dimensions, rowLimit = 1000) {
+export async function fetchSearchAnalytics(siteUrl, token, dimensions, { pageSize = 25_000, maxRows = 250_000 } = {}) {
   const endpoint = `https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(siteUrl)}/searchAnalytics/query`;
   // dataState "all" includes fresh (not-yet-finalized) rows — without it the API silently
   // returns nothing for the last ~2-3 days, so the window always missed the newest activity.
-  const res = await fetch(endpoint, {
-    method: "POST",
-    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ startDate: dateNDaysAgo(DAYS), endDate: dateNDaysAgo(0), dimensions, rowLimit, dataState: "all" }),
-  });
-  const json = await res.json();
-  if (!res.ok) throw new Error(`Search Console query failed: ${res.status} ${JSON.stringify(json)}`);
-  return json.rows || [];
+  const rows = [];
+  while (rows.length < maxRows) {
+    const rowLimit = Math.min(pageSize, maxRows - rows.length);
+    const res = await fetch(endpoint, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ startDate: dateNDaysAgo(DAYS), endDate: dateNDaysAgo(0), dimensions, rowLimit, startRow: rows.length, dataState: "all" }),
+      signal: AbortSignal.timeout(30_000),
+    });
+    const json = await res.json();
+    if (!res.ok) throw new Error(`Search Console query failed: ${res.status} ${JSON.stringify(json)}`);
+    const page = json.rows || [];
+    rows.push(...page);
+    if (page.length < rowLimit) return { rows, complete: true };
+  }
+  return { rows, complete: false, reason: `safety ceiling reached (${maxRows} rows)` };
 }
 
 export async function pullSearchConsole() {
@@ -42,17 +50,36 @@ export async function pullSearchConsole() {
   const token = await getAccessToken(GOOGLE_SERVICE_ACCOUNT_KEY_PATH, SCOPE);
   // pageQueries (page+query dimension) is the finer-grained breakdown the Signal agent needs
   // to attribute a CTR/position opportunity to a specific page — queries/pages alone can't.
-  const [queries, pages, pageQueries, byDate] = await Promise.all([
+  const [queryResult, pageResult, pageQueryResult, dateResult] = await Promise.all([
     fetchSearchAnalytics(GSC_SITE_URL, token, ["query"]),
     fetchSearchAnalytics(GSC_SITE_URL, token, ["page"]),
-    fetchSearchAnalytics(GSC_SITE_URL, token, ["page", "query"], 2000),
-    fetchSearchAnalytics(GSC_SITE_URL, token, ["date"], 40),
+    fetchSearchAnalytics(GSC_SITE_URL, token, ["page", "query"]),
+    fetchSearchAnalytics(GSC_SITE_URL, token, ["date"], { pageSize: 100, maxRows: 1000 }),
   ]);
+  const queries = queryResult.rows;
+  const pages = pageResult.rows;
+  const pageQueries = pageQueryResult.rows;
+  const byDate = dateResult.rows;
+  const resultMeta = (result) => ({ complete: result.complete, rowCount: result.rows.length, reason: result.reason ?? null });
   // The freshest date Google actually returned data for — consumers (Signal) should treat
   // this, not "yesterday", as the data horizon. Fresh rows past the finalized window are
   // partial and may still revise upward.
   const dataThrough = byDate.map((r) => r.keys[0]).sort().at(-1) ?? null;
-  return { siteUrl: GSC_SITE_URL, windowDays: DAYS, dataThrough, queries, pages, pageQueries };
+  return {
+    siteUrl: GSC_SITE_URL,
+    windowDays: DAYS,
+    dataThrough,
+    queries,
+    pages,
+    pageQueries,
+    completeness: {
+      complete: queryResult.complete && pageResult.complete && pageQueryResult.complete && dateResult.complete,
+      queries: resultMeta(queryResult),
+      pages: resultMeta(pageResult),
+      pageQueries: resultMeta(pageQueryResult),
+      dates: resultMeta(dateResult),
+    },
+  };
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {

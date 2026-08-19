@@ -42,12 +42,19 @@ async function inspectUrl(siteUrl, token, inspectionUrl) {
 export async function pullIndexCoverage() {
   const { GOOGLE_SERVICE_ACCOUNT_KEY_PATH, GSC_SITE_URL } = readEnv(["GOOGLE_SERVICE_ACCOUNT_KEY_PATH", "GSC_SITE_URL"]);
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://autivara.com";
-  const token = await getAccessToken(GOOGLE_SERVICE_ACCOUNT_KEY_PATH, SCOPE);
+  let token = await getAccessToken(GOOGLE_SERVICE_ACCOUNT_KEY_PATH, SCOPE);
+  let tokenIssuedAt = Date.now();
   const urls = await fetchSitemapUrls(baseUrl);
 
   const results = [];
   for (const url of urls) {
     try {
+      // OAuth access tokens expire after one hour. Large/slow sitemap audits must refresh before
+      // expiry rather than misclassifying every remaining URL as INSPECTION_FAILED.
+      if (Date.now() - tokenIssuedAt > 45 * 60 * 1000) {
+        token = await getAccessToken(GOOGLE_SERVICE_ACCOUNT_KEY_PATH, SCOPE);
+        tokenIssuedAt = Date.now();
+      }
       const r = await inspectUrl(GSC_SITE_URL, token, url);
       results.push({
         url,

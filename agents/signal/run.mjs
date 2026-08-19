@@ -13,15 +13,17 @@ import { dirname, join } from "node:path";
 import { readEnv } from "../lib/env.mjs";
 import { buildInputs } from "./lib/inputs.mjs";
 import { callSignal } from "./lib/anthropic.mjs";
-import { mutateTaskStore, applyCheckbackScores, appendTasks, isOnCooldown, expireStaleTasks } from "./lib/task-store.mjs";
+import { mutateTaskStore, applyCheckbackScores, appendTasks, isOnCooldown, expireStaleTasks, releaseExpiredClaims } from "./lib/task-store.mjs";
 import { updateQueryHistory, saveQueryHistory } from "./lib/query-history.mjs";
 import { mutateCatalog } from "../dropship/lib/catalog-store.mjs";
+import { acquireWorkflowLease, finishWorkflow } from "../lib/control-plane.mjs";
 
 const __dir = dirname(fileURLToPath(import.meta.url));
 const args = process.argv.slice(2);
 const skipCrawl = args.includes("--skip-crawl");
 const dryRun = args.includes("--dry-run");
 const force = args.includes("--force");
+let workflowRunId = null;
 
 // Operator policy, enforced here in code — not left to the prompt to remember. Keep in sync
 // with the hard rules in prompt.md; see agents/signal/README.md.
@@ -51,6 +53,13 @@ function enforceCaps(tasks, { authorGateMet, store, now }) {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://autivara.com";
   const systemPrompt = readFileSync(join(__dir, "prompt.md"), "utf8");
 
+  // Recovery is independent of whether a new decision batch is needed today. Do it before
+  // buildInputs so the model sees the real executable queue rather than dead worker claims.
+  if (!dryRun) {
+    const recoveryNow = new Date().toISOString();
+    await mutateTaskStore((recoveryStore) => releaseExpiredClaims(recoveryStore, recoveryNow));
+  }
+
   console.log("Signal: building inputs...");
   const inputs = await buildInputs({ baseUrl, skipCrawl });
   const { _store: store, _searchConsoleQueries, ...promptInputs } = inputs;
@@ -73,6 +82,18 @@ function enforceCaps(tasks, { authorGateMet, store, now }) {
     return;
   }
 
+  // Atomically reserve today's decision batch before paying for the model call. The earlier
+  // task-history check remains as backward compatibility for runs created before workflow_runs,
+  // while this unique lease closes the concurrent-start race between scheduler/manual workers.
+  if (!dryRun) {
+    const lease = acquireWorkflowLease({ workflow: "signal", runKey: todayStr, force, leaseMs: 60 * 60 * 1000 });
+    if (!lease.acquired) {
+      console.log(`Signal: ${lease.reason === "complete" ? "already completed" : "already running"} for ${todayStr} — no duplicate batch created.`);
+      return;
+    }
+    workflowRunId = lease.run.id;
+  }
+
   console.log("Signal: calling Claude...");
   const { output, usage } = await callSignal({ apiKey: ANTHROPIC_API_KEY, systemPrompt, userInput: promptInputs });
 
@@ -88,6 +109,7 @@ function enforceCaps(tasks, { authorGateMet, store, now }) {
     // Re-applies against a freshly-loaded, locked store — not the pre-call `store` above — so a
     // concurrent executor's write (e.g. CTR claiming a task) can't get silently clobbered.
     await mutateTaskStore((freshStore) => {
+      releaseExpiredClaims(freshStore, nowISO);
       expireStaleTasks(freshStore, nowISO);
       applyCheckbackScores(freshStore, output.checkback_scores, nowISO);
       appendTasks(freshStore, kept, nowISO);
@@ -117,4 +139,13 @@ function enforceCaps(tasks, { authorGateMet, store, now }) {
   kept.forEach((t) => console.log(`  [${t.agent}] ${t.action} → ${t.target_url}${t.target_query ? ` ("${t.target_query}")` : ""}`));
   console.log(`\n${output.daily_note}`);
   console.log(`\nSaved → agents/signal/output/signal-latest.json`);
-})().catch((e) => { console.error("FATAL:", e.message); process.exit(1); });
+  if (workflowRunId) finishWorkflow(workflowRunId);
+})().catch((e) => {
+  if (workflowRunId) {
+    try { finishWorkflow(workflowRunId, { status: "failed", error: e.message }); } catch (finishError) {
+      console.error("Signal: failed to record workflow failure:", finishError.message);
+    }
+  }
+  console.error("FATAL:", e.message);
+  process.exit(1);
+});

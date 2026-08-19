@@ -16,9 +16,11 @@ import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { readEnv } from "../lib/env.mjs";
-import { initShopify, shopifyApi } from "../lib/shopify.mjs";
+import { pullCompleteShopifyCatalog, recordShopifyCatalogSnapshot } from "../lib/shopify-catalog.mjs";
 import { loadCatalog } from "./lib/catalog-store.mjs";
 import { callCatalogAudit } from "./lib/anthropic.mjs";
+import { seoEvidenceForProduct } from "../lib/product-seo-evidence.mjs";
+import { managedCatalogScope } from "../lib/catalog-scope.mjs";
 
 const __dir = dirname(fileURLToPath(import.meta.url));
 const today = () => new Date().toISOString().slice(0, 10);
@@ -35,7 +37,6 @@ const categorize = (title) => CATEGORY_RULES.find((r) => r.re.test(title)).key;
 
 async function main() {
   const { ANTHROPIC_API_KEY } = readEnv(["ANTHROPIC_API_KEY"]);
-  await initShopify();
 
   // Landed costs are facts (freight-verified), not opinions — the auditor needs them for the
   // 3x floor. Everything else from internal state (flags, lessons, verdicts) stays out.
@@ -44,12 +45,11 @@ async function main() {
     landedByAe = new Map(loadCatalog().products.map((p) => [p.itemId, p.landedCost]));
   } catch {}
 
-  const products = [];
-  for (const status of ["active", "draft", "archived"]) {
-    const res = await shopifyApi("GET", `products.json?limit=250&status=${status}`);
-    products.push(...res.products);
-  }
-  console.log(`Audit: pulled ${products.length} product(s) across all statuses.`);
+  const snapshot = await pullCompleteShopifyCatalog();
+  recordShopifyCatalogSnapshot(snapshot);
+  const scope = managedCatalogScope(snapshot);
+  const products = scope.products;
+  console.log(`Audit: ${products.length} managed product(s); ${scope.excludedCount} incomplete/archived product(s) excluded.`);
 
   const batches = {};
   for (const p of products) {
@@ -62,8 +62,13 @@ async function main() {
       price: Number(p.variants?.[0]?.price),
       landed_cost: aeId ? (landedByAe.get(aeId) ?? null) : null, // null for owned AV- SKUs
       product_type: p.product_type,
-      body_excerpt: (p.body_html ?? "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 300),
-      images: (p.images ?? []).map((i) => ({ position: i.position, current_alt: i.alt ?? null })),
+      body_html: p.body_html,
+      current_seo_title: p.seo.title,
+      current_seo_description: p.seo.description,
+      collections: p.collections,
+      variants: p.variants,
+      images: p.images.map((i) => ({ id: i.id, position: i.position, src: i.src, current_alt: i.alt })),
+      seo_evidence: seoEvidenceForProduct(p, snapshot),
     });
   }
 
@@ -86,10 +91,15 @@ async function main() {
 
   const byVerdict = {};
   for (const r of results) (byVerdict[r.verdict] ??= []).push(r);
+  const expectedIds = new Set(products.map((product) => String(product.id)));
+  const judgedIds = new Set(results.map((result) => String(result.id)).filter((id) => expectedIds.has(id)));
+  const auditComplete = judgedIds.size === expectedIds.size && results.length === expectedIds.size;
 
   mkdirSync(join(__dir, "output"), { recursive: true });
   const outPath = join(__dir, "output", "audit-latest.json");
-  writeFileSync(outPath, JSON.stringify({ date: today(), productCount: products.length, results }, null, 2));
+  writeFileSync(outPath, JSON.stringify({ date: today(), catalogHash: snapshot.hash, scopeHash: scope.hash,
+    productCount: products.length, excludedCount: scope.excludedCount, auditComplete,
+    completeness: snapshot.completeness, results }, null, 2));
 
   console.log(`\n=== AUDIT SUMMARY (${results.length}/${products.length} judged) ===`);
   for (const [verdict, list] of Object.entries(byVerdict)) {
@@ -101,6 +111,7 @@ async function main() {
     }
   }
   console.log(`\nSaved → ${outPath} (no Shopify writes — apply is a separate approved step)`);
+  if (!auditComplete) throw new Error(`Catalog audit incomplete: ${judgedIds.size}/${expectedIds.size} managed products judged; publishing remains blocked`);
 }
 
 main().catch((e) => {

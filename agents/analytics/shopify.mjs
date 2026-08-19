@@ -27,17 +27,19 @@ function dateNDaysAgo(n) {
   return d.toISOString().slice(0, 10);
 }
 
-async function listOrders(sinceISO) {
+export async function listOrders(sinceISO, { pageLimit = 10_000 } = {}) {
   const all = [];
   let url = `orders.json?status=any&created_at_min=${encodeURIComponent(sinceISO)}` +
     `&limit=250&fields=id,created_at,total_price,currency,financial_status,cancelled_at,test,email,line_items`;
-  while (url) {
+  let pages = 0;
+  while (url && pages < pageLimit) {
     const json = await shopifyApi("GET", url);
     all.push(...(json.orders || []));
     url = json._linkNext ? `orders.json?limit=250&page_info=${json._linkNext}` : null;
+    pages += 1;
     await sleep(550); // throttle: stay under 2 req/sec (Basic plan)
   }
-  return all;
+  return { orders: all, complete: !url, pages, reason: url ? `safety ceiling reached (${pageLimit} pages)` : null };
 }
 
 function aggregate(orders, testCustomerEmails) {
@@ -92,8 +94,13 @@ export async function pullShopify() {
     (SIGNAL_TEST_CUSTOMER_EMAILS || "").split(",").map((e) => e.trim().toLowerCase()).filter(Boolean)
   );
   await initShopify();
-  const orders = await listOrders(dateNDaysAgo(DAYS));
-  return { storeDomain: SHOPIFY_STORE_DOMAIN, windowDays: DAYS, ...aggregate(orders, testCustomerEmails) };
+  const result = await listOrders(dateNDaysAgo(DAYS));
+  return {
+    storeDomain: SHOPIFY_STORE_DOMAIN,
+    windowDays: DAYS,
+    ...aggregate(result.orders, testCustomerEmails),
+    completeness: { complete: result.complete, rowCount: result.orders.length, pages: result.pages, reason: result.reason },
+  };
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {

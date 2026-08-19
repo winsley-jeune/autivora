@@ -14,7 +14,9 @@ import { mkdirSync, existsSync, renameSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
-const DB_PATH = join(dirname(fileURLToPath(import.meta.url)), "..", "state", "agents.db");
+// Tests and isolated workers may point at a separate database without changing production code.
+// The scheduler does not set this, so the durable agents/state/agents.db path remains the default.
+const DB_PATH = process.env.AGENTS_DB_PATH || join(dirname(fileURLToPath(import.meta.url)), "..", "state", "agents.db");
 
 let db = null;
 export function openDb() {

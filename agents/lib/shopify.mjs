@@ -27,20 +27,29 @@ export async function initShopify() {
   token = await getShopifyAdminToken(domain, env.SHOPIFY_ADMIN_CLIENT_ID, env.SHOPIFY_ADMIN_CLIENT_SECRET);
 }
 
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 export async function shopifyApi(method, path, body) {
   if (!token) throw new Error("shopifyApi called before initShopify()");
-  const res = await fetch(`https://${domain}/admin/api/${SHOPIFY_API_VERSION}/${path}`, {
-    method,
-    headers: { "X-Shopify-Access-Token": token, "Content-Type": "application/json" },
-    body: body ? JSON.stringify(body) : undefined,
-  });
-  const text = await res.text();
-  let json;
-  try { json = text ? JSON.parse(text) : {}; } catch { json = { _raw: text }; }
-  if (!res.ok) throw new Error(`${method} ${path} → ${res.status}: ${text.slice(0, 300)}`);
-  // Cursor pagination: callers that need the next page read res.headers via _linkNext.
-  const link = res.headers.get("link") || "";
-  const next = link.match(/<[^>]*[?&]page_info=([^>&]+)[^>]*>;\s*rel="next"/);
-  if (next) Object.defineProperty(json, "_linkNext", { value: next[1], enumerable: false });
-  return json;
+  for (let attempt = 1; attempt <= 5; attempt++) {
+    const res = await fetch(`https://${domain}/admin/api/${SHOPIFY_API_VERSION}/${path}`, {
+      method,
+      headers: { "X-Shopify-Access-Token": token, "Content-Type": "application/json" },
+      body: body ? JSON.stringify(body) : undefined,
+    });
+    const text = await res.text();
+    if (res.status === 429 && attempt < 5) {
+      const retryAfter = Number(res.headers.get("retry-after"));
+      await sleep(Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter * 1000 : 600 * attempt);
+      continue;
+    }
+    let json;
+    try { json = text ? JSON.parse(text) : {}; } catch { json = { _raw: text }; }
+    if (!res.ok) throw new Error(`${method} ${path} → ${res.status}: ${text.slice(0, 300)}`);
+    // Cursor pagination: callers that need the next page read res.headers via _linkNext.
+    const link = res.headers.get("link") || "";
+    const next = link.match(/<[^>]*[?&]page_info=([^>&]+)[^>]*>;\s*rel="next"/);
+    if (next) Object.defineProperty(json, "_linkNext", { value: next[1], enumerable: false });
+    return json;
+  }
 }

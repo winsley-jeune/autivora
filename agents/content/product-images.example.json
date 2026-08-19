@@ -1,0 +1,15 @@
+[
+  {
+    "path": "public/products/example-product/supplier-main.jpg",
+    "role": "main"
+  },
+  {
+    "path": "public/products/example-product/supplier-detail.jpg",
+    "role": "gallery"
+  },
+  {
+    "path": "public/products/example-product/supplier-lifestyle.jpg",
+    "role": "lifestyle",
+    "use_case": "A daily commuter using the product naturally in a clean, contemporary American car interior"
+  }
+]

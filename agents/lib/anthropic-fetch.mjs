@@ -3,19 +3,36 @@
 // than pulling in the SDK. `callWithForcedTool` forces a single tool call so the response is
 // always valid JSON matching the given schema — no free-text parsing, ever.
 const API_URL = "https://api.anthropic.com/v1/messages";
-// The one place the agent fleet's model is chosen — a model migration is this line only.
-export const MODEL = "claude-opus-4-8";
+import { assertAnthropicBudget, estimatedAnthropicCost, recordAnthropicUsage } from "./ai-budget.mjs";
+import { readOptionalEnv } from "./env.mjs";
+// Routine generation uses the efficient model; only explicitly routed high-risk verification
+// receives Opus. Environment overrides make model migrations configuration-only.
+const modelEnv = readOptionalEnv(["ANTHROPIC_OPUS_MODEL", "ANTHROPIC_GENERATOR_MODEL", "ANTHROPIC_VERIFIER_MODEL"]);
+export const OPUS_MODEL = process.env.ANTHROPIC_OPUS_MODEL ?? modelEnv.ANTHROPIC_OPUS_MODEL ?? "claude-opus-4-8";
+export const GENERATOR_MODEL = process.env.ANTHROPIC_GENERATOR_MODEL ?? modelEnv.ANTHROPIC_GENERATOR_MODEL ?? "claude-sonnet-4-6";
+export const VERIFIER_MODEL = process.env.ANTHROPIC_VERIFIER_MODEL ?? modelEnv.ANTHROPIC_VERIFIER_MODEL ?? OPUS_MODEL;
+export const MODEL = GENERATOR_MODEL;
 const MAX_ATTEMPTS = 3;
 const RETRYABLE_STATUS = new Set([429, 500, 529]);
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const nonRetryableRequest = (error) => /Anthropic API error 4(?!29)\d|invalid_request_error|credit balance is too low/i.test(error?.message ?? "");
 
 // A raw fetch call gets none of the SDK clients' automatic retry — without this, a single
 // transient 429/5xx/overloaded_error on a daily cron silently costs a whole day of an agent's
 // run (no decision, no execution) until the next scheduled attempt.
 async function postWithRetry(url, options, label) {
   for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
-    const res = await fetch(url, options);
+    let res;
+    try {
+      res = await fetch(url, { ...options, signal: AbortSignal.timeout(5 * 60 * 1000) });
+    } catch (error) {
+      if (attempt === MAX_ATTEMPTS) throw error;
+      const backoffMs = 2 ** attempt * 1000 + Math.random() * 500;
+      console.warn(`${label}: network error (${error.message.slice(0, 100)}) on attempt ${attempt}/${MAX_ATTEMPTS}, retrying in ${Math.round(backoffMs)}ms...`);
+      await sleep(backoffMs);
+      continue;
+    }
     if (!RETRYABLE_STATUS.has(res.status) || attempt === MAX_ATTEMPTS) return res;
 
     const retryAfter = Number(res.headers.get("retry-after"));
@@ -33,6 +50,7 @@ async function postWithRetry(url, options, label) {
 // stay "auto" for the search phase, so the output tool isn't API-guaranteed — one nudge turn
 // recovers the case where the model stops after researching without emitting.
 export async function callWithSearchThenTool({ apiKey, model = MODEL, systemPrompt, userContent, tool, maxTokens = 16000, maxSearches = 12, effort = "high", label = "agent" }) {
+  assertAnthropicBudget(estimatedAnthropicCost({ model, inputText: `${systemPrompt}\n${userContent}`, maxTokens, maxSearches }));
   const tools = [{ type: "web_search_20260209", name: "web_search", max_uses: maxSearches }, tool];
   const baseBody = {
     model,
@@ -51,6 +69,7 @@ export async function callWithSearchThenTool({ apiKey, model = MODEL, systemProm
     try {
       msg = await streamMessage(API_URL, headers, { ...baseBody, messages }, label);
     } catch (e) {
+      if (nonRetryableRequest(e)) throw e;
       if (attempt < 3) {
         console.warn(`${label}: network/stream error (${e.message.slice(0, 80)}), retrying (${attempt}/3)...`);
         await sleep(2 ** attempt * 2000);
@@ -60,7 +79,10 @@ export async function callWithSearchThenTool({ apiKey, model = MODEL, systemProm
     }
     if (msg.stop_reason === "refusal") throw new Error(`${label} call refused`);
     const toolUse = msg.content.find((b) => b.type === "tool_use" && b.name === tool.name);
-    if (toolUse) return { output: toolUse.input, usage: msg.usage };
+    if (toolUse) {
+      const costUsd = recordAnthropicUsage({ model, usage: msg.usage, maxSearches, label });
+      return { output: toolUse.input, usage: msg.usage, costUsd };
+    }
     // Model researched but stopped without emitting — nudge once with the same conversation.
     messages = [...messages, { role: "assistant", content: msg.content }, { role: "user", content: `Now emit your final structured output by calling the ${tool.name} tool exactly once.` }];
   }
@@ -127,6 +149,7 @@ async function streamMessage(url, headers, body, label) {
 // (this call) and Vertex AI — the "thinking must be disabled with forced tool_choice" restriction
 // is Bedrock-only. If this ever 400s, the full response body is surfaced via the thrown error.
 export async function callWithForcedTool({ apiKey, model = MODEL, systemPrompt, userContent, tool, maxTokens = 8000, effort = "high", label = "agent" }) {
+  assertAnthropicBudget(estimatedAnthropicCost({ model, inputText: `${systemPrompt}\n${userContent}`, maxTokens }));
   const body = {
     model,
     max_tokens: maxTokens,
@@ -153,5 +176,6 @@ export async function callWithForcedTool({ apiKey, model = MODEL, systemPrompt, 
 
   const toolUse = json.content.find((b) => b.type === "tool_use" && b.name === tool.name);
   if (!toolUse) throw new Error(`No ${tool.name} tool call in response: ${JSON.stringify(json.content)}`);
-  return { output: toolUse.input, usage: json.usage };
+  const costUsd = recordAnthropicUsage({ model, usage: json.usage, label });
+  return { output: toolUse.input, usage: json.usage, costUsd };
 }

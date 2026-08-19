@@ -160,11 +160,29 @@ export function expireStaleTasks(store, nowISO, maxOpenDays = 14) {
   return store;
 }
 
+// A process can die without reaching releaseTask(). Claims are therefore leases, not permanent
+// ownership. Signal reopens expired claims before each decision run so work cannot remain stuck
+// forever after a restart or SIGKILL.
+export function releaseExpiredClaims(store, nowISO = new Date().toISOString()) {
+  for (const task of store.tasks) {
+    if (task.status !== "in_progress" || !task.claim_expires_at || task.claim_expires_at > nowISO) continue;
+    task.status = "open";
+    task.release_notes = [...(task.release_notes ?? []), {
+      at: nowISO,
+      reason: `claim lease expired for ${task.claimed_by ?? "unknown executor"}`,
+    }];
+    delete task.claimed_by;
+    delete task.claimed_at;
+    delete task.claim_expires_at;
+  }
+  return store;
+}
+
 // --- Executor-facing helpers (for CTR/Uplift/Linker/etc. — not used by Signal itself) ---
 // Both go through mutateTaskStore, so an executor never needs to hand-write a read-modify-write
 // against the store. See agents/lib/git-task-pr.mjs for the paired git write-path helper.
 
-export async function claimTask(taskId, executorName) {
+export async function claimTask(taskId, executorName, { leaseMs = 2 * 60 * 60 * 1000 } = {}) {
   return mutateTaskStore((store) => {
     const task = store.tasks.find((t) => t.id === taskId);
     if (!task) throw new Error(`No task with id ${taskId}`);
@@ -172,6 +190,7 @@ export async function claimTask(taskId, executorName) {
     task.status = "in_progress";
     task.claimed_by = executorName;
     task.claimed_at = new Date().toISOString();
+    task.claim_expires_at = new Date(Date.now() + leaseMs).toISOString();
     return store;
   });
 }
@@ -187,6 +206,7 @@ export async function releaseTask(taskId, reason) {
     task.release_notes = [...(task.release_notes ?? []), { at: new Date().toISOString(), reason }];
     delete task.claimed_by;
     delete task.claimed_at;
+    delete task.claim_expires_at;
     return store;
   });
 }
@@ -198,6 +218,7 @@ export async function completeTask(taskId, { prUrl, commitSha, note } = {}) {
     if (task.status !== "in_progress") throw new Error(`Task ${taskId} is not in_progress (status: ${task.status})`);
     task.status = "done";
     task.completed_at = new Date().toISOString();
+    delete task.claim_expires_at;
     if (prUrl) task.pr_url = prUrl;
     if (commitSha) task.commit_sha = commitSha;
     if (note) task.completion_note = note;

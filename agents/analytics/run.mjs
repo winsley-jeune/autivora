@@ -8,6 +8,7 @@ import { writeFileSync, mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { recordSnapshot } from "../lib/snapshot-store.mjs";
+import { recordEvidence } from "../lib/evidence-store.mjs";
 import { pullSearchConsole } from "./search-console.mjs";
 import { pullGA4 } from "./ga4.mjs";
 import { pullShopify } from "./shopify.mjs";
@@ -17,6 +18,28 @@ const __dir = dirname(fileURLToPath(import.meta.url));
 (async () => {
   const [searchConsole, ga4, shopify] = await Promise.all([pullSearchConsole(), pullGA4(), pullShopify()]);
   const snapshot = { generatedAt: new Date().toISOString(), searchConsole, ga4, shopify };
+
+  const observedAt = new Date(snapshot.generatedAt);
+  const dayKey = snapshot.generatedAt.slice(0, 10);
+  const maxAgeMs = 48 * 60 * 60 * 1000;
+  recordEvidence({
+    evidenceKey: `gsc:commercial-performance:${dayKey}`, source: "google-search-console",
+    kind: "commercial-performance", observedAt, dataThrough: searchConsole.dataThrough,
+    maxAgeMs, complete: searchConsole.completeness.complete,
+    completeness: searchConsole.completeness, payload: searchConsole,
+  });
+  recordEvidence({
+    evidenceKey: `ga4:commercial-funnel:${dayKey}`, source: "google-analytics-4",
+    kind: "commercial-funnel", observedAt, dataThrough: snapshot.generatedAt,
+    maxAgeMs, complete: ga4.completeness.complete,
+    completeness: ga4.completeness, payload: ga4,
+  });
+  recordEvidence({
+    evidenceKey: `shopify:orders:${dayKey}`, source: "shopify",
+    kind: "orders", observedAt, dataThrough: snapshot.generatedAt,
+    maxAgeMs, complete: shopify.completeness.complete,
+    completeness: shopify.completeness, payload: shopify,
+  });
 
   mkdirSync(join(__dir, "output"), { recursive: true });
   const outPath = join(__dir, "output", "snapshot-latest.json");

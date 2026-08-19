@@ -10,6 +10,8 @@ import { loadTasks, openTasks, checkbacksDue, outcomeHistory, meanByAction } fro
 import { getMetricSeries } from "./snapshot-history.mjs";
 import { loadCatalog } from "../../dropship/lib/catalog-store.mjs";
 import { sweepIfStale, competitorIntel } from "../../lib/espionage.mjs";
+import { latestShopifyCatalogSnapshot } from "../../lib/shopify-catalog.mjs";
+import { listCommercialSurfaces } from "../../lib/commercial-surfaces.mjs";
 
 // Latest HarborRank technical audit (kv "harborrank.last_audit" holds {auditId, projectId},
 // set whenever the operator runs an audit). Fail-soft: HarborRank is a local dev app and an
@@ -218,6 +220,7 @@ export async function buildInputs({ baseUrl, skipCrawl = false } = {}) {
         ga4.purchasesByLandingPage ?? "not in this snapshot yet — analytics:run predates the attribution lane",
     },
     product_economics: productEconomics(),
+    commercial_surfaces: listCommercialSurfaces(),
     pricing_experiments: readJson(join(__dir, "..", "state", "pricing-experiments.json")) ?? [],
     sourcing_state: sourcingState(),
     competitor_intel: await competitorIntelSafe(),
@@ -259,6 +262,21 @@ function sourcingState() {
 // contribution per sale ≈ ~85% of price, so price is a faithful margin proxy — Signal weights
 // tasks by dollars, not just traffic opportunity.
 function productEconomics() {
+  const live = latestShopifyCatalogSnapshot();
+  if (live?.complete) {
+    return {
+      note: "Complete live Shopify catalog. Active, draft, and archived inventory is included; prioritize changes using status, price, collection, inventory, and commercial evidence.",
+      observed_at: live.observedAt,
+      catalog_hash: live.hash,
+      completeness: live.completeness,
+      products: live.products.map((p) => ({
+        id: p.id, url: `/product/${p.handle}`, handle: p.handle, title: p.title, status: p.status,
+        price: p.variants[0]?.price ?? null, inventory: p.variants.reduce((sum, v) => sum + (v.inventory_quantity ?? 0), 0),
+        collections: p.collections.map((c) => c.handle), seo_title: p.seo.title, seo_description: p.seo.description,
+        image_count: p.images.length, updated_at: p.updated_at,
+      })),
+    };
+  }
   const cat = readJson(join(__dir, "..", "..", "..", "product-pipeline", "catalog-novelty.json"));
   if (!cat) return { note: "catalog not found", products: [] };
   return {

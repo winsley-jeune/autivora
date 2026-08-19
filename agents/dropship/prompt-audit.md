@@ -20,6 +20,8 @@ web search.
 3. **Rebuild the listing** regardless of verdict (except archive — skip copy for archives):
    - `title` — customer-facing product title: benefit-and-material forward, giftable framing
      where honest, no keyword stuffing, no fake branding, ≤70 chars
+   - `body_html` — fully rebuild the customer description from supplied product facts; concise,
+     differentiated, valid HTML, and no invented materials, capabilities, delivery, or claims
    - `seo_title` — ≤60 chars, the query a real buyer types
    - `seo_description` — ≤155 chars, honest, click-worthy, includes the differentiator
    - `image_alts` — one alt text per image (you get the image count and current alts):

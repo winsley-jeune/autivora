@@ -28,8 +28,16 @@ cd "$REPO_DIR"
 
 {
   echo "=== $(date -u +%Y-%m-%dT%H:%M:%SZ) — daily-run start ==="
+  echo "--- catalog:sync ---"
+  npm run catalog:sync
   echo "--- analytics:run ---"
   npm run analytics:run
+  echo "--- seo:products ---"
+  # Research uncovered commercial categories first, then product-specific opportunities.
+  # Durable 30-day evidence avoids paying once per sibling SKU during cold start.
+  npm run seo:products || echo "seo:products FAILED — catalog publishing will use only prior fresh evidence"
+  echo "--- catalog:autonomous ---"
+  npm run catalog:autonomous || echo "catalog:autonomous FAILED — changes remain unpublished; see above"
   echo "--- analytics:reindex ---"
   # Reindex routine: pushes NEW sitemap URLs + unindexed money pages at Google (Indexing API
   # + sitemap resubmit). Change-driven — no-ops most days. Guarded: an API refusal must not

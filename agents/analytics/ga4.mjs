@@ -23,10 +23,28 @@ async function runReport(propertyId, token, body) {
     method: "POST",
     headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
     body: JSON.stringify(body),
+    signal: AbortSignal.timeout(30_000),
   });
   const json = await res.json();
   if (!res.ok) throw new Error(`GA4 report failed: ${res.status} ${JSON.stringify(json)}`);
   return json;
+}
+
+export async function runCompleteReport(propertyId, token, body, { pageSize = 10_000, maxRows = 100_000 } = {}) {
+  const rows = [];
+  let headers = null;
+  let expectedRows = null;
+  while (rows.length < maxRows) {
+    const report = await runReport(propertyId, token, { ...body, offset: rows.length, limit: Math.min(pageSize, maxRows - rows.length) });
+    headers ??= report;
+    expectedRows = Number(report.rowCount ?? 0);
+    const page = report.rows ?? [];
+    rows.push(...page);
+    if (!page.length || rows.length >= expectedRows) {
+      return { report: { ...headers, rows, rowCount: expectedRows }, complete: rows.length >= expectedRows, rowCount: rows.length };
+    }
+  }
+  return { report: { ...headers, rows, rowCount: expectedRows }, complete: false, rowCount: rows.length, reason: `safety ceiling reached (${maxRows} rows)` };
 }
 
 function rowsToObjects(report) {
@@ -45,35 +63,39 @@ export async function pullGA4() {
   const token = await getAccessToken(GOOGLE_SERVICE_ACCOUNT_KEY_PATH, SCOPE);
   const dateRanges = [{ startDate: `${DAYS}daysAgo`, endDate: "yesterday" }];
 
-  const [byChannelReport, byLandingPageReport, purchasesByLandingPageReport] = await Promise.all([
-    runReport(GA4_PROPERTY_ID, token, {
+  const [channelResult, landingResult, purchaseResult] = await Promise.all([
+    runCompleteReport(GA4_PROPERTY_ID, token, {
       dateRanges,
       dimensions: [{ name: "sessionDefaultChannelGroup" }],
       metrics: [{ name: "sessions" }, { name: "conversions" }, { name: "totalRevenue" }],
     }),
-    runReport(GA4_PROPERTY_ID, token, {
+    runCompleteReport(GA4_PROPERTY_ID, token, {
       dateRanges,
       dimensions: [{ name: "landingPage" }],
       metrics: [{ name: "sessions" }, { name: "conversions" }],
-      limit: 50,
     }),
     // Revenue attribution (CEO change #5): which landing page actually produced purchases —
     // the join Signal has been flagging as missing every run. Zero rows is a valid result on
     // a young store; the point is the lane exists so checkbacks can score revenue impact.
-    runReport(GA4_PROPERTY_ID, token, {
+    runCompleteReport(GA4_PROPERTY_ID, token, {
       dateRanges,
       dimensions: [{ name: "landingPage" }],
       metrics: [{ name: "transactions" }, { name: "purchaseRevenue" }, { name: "sessions" }],
-      limit: 50,
     }),
   ]);
 
   return {
     propertyId: GA4_PROPERTY_ID,
     windowDays: DAYS,
-    byChannel: rowsToObjects(byChannelReport),
-    byLandingPage: rowsToObjects(byLandingPageReport),
-    purchasesByLandingPage: rowsToObjects(purchasesByLandingPageReport).filter((r) => r.transactions > 0),
+    byChannel: rowsToObjects(channelResult.report),
+    byLandingPage: rowsToObjects(landingResult.report),
+    purchasesByLandingPage: rowsToObjects(purchaseResult.report).filter((r) => r.transactions > 0),
+    completeness: {
+      complete: channelResult.complete && landingResult.complete && purchaseResult.complete,
+      byChannel: { complete: channelResult.complete, rowCount: channelResult.rowCount, reason: channelResult.reason ?? null },
+      byLandingPage: { complete: landingResult.complete, rowCount: landingResult.rowCount, reason: landingResult.reason ?? null },
+      purchasesByLandingPage: { complete: purchaseResult.complete, rowCount: purchaseResult.rowCount, reason: purchaseResult.reason ?? null },
+    },
   };
 }
 

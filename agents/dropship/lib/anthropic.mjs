@@ -3,7 +3,7 @@
 // judgment (what multiple the product commands and why), a competition read (who sells it,
 // saturated or emerging), the marketing challenge, and channel eligibility (Amazon/TikTok/
 // autivara-only) — merchandising decisions, not just product picking.
-import { callWithForcedTool, callWithSearchThenTool } from "../../lib/anthropic-fetch.mjs";
+import { callWithForcedTool, callWithSearchThenTool, GENERATOR_MODEL, VERIFIER_MODEL } from "../../lib/anthropic-fetch.mjs";
 
 
 // The demand-research pass (prompt-demand.md): live web search over observed market demand,
@@ -105,6 +105,7 @@ export const CATALOG_AUDIT_SCHEMA = {
           new_price: { type: "number", description: "Required when verdict is reprice; also set when go_live needs a different price than current" },
           rationale: { type: "string", description: "Concrete market evidence: sites searched, observed price ranges, anchor findings" },
           title: { type: "string", description: "Rebuilt customer-facing title (<=70 chars). Omit for archive." },
+          body_html: { type: "string", description: "Truthful, product-specific customer-facing HTML description grounded only in supplied facts. Omit for archive." },
           seo_title: { type: "string", description: "<=60 chars. Omit for archive." },
           seo_description: { type: "string", description: "<=155 chars. Omit for archive." },
           image_alts: { type: "array", items: { type: "string" }, description: "One alt text per image, in position order (<=125 chars each). Omit for archive." },
@@ -119,7 +120,7 @@ export const CATALOG_AUDIT_SCHEMA = {
 
 export async function callCatalogAudit({ apiKey, systemPrompt, userInput }) {
   return callWithSearchThenTool({
-    apiKey,
+    apiKey, model: GENERATOR_MODEL,
     systemPrompt,
     userContent: JSON.stringify(userInput, null, 2),
     tool: {
@@ -127,9 +128,41 @@ export async function callCatalogAudit({ apiKey, systemPrompt, userInput }) {
       description: "Emit the per-product audit verdicts with rebuilt listing assets and a batch note.",
       input_schema: CATALOG_AUDIT_SCHEMA,
     },
-    maxTokens: 30000,
-    maxSearches: 15,
+    maxTokens: 8000,
+    maxSearches: 5,
+    effort: "medium",
     label: "Audit",
+  });
+}
+
+const CATALOG_VERIFICATION_SCHEMA = {
+  type: "object",
+  properties: {
+    decisions: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          id: { type: "number" }, passed: { type: "boolean" },
+          checks: {
+            type: "object",
+            properties: { factual: { type: "boolean" }, truthful: { type: "boolean" }, seo: { type: "boolean" }, economics: { type: "boolean" }, status_transition: { type: "boolean" } },
+            required: ["factual", "truthful", "seo", "economics", "status_transition"],
+          },
+          notes: { type: "string" },
+        },
+        required: ["id", "passed", "checks", "notes"],
+      },
+    },
+  },
+  required: ["decisions"],
+};
+
+export async function callCatalogVerification({ apiKey, systemPrompt, userInput }) {
+  return callWithForcedTool({
+    apiKey, model: VERIFIER_MODEL, systemPrompt, userContent: JSON.stringify(userInput, null, 2),
+    tool: { name: "verify_catalog_decisions", description: "Independently verify every proposed Shopify catalog mutation.", input_schema: CATALOG_VERIFICATION_SCHEMA },
+    maxTokens: 4000, effort: "high", label: "CatalogVerifier",
   });
 }
 
