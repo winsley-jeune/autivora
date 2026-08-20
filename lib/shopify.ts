@@ -132,6 +132,8 @@ export async function createCart(): Promise<Cart> {
                         id
                         handle
                         title
+                        tags
+                        priceRange { minVariantPrice { amount currencyCode } }
                         featuredImage {
                           url
                           altText
@@ -203,6 +205,8 @@ export async function addToCart(
                         id
                         handle
                         title
+                        tags
+                        priceRange { minVariantPrice { amount currencyCode } }
                         featuredImage {
                           url
                           altText
@@ -275,6 +279,8 @@ export async function removeFromCart(cartId: string, lineIds: string[]): Promise
                         id
                         handle
                         title
+                        tags
+                        priceRange { minVariantPrice { amount currencyCode } }
                         featuredImage {
                           url
                           altText
@@ -350,6 +356,8 @@ export async function updateCart(
                         id
                         handle
                         title
+                        tags
+                        priceRange { minVariantPrice { amount currencyCode } }
                         featuredImage {
                           url
                           altText
@@ -421,6 +429,8 @@ export async function getCart(cartId: string): Promise<Cart | null> {
                       id
                       handle
                       title
+                      tags
+                      priceRange { minVariantPrice { amount currencyCode } }
                       featuredImage {
                         url
                         altText
