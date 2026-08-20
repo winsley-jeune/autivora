@@ -5,14 +5,16 @@
 //
 // The single env reader for every agent — lives in agents/lib/ so no agent has to reach into
 // a peer agent's directory for it.
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 
 function parseEnvFile(keys) {
-  const raw = readFileSync(join(ROOT, ".env"), "utf8");
+  const envPath = join(ROOT, ".env");
+  if (!existsSync(envPath)) return {};
+  const raw = readFileSync(envPath, "utf8");
   const values = {};
   for (const line of raw.split(/\r?\n/)) {
     const i = line.indexOf("=");

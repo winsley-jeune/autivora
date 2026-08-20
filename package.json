@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "node --test agents/tests/*.test.mjs",
+    "test": "node --test --test-concurrency=1 agents/tests/*.test.mjs",
     "typecheck": "tsc --noEmit",
     "lint": "next lint",
     "analytics:gsc": "node agents/analytics/search-console.mjs",
