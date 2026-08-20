@@ -6,6 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "test": "node --test agents/tests/*.test.mjs",
+    "typecheck": "tsc --noEmit",
     "lint": "next lint",
     "analytics:gsc": "node agents/analytics/search-console.mjs",
     "analytics:ga4": "node agents/analytics/ga4.mjs",

@@ -9,10 +9,10 @@ import { brandName } from '@/lib/brand';
 
 type CartContextType = {
   cart: Cart | undefined;
-  addCartItem: (variantId: string, quantity?: number, sellingPlanId?: string) => Promise<void>;
-  addCartItems: (items: { variantId: string; quantity?: number; sellingPlanId?: string }[]) => Promise<void>;
-  updateCartItem: (lineId: string, variantId: string, quantity: number) => Promise<void>;
-  removeCartItem: (lineId: string) => Promise<void>;
+  addCartItem: (variantId: string, quantity?: number, sellingPlanId?: string) => Promise<boolean>;
+  addCartItems: (items: { variantId: string; quantity?: number; sellingPlanId?: string }[]) => Promise<boolean>;
+  updateCartItem: (lineId: string, variantId: string, quantity: number) => Promise<boolean>;
+  removeCartItem: (lineId: string) => Promise<boolean>;
   isCartOpen: boolean;
   setCartOpen: (isOpen: boolean) => void;
   cartError: string | null;
@@ -71,17 +71,18 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           category: categoryFromTags(line.merchandise.product.tags),
         });
       }
+      return true;
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unable to add this item. Please try again.';
       setCartError(message);
-      throw error;
+      return false;
     } finally {
       setCartMutating(false);
     }
   };
 
   const addCartItem = async (variantId: string, quantity = 1, sellingPlanId?: string) => {
-    await addCartItems([{ variantId, quantity, sellingPlanId }]);
+    return addCartItems([{ variantId, quantity, sellingPlanId }]);
   };
 
   const updateCartItem = async (lineId: string, variantId: string, quantity: number) => {
@@ -91,8 +92,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       const res = await updateCartAction(lineId, variantId, quantity);
       if (typeof res === 'string') throw new Error(res);
       setCart(res);
+      return true;
     } catch (error) {
       setCartError(error instanceof Error ? error.message : 'Unable to update your cart.');
+      return false;
     } finally {
       setCartMutating(false);
     }
@@ -109,18 +112,21 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
       if (removed) {
         const money = removed.merchandise.product.priceRange?.minVariantPrice;
-        if (!money) return;
-        trackRemoveFromCart({
-          id: removed.merchandise.product.id,
-          name: brandName(removed.merchandise.product.title),
-          price: parseFloat(removed.merchandise.product.priceRange.minVariantPrice.amount),
-          currency: removed.merchandise.product.priceRange.minVariantPrice.currencyCode,
-          quantity: removed.quantity,
-          category: categoryFromTags(removed.merchandise.product.tags),
-        });
+        if (money) {
+          trackRemoveFromCart({
+            id: removed.merchandise.product.id,
+            name: brandName(removed.merchandise.product.title),
+            price: parseFloat(money.amount),
+            currency: money.currencyCode,
+            quantity: removed.quantity,
+            category: categoryFromTags(removed.merchandise.product.tags),
+          });
+        }
       }
+      return true;
     } catch (error) {
       setCartError(error instanceof Error ? error.message : 'Unable to remove this item.');
+      return false;
     } finally {
       setCartMutating(false);
     }

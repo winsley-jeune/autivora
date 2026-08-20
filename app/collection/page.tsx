@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import Link from 'next/link';
 import { getProducts } from '@/lib/shopify';
 import { SIGNATURE_OILS } from '@/lib/upsell-products';
@@ -75,7 +76,11 @@ export default async function CollectionPage() {
         </nav>
       </section>
 
-      {browserProducts.length > 0 && <CollectionBrowser products={browserProducts} />}
+      {browserProducts.length > 0 && (
+        <Suspense fallback={null}>
+          <CollectionBrowser products={browserProducts} />
+        </Suspense>
+      )}
 
       {/* ── Signature Oils ── */}
       {oils.length > 0 && (

@@ -17,12 +17,8 @@ export default function QuickAddButton({ variantId }: Props) {
     e.stopPropagation();
     if (state !== 'idle') return;
     setState('loading');
-    try {
-      await addCartItem(variantId, 1);
-      setState('done');
-    } catch {
-      setState('error');
-    }
+    const added = await addCartItem(variantId, 1);
+    setState(added ? 'done' : 'error');
     setTimeout(() => setState('idle'), 1800);
   };
 

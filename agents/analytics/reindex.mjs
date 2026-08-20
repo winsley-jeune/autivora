@@ -31,7 +31,7 @@ const SEEN_KEY = "reindex.sitemap_urls";
 
 // Money pages first: product and collection surfaces are where sales happen (operator
 // page-type policy) — blogs ride the sitemap resubmit instead of spending API quota.
-const MONEY_PATH = /^\/(product\/|home$|home\/|industrial|scents|collection$|auto$)/;
+const MONEY_PATH = /^\/(product\/|home$|industrial$|collection$|auto$)/;
 
 function ensureStore() {
   const d = openDb();
@@ -52,13 +52,13 @@ async function liveSitemapUrls() {
   return [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]).filter((u) => u.startsWith(BASE_URL));
 }
 
-function unindexedMoneyPages() {
+function unindexedMoneyPages(currentUrls) {
   const path = join(__dir, "output", "index-coverage-latest.json");
   if (!existsSync(path)) return [];
   const audit = JSON.parse(readFileSync(path, "utf8"));
   return (audit.notIndexed ?? [])
     .map((p) => p.url)
-    .filter((u) => MONEY_PATH.test(new URL(u).pathname));
+    .filter((u) => currentUrls.has(u) && MONEY_PATH.test(new URL(u).pathname));
 }
 
 async function main() {
@@ -78,7 +78,7 @@ async function main() {
   );
   const candidates = [
     ...newUrls.map((url) => ({ url, reason: "new-in-sitemap" })),
-    ...unindexedMoneyPages().map((url) => ({ url, reason: "unindexed-money-page" })),
+    ...unindexedMoneyPages(new Set(current)).map((url) => ({ url, reason: "unindexed-money-page" })),
   ].filter((c, i, all) => !recentlySubmitted.has(c.url) && all.findIndex((x) => x.url === c.url) === i)
    .slice(0, MAX_PER_RUN);
 

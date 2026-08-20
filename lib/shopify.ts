@@ -607,7 +607,7 @@ export async function getProductsByTag(
                 description
                 featuredImage { url altText }
                 images(first: 2) { edges { node { url } } }
-                variants(first: 10) { edges { node { id availableForSale } } }
+                variants(first: 250) { edges { node { id availableForSale } } }
                 priceRange { minVariantPrice { amount currencyCode } }
               }
             }
@@ -655,7 +655,7 @@ export async function searchProducts(term: string): Promise<CatalogCard[]> {
                 tags
                 featuredImage { url altText }
                 images(first: 2) { edges { node { url } } }
-                variants(first: 10) { edges { node { id availableForSale } } }
+                variants(first: 250) { edges { node { id availableForSale } } }
                 priceRange { minVariantPrice { amount currencyCode } }
               }
             }

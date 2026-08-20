@@ -84,7 +84,7 @@ export default function SearchOverlay({ open, onClose }: { open: boolean; onClos
   const hasResults = results.products.length > 0 || results.articles.length > 0;
 
   return (
-    <div className="fixed inset-0 z-[60]" aria-modal="true" role="dialog">
+    <div className="fixed inset-0 z-[60]">
       {/* Backdrop — page stays visible behind it */}
       <div
         onClick={onClose}
@@ -99,7 +99,7 @@ export default function SearchOverlay({ open, onClose }: { open: boolean; onClos
           shown ? 'translate-y-0 opacity-100' : '-translate-y-3 opacity-0'
         }`}
       >
-        <div ref={dialogRef} className="bg-white rounded-md shadow-2xl border border-neutral-100 overflow-hidden">
+        <div ref={dialogRef} role="dialog" aria-modal="true" aria-label="Search products and guides" className="bg-white rounded-md shadow-2xl border border-neutral-100 overflow-hidden">
           {/* Input row */}
           <form action="/search" method="get" className="flex items-center gap-3 px-5 py-4 border-b border-neutral-100">
             <Search size={18} className="text-neutral-400 shrink-0" />
