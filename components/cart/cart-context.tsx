@@ -60,6 +60,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       for (const item of items) {
         const line = lineForVariant(res, item.variantId);
         if (!line) continue;
+        const money = line.merchandise.product.priceRange?.minVariantPrice;
+        if (!money) continue;
         trackAddToCart({
           id: line.merchandise.product.id,
           name: brandName(line.merchandise.product.title),
@@ -106,6 +108,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       setCart(res);
 
       if (removed) {
+        const money = removed.merchandise.product.priceRange?.minVariantPrice;
+        if (!money) return;
         trackRemoveFromCart({
           id: removed.merchandise.product.id,
           name: brandName(removed.merchandise.product.title),

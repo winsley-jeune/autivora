@@ -34,6 +34,15 @@ test('cart errors are exposed to shoppers', () => {
   assert.match(drawer, /role="alert"/);
 });
 
+test('every cart response includes analytics product fields and guards missing data', () => {
+  const shopify = read('lib/shopify.ts');
+  const context = read('components/cart/cart-context.tsx');
+  const cartQueries = shopify.slice(0, shopify.indexOf('export async function getProduct'));
+  const cartProductPrices = cartQueries.match(/priceRange \{ minVariantPrice \{ amount currencyCode \} \}/g) ?? [];
+  assert.equal(cartProductPrices.length, 5);
+  assert.match(context, /if \(!money\) continue/);
+});
+
 test('quick add is not nested inside the product link and remains visible on touch', () => {
   const source = read('components/ProductCard.tsx');
   assert.match(source, /<article/);
