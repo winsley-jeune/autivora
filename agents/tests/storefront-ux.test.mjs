@@ -9,7 +9,7 @@ const read = (path) => readFileSync(join(root, path), 'utf8');
 test('product CTA bypasses the oil modal when no oils are purchasable', () => {
   const source = read('components/UpsellModal.tsx');
   assert.match(source, /oils\.length \? setOpen\(true\) : handleConfirm\(false\)/);
-  assert.match(source, /catch \{[\s\S]*setError\('We could not add this item/);
+  assert.match(source, /if \(!added\) \{[\s\S]*setError\('We could not add this item/);
   assert.doesNotMatch(source, /finally \{[\s\S]*setCartOpen\(true\)/);
 });
 
@@ -37,10 +37,24 @@ test('cart errors are exposed to shoppers', () => {
 test('every cart response includes analytics product fields and guards missing data', () => {
   const shopify = read('lib/shopify.ts');
   const context = read('components/cart/cart-context.tsx');
-  const cartQueries = shopify.slice(0, shopify.indexOf('export async function getProduct'));
-  const cartProductPrices = cartQueries.match(/priceRange \{ minVariantPrice \{ amount currencyCode \} \}/g) ?? [];
-  assert.equal(cartProductPrices.length, 5);
+  const operations = [...shopify.matchAll(/query:\s*`([\s\S]*?)`/g)]
+    .map((match) => match[1])
+    .filter((query) => /(?:mutation|query)\s+(?:cart|getCart)/i.test(query));
+  assert.ok(operations.length > 0, 'expected cart GraphQL operations');
+  for (const operation of operations) {
+    const products = operation.match(/\bproduct\s*\{/g) ?? [];
+    assert.ok(products.length > 0, 'each cart operation must select product data');
+    assert.equal((operation.match(/\btags\b/g) ?? []).length, products.length);
+    assert.equal((operation.match(/\bpriceRange\s*\{/g) ?? []).length, products.length);
+  }
   assert.match(context, /if \(!money\) continue/);
+});
+
+test('recrawl candidates exclude quarantined routes and stale sitemap URLs', () => {
+  const source = read('agents/analytics/reindex.mjs');
+  assert.match(source, /currentUrls\.has\(u\)/);
+  const moneyPath = source.match(/const MONEY_PATH = (\/\^.*?\/);/)?.[1] ?? '';
+  assert.doesNotMatch(moneyPath, /scents|home\\\/|industrial\|/);
 });
 
 test('quick add is not nested inside the product link and remains visible on touch', () => {

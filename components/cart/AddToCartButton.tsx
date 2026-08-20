@@ -19,9 +19,8 @@ export default function AddToCartButton({ variantId, label = 'Add to Cart', clas
     setLoading(true);
     setError(false);
     try {
-      await addCartItem(variantId, 1);
-    } catch {
-      setError(true);
+      const added = await addCartItem(variantId, 1);
+      setError(!added);
     } finally {
       setLoading(false);
     }

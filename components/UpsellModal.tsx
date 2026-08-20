@@ -51,15 +51,17 @@ export default function UpsellModal({ variantId, oils, label = 'Add to Cart', cl
     if (loading) return;
     setLoading(true);
     setError(null);
+    const sellingPlanId = subscribe ? activeInterval.sellingPlanId : undefined;
+    const selectedOils = withOils
+      ? oils.filter((oil) => selected.has(oil.id)).map((oil) => ({ variantId: oil.variantId, quantity: 1, sellingPlanId }))
+      : [];
     try {
-      const sellingPlanId = subscribe ? activeInterval.sellingPlanId : undefined;
-      const selectedOils = withOils
-        ? oils.filter((oil) => selected.has(oil.id)).map((oil) => ({ variantId: oil.variantId, quantity: 1, sellingPlanId }))
-        : [];
-      await addCartItems([{ variantId, quantity: 1 }, ...selectedOils]);
+      const added = await addCartItems([{ variantId, quantity: 1 }, ...selectedOils]);
+      if (!added) {
+        setError('We could not add this item. Please try again.');
+        return;
+      }
       setOpen(false);
-    } catch {
-      setError('We could not add this item. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -96,9 +98,7 @@ export default function UpsellModal({ variantId, oils, label = 'Add to Cart', cl
                 <h2 id="oil-upsell-title" className="text-2xl font-display font-bold tracking-tight">
                   Add a Signature Oil
                 </h2>
-                <p className="text-sm text-neutral-400 font-light">
-                  20ml · Cold-air compatible · Pairs with your Autivara device
-                </p>
+                <p className="text-sm text-neutral-400 font-light">Choose an available Autivara oil.</p>
               </div>
               <button onClick={closeModal} className="text-neutral-300 hover:text-black transition-colors mt-1" aria-label="Close">
                 <X size={18} />
@@ -224,8 +224,9 @@ export default function UpsellModal({ variantId, oils, label = 'Add to Cart', cl
             </div>
 
             {/* Footer */}
-            <div className="px-8 pb-8 flex flex-col sm:flex-row gap-3">
-              {error && <p role="alert" className="sm:col-span-2 text-xs text-red-700">{error}</p>}
+            <div className="px-8 pb-8">
+              {error && <p role="alert" className="mb-3 text-xs text-red-700">{error}</p>}
+              <div className="flex flex-col sm:flex-row gap-3">
               <button
                 onClick={() => handleConfirm(true)}
                 disabled={!anySelected}
@@ -241,6 +242,7 @@ export default function UpsellModal({ variantId, oils, label = 'Add to Cart', cl
               >
                 Just The Diffuser
               </button>
+              </div>
             </div>
 
           </div>

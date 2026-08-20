@@ -147,22 +147,18 @@ export default async function ProductPage({ params }: Props) {
               </h1>
             </div>
 
-            {product.descriptionHtml ? (
+            {product.descriptionHtml && (
               <div
                 className="max-w-xl space-y-4 text-base text-neutral-600 font-light leading-relaxed [&_p]:mb-4 [&_strong]:font-medium [&_strong]:text-black [&_ul]:my-5 [&_ul]:space-y-2 [&_ul]:pl-5 [&_ul]:list-disc [&_ol]:my-5 [&_ol]:space-y-2 [&_ol]:pl-5 [&_ol]:list-decimal [&_a]:underline [&_a]:underline-offset-2"
                 dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
               />
-            ) : (
-              <p className="text-neutral-500 text-base font-light leading-relaxed max-w-xl">
-                Product details are being verified. Contact support before ordering if you need a specific compatibility or installation detail.
-              </p>
             )}
 
             <div className="space-y-6">
               <div className="flex items-center justify-between gap-4 max-w-xl">
                 <span className="text-2xl font-light tracking-tight text-neutral-900">{price}</span>
                 <span className={`text-xs font-medium ${product.availableForSale ? 'text-emerald-700' : 'text-neutral-500'}`}>
-                  {product.availableForSale ? 'Available to order' : 'Currently unavailable'}
+                  {product.availableForSale ? 'Available to order' : 'Unavailable'}
                 </span>
               </div>
 
@@ -174,7 +170,7 @@ export default async function ProductPage({ params }: Props) {
                     disabled
                     className="w-full lg:w-max px-16 py-5 bg-neutral-200 text-neutral-400 text-[11px] font-bold uppercase tracking-[0.3em] rounded-sm cursor-not-allowed"
                   >
-                    Coming Soon
+                    Unavailable
                   </button>
                 )}
                 <div className="flex flex-wrap gap-x-5 gap-y-2 text-xs text-neutral-500">
@@ -229,7 +225,7 @@ export default async function ProductPage({ params }: Props) {
               disabled
               className="px-20 py-6 bg-white/20 text-white/40 text-[12px] font-bold uppercase tracking-[0.4em] rounded-sm cursor-not-allowed"
             >
-              Coming Soon
+              Unavailable
             </button>
           )}
         </div>

@@ -1,6 +1,7 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import ProductCard from '@/components/ProductCard';
 
 export type CollectionItem = {
@@ -18,18 +19,36 @@ export type CollectionItem = {
 const FILTERS = ['All', 'Car', 'Home', 'Commercial'] as const;
 
 export default function CollectionBrowser({ products }: { products: CollectionItem[] }) {
-  const [filter, setFilter] = useState<(typeof FILTERS)[number]>('All');
-  const [sort, setSort] = useState('featured');
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const requestedFilter = searchParams.get('space');
+  const filter = FILTERS.includes(requestedFilter as (typeof FILTERS)[number])
+    ? requestedFilter as (typeof FILTERS)[number]
+    : 'All';
+  const requestedSort = searchParams.get('sort');
+  const sort = ['featured', 'price-asc', 'price-desc', 'title'].includes(requestedSort ?? '')
+    ? requestedSort as string
+    : 'featured';
+  const hasMixedCurrencies = new Set(products.map((product) => product.currencyCode)).size > 1;
+
+  const setQuery = (key: 'space' | 'sort', value: string, defaultValue: string) => {
+    const next = new URLSearchParams(searchParams.toString());
+    if (value === defaultValue) next.delete(key);
+    else next.set(key, value);
+    const query = next.toString();
+    router.push(query ? `${pathname}?${query}` : pathname, { scroll: false });
+  };
 
   const visible = useMemo(() => {
     const selected = filter === 'All' ? products : products.filter((product) => product.category === filter);
     return [...selected].sort((a, b) => {
-      if (sort === 'price-asc') return Number(a.price) - Number(b.price);
-      if (sort === 'price-desc') return Number(b.price) - Number(a.price);
+      if (!hasMixedCurrencies && sort === 'price-asc') return Number(a.price) - Number(b.price);
+      if (!hasMixedCurrencies && sort === 'price-desc') return Number(b.price) - Number(a.price);
       if (sort === 'title') return a.title.localeCompare(b.title);
       return 0;
     });
-  }, [filter, products, sort]);
+  }, [filter, hasMixedCurrencies, products, sort]);
 
   return (
     <section aria-labelledby="available-diffusers" className="max-w-7xl mx-auto px-5 sm:px-6 pt-16 md:pt-20 pb-16">
@@ -49,7 +68,7 @@ export default function CollectionBrowser({ products }: { products: CollectionIt
                   key={option}
                   type="button"
                   aria-pressed={filter === option}
-                  onClick={() => setFilter(option)}
+                  onClick={() => setQuery('space', option, 'All')}
                   className={`min-h-11 rounded-sm border px-4 py-2 text-xs font-medium transition-colors ${filter === option ? 'border-black bg-black text-white' : 'border-neutral-200 hover:border-black'}`}
                 >
                   {option}
@@ -61,12 +80,12 @@ export default function CollectionBrowser({ products }: { products: CollectionIt
             Sort
             <select
               value={sort}
-              onChange={(event) => setSort(event.target.value)}
+              onChange={(event) => setQuery('sort', event.target.value, 'featured')}
               className="mt-2 block min-h-11 w-full rounded-sm border border-neutral-200 bg-white px-3 text-sm font-normal normal-case tracking-normal text-black focus:border-black sm:w-44"
             >
               <option value="featured">Featured</option>
-              <option value="price-asc">Price: low to high</option>
-              <option value="price-desc">Price: high to low</option>
+              <option value="price-asc" disabled={hasMixedCurrencies}>Price: low to high</option>
+              <option value="price-desc" disabled={hasMixedCurrencies}>Price: high to low</option>
               <option value="title">Name: A–Z</option>
             </select>
           </label>
