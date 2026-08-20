@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { Inter, Playfair_Display } from 'next/font/google'
 import './globals.css'
 import { CartProvider } from '@/components/cart/cart-context'
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
     template: '%s | Autivara',
   },
   description:
-    'Design-led aroma diffusers for car, home & business — flame, mist & vent-clip designs. Refillable, no cartridges, made to be displayed.',
+    'Design-led aroma diffusers for car, home, and commercial spaces. Compare vent-clip, rechargeable, ultrasonic, and HVAC-compatible designs.',
   metadataBase: new URL(BASE_URL),
   applicationName: 'Autivara',
   authors: [{ name: 'Autivara' }],
@@ -33,14 +34,14 @@ export const metadata: Metadata = {
     url: BASE_URL,
     title: 'Autivara — Design-Led Aroma Diffusers',
     description:
-      'Design-led aroma diffusers for car, home & business — flame, mist & vent-clip designs. Refillable, no cartridges, made to be displayed.',
+      'Design-led aroma diffusers for car, home, and commercial spaces.',
     locale: 'en_US',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Autivara — Design-Led Aroma Diffusers',
     description:
-      'Design-led aroma diffusers for car, home & business — flame, mist & vent-clip designs. Refillable, no cartridges, made to be displayed.',
+      'Design-led aroma diffusers for car, home, and commercial spaces.',
   },
   robots: {
     index: true,
@@ -156,17 +157,16 @@ export default function RootLayout({
                     { label: 'Car', href: '/auto' },
                     { label: 'Home', href: '/home' },
                     { label: 'Commercial', href: '/industrial' },
-                    { label: 'Scents', href: '/scents' },
                     { label: 'All Products', href: '/collection' },
                     { label: 'Journal', href: '/blog' },
                   ].map(({ label, href }) => (
                     <li key={href}>
-                      <a
+                      <Link
                         href={href}
                         className="text-xs text-neutral-500 hover:text-black transition-colors font-light"
                       >
                         {label}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -188,12 +188,12 @@ export default function RootLayout({
                     { label: 'Terms', href: '/terms' },
                   ].map(({ label, href }) => (
                     <li key={href}>
-                      <a
+                      <Link
                         href={href}
                         className="text-xs text-neutral-500 hover:text-black transition-colors font-light"
                       >
                         {label}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>

@@ -24,6 +24,11 @@ export async function getCartAction() {
 }
 
 export async function addToCartAction(merchandiseId: string, quantity: number, sellingPlanId?: string) {
+  return addCartLinesAction([{ merchandiseId, quantity, sellingPlanId }]);
+}
+
+export async function addCartLinesAction(lines: { merchandiseId: string; quantity: number; sellingPlanId?: string }[]) {
+  if (!lines.length) return 'No items selected';
   const cartId = (await cookies()).get('cartId')?.value;
   let cart;
 
@@ -37,7 +42,7 @@ export async function addToCartAction(merchandiseId: string, quantity: number, s
   }
 
   try {
-    const newCart = await addToCart(cart.id, [{ merchandiseId, quantity, sellingPlanId }]);
+    const newCart = await addToCart(cart.id, lines);
     return newCart;
   } catch (e) {
     return 'Error adding item to cart';

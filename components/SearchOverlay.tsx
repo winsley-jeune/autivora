@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Search, X } from 'lucide-react';
+import { useDialogAccessibility } from '@/components/useDialogAccessibility';
 
 type ProductHit = {
   handle: string;
@@ -31,24 +32,17 @@ export default function SearchOverlay({ open, onClose }: { open: boolean; onClos
   const [loading, setLoading] = useState(false);
   const [shown, setShown] = useState(false); // drives the slide-in transition
   const inputRef = useRef<HTMLInputElement>(null);
+  const dialogRef = useDialogAccessibility<HTMLDivElement>(open, onClose);
 
-  // Mount → animate in, lock scroll, focus the field, wire Escape.
+  // Mount → animate in and focus the field. Shared dialog behavior handles focus containment.
   useEffect(() => {
     if (!open) return;
     setShown(false);
     const raf = requestAnimationFrame(() => setShown(true));
     const t = setTimeout(() => inputRef.current?.focus(), 60);
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', onKey);
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
     return () => {
       cancelAnimationFrame(raf);
       clearTimeout(t);
-      window.removeEventListener('keydown', onKey);
-      document.body.style.overflow = prevOverflow;
     };
   }, [open, onClose]);
 
@@ -105,7 +99,7 @@ export default function SearchOverlay({ open, onClose }: { open: boolean; onClos
           shown ? 'translate-y-0 opacity-100' : '-translate-y-3 opacity-0'
         }`}
       >
-        <div className="bg-white rounded-md shadow-2xl border border-neutral-100 overflow-hidden">
+        <div ref={dialogRef} className="bg-white rounded-md shadow-2xl border border-neutral-100 overflow-hidden">
           {/* Input row */}
           <form action="/search" method="get" className="flex items-center gap-3 px-5 py-4 border-b border-neutral-100">
             <Search size={18} className="text-neutral-400 shrink-0" />
@@ -115,7 +109,7 @@ export default function SearchOverlay({ open, onClose }: { open: boolean; onClos
               name="q"
               value={q}
               onChange={(e) => setQ(e.target.value)}
-              placeholder="Search diffusers, scents, guides…"
+              placeholder="Search diffusers and guides…"
               aria-label="Search"
               className="flex-1 text-base bg-transparent focus:outline-none placeholder:text-neutral-400"
             />

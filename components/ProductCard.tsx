@@ -31,8 +31,9 @@ export default function ProductCard({
   const displayTitle = brandName(title);
 
   return (
-    <Link href={`/product/${handle}`} className="group block space-y-3">
+    <article className="group block space-y-3">
       <div className="relative w-full aspect-square bg-neutral-50 rounded-sm overflow-hidden">
+        <Link href={`/product/${handle}`} aria-label={`View ${displayTitle}`} className="absolute inset-0 block">
         {image ? (
           <>
             <Image
@@ -59,20 +60,21 @@ export default function ProductCard({
             Autivara
           </div>
         )}
+        </Link>
 
         {variantId && (
-          <div className="absolute bottom-0 inset-x-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out">
+          <div className="absolute bottom-0 inset-x-0 z-10 translate-y-0 md:translate-y-full md:group-hover:translate-y-0 md:group-focus-within:translate-y-0 transition-transform duration-300 ease-out">
             <QuickAddButton variantId={variantId} />
           </div>
         )}
       </div>
 
-      <div className="flex justify-between items-start gap-3">
+      <Link href={`/product/${handle}`} className="flex justify-between items-start gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-4">
         <h3 className="text-sm font-medium tracking-tight group-hover:text-neutral-500 transition-colors">
           {displayTitle}
         </h3>
         <span className="text-sm font-light text-neutral-900 flex-shrink-0">{formatted}</span>
-      </div>
-    </Link>
+      </Link>
+    </article>
   );
 }

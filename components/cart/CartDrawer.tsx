@@ -1,10 +1,12 @@
 'use client';
 
+import { useCallback } from 'react';
 import { Minus, Plus, Trash2, X } from 'lucide-react';
 import Image from 'next/image';
 import { useCart } from './cart-context';
 import { trackInitiateCheckout } from '@/components/analytics/events';
 import { brandName } from '@/lib/brand';
+import { useDialogAccessibility } from '@/components/useDialogAccessibility';
 
 function formatPrice(amount: string, currencyCode: string) {
   return new Intl.NumberFormat('en-US', {
@@ -14,7 +16,9 @@ function formatPrice(amount: string, currencyCode: string) {
 }
 
 export default function CartDrawer() {
-  const { cart, isCartOpen, setCartOpen, removeCartItem, updateCartItem } = useCart();
+  const { cart, isCartOpen, setCartOpen, removeCartItem, updateCartItem, cartError, clearCartError, isCartMutating } = useCart();
+  const closeCart = useCallback(() => setCartOpen(false), [setCartOpen]);
+  const dialogRef = useDialogAccessibility<HTMLDivElement>(isCartOpen, closeCart);
 
   const items = cart?.lines.edges ?? [];
   const subtotal = cart?.cost.subtotalAmount;
@@ -24,7 +28,7 @@ export default function CartDrawer() {
       {/* Backdrop */}
       <div
         aria-hidden={!isCartOpen}
-        onClick={() => setCartOpen(false)}
+        onClick={closeCart}
         className={`fixed inset-0 bg-black/30 backdrop-blur-sm z-40 transition-opacity duration-300 ${
           isCartOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
@@ -32,7 +36,11 @@ export default function CartDrawer() {
 
       {/* Drawer panel */}
       <div
+        ref={dialogRef}
         role="dialog"
+        aria-modal="true"
+        aria-hidden={!isCartOpen}
+        inert={!isCartOpen}
         aria-label="Shopping cart"
         className={`fixed top-0 right-0 h-full w-full sm:w-96 bg-white z-50 flex flex-col shadow-2xl transition-transform duration-300 ease-in-out ${
           isCartOpen ? 'translate-x-0' : 'translate-x-full'
@@ -42,7 +50,7 @@ export default function CartDrawer() {
         <div className="flex justify-between items-center px-6 py-5 border-b border-neutral-100">
           <span className="text-[11px] font-bold uppercase tracking-[0.3em]">Your Cart</span>
           <button
-            onClick={() => setCartOpen(false)}
+            onClick={closeCart}
             className="text-neutral-400 hover:text-black transition-colors"
             aria-label="Close cart"
           >
@@ -52,11 +60,17 @@ export default function CartDrawer() {
 
         {/* Line items */}
         <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6">
+          {cartError && (
+            <div role="alert" className="flex items-start justify-between gap-3 rounded-sm bg-red-50 px-4 py-3 text-xs text-red-700">
+              <span>{cartError}</span>
+              <button type="button" onClick={clearCartError} aria-label="Dismiss cart error">×</button>
+            </div>
+          )}
           {items.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center space-y-4 py-16">
               <p className="text-sm text-neutral-400 font-light">Your cart is empty.</p>
               <button
-                onClick={() => setCartOpen(false)}
+                onClick={closeCart}
                 className="text-[10px] font-bold uppercase tracking-[0.3em] underline underline-offset-4 hover:text-neutral-500 transition-colors"
               >
                 Continue Shopping
@@ -96,6 +110,7 @@ export default function CartDrawer() {
                   <div className="flex items-center gap-3 pt-1">
                     <div className="flex items-center border border-neutral-200 rounded-sm">
                       <button
+                        disabled={isCartMutating}
                         onClick={() =>
                           item.quantity === 1
                             ? removeCartItem(item.id)
@@ -108,6 +123,7 @@ export default function CartDrawer() {
                       </button>
                       <span className="px-2 text-xs font-light">{item.quantity}</span>
                       <button
+                        disabled={isCartMutating}
                         onClick={() =>
                           updateCartItem(item.id, item.merchandise.id, item.quantity + 1)
                         }
@@ -118,6 +134,7 @@ export default function CartDrawer() {
                       </button>
                     </div>
                     <button
+                      disabled={isCartMutating}
                       onClick={() => removeCartItem(item.id)}
                       className="text-neutral-300 hover:text-red-400 transition-colors"
                       aria-label="Remove item"

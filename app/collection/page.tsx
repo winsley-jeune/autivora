@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { getProducts } from '@/lib/shopify';
 import { SIGNATURE_OILS } from '@/lib/upsell-products';
 import ProductCard from '@/components/ProductCard';
+import CollectionBrowser, { type CollectionItem } from '@/components/CollectionBrowser';
+import { categoryFromTags } from '@/lib/category';
 
 export const metadata: Metadata = {
   title: 'Aroma Diffusers for Car, Home & Business',
@@ -27,6 +29,27 @@ export default async function CollectionPage() {
   const oilIds = new Set(SIGNATURE_OILS.map((o) => o.productId));
   const devices = products.filter((p) => !oilIds.has(p.id));
   const oils = products.filter((p) => oilIds.has(p.id));
+  const browserProducts: CollectionItem[] = devices.map((product) => {
+    const categoryLabel = categoryFromTags(product.tags);
+    const category: CollectionItem['category'] = categoryLabel.startsWith('Car')
+      ? 'Car'
+      : categoryLabel.startsWith('Home')
+        ? 'Home'
+        : categoryLabel.startsWith('Commercial')
+          ? 'Commercial'
+          : 'Other';
+    return {
+      id: product.id,
+      handle: product.handle,
+      title: product.title,
+      price: product.priceRange.minVariantPrice.amount,
+      currencyCode: product.priceRange.minVariantPrice.currencyCode,
+      image: product.featuredImage?.url,
+      secondaryImage: product.images?.edges?.[1]?.node?.url,
+      variantId: product.variants?.edges?.find(({ node }) => node.availableForSale)?.node?.id,
+      category,
+    };
+  });
 
   return (
     <div className="min-h-screen bg-white">
@@ -52,32 +75,7 @@ export default async function CollectionPage() {
         </nav>
       </section>
 
-      {/* ── The Device ── */}
-      {devices.length > 0 && (
-        <section className="max-w-7xl mx-auto px-6 pt-24 pb-16">
-          <div className="flex items-center gap-6 mb-12">
-            <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-neutral-400">
-              Available diffusers
-            </span>
-            <div className="flex-1 h-[1px] bg-neutral-100" />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-            {devices.map((product) => (
-              <ProductCard
-                key={product.id}
-                handle={product.handle}
-                title={product.title}
-                price={product.priceRange.minVariantPrice.amount}
-                currencyCode={product.priceRange.minVariantPrice.currencyCode}
-                image={product.featuredImage?.url}
-                secondaryImage={product.images?.edges?.[1]?.node?.url}
-                variantId={product.variants?.edges?.[0]?.node?.id}
-              />
-            ))}
-          </div>
-        </section>
-      )}
+      {browserProducts.length > 0 && <CollectionBrowser products={browserProducts} />}
 
       {/* ── Signature Oils ── */}
       {oils.length > 0 && (

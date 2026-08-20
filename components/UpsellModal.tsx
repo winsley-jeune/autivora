@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Check, X, RefreshCw } from 'lucide-react';
 import { useCart } from '@/components/cart/cart-context';
 import type { OilCard } from '@/lib/upsell-products';
@@ -9,6 +9,7 @@ import {
   SUBSCRIPTION_DISCOUNT_PERCENT,
   subscriptionsEnabled,
 } from '@/lib/subscription-plans';
+import { useDialogAccessibility } from '@/components/useDialogAccessibility';
 
 type Props = {
   variantId: string;
@@ -28,9 +29,12 @@ export default function UpsellModal({ variantId, oils, label = 'Add to Cart', cl
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [subscribe, setSubscribe] = useState(false);
   const [intervalIdx, setIntervalIdx] = useState(0);
-  const { addCartItem, setCartOpen } = useCart();
+  const { addCartItems } = useCart();
+  const closeModal = useCallback(() => setOpen(false), []);
+  const dialogRef = useDialogAccessibility<HTMLDivElement>(open, closeModal);
 
   const toggle = (id: string) => {
     setSelected((prev) => {
@@ -44,21 +48,20 @@ export default function UpsellModal({ variantId, oils, label = 'Add to Cart', cl
   const canSubscribe = subscriptionsEnabled;
 
   const handleConfirm = async (withOils: boolean) => {
+    if (loading) return;
     setLoading(true);
-    setOpen(false);
+    setError(null);
     try {
-      await addCartItem(variantId, 1);
-      if (withOils) {
-        const sellingPlanId = subscribe ? activeInterval.sellingPlanId : undefined;
-        for (const oil of oils) {
-          if (selected.has(oil.id)) {
-            await addCartItem(oil.variantId, 1, sellingPlanId);
-          }
-        }
-      }
+      const sellingPlanId = subscribe ? activeInterval.sellingPlanId : undefined;
+      const selectedOils = withOils
+        ? oils.filter((oil) => selected.has(oil.id)).map((oil) => ({ variantId: oil.variantId, quantity: 1, sellingPlanId }))
+        : [];
+      await addCartItems([{ variantId, quantity: 1 }, ...selectedOils]);
+      setOpen(false);
+    } catch {
+      setError('We could not add this item. Please try again.');
     } finally {
       setLoading(false);
-      setCartOpen(true);
     }
   };
 
@@ -67,7 +70,7 @@ export default function UpsellModal({ variantId, oils, label = 'Add to Cart', cl
   return (
     <>
       <button
-        onClick={() => setOpen(true)}
+        onClick={() => oils.length ? setOpen(true) : handleConfirm(false)}
         disabled={loading}
         className={
           className ??
@@ -76,12 +79,13 @@ export default function UpsellModal({ variantId, oils, label = 'Add to Cart', cl
       >
         {loading ? 'Adding...' : label}
       </button>
+      {error && !open && <p role="alert" className="mt-3 text-xs text-red-700">{error}</p>}
 
       {open && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setOpen(false)} />
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={closeModal} />
 
-          <div className="relative z-10 bg-white w-full max-w-2xl rounded-sm shadow-2xl overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
+          <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="oil-upsell-title" className="relative z-10 bg-white w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-sm shadow-2xl animate-in fade-in slide-in-from-bottom-4 duration-300">
 
             {/* Header */}
             <div className="flex justify-between items-start px-8 pt-8 pb-6 border-b border-neutral-100">
@@ -89,14 +93,14 @@ export default function UpsellModal({ variantId, oils, label = 'Add to Cart', cl
                 <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-neutral-400">
                   Complete Your Experience
                 </p>
-                <h2 className="text-2xl font-display font-bold tracking-tight">
+                <h2 id="oil-upsell-title" className="text-2xl font-display font-bold tracking-tight">
                   Add a Signature Oil
                 </h2>
                 <p className="text-sm text-neutral-400 font-light">
                   20ml · Cold-air compatible · Pairs with your Autivara device
                 </p>
               </div>
-              <button onClick={() => setOpen(false)} className="text-neutral-300 hover:text-black transition-colors mt-1" aria-label="Close">
+              <button onClick={closeModal} className="text-neutral-300 hover:text-black transition-colors mt-1" aria-label="Close">
                 <X size={18} />
               </button>
             </div>
@@ -221,6 +225,7 @@ export default function UpsellModal({ variantId, oils, label = 'Add to Cart', cl
 
             {/* Footer */}
             <div className="px-8 pb-8 flex flex-col sm:flex-row gap-3">
+              {error && <p role="alert" className="sm:col-span-2 text-xs text-red-700">{error}</p>}
               <button
                 onClick={() => handleConfirm(true)}
                 disabled={!anySelected}

@@ -10,15 +10,19 @@ type Props = {
 
 export default function QuickAddButton({ variantId }: Props) {
   const { addCartItem } = useCart();
-  const [state, setState] = useState<'idle' | 'loading' | 'done'>('idle');
+  const [state, setState] = useState<'idle' | 'loading' | 'done' | 'error'>('idle');
 
   const handleClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     if (state !== 'idle') return;
     setState('loading');
-    await addCartItem(variantId, 1);
-    setState('done');
+    try {
+      await addCartItem(variantId, 1);
+      setState('done');
+    } catch {
+      setState('error');
+    }
     setTimeout(() => setState('idle'), 1800);
   };
 
@@ -26,6 +30,7 @@ export default function QuickAddButton({ variantId }: Props) {
     <button
       onClick={handleClick}
       disabled={state === 'loading'}
+      aria-live="polite"
       className="w-full py-3 bg-black text-white text-[10px] font-bold uppercase tracking-[0.3em] flex items-center justify-center gap-2 hover:bg-neutral-800 transition-colors duration-200 disabled:opacity-60"
     >
       {state === 'done' ? (
@@ -35,6 +40,8 @@ export default function QuickAddButton({ variantId }: Props) {
         </>
       ) : state === 'loading' ? (
         'Adding...'
+      ) : state === 'error' ? (
+        'Try Again'
       ) : (
         <>
           <ShoppingBag size={12} />

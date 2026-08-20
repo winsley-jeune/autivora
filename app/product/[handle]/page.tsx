@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import Link from 'next/link';
 import { getProduct, getUpsellProducts } from '@/lib/shopify';
 import { Image as ShopifyImage } from '@/lib/shopify-types';
 import { SIGNATURE_OILS, type OilCard } from '@/lib/upsell-products';
@@ -31,7 +32,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const description =
     product.seo?.description ||
     product.description ||
-    'Cold-air, waterless diffusion of pure fragrance — no heat, no water, no dilution.';
+    'Compare this Autivara diffuser’s format, controls, price, and product-specific features.';
   const canonical = `/product/${handle}`;
   const ogImage = product.featuredImage?.url;
   return {
@@ -97,7 +98,8 @@ export default async function ProductPage({ params }: Props) {
     currency: product.priceRange.minVariantPrice.currencyCode,
   }).format(parseFloat(product.priceRange.minVariantPrice.amount));
 
-  const firstVariantId = product.variants?.edges?.[0]?.node?.id ?? null;
+  const firstVariant = product.variants?.edges?.find(({ node }) => node.availableForSale)?.node ?? null;
+  const firstVariantId = firstVariant?.id ?? null;
 
   // Real Shopify images only — featured first, then gallery (deduped). No stock fallbacks.
   const seen = new Set<string>();
@@ -129,7 +131,7 @@ export default async function ProductPage({ params }: Props) {
       />
 
       {/* 1️⃣ Hero */}
-      <section className="pt-32 pb-24 px-6 lg:px-12 max-w-7xl mx-auto">
+      <section className="pt-16 md:pt-24 pb-20 px-5 sm:px-6 lg:px-12 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
           {/* Left: image gallery — main + clickable thumbnails */}
           <ProductGallery images={images} title={displayTitle} />
@@ -140,18 +142,29 @@ export default async function ProductPage({ params }: Props) {
               <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-neutral-400">
                 {category}
               </span>
-              <h1 className="text-5xl lg:text-7xl font-display font-bold tracking-tighter leading-[0.9]">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-bold tracking-tighter leading-[0.95]">
                 {displayTitle}
               </h1>
             </div>
 
-            <p className="text-neutral-500 text-lg font-light leading-relaxed max-w-md">
-              {product.description ||
-                'Autivara pairs a real fragrance oil with a design you will want on display — refillable, easy to live with, and made to set the mood.'}
-            </p>
+            {product.descriptionHtml ? (
+              <div
+                className="max-w-xl space-y-4 text-base text-neutral-600 font-light leading-relaxed [&_p]:mb-4 [&_strong]:font-medium [&_strong]:text-black [&_ul]:my-5 [&_ul]:space-y-2 [&_ul]:pl-5 [&_ul]:list-disc [&_ol]:my-5 [&_ol]:space-y-2 [&_ol]:pl-5 [&_ol]:list-decimal [&_a]:underline [&_a]:underline-offset-2"
+                dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
+              />
+            ) : (
+              <p className="text-neutral-500 text-base font-light leading-relaxed max-w-xl">
+                Product details are being verified. Contact support before ordering if you need a specific compatibility or installation detail.
+              </p>
+            )}
 
             <div className="space-y-6">
-              <span className="text-2xl font-light tracking-tight text-neutral-900">{price}</span>
+              <div className="flex items-center justify-between gap-4 max-w-xl">
+                <span className="text-2xl font-light tracking-tight text-neutral-900">{price}</span>
+                <span className={`text-xs font-medium ${product.availableForSale ? 'text-emerald-700' : 'text-neutral-500'}`}>
+                  {product.availableForSale ? 'Available to order' : 'Currently unavailable'}
+                </span>
+              </div>
 
               <div className="flex flex-col space-y-6">
                 {firstVariantId ? (
@@ -164,6 +177,11 @@ export default async function ProductPage({ params }: Props) {
                     Coming Soon
                   </button>
                 )}
+                <div className="flex flex-wrap gap-x-5 gap-y-2 text-xs text-neutral-500">
+                  <Link href="/shipping" className="underline underline-offset-4 hover:text-black">Shipping information</Link>
+                  <Link href="/returns" className="underline underline-offset-4 hover:text-black">Returns &amp; refunds</Link>
+                  <Link href="/contact" className="underline underline-offset-4 hover:text-black">Ask a product question</Link>
+                </div>
               </div>
             </div>
           </div>

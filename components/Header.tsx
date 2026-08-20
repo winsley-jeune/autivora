@@ -1,16 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
+import Link from 'next/link';
 import { Menu, X, Search } from 'lucide-react';
 import CartButton from '@/components/CartButton';
 import SearchOverlay from '@/components/SearchOverlay';
+import { useDialogAccessibility } from '@/components/useDialogAccessibility';
 
 // Categories match the homepage "Our Collections" + Shop All. /office is retired.
 const NAV_LINKS = [
   { label: 'Car', href: '/auto' },
   { label: 'Home', href: '/home' },
   { label: 'Commercial', href: '/industrial' },
-  { label: 'Scents', href: '/scents' },
   { label: 'Shop All', href: '/collection' },
 ];
 
@@ -25,23 +26,26 @@ const SECONDARY_LINKS = [
 export default function Header() {
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const closeMenu = useCallback(() => setOpen(false), []);
+  const closeSearch = useCallback(() => setSearchOpen(false), []);
+  const menuRef = useDialogAccessibility<HTMLDivElement>(open, closeMenu);
 
   return (
     <header className="py-6 px-8 border-b border-gray-100 flex justify-between items-center bg-white/80 backdrop-blur-md sticky top-0 z-50">
       {/* Logo */}
-      <a
+      <Link
         href="/"
         className="text-xl font-display font-bold tracking-tighter uppercase hover:opacity-70 transition-opacity"
       >
         Autivara
-      </a>
+      </Link>
 
       {/* Desktop nav */}
       <nav className="hidden md:flex gap-8 text-sm font-medium tracking-wide text-gray-500">
         {NAV_LINKS.map(({ label, href }) => (
-          <a key={href} href={href} className="hover:text-black transition-colors">
+          <Link key={href} href={href} className="hover:text-black transition-colors">
             {label}
-          </a>
+          </Link>
         ))}
       </nav>
 
@@ -67,17 +71,17 @@ export default function Header() {
 
       {/* Mobile drawer — full category list, scrollable */}
       {open && (
-        <div className="fixed inset-x-0 bottom-0 top-[73px] z-40 bg-white flex flex-col md:hidden overflow-y-auto">
+        <div ref={menuRef} role="dialog" aria-modal="true" aria-label="Main menu" className="fixed inset-x-0 bottom-0 top-[73px] z-40 bg-white flex flex-col md:hidden overflow-y-auto">
           <nav className="flex flex-col px-8 pt-10 gap-6">
             {NAV_LINKS.map(({ label, href }) => (
-              <a
+              <Link
                 key={href}
                 href={href}
                 onClick={() => setOpen(false)}
                 className="text-3xl font-display font-bold tracking-tighter text-black hover:text-neutral-400 transition-colors"
               >
                 {label}
-              </a>
+              </Link>
             ))}
           </nav>
 
@@ -93,20 +97,20 @@ export default function Header() {
               <Search size={14} /> Search
             </button>
             {SECONDARY_LINKS.map(({ label, href }) => (
-              <a
+              <Link
                 key={href}
                 href={href}
                 onClick={() => setOpen(false)}
                 className="block text-xs text-neutral-400 hover:text-black transition-colors"
               >
                 {label}
-              </a>
+              </Link>
             ))}
           </div>
         </div>
       )}
 
-      <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
+      <SearchOverlay open={searchOpen} onClose={closeSearch} />
     </header>
   );
 }
