@@ -597,7 +597,7 @@ export async function getProductsByTag(
                 description
                 featuredImage { url altText }
                 images(first: 2) { edges { node { url } } }
-                variants(first: 1) { edges { node { id } } }
+                variants(first: 10) { edges { node { id availableForSale } } }
                 priceRange { minVariantPrice { amount currencyCode } }
               }
             }
@@ -617,7 +617,7 @@ export async function getProductsByTag(
         currencyCode: e.node.priceRange.minVariantPrice.currencyCode,
         image: primary ?? imgs[0],
         secondaryImage: imgs.find((u: string) => u !== (primary ?? imgs[0])),
-        variantId: e.node.variants?.edges?.[0]?.node?.id,
+        variantId: e.node.variants?.edges?.find((edge: any) => edge.node.availableForSale)?.node?.id,
       };
     });
   } catch (e) {
@@ -645,7 +645,7 @@ export async function searchProducts(term: string): Promise<CatalogCard[]> {
                 tags
                 featuredImage { url altText }
                 images(first: 2) { edges { node { url } } }
-                variants(first: 1) { edges { node { id } } }
+                variants(first: 10) { edges { node { id availableForSale } } }
                 priceRange { minVariantPrice { amount currencyCode } }
               }
             }
@@ -666,7 +666,7 @@ export async function searchProducts(term: string): Promise<CatalogCard[]> {
         currencyCode: e.node.priceRange.minVariantPrice.currencyCode as string,
         image: (primary ?? imgs[0]) as string | undefined,
         secondaryImage: imgs.find((u: string) => u !== (primary ?? imgs[0])) as string | undefined,
-        variantId: e.node.variants?.edges?.[0]?.node?.id as string | undefined,
+        variantId: e.node.variants?.edges?.find((edge: any) => edge.node.availableForSale)?.node?.id as string | undefined,
       };
     });
   } catch (e) {

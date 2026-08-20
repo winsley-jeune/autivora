@@ -27,18 +27,19 @@ export default function ProductGallery({
   const main = images[selected] ?? images[0];
 
   return (
-    <div className="flex gap-4">
+    <div className="flex flex-col-reverse gap-4 sm:flex-row">
       {/* Left: the other images as thumbnails — click to substitute the main */}
       {images.length > 1 && (
-        <div className="flex flex-col gap-3 w-16 sm:w-20 shrink-0">
+        <div className="flex flex-row gap-3 w-full overflow-x-auto pb-1 sm:w-20 sm:flex-col sm:overflow-visible sm:pb-0 shrink-0">
           {images.map((img, i) =>
-            i === selected ? null : (
+            (
               <button
                 key={img.url}
                 type="button"
                 onClick={() => setSelected(i)}
                 aria-label={`View image ${i + 1} of ${title}`}
-                className="aspect-square bg-neutral-50 rounded-sm overflow-hidden border border-neutral-200 hover:border-black transition-colors cursor-pointer"
+                aria-current={i === selected ? 'true' : undefined}
+                className={`w-16 sm:w-full shrink-0 aspect-square bg-neutral-50 rounded-sm overflow-hidden border hover:border-black transition-colors cursor-pointer ${i === selected ? 'border-black' : 'border-neutral-200'}`}
               >
                 <img
                   src={img.url}

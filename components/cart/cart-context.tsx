@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
-import { addToCartAction, getCartAction, removeFromCartAction, updateCartAction } from '@/app/actions/cart';
+import { addCartLinesAction, getCartAction, removeFromCartAction, updateCartAction } from '@/app/actions/cart';
 import { Cart, CartItem } from '@/lib/shopify-types';
 import { trackAddToCart, trackRemoveFromCart } from '@/components/analytics/events';
 import { categoryFromTags } from '@/lib/category';
@@ -9,11 +9,15 @@ import { brandName } from '@/lib/brand';
 
 type CartContextType = {
   cart: Cart | undefined;
-  addCartItem: (variantId: string, quantity?: number, sellingPlanId?: string) => Promise<string | void>;
-  updateCartItem: (lineId: string, variantId: string, quantity: number) => Promise<string | void>;
-  removeCartItem: (lineId: string) => Promise<string | void>;
+  addCartItem: (variantId: string, quantity?: number, sellingPlanId?: string) => Promise<void>;
+  addCartItems: (items: { variantId: string; quantity?: number; sellingPlanId?: string }[]) => Promise<void>;
+  updateCartItem: (lineId: string, variantId: string, quantity: number) => Promise<void>;
+  removeCartItem: (lineId: string) => Promise<void>;
   isCartOpen: boolean;
   setCartOpen: (isOpen: boolean) => void;
+  cartError: string | null;
+  clearCartError: () => void;
+  isCartMutating: boolean;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -29,6 +33,8 @@ function lineById(cart: Cart, lineId: string): CartItem | undefined {
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<Cart | undefined>(undefined);
   const [isCartOpen, setCartOpen] = useState(false);
+  const [cartError, setCartError] = useState<string | null>(null);
+  const [isCartMutating, setCartMutating] = useState(false);
 
   useEffect(() => {
     getCartAction()
@@ -38,52 +44,81 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       .catch(() => {});
   }, []);
 
-  const addCartItem = async (variantId: string, quantity = 1, sellingPlanId?: string) => {
-    const res = await addToCartAction(variantId, quantity, sellingPlanId);
-    if (typeof res === 'string') {
-      return res;
-    }
-    setCart(res);
-    setCartOpen(true);
+  const addCartItems = async (items: { variantId: string; quantity?: number; sellingPlanId?: string }[]) => {
+    setCartError(null);
+    setCartMutating(true);
+    try {
+      const res = await addCartLinesAction(items.map((item) => ({
+        merchandiseId: item.variantId,
+        quantity: item.quantity ?? 1,
+        sellingPlanId: item.sellingPlanId,
+      })));
+      if (typeof res === 'string') throw new Error(res);
+      setCart(res);
+      setCartOpen(true);
 
-    const line = lineForVariant(res, variantId);
-    if (line) {
-      trackAddToCart({
-        id: line.merchandise.product.id,
-        name: brandName(line.merchandise.product.title),
-        price: parseFloat(line.merchandise.product.priceRange.minVariantPrice.amount),
-        currency: line.merchandise.product.priceRange.minVariantPrice.currencyCode,
-        quantity,
-        category: categoryFromTags(line.merchandise.product.tags),
-      });
+      for (const item of items) {
+        const line = lineForVariant(res, item.variantId);
+        if (!line) continue;
+        trackAddToCart({
+          id: line.merchandise.product.id,
+          name: brandName(line.merchandise.product.title),
+          price: parseFloat(line.merchandise.product.priceRange.minVariantPrice.amount),
+          currency: line.merchandise.product.priceRange.minVariantPrice.currencyCode,
+          quantity: item.quantity ?? 1,
+          category: categoryFromTags(line.merchandise.product.tags),
+        });
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unable to add this item. Please try again.';
+      setCartError(message);
+      throw error;
+    } finally {
+      setCartMutating(false);
     }
   };
 
+  const addCartItem = async (variantId: string, quantity = 1, sellingPlanId?: string) => {
+    await addCartItems([{ variantId, quantity, sellingPlanId }]);
+  };
+
   const updateCartItem = async (lineId: string, variantId: string, quantity: number) => {
-    const res = await updateCartAction(lineId, variantId, quantity);
-    if (typeof res === 'string') {
-      return res;
+    setCartError(null);
+    setCartMutating(true);
+    try {
+      const res = await updateCartAction(lineId, variantId, quantity);
+      if (typeof res === 'string') throw new Error(res);
+      setCart(res);
+    } catch (error) {
+      setCartError(error instanceof Error ? error.message : 'Unable to update your cart.');
+    } finally {
+      setCartMutating(false);
     }
-    setCart(res);
   };
 
   const removeCartItem = async (lineId: string) => {
     const removed = cart ? lineById(cart, lineId) : undefined;
-    const res = await removeFromCartAction(lineId);
-    if (typeof res === 'string') {
-      return res;
-    }
-    setCart(res);
+    setCartError(null);
+    setCartMutating(true);
+    try {
+      const res = await removeFromCartAction(lineId);
+      if (typeof res === 'string') throw new Error(res);
+      setCart(res);
 
-    if (removed) {
-      trackRemoveFromCart({
-        id: removed.merchandise.product.id,
-        name: brandName(removed.merchandise.product.title),
-        price: parseFloat(removed.merchandise.product.priceRange.minVariantPrice.amount),
-        currency: removed.merchandise.product.priceRange.minVariantPrice.currencyCode,
-        quantity: removed.quantity,
-        category: categoryFromTags(removed.merchandise.product.tags),
-      });
+      if (removed) {
+        trackRemoveFromCart({
+          id: removed.merchandise.product.id,
+          name: brandName(removed.merchandise.product.title),
+          price: parseFloat(removed.merchandise.product.priceRange.minVariantPrice.amount),
+          currency: removed.merchandise.product.priceRange.minVariantPrice.currencyCode,
+          quantity: removed.quantity,
+          category: categoryFromTags(removed.merchandise.product.tags),
+        });
+      }
+    } catch (error) {
+      setCartError(error instanceof Error ? error.message : 'Unable to remove this item.');
+    } finally {
+      setCartMutating(false);
     }
   };
 
@@ -91,12 +126,16 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     () => ({
       cart,
       addCartItem,
+      addCartItems,
       updateCartItem,
       removeCartItem,
       isCartOpen,
       setCartOpen,
+      cartError,
+      clearCartError: () => setCartError(null),
+      isCartMutating,
     }),
-    [cart, isCartOpen]
+    [cart, isCartOpen, cartError, isCartMutating]
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

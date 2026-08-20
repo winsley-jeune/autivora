@@ -6,7 +6,7 @@ import ProductCard from '@/components/ProductCard';
 
 export const metadata: Metadata = {
   title: 'Search',
-  description: 'Search Autivara diffusers, scents, and guides.',
+  description: 'Search Autivara diffusers and buying guides.',
   alternates: { canonical: '/search' },
   // Internal search-results pages should not be indexed (thin/duplicate), but
   // the page still powers the WebSite SearchAction and on-site search.
@@ -44,7 +44,7 @@ export default async function SearchPage({ searchParams }: Props) {
               type="search"
               name="q"
               defaultValue={query}
-              placeholder="Search diffusers, scents, guides…"
+              placeholder="Search diffusers and guides…"
               aria-label="Search"
               autoFocus
               className="flex-1 border border-neutral-200 rounded-sm px-4 py-3 text-sm focus:outline-none focus:border-black transition-colors"
@@ -123,7 +123,6 @@ export default async function SearchPage({ searchParams }: Props) {
                 { label: 'Car', href: '/auto' },
                 { label: 'Home', href: '/home' },
                 { label: 'Commercial', href: '/industrial' },
-                { label: 'Scents', href: '/scents' },
                 { label: 'All Products', href: '/collection' },
               ].map((l) => (
                 <Link
@@ -140,7 +139,7 @@ export default async function SearchPage({ searchParams }: Props) {
 
         {!query && (
           <p className="text-neutral-500 font-light">
-            Type above to search diffusers, scents, and guides — or{' '}
+            Type above to search diffusers and guides — or{' '}
             <Link href="/collection" className="underline hover:text-black">
               browse the full collection
             </Link>

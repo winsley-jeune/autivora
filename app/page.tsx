@@ -8,12 +8,12 @@ export const metadata: Metadata = {
     absolute: 'Aroma Diffusers for Car, Home & Business | Autivara',
   },
   description:
-    'Design-led aroma diffusers for car, home & business — flame, mist & vent-clip designs. Refillable, no cartridges, made to be displayed.',
+    'Design-led aroma diffusers for car, home, and commercial spaces. Compare vent-clip, rechargeable, ultrasonic, and HVAC-compatible designs.',
   alternates: { canonical: '/' },
   openGraph: {
     title: 'Autivara — Design-Led Aroma Diffusers',
     description:
-      'Design-led aroma diffusers for car, home & business — flame, mist & vent-clip designs. Refillable, no cartridges, made to be displayed.',
+      'Design-led aroma diffusers for car, home, and commercial spaces.',
     url: '/',
     type: 'website',
   },
@@ -24,7 +24,7 @@ const CATEGORIES = [
     label: 'Car',
     href: '/auto',
     headline: 'Scent that moves with you.',
-    blurb: 'Vent clips, solar spinners, and rechargeable diffusers for every cabin.',
+    blurb: 'Vent clips and rechargeable aroma diffusers for the cabin.',
     image: '/products/autivora-astronaut-car-diffuser/autivora-astronaut-car-diffuser-1.jpg',
   },
   {
@@ -97,7 +97,7 @@ export default function Home() {
           </span>
           <div className="hidden md:block w-[1px] h-4 bg-neutral-100" />
           <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400 flex-1">
-            Refillable · No Cartridges
+            Product-Specific Features
           </span>
           <div className="hidden md:block w-[1px] h-4 bg-neutral-100" />
           <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400 flex-1">
@@ -169,15 +169,15 @@ export default function Home() {
               Designed to be displayed.
             </h2>
             <p className="text-neutral-500 text-lg font-light leading-relaxed">
-              From a sculpted volcano to a precision astronaut, every Autivara diffuser pairs a real
-              fragrance oil with a design worth displaying — considered, refined, and made to be
-              seen. Refill it whenever the mood changes.
+              From sculpted home diffusers to compact car-vent designs, the collection combines
+              functional formats with objects intended to complement their surroundings. Compare
+              power, filling, controls, and compatibility on each product page.
             </p>
             <Link
-              href="/scents"
+              href="/collection"
               className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] border-b border-black pb-1 hover:text-neutral-500 transition-colors"
             >
-              The Scent Catalog <ArrowRight size={12} />
+              Compare All Diffusers <ArrowRight size={12} />
             </Link>
           </div>
         </div>

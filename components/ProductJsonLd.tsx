@@ -38,9 +38,6 @@ export default function ProductJsonLd({ product }: Props) {
         ? 'https://schema.org/InStock'
         : 'https://schema.org/OutOfStock',
       url,
-      priceValidUntil: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30)
-        .toISOString()
-        .split('T')[0],
       seller: {
         '@type': 'Organization',
         name: 'Autivara',

@@ -9,6 +9,7 @@ export default function CartButton() {
   return (
     <button
       onClick={() => setCartOpen(true)}
+      aria-label={`Open cart with ${count} item${count === 1 ? '' : 's'}`}
       className="text-sm font-medium border border-black px-4 py-2 rounded-full hover:bg-black hover:text-white transition-all"
     >
       Cart ({count})
