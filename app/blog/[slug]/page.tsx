@@ -275,18 +275,17 @@ export default async function BlogArticle({ params }: Props) {
       <section className="bg-neutral-900 text-white py-20 px-6 text-center">
         <div className="max-w-2xl mx-auto space-y-8">
           <h2 className="text-3xl font-display font-bold tracking-tight">
-            Ready to Upgrade Your Cabin?
+            Explore the Current Collection
           </h2>
           <p className="text-neutral-400 font-light">
-            Autivara uses cold-air nebulization to deliver pure fragrance
-            without heat, water, or chemicals. Waterless. USB-C rechargeable.
-            Zero residue.
+            Compare the current products, prices, availability, and model-specific details before
+            choosing a diffuser for your space.
           </p>
           <Link
-            href="/product/autivara-rechargeable-car-diffuser"
+            href="/collection"
             className="inline-block px-16 py-5 bg-white text-black text-[11px] font-bold uppercase tracking-[0.3em] hover:bg-neutral-200 transition-all rounded-sm"
           >
-            Shop Autivara
+            View the Collection
           </Link>
         </div>
       </section>

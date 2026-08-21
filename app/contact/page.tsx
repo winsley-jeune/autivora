@@ -4,7 +4,7 @@ import Link from 'next/link';
 export const metadata: Metadata = {
   title: 'Contact Us',
   description:
-    'Reach the Autivara team — order questions, product support, wholesale and B2B inquiries. We respond within 1 business day.',
+    'Contact Autivara about orders, product details, returns, and business inquiries.',
   alternates: { canonical: '/contact' },
   openGraph: {
     title: 'Contact Us — Autivara',
@@ -29,7 +29,7 @@ export default function ContactPage() {
             Contact Us
           </h1>
           <p className="text-sm text-neutral-400 font-light">
-            We respond to every message within 1 business day.
+            Include your order number or product name when applicable.
           </p>
         </div>
 
@@ -41,9 +41,8 @@ export default function ContactPage() {
               Orders & Product Support
             </h2>
             <p>
-              Questions about an order, shipping, a return, or getting the most out of your
-              Autivara diffuser — email us and a real person will get back to you within one
-              business day, Monday through Friday, 9:00 AM – 6:00 PM GMT.
+              Questions about an order, shipping, a return, or a product detail — email us with
+              the relevant order number, product name, and a description of what you need.
             </p>
             <a
               href="mailto:support@autivara.com"
@@ -58,9 +57,8 @@ export default function ContactPage() {
               Wholesale & B2B
             </h2>
             <p>
-              Detailing studios, salons, gyms, hotels, and retailers — we offer wholesale pricing
-              on devices and oils. Tell us about your space and volume, and we&apos;ll send a
-              wholesale price list the same day.
+              For a business inquiry, tell us about the products, quantities, destination, and
+              project requirements. We will confirm what options are currently available.
             </p>
             <a
               href="mailto:support@autivara.com?subject=Wholesale%20Inquiry"

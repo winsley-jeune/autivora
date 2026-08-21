@@ -6,11 +6,11 @@ import FaqJsonLd from '@/components/FaqJsonLd';
 export const metadata: Metadata = {
   title: 'FAQ — How Autivara Diffusers Work, Shipping & Returns',
   description:
-    'Answers about Autivara aroma diffusers — how car, home, and commercial units work, refilling and fragrance oils, battery life, shipping, and returns.',
+    'Answers about Autivara product details, compatibility, ordering, shipping, and returns.',
   alternates: { canonical: '/faq' },
   openGraph: {
     title: 'Autivara FAQ',
-    description: 'How our diffusers work, refilling and oils, shipping, and returns.',
+    description: 'Product details, compatibility, shipping, and returns.',
     url: '/faq',
     type: 'website',
   },
@@ -21,27 +21,27 @@ type FaqGroup = { heading: string; items: { question: string; answer: string }[]
 
 const FAQ_GROUPS: FaqGroup[] = [
   {
-    heading: 'How the diffusers work',
+    heading: 'Products and compatibility',
     items: [
       {
-        question: 'How do Autivara car diffusers work?',
+        question: 'How do I confirm how a diffuser works?',
         answer:
-          'Our car diffusers are waterless. You add a few drops of fragrance oil to the diffuser, clip it to an air vent or set it on the dash, and the airflow (or, on solar models, a sun-powered rotor) carries the scent through the cabin. There is no water tank and no spill risk on your interior.',
+          'Check the product page for the current mechanism, power source, fill instructions, and included components. These details vary by model and are not universal across the collection.',
       },
       {
-        question: 'How do the home diffusers work?',
+        question: 'Which oil or refill can I use?',
         answer:
-          'Our home diffusers use cool ultrasonic mist. You fill the tank with water, add a few drops of oil, and an ultrasonic plate turns it into a fine, cool mist — no heat, whisper-quiet, with auto shut-off when the tank runs dry. Flame-effect and light-show models add ambient light on top of the mist.',
+          'Use only a refill type explicitly listed on the product page or in the instructions supplied with that model. If compatibility is not stated, contact support before adding an oil or refill.',
       },
       {
-        question: 'How do the commercial scent machines work?',
+        question: 'How do I confirm commercial installation and coverage?',
         answer:
-          'Our commercial units use cold-air (nebulizing) diffusion that carries pure fragrance oil through a space without water or heat — either standalone or connected to an HVAC duct on larger units. Smart models add Wi-Fi scheduling so you control intensity and run times from an app.',
+          'Coverage and installation depend on the exact model, room volume, layout, ventilation, and operating conditions. Send the product and space details to support before purchasing equipment for a commercial installation.',
       },
       {
         question: 'Are they safe to run around children and pets?',
         answer:
-          'The home units run cool to the touch with auto shut-off, and the car units use no water or heat. As with any fragrance product, keep concentrated oils out of reach, follow the fill guidance for each unit, and ventilate the room if anyone is sensitive to scent. Check the specific oil label for any pet cautions.',
+          'Follow the product instructions and oil label, keep concentrated fragrance products out of reach, and consider individual fragrance sensitivities. Product-specific safety features must be confirmed on the relevant product page or instructions.',
       },
     ],
   },
@@ -49,19 +49,19 @@ const FAQ_GROUPS: FaqGroup[] = [
     heading: 'Fragrance oils & refills',
     items: [
       {
-        question: 'Do I have to buy a special cartridge?',
+        question: 'Are all Autivara oils compatible with every diffuser?',
         answer:
-          'No. Autivara diffusers are refillable — there are no proprietary pods or locked cartridges. You buy the device once and refill it with any Autivara fragrance oil, so you own your scent.',
+          'No universal compatibility claim applies across the collection. Use the compatibility information for the specific diffuser and oil, and contact support if the pairing is not listed.',
       },
       {
         question: 'Can I use my own oils?',
         answer:
-          'You can use any quality water-soluble or diffuser-grade fragrance or essential oil that matches the diffusion type (waterless for car, water-based for ultrasonic home units). We recommend our own oils because they are blended and tested for these devices, but you are never locked in.',
+          'Only when the product instructions explicitly allow it. Oil composition and diffuser mechanisms vary, so do not assume that a third-party oil is suitable for a particular device.',
       },
       {
         question: 'How long does a refill last?',
         answer:
-          'It depends on the unit and how often you run it. A few drops in a car vent clip typically lasts one to two weeks; a home ultrasonic tank runs for hours per fill. Running on a lower setting or on a timer extends how long each refill lasts.',
+          'Runtime and refill frequency vary by model, capacity, settings, environment, and use. Refer to the product instructions rather than a collection-wide estimate.',
       },
     ],
   },
@@ -71,22 +71,22 @@ const FAQ_GROUPS: FaqGroup[] = [
       {
         question: 'Where do you ship and how long does it take?',
         answer:
-          'We ship across North America. Orders are processed within 1–2 business days, with delivery times shown at checkout. See our shipping page for current rates and timelines.',
+          'Enter the delivery address at checkout to see the methods, destinations, costs, and estimates currently available. See our shipping page for the full policy.',
       },
       {
         question: 'What is your return policy?',
         answer:
-          'If a diffuser arrives damaged or is not right for you, contact us and we will make it right. See our returns page for the full window and process. Fragrance oils, for hygiene reasons, are returnable only if unopened.',
+          'Contact support within 30 days of delivery to request a return. Eligibility and the available resolution depend on the item and its condition; see the returns page before sending anything back.',
       },
       {
         question: 'Do you offer wholesale or custom-branded units for businesses?',
         answer:
-          'Yes. We offer multi-unit pricing and custom-branded options for hotels, salons, offices, gyms, and retail. Email support@autivara.com with your space and volume and we will put together a plan.',
+          'Contact support with the products, quantities, destination, and project requirements. We will confirm what options are currently available rather than promising a program in advance.',
       },
       {
         question: 'How do I reach a real person?',
         answer:
-          'Email support@autivara.com and a member of our team will reply within one business day. We answer our own support.',
+          'Email support@autivara.com or use the contact page. Include the product or order number when applicable so the request can be reviewed efficiently.',
       },
     ],
   },
@@ -114,7 +114,7 @@ export default function FaqPage() {
             Frequently asked questions
           </h1>
           <p className="text-sm text-neutral-400 font-light">
-            How our diffusers work, refilling, shipping, and returns.
+            Product details, compatibility, shipping, and returns.
           </p>
         </div>
 
@@ -144,7 +144,7 @@ export default function FaqPage() {
             <Link href="/contact" className="underline hover:text-black">
               Contact us
             </Link>{' '}
-            — we reply within one business day.
+            — include the product or order number when applicable.
           </p>
         </div>
       </div>

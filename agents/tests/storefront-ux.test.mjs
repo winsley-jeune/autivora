@@ -73,6 +73,25 @@ test('primary navigation does not promote the unavailable scent catalog', () => 
   assert.doesNotMatch(layout, /label: 'Scents'/);
 });
 
+test('shared customer surfaces do not publish universal legacy catalog claims', () => {
+  const about = read('app/about/page.tsx');
+  const faq = read('app/faq/page.tsx');
+  const blogPage = read('app/blog/[slug]/page.tsx');
+  const productFaq = read('lib/product-faq.ts');
+  assert.doesNotMatch(about, /No proprietary|refill it with any Autivara oil|reply within one business day/);
+  assert.doesNotMatch(faq, /there are no proprietary pods|You can use any quality|reply within one business day/);
+  assert.doesNotMatch(blogPage, /Zero residue|without heat, water, or chemicals/);
+  assert.match(productFaq, /Product FAQ publication is paused/);
+  assert.match(productFaq, /return \[\];/);
+});
+
+test('published blog data filters unverified product-specific claim blocks', () => {
+  const source = read('lib/blog-data.ts');
+  assert.match(source, /function containsUnverifiedCatalogClaim/);
+  assert.match(source, /content: article\.content\.filter\(\(block\) => !containsUnverifiedCatalogClaim\(block\)\)/);
+  assert.match(source, /\.map\(publicationSafe\)/);
+});
+
 test('overlays use modal semantics and shared keyboard focus management', () => {
   const cart = read('components/cart/CartDrawer.tsx');
   const upsell = read('components/UpsellModal.tsx');

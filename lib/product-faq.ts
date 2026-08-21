@@ -428,10 +428,22 @@ export function productFaq(product: {
   title: string;
   tags?: string[];
 }): FaqItem[] {
-  if (MANUALLY_REVIEWED_FAQ[product.handle]) return MANUALLY_REVIEWED_FAQ[product.handle];
-  if (PRODUCTS_PENDING_MANUAL_REVIEW.has(product.handle)) return [];
-  if (PRODUCT_FAQ_OVERRIDES[product.handle]) return PRODUCT_FAQ_OVERRIDES[product.handle];
+  // Product FAQ publication is paused until the custom catalog stores approved, cited answers.
+  // This prevents legacy Shopify-era compatibility and mechanism claims from reaching pages or
+  // FAQPage structured data while the evidence migration is in progress.
+  return [];
 
+  /* Legacy product-specific answers retained temporarily for the evidence migration.
+  if (MANUALLY_REVIEWED_FAQ[product.handle]) return MANUALLY_REVIEWED_FAQ[product.handle];
+  if (PRODUCT_FAQ_OVERRIDES[product.handle]) return PRODUCT_FAQ_OVERRIDES[product.handle];
+  if (PRODUCTS_PENDING_MANUAL_REVIEW.has(product.handle)) return [];
+
+  // Do not synthesize collection-wide mechanism, compatibility, runtime, safety, or contract
+  // claims. A product receives FAQs only after its product-specific answers are reviewed.
+  return [];
+
+  Legacy generic templates retained temporarily for reference during the catalog evidence
+     migration. They are unreachable by design and should be deleted with the Shopify adapter.
   const name = brandName(product.title);
   const isOil = product.tags?.includes('fragrance-oil');
   const collection = collectionOf(product.tags);
@@ -544,4 +556,5 @@ export function productFaq(product: {
         'Add a different Autivara oil on your next refill. You can switch scents as often as you like to match the room or the season.',
     },
   ];
+  */
 }

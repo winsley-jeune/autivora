@@ -6,7 +6,7 @@ import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 export const metadata: Metadata = {
   title: 'About Autivara — Design-Led Aroma Diffusers',
   description:
-    'Autivara makes design-led aroma diffusers for the car, the home, and business — pieces built to be displayed, with refillable fragrance you own. Here is what we stand for.',
+    'Autivara curates design-led aroma diffusers for cars, homes, and business spaces. Product pages contain the current details for each model.',
   alternates: { canonical: '/about' },
   openGraph: {
     title: 'About Autivara',
@@ -44,7 +44,7 @@ export default function AboutPage() {
             <p>
               Most diffusers are designed to disappear — a plain box you tuck out of sight. We took
               the opposite view. A diffuser sits in your space all day, so it should be something you
-              actually want to look at. Autivara pairs a real fragrance oil with a design worth
+              actually want to look at. Autivara pairs scenting products with designs worth
               displaying: a glowing volcano, a mirror-ball light show, a precision astronaut on the
               dash, a machined metal disc. Function and object, in one.
             </p>
@@ -56,19 +56,18 @@ export default function AboutPage() {
               One considered range across three spaces — the <Link href="/auto" className="underline hover:text-black">car</Link>,
               the <Link href="/home" className="underline hover:text-black">home</Link>, and{' '}
               <Link href="/industrial" className="underline hover:text-black">commercial</Link>{' '}
-              settings. Vent clips and rechargeable car diffusers; flame-effect, mist, and
-              light-show home pieces; and app-scheduled scent machines for offices, lobbies, and
-              venues. Every one is built to be refilled with our line of{' '}
-              <Link href="/scents" className="underline hover:text-black">fragrance oils</Link>.
+              settings. The collection includes compact car designs, home ambience pieces, and
+              equipment intended for larger spaces. Features and compatibility vary by product,
+              so the current product page is the source for each model.
             </p>
           </section>
 
           <section className="space-y-4">
             <h2 className="text-xs font-bold uppercase tracking-[0.3em] text-black">What we stand for</h2>
             <p>
-              <strong className="text-black font-medium">You own your scent.</strong> No proprietary
-              cartridges, no required subscription. Buy the device once, then refill it with any
-              Autivara oil whenever the mood changes.
+              <strong className="text-black font-medium">Product-specific guidance.</strong> We do
+              not present one refill method, oil type, or feature set as universal across the
+              collection. Check the product page before ordering or refilling a device.
             </p>
             <p>
               <strong className="text-black font-medium">Design first.</strong> Materials and form
@@ -76,10 +75,9 @@ export default function AboutPage() {
               shelf, or the counter.
             </p>
             <p>
-              <strong className="text-black font-medium">Honest about how it works.</strong> Our car
-              diffusers are waterless and refillable; our home pieces use cool ultrasonic mist (no
-              heat); our commercial units carry pure fragrance through the space. We describe each
-              for exactly what it is.
+              <strong className="text-black font-medium">Honest about how it works.</strong> Product
+              pages identify the details currently supported for that model. If a compatibility or
+              installation detail is not listed, ask us before ordering.
             </p>
           </section>
 
@@ -91,7 +89,7 @@ export default function AboutPage() {
               <a href="mailto:support@autivara.com" className="underline hover:text-black">
                 support@autivara.com
               </a>{' '}
-              and a real person will reply within one business day.
+              and our team will respond as soon as possible.
             </p>
             <Link
               href="/collection"

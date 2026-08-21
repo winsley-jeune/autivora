@@ -571,6 +571,25 @@ const RETIRED_SLUGS = new Set([
   'waterless-vs-ultrasonic-diffuser',
 ]);
 
+const CATALOG_REFERENCE = /\bAutivara\b|\bour\s+(?:device|diffuser|oil|commercial|home|car)|\/(?:product|scents|collection|auto|home|industrial)\b/i;
+const UNVERIFIED_PRODUCT_DETAIL = /\$\d|\b\d+(?:\.\d+)?\s*(?:ml|sq\.?\s*ft|square feet|hours?|days?|drops?|microns?|MHz)\b|cold-air|nebuliz|waterless|ultrasonic|USB-C|HVAC|Wi-?Fi|Bluetooth|zero residue|no residue|no (?:required )?subscription|no (?:proprietary )?(?:cartridges?|pods?|vials?)|any (?:compatible |quality |diffuser-grade )?(?:oil|fragrance|essential oil)|works? (?:across|with)|refillable/i;
+
+function containsUnverifiedCatalogClaim(text: string): boolean {
+  return CATALOG_REFERENCE.test(text) && UNVERIFIED_PRODUCT_DETAIL.test(text);
+}
+
+function publicationSafe(article: BlogArticle): BlogArticle {
+  const safeDescription = `Read Autivara's editorial guide to ${article.title.replace(/\s*\|.*$/, '')}. Check current product pages for verified specifications, compatibility, price, and availability.`;
+  return {
+    ...article,
+    metaDescription: containsUnverifiedCatalogClaim(article.metaDescription)
+      ? safeDescription
+      : article.metaDescription,
+    excerpt: containsUnverifiedCatalogClaim(article.excerpt) ? safeDescription : article.excerpt,
+    content: article.content.filter((block) => !containsUnverifiedCatalogClaim(block)),
+  };
+}
+
 // Pillar buying guides lead (hub pages), then the competitive/comparison set,
 // then the core set. SEO rewrites (lib/blog-rewrites.ts) override by slug.
 export const BLOG_ARTICLES: BlogArticle[] = [
@@ -588,6 +607,10 @@ export const BLOG_ARTICLES: BlogArticle[] = [
 ]
   .filter((a) => !RETIRED_SLUGS.has(a.slug))
   .map((a) => BLOG_REWRITES[a.slug] ?? a)
+  // Legacy articles predate the catalog evidence model. Keep their editorial sections live, but
+  // suppress product-specific prices, mechanisms, compatibility, runtime, and ownership claims
+  // until those facts are approved in the custom catalog.
+  .map(publicationSafe)
   // A post's `date` doubles as its release date — anything dated in the
   // future is excluded entirely (absent from the list, sitemap, and 404s
   // by URL) until that date arrives. See lib/blog-schedule.ts.

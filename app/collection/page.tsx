@@ -10,7 +10,7 @@ import { categoryFromTags } from '@/lib/category';
 export const metadata: Metadata = {
   title: 'Aroma Diffusers for Car, Home & Business',
   description:
-    'Shop Autivara aroma diffusers for car vents, home ambience, and commercial spaces. Compare waterless, ultrasonic, USB-C, and HVAC-compatible designs.',
+    'Shop Autivara aroma diffusers for car, home, and commercial spaces. Check each product page for current features, compatibility, price, and availability.',
   alternates: { canonical: '/collection' },
   openGraph: {
     title: 'The Autivara Collection',
@@ -64,8 +64,8 @@ export default async function CollectionPage() {
           Aroma diffusers for every space.
         </h1>
         <p className="mt-8 text-neutral-500 font-light leading-relaxed max-w-2xl mx-auto">
-          Compare refillable car vent diffusers, cool-mist home designs, and waterless commercial
-          scent machines. Product pages show the power source, format, and features for each model.
+          Compare designs for car, home, and commercial spaces. Product pages show the current
+          price, availability, supported features, and compatibility for each model.
         </p>
         <nav aria-label="Shop diffuser categories" className="mt-10 flex flex-wrap justify-center gap-3">
           {[['Car diffusers', '/auto'], ['Home diffusers', '/home'], ['Commercial diffusers', '/industrial']].map(([label, href]) => (
