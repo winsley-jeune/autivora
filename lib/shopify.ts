@@ -9,7 +9,19 @@ import {
 const rawDomain = process.env.SHOPIFY_STORE_DOMAIN;
 const domain = rawDomain?.replace(/^https?:\/\//, '').replace(/\/$/, '');
 const storefrontAccessToken = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN;
-const API_VERSION = '2024-01';
+const API_VERSION = '2026-07';
+
+type CartMutationPayload = {
+  cart: any | null;
+  userErrors?: Array<{ code?: string | null; field?: string[] | null; message: string }>;
+};
+
+function requireCartMutation(payload: CartMutationPayload | null | undefined, operation: string): Cart {
+  const error = payload?.userErrors?.[0];
+  if (error) throw new Error(error.message);
+  if (!payload?.cart) throw new Error(`${operation} did not return an updated cart.`);
+  return reshapeCart(payload.cart);
+}
 
 async function shopifyFetch<T>({
   query,
@@ -92,6 +104,7 @@ export async function createCart(): Promise<Cart> {
     query: `
       mutation cartCreate {
         cartCreate {
+          userErrors { code field message }
           cart {
             id
             checkoutUrl
@@ -154,7 +167,7 @@ export async function createCart(): Promise<Cart> {
     cache: 'no-store',
   });
 
-  return reshapeCart(res.body.data.cartCreate.cart);
+  return requireCartMutation(res.body.data.cartCreate, 'Creating the cart');
 }
 
 export async function addToCart(
@@ -165,6 +178,7 @@ export async function addToCart(
     query: `
       mutation cartLinesAdd($cartId: ID!, $lines: [CartLineInput!]!) {
         cartLinesAdd(cartId: $cartId, lines: $lines) {
+          userErrors { code field message }
           cart {
             id
             checkoutUrl
@@ -231,7 +245,7 @@ export async function addToCart(
     cache: 'no-store',
   });
 
-  return reshapeCart(res.body.data.cartLinesAdd.cart);
+  return requireCartMutation(res.body.data.cartLinesAdd, 'Adding the item');
 }
 
 export async function removeFromCart(cartId: string, lineIds: string[]): Promise<Cart> {
@@ -239,6 +253,7 @@ export async function removeFromCart(cartId: string, lineIds: string[]): Promise
     query: `
       mutation cartLinesRemove($cartId: ID!, $lineIds: [ID!]!) {
         cartLinesRemove(cartId: $cartId, lineIds: $lineIds) {
+          userErrors { code field message }
           cart {
             id
             checkoutUrl
@@ -305,7 +320,7 @@ export async function removeFromCart(cartId: string, lineIds: string[]): Promise
     cache: 'no-store',
   });
 
-  return reshapeCart(res.body.data.cartLinesRemove.cart);
+  return requireCartMutation(res.body.data.cartLinesRemove, 'Removing the item');
 }
 
 export async function updateCart(
@@ -316,6 +331,7 @@ export async function updateCart(
     query: `
       mutation cartLinesUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
         cartLinesUpdate(cartId: $cartId, lines: $lines) {
+          userErrors { code field message }
           cart {
             id
             checkoutUrl
@@ -382,7 +398,7 @@ export async function updateCart(
     cache: 'no-store',
   });
 
-  return reshapeCart(res.body.data.cartLinesUpdate.cart);
+  return requireCartMutation(res.body.data.cartLinesUpdate, 'Updating the cart');
 }
 
 export async function getCart(cartId: string): Promise<Cart | null> {

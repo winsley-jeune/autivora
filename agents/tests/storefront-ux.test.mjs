@@ -46,8 +46,25 @@ test('every cart response includes analytics product fields and guards missing d
     assert.ok(products.length > 0, 'each cart operation must select product data');
     assert.equal((operation.match(/\btags\b/g) ?? []).length, products.length);
     assert.equal((operation.match(/\bpriceRange\s*\{/g) ?? []).length, products.length);
+    if (/mutation\s+cart/i.test(operation)) {
+      assert.match(operation, /userErrors \{ code field message \}/);
+    }
   }
   assert.match(context, /if \(!money\) continue/);
+});
+
+test('cart actions validate identifiers, secure the cookie, and surface Shopify user errors', () => {
+  const actions = read('app/actions/cart.ts');
+  const shopify = read('lib/shopify.ts');
+  const drawer = read('components/cart/CartDrawer.tsx');
+  assert.match(actions, /httpOnly: true/);
+  assert.match(actions, /sameSite: 'lax'/);
+  assert.match(actions, /isVariantId/);
+  assert.match(actions, /isLineId/);
+  assert.match(shopify, /requireCartMutation/);
+  assert.match(shopify, /const API_VERSION = '2026-07'/);
+  assert.match(drawer, /safeCheckoutUrl/);
+  assert.match(drawer, /Checkout Unavailable/);
 });
 
 test('recrawl candidates exclude quarantined routes and stale sitemap URLs', () => {

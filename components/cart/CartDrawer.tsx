@@ -15,6 +15,19 @@ function formatPrice(amount: string, currencyCode: string) {
   }).format(parseFloat(amount));
 }
 
+function safeCheckoutUrl(value: string | undefined): string | null {
+  if (!value) return null;
+  try {
+    const url = new URL(value);
+    const allowedHost = url.hostname === 'autivara.com'
+      || url.hostname === 'checkout.autivara.com'
+      || url.hostname.endsWith('.myshopify.com');
+    return url.protocol === 'https:' && allowedHost ? url.toString() : null;
+  } catch {
+    return null;
+  }
+}
+
 export default function CartDrawer() {
   const { cart, isCartOpen, setCartOpen, removeCartItem, updateCartItem, cartError, clearCartError, isCartMutating } = useCart();
   const closeCart = useCallback(() => setCartOpen(false), [setCartOpen]);
@@ -22,6 +35,7 @@ export default function CartDrawer() {
 
   const items = cart?.lines.edges ?? [];
   const subtotal = cart?.cost.subtotalAmount;
+  const checkoutUrl = safeCheckoutUrl(cart?.checkoutUrl);
 
   return (
     <>
@@ -163,17 +177,21 @@ export default function CartDrawer() {
               Taxes and shipping calculated at checkout.
             </p>
             <a
-              href={cart?.checkoutUrl ?? '#'}
-              onClick={() => {
-                if (!cart) return;
+              href={checkoutUrl ?? undefined}
+              aria-disabled={!checkoutUrl || isCartMutating}
+              onClick={(event) => {
+                if (!cart || !checkoutUrl || isCartMutating) {
+                  event.preventDefault();
+                  return;
+                }
                 const value = parseFloat(cart.cost.subtotalAmount.amount);
                 const currency = cart.cost.subtotalAmount.currencyCode;
                 const itemIds = cart.lines.edges.map((e) => e.node.merchandise.product.id);
                 trackInitiateCheckout(value, currency, itemIds);
               }}
-              className="block w-full py-4 bg-black text-white text-center text-[11px] font-bold uppercase tracking-[0.3em] hover:bg-neutral-800 transition-all duration-300 rounded-sm"
+              className={`block w-full py-4 bg-black text-white text-center text-[11px] font-bold uppercase tracking-[0.3em] transition-all duration-300 rounded-sm ${!checkoutUrl || isCartMutating ? 'pointer-events-none opacity-50' : 'hover:bg-neutral-800'}`}
             >
-              Checkout
+              {isCartMutating ? 'Updating Cart…' : checkoutUrl ? 'Checkout' : 'Checkout Unavailable'}
             </a>
           </div>
         )}
