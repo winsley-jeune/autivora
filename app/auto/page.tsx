@@ -8,6 +8,11 @@ import CategoryFaq from '@/components/CategoryFaq';
 
 const AUTO_FAQ = [
   {
+    question: 'What is a waterless car diffuser?',
+    answer:
+      'A waterless car diffuser disperses fragrance without a water reservoir. Passive vent clips use cabin airflow, while rechargeable models meter scent from their own chamber. Always follow the refill and placement instructions for the specific model.',
+  },
+  {
     question: 'Are car vent diffusers better than hanging air fresheners?',
     answer:
       'Vent clips are refillable and use airflow from an active vent to disperse scent. Strength and refill frequency vary with the oil, number of drops, climate, and how often you drive.',
@@ -103,6 +108,36 @@ export default function AutoLanding() {
 
       {/* Car products (live from Shopify) */}
       <ProductGrid tags="car-diffusers" eyebrow="The Collection" heading="Built for the cabin." emitItemList />
+
+      {/* Collection buying guide — commercial guidance belongs on the page that sells. */}
+      <section className="px-6 py-20 border-y border-neutral-100">
+        <div className="max-w-5xl mx-auto space-y-14">
+          <div className="max-w-3xl space-y-5">
+            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400">Car diffuser buying guide</span>
+            <h2 className="text-3xl md:text-5xl font-display font-medium tracking-tight">Choose the format that fits your drive.</h2>
+            <p className="text-neutral-600 font-light leading-relaxed">
+              Autivara car diffusers are refillable, with passive waterless clips and rechargeable cabin models available. There is no water tank to balance in the car. Compare how each format mounts, disperses scent, and needs to be maintained before choosing.
+            </p>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[680px] border-collapse text-left text-sm">
+              <thead><tr className="border-b border-black">{['Format', 'How it works', 'Best for', 'Trade-off'].map((heading) => <th key={heading} className="py-4 pr-6 text-[10px] uppercase tracking-[0.2em]">{heading}</th>)}</tr></thead>
+              <tbody className="text-neutral-600 font-light">
+                <tr className="border-b border-neutral-200"><td className="py-5 pr-6 font-medium text-black">Vent clip</td><td className="py-5 pr-6">Uses air from an active vent to carry scent.</td><td className="py-5 pr-6">Simple, compact, no charging.</td><td className="py-5 pr-6">Output changes with vent airflow.</td></tr>
+                <tr className="border-b border-neutral-200"><td className="py-5 pr-6 font-medium text-black">Rechargeable</td><td className="py-5 pr-6">A powered cabin unit disperses scent independently.</td><td className="py-5 pr-6">More control away from the vent.</td><td className="py-5 pr-6">Requires periodic charging.</td></tr>
+                <tr><td className="py-5 pr-6 font-medium text-black">Timed spray</td><td className="py-5 pr-6">Releases scent at controlled intervals.</td><td className="py-5 pr-6">Drivers who prefer intermittent output.</td><td className="py-5 pr-6">Needs the correct refill and settings.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              ['Choose a vent clip when…', 'You want the smallest setup, drive with the vents running, and prefer a device with no battery to manage.'],
+              ['Choose rechargeable when…', 'You want scent output that is less dependent on vent airflow and do not mind charging the unit periodically.'],
+              ['Start gently', 'A car cabin is compact. Begin with the lowest recommended fill or setting, then increase only after evaluating it during a normal drive.'],
+            ].map(([heading, copy]) => <div key={heading} className="space-y-3"><h3 className="text-sm font-display font-semibold">{heading}</h3><p className="text-sm text-neutral-600 font-light leading-relaxed">{copy}</p></div>)}
+          </div>
+        </div>
+      </section>
 
       {/* Buying guide link (pillar) */}
       <section className="px-6 pb-8">
