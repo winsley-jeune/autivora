@@ -59,7 +59,9 @@ async function tick() {
     return;
   }
   console.log(`[scheduler ${new Date().toISOString()}] starting daily run for ${day}...`);
-  execFile(SCRIPT, { timeout: 60 * 60 * 1000 }, (err) => {
+  // The pipeline owns per-stage deadlines and a durable 100-minute lease. This outer timeout is
+  // only a final failsafe and must be longer than that lease so recovery cannot overlap a live run.
+  execFile(SCRIPT, { timeout: 110 * 60 * 1000 }, (err) => {
     running = false;
     console.log(`[scheduler ${new Date().toISOString()}] daily run ${err ? `FAILED: ${err.message.slice(0, 200)}` : "done"} — see ${LOG_DIR}/daily-run-${day}.log`);
   });
