@@ -21,50 +21,22 @@ REPO_DIR="/Users/jeunewinsley/Developer/nextjs-shopify"
 NODE_BIN="/Users/jeunewinsley/.local/share/fnm/aliases/default/bin"
 LOG_DIR="/Users/jeunewinsley/Library/Logs/autivora-agents"
 LOG_FILE="$LOG_DIR/daily-run-$(date +%Y-%m-%d).log"
+ATTEMPT_LOG="$LOG_DIR/daily-run-$(date +%Y-%m-%d)-$(date +%H%M%S)-$$.log"
 
 mkdir -p "$LOG_DIR"
 export PATH="$NODE_BIN:/usr/bin:/bin:/usr/sbin:/sbin"
 cd "$REPO_DIR"
 
-{
-  echo "=== $(date -u +%Y-%m-%dT%H:%M:%SZ) — daily-run start ==="
-  echo "--- catalog:sync ---"
-  npm run catalog:sync
-  echo "--- analytics:run ---"
-  npm run analytics:run
-  echo "--- seo:products ---"
-  # Research uncovered commercial categories first, then product-specific opportunities.
-  # Durable 30-day evidence avoids paying once per sibling SKU during cold start.
-  npm run seo:products || echo "seo:products FAILED — catalog publishing will use only prior fresh evidence"
-  echo "--- catalog:autonomous ---"
-  npm run catalog:autonomous || echo "catalog:autonomous FAILED — changes remain unpublished; see above"
-  echo "--- analytics:reindex ---"
-  # Reindex routine: pushes NEW sitemap URLs + unindexed money pages at Google (Indexing API
-  # + sitemap resubmit). Change-driven — no-ops most days. Guarded: an API refusal must not
-  # kill the decision loop below.
-  npm run analytics:reindex || echo "analytics:reindex FAILED — see above"
-  echo "--- signal:run ---"
-  # Budget exhaustion or a temporary model outage must not prevent deterministic downstream
-  # monitoring/distribution stages from running. Signal emits no task when it cannot reason.
-  npm run signal:run || echo "signal:run DEFERRED — AI budget/provider unavailable; downstream stages continue"
-  echo "--- herald:run ---"
-  # Herald (social drafter). Tops the approval queue up to 3 unposted drafts; exits instantly
-  # when topped up. Drafts only — the operator approves and posts.
-  npm run herald:run || echo "herald:run FAILED — see above"
-  echo "--- envoy:run ---"
-  # Envoy (outreach drafter). Exits instantly when Signal has queued no envoy tasks; drafts
-  # only — sending is always the operator. Guarded like Scout so a failure can't kill the loop.
-  npm run envoy:run || echo "envoy:run FAILED — see above"
-  echo "--- dropship:observe ---"
-  # Market observatory: daily order-count snapshots across the keyword panel. Runs BEFORE
-  # Scout so sourcing reasons over fresh demand velocity. Compounds daily — never skip.
-  npm run dropship:observe || echo "dropship:observe FAILED — see above"
-  echo "--- dropship:run ---"
-  # Scout (sourcing agent). Guarded so a Scout failure (e.g. AliExpress re-auth needed — Test-
-  # status refresh tokens die after ~2 missed daily runs) can't kill the SEO loop above it.
-  npm run dropship:run || echo "dropship:run FAILED — see above (likely AliExpress re-auth needed)"
-  echo "--- scoreboard ---"
-  # The operator's one daily number: live sales vs the North Star, as a Mac notification.
-  npm run scoreboard || echo "scoreboard FAILED — see above"
-  echo "=== $(date -u +%Y-%m-%dT%H:%M:%SZ) — daily-run done ==="
-} >> "$LOG_FILE" 2>&1
+if node agents/scripts/daily-pipeline.mjs > "$ATTEMPT_LOG" 2>&1; then
+  echo "=== $(date -u +%Y-%m-%dT%H:%M:%SZ) — daily-run start ($ATTEMPT_LOG) ===" >> "$LOG_FILE"
+  echo "=== $(date -u +%Y-%m-%dT%H:%M:%SZ) — daily-run done ($ATTEMPT_LOG) ===" >> "$LOG_FILE"
+else
+  status=$?
+  if [ "$status" -eq 75 ]; then
+    echo "=== $(date -u +%Y-%m-%dT%H:%M:%SZ) — daily-run lease-busy ($ATTEMPT_LOG) ===" >> "$LOG_FILE"
+    exit 0
+  fi
+  echo "=== $(date -u +%Y-%m-%dT%H:%M:%SZ) — daily-run start ($ATTEMPT_LOG) ===" >> "$LOG_FILE"
+  echo "=== $(date -u +%Y-%m-%dT%H:%M:%SZ) — daily-run incomplete status=$status ($ATTEMPT_LOG) ===" >> "$LOG_FILE"
+  exit "$status"
+fi
