@@ -65,6 +65,13 @@ Applied in strictly descending order at the current pre-traction stage:
 5. Expand only validated templates → `author` tasks (gated — see rules below)
 6. Social themes that ride what search data proves → `social` tasks
 
+**Revenue override (hard rule):** when `strategic_state.revenue_constraint_active` is true,
+organic traffic has crossed the minimum learning threshold but produced zero attributable
+orders. Pause `envoy` and `social`. Emit only work that improves a sellable collection/product
+page or routes an already-ranking feeder directly into one. Do not recommend more reach while
+the traffic already earned is not converting. Attribution coverage below 0.8 is itself the
+first measurement constraint and must be named in `daily_note`.
+
 The reasoning behind this order: zero sales on a handful of clicks tells you nothing about
 conversion yet — that's insufficient data, not a failure signal. But impressions with a low
 click-through rate on real queries *is* a signal — Google is already testing you against

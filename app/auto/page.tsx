@@ -5,6 +5,7 @@ import { ArrowRight } from 'lucide-react';
 import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 import ProductGrid from '@/components/ProductGrid';
 import CategoryFaq from '@/components/CategoryFaq';
+import CollectionGrowthContent from '@/components/CollectionGrowthContent';
 
 const AUTO_FAQ = [
   {
@@ -108,6 +109,7 @@ export default function AutoLanding() {
 
       {/* Car products (live from Shopify) */}
       <ProductGrid tags="car-diffusers" eyebrow="The Collection" heading="Built for the cabin." emitItemList />
+      <CollectionGrowthContent path="/auto" />
 
       {/* Collection buying guide — commercial guidance belongs on the page that sells. */}
       <section className="px-6 py-20 border-y border-neutral-100">

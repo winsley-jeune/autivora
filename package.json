@@ -16,6 +16,7 @@
     "analytics:reindex": "node agents/analytics/reindex.mjs",
     "analytics:run": "node agents/analytics/run.mjs",
     "signal:run": "node agents/signal/run.mjs",
+    "revenue:execute": "node agents/scripts/revenue-execute.mjs",
     "uplift:run": "node agents/uplift/run.mjs",
     "linker:run": "node agents/linker/run.mjs",
     "visual:run": "node agents/visual/run.mjs",

@@ -4,6 +4,7 @@
 import { spawn } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { dirname, join, resolve } from "node:path";
+import { existsSync, readFileSync } from "node:fs";
 import { acquireWorkflowLease, finishWorkflow } from "../lib/control-plane.mjs";
 import { latestShopifyCatalogSnapshot } from "../lib/shopify-catalog.mjs";
 
@@ -19,8 +20,9 @@ export const STAGES = [
   { name: "catalog-autonomous", args: ["run", "catalog:autonomous"], timeoutMs: 10 * MINUTE, lane: "catalog", needsCatalog: true, needsSeo: true },
   { name: "reindex", args: ["run", "analytics:reindex"], timeoutMs: 5 * MINUTE, lane: "monitoring" },
   { name: "signal", args: ["run", "signal:run"], timeoutMs: 8 * MINUTE, lane: "monitoring" },
-  { name: "herald", args: ["run", "herald:run"], timeoutMs: 5 * MINUTE, lane: "monitoring" },
-  { name: "envoy", args: ["run", "envoy:run"], timeoutMs: 5 * MINUTE, lane: "monitoring" },
+  { name: "revenue-execute", args: ["run", "revenue:execute"], timeoutMs: 15 * MINUTE, lane: "revenue" },
+  { name: "herald", args: ["run", "herald:run"], timeoutMs: 5 * MINUTE, lane: "distribution", pauseForRevenue: true },
+  { name: "envoy", args: ["run", "envoy:run"], timeoutMs: 5 * MINUTE, lane: "distribution", pauseForRevenue: true },
   { name: "dropship-observe", args: ["run", "dropship:observe"], timeoutMs: 10 * MINUTE, lane: "monitoring" },
   { name: "dropship-scout", args: ["run", "dropship:run"], timeoutMs: 10 * MINUTE, lane: "monitoring" },
   { name: "scoreboard", args: ["run", "scoreboard"], timeoutMs: 2 * MINUTE, lane: "monitoring" },
@@ -90,6 +92,14 @@ function hasFreshCatalog(now = new Date()) {
   return Boolean(snapshot?.complete && Date.parse(snapshot.observedAt) >= now.getTime() - 26 * 60 * MINUTE);
 }
 
+export function hasRevenueConstraint() {
+  const path = join(root, "agents", "analytics", "output", "snapshot-latest.json");
+  if (!existsSync(path)) return false;
+  const snapshot = JSON.parse(readFileSync(path, "utf8"));
+  const organicSessions = (snapshot.ga4?.byChannel ?? []).find((row) => row.sessionDefaultChannelGroup === "Organic Search")?.sessions ?? 0;
+  return organicSessions >= 50 && (snapshot.shopify?.organicOrderCount ?? 0) === 0;
+}
+
 export async function runDailyPipeline({
   now = new Date(),
   stages = STAGES,
@@ -97,11 +107,12 @@ export async function runDailyPipeline({
   catalogFresh = hasFreshCatalog,
   acquire = acquireWorkflowLease,
   finish = finishWorkflow,
+  revenueConstraint = hasRevenueConstraint,
 } = {}) {
   const day = localDay(now);
   // Worst case is about 90 minutes when every stage reaches its deadline. Keep the global lease
   // longer than that total so a second scheduler cannot enter while the final stage is alive.
-  const pipeline = acquire({ workflow: "daily-pipeline", runKey: day, leaseMs: 100 * MINUTE });
+  const pipeline = acquire({ workflow: "daily-pipeline", runKey: day, leaseMs: 120 * MINUTE });
   if (!pipeline.acquired) {
     console.log(`[daily ${day}] pipeline no-op (${pipeline.reason}).`);
     return { day, acquired: false, reason: pipeline.reason, results: [] };
@@ -110,8 +121,14 @@ export async function runDailyPipeline({
   const results = [];
   let catalogReady = false;
   let seoReady = false;
+  const revenueBlocked = revenueConstraint();
   try {
     for (const stage of stages) {
+      if (stage.pauseForRevenue && revenueBlocked) {
+        console.log(`[daily ${day}] ${stage.name}: paused (organic revenue constraint).`);
+        results.push({ name: stage.name, ok: true, skipped: true, reason: "organic revenue constraint" });
+        continue;
+      }
       if (stage.needsCatalog && !catalogReady) {
         const skipped = { name: stage.name, ok: false, skipped: true, reason: "no fresh complete catalog" };
         console.error(`[daily ${day}] ${stage.name}: skipped (${skipped.reason}).`);

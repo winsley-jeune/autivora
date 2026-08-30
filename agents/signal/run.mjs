@@ -32,13 +32,21 @@ const CAPS = { total: 8, ctr: 3, uplift: 2, linker: 2, author: 1 };
 // Applies total/per-agent caps, the author gate, and per-page cooldowns (don't re-touch a page
 // whose metric change you're still measuring). `store` is the pre-call snapshot — good enough
 // for this check; the final persisted write re-reads fresh under lock in mutateTaskStore.
-function enforceCaps(tasks, { authorGateMet, store, now }) {
+export function enforceCaps(tasks, { authorGateMet, revenueConstraintActive = false, store, now }) {
   const counts = {};
   const kept = [];
   const dropped = [];
   for (const t of tasks) {
     if (kept.length >= CAPS.total) { dropped.push({ task: t, reason: "total cap" }); continue; }
     if (t.agent === "author" && !authorGateMet) { dropped.push({ task: t, reason: "author gate not met" }); continue; }
+    if (revenueConstraintActive && ["envoy", "social"].includes(t.agent)) {
+      dropped.push({ task: t, reason: "revenue constraint: distribution paused until organic traffic converts" });
+      continue;
+    }
+    if (revenueConstraintActive && t.agent === "uplift" && t.target_url.startsWith("/blog/")) {
+      dropped.push({ task: t, reason: "revenue constraint: uplift must target a sellable page" });
+      continue;
+    }
     if (isOnCooldown(store, t.target_url, t.agent, now)) { dropped.push({ task: t, reason: "page cooldown" }); continue; }
     const cap = CAPS[t.agent];
     counts[t.agent] = (counts[t.agent] ?? 0) + 1;
@@ -99,7 +107,12 @@ function enforceCaps(tasks, { authorGateMet, store, now }) {
 
   const now = new Date();
   const nowISO = now.toISOString();
-  const { kept, dropped } = enforceCaps(output.tasks || [], { authorGateMet: promptInputs.strategic_state.author_gate_met, store, now });
+  const { kept, dropped } = enforceCaps(output.tasks || [], {
+    authorGateMet: promptInputs.strategic_state.author_gate_met,
+    revenueConstraintActive: promptInputs.strategic_state.revenue_constraint_active,
+    store,
+    now,
+  });
   if (dropped.length) {
     console.warn(`Signal: dropped ${dropped.length} task(s):`);
     dropped.forEach((d) => console.warn(`  [${d.reason}] ${d.task.agent} → ${d.task.target_url}`));

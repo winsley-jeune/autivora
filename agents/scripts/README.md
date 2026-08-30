@@ -55,7 +55,10 @@ automatically the next time it wakes — no separate retry logic needed.
 
 ## What it does NOT do
 
-Signal's Uplift/Linker/Author tasks still require their executor and review flow. The daily
+The daily revenue executor processes one bounded commercial-page Uplift/Author/Linker task,
+opens a typechecked PR, and requests CI-gated auto-merge. Unsupported or higher-risk tasks remain
+open for review. When at least 50 organic sessions have produced zero attributable orders,
+Herald and Envoy pause so distribution cannot outrank conversion work. The daily
 catalog lane can publish only through the existing deterministic audit, independent verification,
 mutation-cap, idempotency, and rollback gates. A catalog failure never suppresses the independent
 analytics, reindex, Signal, Herald, Envoy, observation, Scout, or scoreboard stages.

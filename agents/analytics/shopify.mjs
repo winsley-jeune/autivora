@@ -30,7 +30,7 @@ function dateNDaysAgo(n) {
 export async function listOrders(sinceISO, { pageLimit = 10_000 } = {}) {
   const all = [];
   let url = `orders.json?status=any&created_at_min=${encodeURIComponent(sinceISO)}` +
-    `&limit=250&fields=id,created_at,total_price,currency,financial_status,cancelled_at,test,email,line_items`;
+    `&limit=250&fields=id,created_at,total_price,currency,financial_status,cancelled_at,test,email,line_items,landing_site,referring_site,source_name`;
   let pages = 0;
   while (url && pages < pageLimit) {
     const json = await shopifyApi("GET", url);
@@ -42,7 +42,20 @@ export async function listOrders(sinceISO, { pageLimit = 10_000 } = {}) {
   return { orders: all, complete: !url, pages, reason: url ? `safety ceiling reached (${pageLimit} pages)` : null };
 }
 
-function aggregate(orders, testCustomerEmails) {
+export function attributionChannel(order) {
+  const landing = order.landing_site || "";
+  const referrer = order.referring_site || "";
+  let source = "";
+  try { source = new URL(landing, "https://autivara.com").searchParams.get("utm_source") || ""; } catch {}
+  const signal = `${source} ${referrer}`.toLowerCase();
+  if (/google|bing|yahoo|duckduckgo|ecosia|baidu|yandex/.test(signal)) return "organic_search";
+  if (/chatgpt|openai|perplexity|claude|gemini|copilot/.test(signal)) return "ai_assistant";
+  if (source) return source;
+  if (referrer) return "referral";
+  return "unknown";
+}
+
+export function aggregate(orders, testCustomerEmails) {
   const isKnownTestCustomer = (o) => o.email && testCustomerEmails.has(o.email.toLowerCase());
   const valid = orders.filter((o) => !o.test && !o.cancelled_at && !isKnownTestCustomer(o));
   const revenue = valid.reduce((s, o) => s + Number(o.total_price), 0);
@@ -69,6 +82,18 @@ function aggregate(orders, testCustomerEmails) {
     }
   }
 
+  const attributedOrders = valid.map((order) => ({
+    id: order.id,
+    createdAt: order.created_at,
+    revenue: Number(order.total_price),
+    channel: attributionChannel(order),
+    landingSite: order.landing_site || null,
+    referringSite: order.referring_site || null,
+    sourceName: order.source_name || null,
+  }));
+  const organicOrders = attributedOrders.filter((order) => order.channel === "organic_search");
+  const knownAttributionOrders = attributedOrders.filter((order) => order.channel !== "unknown");
+
   return {
     orderCount,
     revenue: Number(revenue.toFixed(2)),
@@ -79,6 +104,10 @@ function aggregate(orders, testCustomerEmails) {
       .map((p) => ({ ...p, revenue: Number(p.revenue.toFixed(2)) }))
       .sort((a, b) => b.revenue - a.revenue)
       .slice(0, 15),
+    attributedOrders,
+    organicOrderCount: organicOrders.length,
+    organicRevenue: Number(organicOrders.reduce((sum, order) => sum + order.revenue, 0).toFixed(2)),
+    attributionCoverage: orderCount ? Number((knownAttributionOrders.length / orderCount).toFixed(4)) : 1,
     excludedTestOrders: orders.filter((o) => o.test).length,
     excludedCancelledOrders: orders.filter((o) => o.cancelled_at).length,
     excludedKnownTestCustomerOrders: orders.filter(isKnownTestCustomer).length,
