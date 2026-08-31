@@ -100,5 +100,104 @@
         "answer": "A traditional disposable air freshener (hanging card, gel vent clip, or plastic unit) has a fixed fragrance baked in — once it fades in 2–4 weeks, you throw it away and buy another. A waterless car diffuser like Autivara's uses a dry felt pad or scent core that you recharge with a few drops of any oil. You choose the scent, control the intensity, and reuse the same unit indefinitely — no single-use plastic waste, no locked-in fragrance, no subscription."
       }
     ]
+  },
+  "/industrial": {
+    "heading": "Commercial Scent Diffusers — Own Your Oil, No Contract Required",
+    "intro": "Autivara's commercial scenting line covers every venue size — from a boutique fitting room to a 2,000+ sq ft hotel lobby — with waterless, app-scheduled diffusers you buy once and run on any oil you choose. Unlike ScentAir and Aroma360, there is no proprietary refill contract, no locked fragrance subscription, and no monthly service fee. Choose your unit, choose your oil, and control the schedule from an app.",
+    "comparison": {
+      "columns": [
+        "",
+        "Smart Plug-In — $79",
+        "Atmos Wi-Fi — $149",
+        "Atmos Pro HVAC — $349"
+      ],
+      "rows": [
+        [
+          "Best for",
+          "Small offices, boutiques, guest suites",
+          "Medium lobbies, showrooms, salons",
+          "Whole venues, hotels, large retail"
+        ],
+        [
+          "Coverage area",
+          "~500 sq ft",
+          "~1,000 sq ft",
+          "2,000+ sq ft"
+        ],
+        [
+          "Install method",
+          "Plug into any wall outlet — no mounting",
+          "Wall-mounted — no plumbing or wiring",
+          "Connects to existing HVAC ductwork"
+        ],
+        [
+          "Scent technology",
+          "Waterless nebulizing",
+          "Waterless nebulizing",
+          "Waterless nebulizing"
+        ],
+        [
+          "App scheduling",
+          "Yes — Wi-Fi app",
+          "Yes — Wi-Fi app",
+          "Yes — minute-level schedule & intensity"
+        ],
+        [
+          "Contract required",
+          "None",
+          "None",
+          "None"
+        ],
+        [
+          "Proprietary refills",
+          "No — use any compatible oil",
+          "No — magnetic snap-in, any oil",
+          "No — use any compatible oil"
+        ]
+      ]
+    },
+    "chooser": [
+      {
+        "title": "Small office, boutique, or guest suite",
+        "body": "The Smart Plug-In ($79) slots into any wall outlet and covers up to ~500 sq ft. No mounting hardware, no wiring — scenting in minutes. Ideal for dental waiting rooms, hair salons, small retail, and hotel guest rooms.",
+        "href": "/product/autivara-smart-plug-diffuser"
+      },
+      {
+        "title": "Medium lobby, showroom, or spa",
+        "body": "The Atmos Wi-Fi ($149) wall-mounts without plumbing and covers up to ~1,000 sq ft. Schedule fragrance intensity by the hour from the app. A strong fit for restaurant entrances, med-spas, and mid-size retail floors.",
+        "href": "/product/autivara-atmos-wifi-diffuser"
+      },
+      {
+        "title": "Whole venue — hotel, large restaurant, or event space",
+        "body": "The Atmos Pro HVAC ($349) ties into your existing ductwork and scents 2,000+ sq ft evenly through the vents you already have. One unit, one app, entire building — the top of the Autivara commercial range.",
+        "href": "/product/autivara-atmos-pro-hvac"
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Do commercial scent diffusers require a contract?",
+        "answer": "Autivara commercial diffusers require no contract. You purchase the unit outright and use any compatible fragrance oil you choose — there is no mandatory subscription, no proprietary refill cartridge, and no monthly service fee. This differs from some commercial scenting services that lock customers into long-term fragrance supply agreements."
+      },
+      {
+        "question": "How much does commercial scenting cost per month?",
+        "answer": "With Autivara, your ongoing cost is the price of the fragrance oil you use — there is no monthly platform fee or service contract. Your only upfront cost is the diffuser itself: $79 for the Smart Plug-In, $149 for the Atmos Wi-Fi, or $349 for the Atmos Pro HVAC. Oil consumption varies by unit, space size, and the intensity level you schedule in the app."
+      },
+      {
+        "question": "What is the coverage area of an HVAC scent diffuser?",
+        "answer": "The Atmos Pro HVAC is designed to cover 2,000+ sq ft by connecting to your building's existing ductwork and distributing fragrance evenly through the vents already in place. Actual coverage depends on your HVAC system layout, airflow rate, ceiling height, and the intensity setting you configure in the app."
+      },
+      {
+        "question": "Which diffuser is right for a restaurant?",
+        "answer": "For a restaurant entrance or bar area up to ~1,000 sq ft, the Atmos Wi-Fi ($149) wall-mounted unit lets you schedule scent on and off around service times from an app. For a full dining room or multi-room venue over 2,000 sq ft, the Atmos Pro HVAC ($349) delivers even coverage through your existing ductwork."
+      },
+      {
+        "question": "Can I use my own fragrance oils in a commercial diffuser?",
+        "answer": "Yes. All three Autivara commercial diffusers — the Smart Plug-In, Atmos Wi-Fi, and Atmos Pro HVAC — use a waterless nebulizing system compatible with the fragrance oil of your choice. There are no locked proprietary cartridges."
+      },
+      {
+        "question": "What commercial verticals are these diffusers suited for?",
+        "answer": "The Autivara commercial line is used across restaurants (entrance and dining scenting), salons and spas (ambient wellness fragrance), dental and medical offices (odor neutralization and calming scent), and retail environments (signature scent branding). Choose the unit whose coverage area matches your space."
+      }
+    ]
   }
 }
