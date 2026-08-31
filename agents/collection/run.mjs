@@ -41,8 +41,13 @@ const git = (args) => execFileSync('git', args, { cwd: root, encoding: 'utf8' })
     await completeTask(taskId, { prUrl, note: change_summary });
     console.log(`Collection: task #${taskId} opened ${prUrl}`);
     if (process.env.AUTONOMOUS_PR_MERGE !== 'false') {
-      try { execFileSync('gh', ['pr', 'merge', prUrl, '--auto', '--squash', '--delete-branch'], { cwd: root, stdio: 'inherit' }); }
-      catch (error) { console.warn(`Collection: auto-merge could not be enabled: ${error.message}`); }
+      try {
+        execFileSync('gh', ['pr', 'merge', prUrl, '--auto', '--squash'], { cwd: root, stdio: 'inherit' });
+      } catch {
+        console.log('Collection: repository auto-merge is unavailable; waiting for required checks.');
+        execFileSync('gh', ['pr', 'checks', prUrl, '--watch', '--interval', '10'], { cwd: root, stdio: 'inherit', timeout: 12 * 60 * 1000 });
+        execFileSync('gh', ['pr', 'merge', prUrl, '--squash'], { cwd: root, stdio: 'inherit' });
+      }
     }
   } catch (error) {
     if (branchStarted) { try { git(['checkout', '--', contentPath]); } catch {} try { git(['checkout', startBranch]); } catch {} abandonTaskBranch(task, root); }
