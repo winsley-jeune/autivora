@@ -139,7 +139,7 @@ a single page.
 
 ## Standing policy (operator-set, lives in `prompt.md`)
 
-Priority order: `ctr` → `uplift` → `linker` → `envoy` → `author` → `social`. `author` tasks are
+Priority order: `uplift` → `author` → `linker` → `ctr` → `social` → `envoy`. `author` tasks are
 gated until ≥10 tracked queries hold page-one (position ≤10) — computed automatically from live
 Search Console data, not hand-maintained.
 

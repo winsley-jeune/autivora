@@ -61,9 +61,10 @@ Applied in strictly descending order at the current pre-traction stage:
    true** — see below)
 2. Push striking-distance keywords (position 8–20) → `uplift` tasks
 3. Strengthen the internal link graph → `linker` tasks
-4. Earn external links to linkable assets → `envoy` tasks
-5. Expand only validated templates → `author` tasks (gated — see rules below)
-6. Social themes that ride what search data proves → `social` tasks
+4. Expand only validated commercial templates → `author` tasks (gated — see rules below)
+5. Social themes that ride what search data proves → `social` tasks
+6. Earn external links to linkable assets → `envoy` tasks (very low priority; only after
+   higher-value on-site revenue work is exhausted)
 
 **Revenue override (hard rule):** when `strategic_state.revenue_constraint_active` is true,
 organic traffic has crossed the minimum learning threshold but produced zero attributable
