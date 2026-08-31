@@ -1,1 +1,104 @@
-{}
+{
+  "/auto": {
+    "heading": "Car Diffusers — Waterless, No Subscription, Your Oil",
+    "intro": "Every Autivara car diffuser is waterless — no tank, no spills, no subscription. Drop in a few drops of any oil you already own, clip it to your vent (or charge it and set it anywhere), and drive in your signature scent. Seven models from $16–$39, all refillable indefinitely.",
+    "comparison": {
+      "columns": [
+        "Feature",
+        "Autivara Car Diffuser",
+        "Disposable Air Freshener",
+        "Pura Car Pro (subscription vials)"
+      ],
+      "rows": [
+        [
+          "How it works",
+          "Waterless oil diffuser — add a few drops of any essential or fragrance oil",
+          "Impregnated card, gel, or plastic — fragrance is fixed and fades",
+          "Subscription vial system locked to Pura's oil catalog"
+        ],
+        [
+          "Subscription required?",
+          "No — buy once, use any oil",
+          "No — but you keep buying replacements",
+          "Yes — ongoing vial subscription to maintain scent"
+        ],
+        [
+          "Estimated 12-month cost",
+          "One diffuser ($19–$39) + your own oil; no mandatory repeat spend",
+          "~$30–$60+/yr replacing disposables every 2–4 weeks",
+          "Diffuser hardware + recurring vial subscription cost"
+        ],
+        [
+          "Oil choice",
+          "Any compatible essential or fragrance oil you choose",
+          "Fixed scent — cannot be changed",
+          "Limited to Pura's vial catalog"
+        ],
+        [
+          "Refillable?",
+          "Yes — indefinitely",
+          "No — single use, then discard",
+          "Yes, but only with proprietary subscription vials"
+        ],
+        [
+          "Waterless?",
+          "Yes — no tank, no spills",
+          "Yes (dry format)",
+          "No — liquid vial system"
+        ],
+        [
+          "Plastic waste",
+          "Minimal — reuse the same diffuser",
+          "High — disposable units add up over 12 months",
+          "Moderate — recurring vial packaging"
+        ]
+      ]
+    },
+    "chooser": [
+      {
+        "title": "Vent-Clip Figures ($19) — Best for Character & Simplicity",
+        "body": "Astronaut, Bear, Guitar, and Pear figures clip onto any air vent. Waterless felt/oil core, refillable in seconds. The most affordable entry point — and genuinely display-worthy on your dash.",
+        "href": "/product/autivara-astronaut-car-diffuser"
+      },
+      {
+        "title": "Machined Metal Disc ($34) — Best for a Minimal, Grown-Up Look",
+        "body": "Solid machined metal with a magnetic snap top. No novelty shape — just a sleek two-piece disc that clips to your vent and arrives gift-boxed. Waterless refillable felt pad.",
+        "href": "/product/autivara-magnetic-vent-diffuser"
+      },
+      {
+        "title": "Pulse Smart Spray ($39) — Best for Hands-Free Timed Scenting",
+        "body": "The only model that sprays on its own. Set a mist timer, choose one of three intensity levels, and let it run. Ambient light ring for night drives. USB-C rechargeable.",
+        "href": "/product/autivara-smart-spray-diffuser"
+      },
+      {
+        "title": "Rechargeable Waterless Diffuser ($39) — Best Vent-Free Placement",
+        "body": "USB-C rechargeable and vent-independent — sits upright anywhere in the cabin without clipping to an air vent. Adjustable output, no water tank, no spills.",
+        "href": "/product/autivara-rechargeable-car-diffuser"
+      },
+      {
+        "title": "Aviator Bear Spinning Propeller ($19) — Best for a Bit of Motion",
+        "body": "The propeller actually spins on your vent's airflow, fanning scent evenly through the cabin. Soft-touch silicone clip, magnetic top for mess-free refills, waterless core.",
+        "href": "/product/autivara-bear-propeller-diffuser"
+      },
+      {
+        "title": "Guitar Swaying Figure ($19) — Best for Music Lovers",
+        "body": "Sways gently with airflow on a 360° rotating silicone clip. Waterless refillable scent core, works on any air vent. A quiet, movement-based detail for the dash.",
+        "href": "/product/autivara-guitar-car-diffuser"
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Do I need a subscription for a car diffuser?",
+        "answer": "Not with Autivara. Every model is a one-time purchase — you fill it with any essential or fragrance oil you already own, and refill it whenever you like. There is no subscription, no proprietary vial system, and no recurring charge required to keep using it."
+      },
+      {
+        "question": "Which Autivara car diffuser lasts longest?",
+        "answer": "All Autivara car diffusers are refillable indefinitely, so the diffuser itself doesn't expire. Scent longevity between refills depends on the oil you use and the output setting you choose. The Rechargeable Car Diffuser ($39) and the Pulse Smart Spray ($39) both have adjustable output modes that let you stretch each fill further by starting at the lowest setting and increasing only as needed."
+      },
+      {
+        "question": "What's the difference between a waterless car diffuser and a regular car air freshener?",
+        "answer": "A traditional disposable air freshener (hanging card, gel vent clip, or plastic unit) has a fixed fragrance baked in — once it fades in 2–4 weeks, you throw it away and buy another. A waterless car diffuser like Autivara's uses a dry felt pad or scent core that you recharge with a few drops of any oil. You choose the scent, control the intensity, and reuse the same unit indefinitely — no single-use plastic waste, no locked-in fragrance, no subscription."
+      }
+    ]
+  }
+}
