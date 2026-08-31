@@ -191,6 +191,11 @@ export async function buildInputs({ baseUrl, skipCrawl = false } = {}) {
     organic_impressions: organicImpressions,
     organic_clicks: organicClicks,
     ga4_sessions_28d: (ga4.byChannel || []).reduce((s, c) => s + c.sessions, 0),
+    organic_sessions_28d: (ga4.byChannel || []).find((c) => c.sessionDefaultChannelGroup === "Organic Search")?.sessions ?? 0,
+    organic_conversions_28d: (ga4.byChannel || []).find((c) => c.sessionDefaultChannelGroup === "Organic Search")?.conversions ?? 0,
+    organic_revenue_28d: shopify?.organicRevenue ?? 0,
+    organic_orders_28d: shopify?.organicOrderCount ?? 0,
+    order_attribution_coverage: shopify?.attributionCoverage ?? 0,
     shopify_orders: shopify?.orderCount ?? 0,
     shopify_revenue: shopify?.revenue ?? 0,
     page_one_query_count: pageOneQueries.size,
@@ -198,7 +203,10 @@ export async function buildInputs({ baseUrl, skipCrawl = false } = {}) {
     // Below CTR_STAGE_MIN_TOTAL_IMPRESSIONS, per-query CTR deltas are noise — defer the whole
     // lane rather than let Signal chase unmeasurable thresholds. See prompt.md's priority order.
     ctr_lane_active: organicImpressions >= CTR_STAGE_MIN_TOTAL_IMPRESSIONS,
-    standing_priority_order: ["ctr", "uplift", "linker", "envoy", "author", "social"],
+    revenue_constraint_active:
+      ((ga4.byChannel || []).find((c) => c.sessionDefaultChannelGroup === "Organic Search")?.sessions ?? 0) >= 50 &&
+      (shopify?.organicOrderCount ?? 0) === 0,
+    standing_priority_order: ["uplift", "author", "linker", "ctr", "envoy", "social"],
   };
 
   return {

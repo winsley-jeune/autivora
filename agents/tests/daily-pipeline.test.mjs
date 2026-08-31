@@ -75,3 +75,24 @@ test("completed catalog and SEO stages permit autonomous operation on resume", a
   assert.deepEqual(called, stages.map((stage) => stage.name));
   assert.equal(result.complete, true);
 });
+
+test("revenue constraint pauses distribution but executes revenue work", async () => {
+  const called = [];
+  const stages = [
+    { name: "signal" },
+    { name: "revenue-execute" },
+    { name: "herald", pauseForRevenue: true },
+    { name: "envoy", pauseForRevenue: true },
+    { name: "scoreboard" },
+  ];
+  const result = await runDailyPipeline({
+    stages,
+    acquire: () => ({ acquired: true, run: { id: "pipeline-revenue" } }),
+    finish: () => {},
+    revenueConstraint: () => true,
+    execute: async (stage) => { called.push(stage.name); return { name: stage.name, ok: true }; },
+  });
+  assert.deepEqual(called, ["signal", "revenue-execute", "scoreboard"]);
+  assert.equal(result.complete, true);
+  assert.equal(result.results.find((item) => item.name === "envoy").reason, "organic revenue constraint");
+});

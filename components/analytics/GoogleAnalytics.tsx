@@ -16,7 +16,7 @@ export default function GoogleAnalytics({ gaId }: { gaId: string }) {
           // yet carry the same tag.
           gtag('config', '${gaId}', {
             send_page_view: true,
-            linker: { domains: ['autivara.com', 'checkout.autivara.com'] }
+            linker: { domains: ['autivara.com', 'checkout.autivara.com', 'autivora.myshopify.com'] }
           });
         `}
       </Script>

@@ -4,6 +4,7 @@ import { ArrowRight } from 'lucide-react';
 import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 import ProductGrid from '@/components/ProductGrid';
 import CategoryFaq from '@/components/CategoryFaq';
+import CollectionGrowthContent from '@/components/CollectionGrowthContent';
 
 const INDUSTRIAL_FAQ = [
   {
@@ -82,6 +83,7 @@ export default function IndustrialLanding() {
         heading="Scale your scent."
         emitItemList
       />
+      <CollectionGrowthContent path="/industrial" />
 
       {/* Pillars */}
       <section className="py-24 px-6 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
