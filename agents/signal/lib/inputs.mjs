@@ -206,7 +206,7 @@ export async function buildInputs({ baseUrl, skipCrawl = false } = {}) {
     revenue_constraint_active:
       ((ga4.byChannel || []).find((c) => c.sessionDefaultChannelGroup === "Organic Search")?.sessions ?? 0) >= 50 &&
       (shopify?.organicOrderCount ?? 0) === 0,
-    standing_priority_order: ["uplift", "author", "linker", "ctr", "envoy", "social"],
+    standing_priority_order: ["uplift", "author", "linker", "ctr", "social", "envoy"],
   };
 
   return {
