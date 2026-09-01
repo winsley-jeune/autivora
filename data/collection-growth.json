@@ -100,5 +100,117 @@
         "answer": "A traditional disposable air freshener (hanging card, gel vent clip, or plastic unit) has a fixed fragrance baked in — once it fades in 2–4 weeks, you throw it away and buy another. A waterless car diffuser like Autivara's uses a dry felt pad or scent core that you recharge with a few drops of any oil. You choose the scent, control the intensity, and reuse the same unit indefinitely — no single-use plastic waste, no locked-in fragrance, no subscription."
       }
     ]
+  },
+  "/industrial": {
+    "heading": "Commercial Scent Diffusers — Own Your Oil, No Contract Required",
+    "intro": "Professional scenting shouldn't mean locking your business into a proprietary refill contract. Unlike ScentAir or Aroma360 — whose systems tie you to their branded oils at their prices — every Autivara commercial diffuser works with any fragrance oil you choose. Buy the hardware once, fill it with what you want, and own the experience from day one. Three units cover the full range of commercial spaces, from a single boutique room to an entire venue scented through your existing HVAC ductwork.",
+    "comparison": {
+      "columns": [
+        "",
+        "Smart Plug-In — $79",
+        "Atmos Wi-Fi — $149",
+        "Atmos Pro HVAC — $349"
+      ],
+      "rows": [
+        [
+          "Best for",
+          "Small offices, boutiques, guest suites",
+          "Medium lobbies, showrooms, offices",
+          "Whole venues, multi-room buildings"
+        ],
+        [
+          "Coverage area",
+          "~500 sq ft",
+          "~1,000 sq ft",
+          "2,000+ sq ft"
+        ],
+        [
+          "Install type",
+          "Plugs directly into wall outlet",
+          "Wall-mounted, no plumbing",
+          "Ties into existing HVAC ductwork"
+        ],
+        [
+          "App scheduling",
+          "Yes — Wi-Fi app",
+          "Yes — Wi-Fi app",
+          "Yes — app, minute-level scheduling"
+        ],
+        [
+          "Diffusion method",
+          "Waterless",
+          "Waterless nebulizing",
+          "Waterless nebulizing"
+        ],
+        [
+          "Refill system",
+          "Magnetic snap-in",
+          "Magnetic pop-open bay",
+          "Standard oil fill"
+        ],
+        [
+          "Contract required",
+          "No",
+          "No",
+          "No"
+        ],
+        [
+          "Oil compatibility",
+          "Any fragrance oil",
+          "Any fragrance oil",
+          "Any fragrance oil"
+        ]
+      ]
+    },
+    "chooser": [
+      {
+        "title": "Small office, boutique, or guest suite",
+        "body": "The Smart Plug-In ($79) slots into any wall outlet — no mounting hardware, no wiring. Wi-Fi scheduling and a magnetic snap-in refill have your space scenting in minutes. Ideal for up to ~500 sq ft.",
+        "href": "/product/autivara-smart-plug-diffuser"
+      },
+      {
+        "title": "Restaurant, salon, or dental waiting room",
+        "body": "The Atmos Wi-Fi ($149) wall-mounts cleanly in a lobby or treatment corridor and covers ~1,000 sq ft with waterless nebulized scent. App scheduling lets you dial intensity up for busy service hours and down overnight — no staff intervention needed.",
+        "href": "/product/autivara-atmos-wifi-diffuser"
+      },
+      {
+        "title": "Retail floor or mid-size showroom",
+        "body": "The Atmos Wi-Fi ($149) covers a mid-size showroom or retail floor at ~1,000 sq ft. Its magnetic refill bay means oil swaps happen in seconds — useful when you rotate seasonal fragrances to match promotions.",
+        "href": "/product/autivara-atmos-wifi-diffuser"
+      },
+      {
+        "title": "Whole hotel, venue, or multi-room facility",
+        "body": "The Atmos Pro HVAC ($349) connects directly to your building's existing ductwork and delivers consistent scent to every room through the vents already installed. One machine, one schedule, whole-venue coverage at 2,000+ sq ft.",
+        "href": "/product/autivara-atmos-pro-hvac"
+      },
+      {
+        "title": "Spa or wellness studio",
+        "body": "The Atmos Wi-Fi ($149) handles a mid-size treatment floor at ~1,000 sq ft. Waterless nebulizing means pure oil only — no water, no heat — keeping the scent clean and consistent across treatment rooms.",
+        "href": "/product/autivara-atmos-wifi-diffuser"
+      },
+      {
+        "title": "Large venue needing HVAC integration",
+        "body": "The Atmos Pro HVAC ($349) is the top of the Autivara commercial range. It ties into your existing ductwork so a single machine scents an entire venue evenly — with minute-level app scheduling for intensity and run times.",
+        "href": "/product/autivara-atmos-pro-hvac"
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Do commercial scent diffusers require a contract?",
+        "answer": "Autivara commercial diffusers require no contract of any kind. Some competing services (such as subscription-based scenting companies) require ongoing service agreements that tie you to their proprietary refill oils. Autivara hardware is a one-time purchase and works with any fragrance oil you choose — there are no recurring service fees, no locked refills, and no minimum commitment."
+      },
+      {
+        "question": "How much does commercial scenting cost per month?",
+        "answer": "With Autivara, your only recurring cost is the fragrance oil you choose to use — there is no monthly service fee or subscription. Hardware costs range from $79 (Smart Plug-In) to $149 (Atmos Wi-Fi) to $349 (Atmos Pro HVAC), each a one-time purchase. Because the diffusers are compatible with any oil, you control your ongoing cost entirely."
+      },
+      {
+        "question": "What is the coverage area of an HVAC scent diffuser?",
+        "answer": "The Atmos Pro HVAC is designed for whole-venue coverage and handles 2,000+ sq ft by connecting to your building's existing HVAC ductwork. Scent is distributed evenly through the vents already in place, so a single unit can cover multiple rooms or floors. For smaller spaces, the wall-mounted Atmos Wi-Fi covers ~1,000 sq ft and the Smart Plug-In covers ~500 sq ft."
+      },
+      {
+        "question": "Which commercial diffuser is right for a restaurant, salon, or dental office?",
+        "answer": "For most single-floor service businesses — restaurants, salons, spas, and dental waiting areas — the Atmos Wi-Fi ($149) is the practical fit. It wall-mounts discreetly, covers ~1,000 sq ft with app-scheduled waterless scent, and swaps oils in seconds via its magnetic refill bay. For a larger multi-room venue, step up to the Atmos Pro HVAC ($349), which ties into existing ductwork for 2,000+ sq ft of even coverage."
+      }
+    ]
   }
 }
