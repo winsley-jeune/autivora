@@ -63,7 +63,12 @@ export function assertCleanFor(files, cwd) {
 export function startTaskBranch(task, cwd) {
   const startBranch = run("git", ["branch", "--show-current"], { cwd });
   run("git", ["fetch", "origin", PRODUCTION_BRANCH], { cwd });
-  const branch = branchNameForTask(task);
+  const baseBranch = branchNameForTask(task);
+  let branch = baseBranch;
+  try {
+    run("git", ["show-ref", "--verify", "--quiet", `refs/remotes/origin/${baseBranch}`], { cwd });
+    branch = `${baseBranch}-retry-${Date.now()}`;
+  } catch {}
   run("git", ["checkout", "-b", branch, `origin/${PRODUCTION_BRANCH}`], { cwd });
   return { startBranch, branch };
 }
@@ -72,19 +77,19 @@ export function startTaskBranch(task, cwd) {
 // tree dirty with exactly `files` changed). Commits, pushes, opens a PR explicitly targeting
 // PRODUCTION_BRANCH (never gh's implicit default), and returns to `startBranch` — success or
 // failure. Returns the PR URL — pass it to completeTask() from agents/signal/lib/task-store.mjs.
-export function finishTaskPR({ task, files, commitMessage, cwd, startBranch }) {
+export function finishTaskPR({ task, files, commitMessage, cwd, startBranch, branch = branchNameForTask(task) }) {
   if (!files?.length) throw new Error("finishTaskPR: no files given — refusing to commit an empty change");
   try {
     run("git", ["add", ...files], { cwd });
     run("git", ["commit", "-m", commitMessage ?? `${task.agent}: ${task.action} on ${task.target_url}`], { cwd });
-    run("git", ["push", "-u", "origin", branchNameForTask(task)], { cwd });
+    run("git", ["push", "-u", "origin", branch], { cwd });
 
     // Signal writes verbose multi-sentence `action` fields; GitHub caps PR titles at 256 chars
     // and rejects the whole create beyond it (bit tasks #26/#28: branch pushed, no PR). Keep
     // the title a summary; the full action already lives in the PR body.
     const rawTitle = `[${task.agent}] ${task.action} — ${task.target_url}`;
     const prTitle = rawTitle.length > 240 ? `[${task.agent}] task #${task.id} — ${task.target_url}`.slice(0, 240) : rawTitle;
-    return run("gh", ["pr", "create", "--title", prTitle, "--body", prBody(task), "--head", branchNameForTask(task), "--base", PRODUCTION_BRANCH], { cwd });
+    return run("gh", ["pr", "create", "--title", prTitle, "--body", prBody(task), "--head", branch, "--base", PRODUCTION_BRANCH], { cwd });
   } finally {
     if (startBranch) run("git", ["checkout", startBranch], { cwd });
   }
@@ -92,6 +97,6 @@ export function finishTaskPR({ task, files, commitMessage, cwd, startBranch }) {
 
 // Deletes the local task branch after a failed run, so a retry via startTaskBranch() doesn't hit
 // "branch already exists". Safe to call even if the branch was never created.
-export function abandonTaskBranch(task, cwd) {
-  try { run("git", ["branch", "-D", branchNameForTask(task)], { cwd }); } catch {}
+export function abandonTaskBranch(task, cwd, branch = branchNameForTask(task)) {
+  try { run("git", ["branch", "-D", branch], { cwd }); } catch {}
 }

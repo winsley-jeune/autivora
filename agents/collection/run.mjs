@@ -21,9 +21,9 @@ const git = (args) => execFileSync('git', args, { cwd: root, encoding: 'utf8' })
   if (!['uplift', 'author'].includes(task.agent) || !allowedPaths.has(task.target_url)) throw new Error(`Task ${taskId} is not a supported collection revenue task`);
   assertCleanFor([contentPath], root);
   const { ANTHROPIC_API_KEY } = readEnv(['ANTHROPIC_API_KEY']);
-  let startBranch; let branchStarted = false; let claimed = false;
+  let startBranch; let taskBranch; let branchStarted = false; let claimed = false;
   try {
-    ({ startBranch } = startTaskBranch(task, root)); branchStarted = true;
+    ({ startBranch, branch: taskBranch } = startTaskBranch(task, root)); branchStarted = true;
     const all = JSON.parse(readFileSync(join(root, contentPath), 'utf8'));
     const snapshot = latestShopifyCatalogSnapshot();
     if (!snapshot?.complete || !Array.isArray(snapshot.products)) throw new Error('No complete Shopify catalog snapshot for grounding');
@@ -37,7 +37,7 @@ const git = (args) => execFileSync('git', args, { cwd: root, encoding: 'utf8' })
     all[task.target_url] = content;
     writeFileSync(join(root, contentPath), `${JSON.stringify(all, null, 2)}\n`);
     execFileSync('npx', ['tsc', '--noEmit'], { cwd: root, stdio: 'inherit' });
-    const prUrl = finishTaskPR({ task, files: [contentPath], commitMessage: `${task.agent}: strengthen ${task.target_url} for revenue`, cwd: root, startBranch });
+    const prUrl = finishTaskPR({ task, files: [contentPath], commitMessage: `${task.agent}: strengthen ${task.target_url} for revenue`, cwd: root, startBranch, branch: taskBranch });
     await completeTask(taskId, { prUrl, note: change_summary });
     console.log(`Collection: task #${taskId} opened ${prUrl}`);
     if (process.env.AUTONOMOUS_PR_MERGE !== 'false') {
@@ -50,7 +50,7 @@ const git = (args) => execFileSync('git', args, { cwd: root, encoding: 'utf8' })
       }
     }
   } catch (error) {
-    if (branchStarted) { try { git(['checkout', '--', contentPath]); } catch {} try { git(['checkout', startBranch]); } catch {} abandonTaskBranch(task, root); }
+    if (branchStarted) { try { git(['checkout', '--', contentPath]); } catch {} try { git(['checkout', startBranch]); } catch {} abandonTaskBranch(task, root, taskBranch); }
     if (claimed) await releaseTask(taskId, error.message);
     throw error;
   }
