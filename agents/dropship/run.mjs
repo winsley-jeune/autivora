@@ -34,6 +34,7 @@ import { competitorIntel } from "../lib/espionage.mjs";
 import { HYPOTHESIS_TARGET, mineSearchDemand, provenSales, WINNER_DEFINITION, activeHypotheses, staleHypotheses, applyResearchOutput } from "./lib/demand.mjs";
 import { demandMovers, categoryPulse } from "./lib/observatory.mjs";
 import { initShopify, createDraftProduct, createBundleDraft } from "./lib/shopify.mjs";
+import { upsertUnitEconomics } from "../lib/profit-control.mjs";
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
@@ -407,6 +408,9 @@ async function main() {
         importedOn: today(), lastVerifiedOn: today(),
         verifyHistory: [{ on: today(), ok: true, stock: v.stock, note: "initial import" }],
       });
+      upsertUnitEconomics({ productKey: String(product.id), sellingPrice: Number(price), supplierCost: v.landedCost,
+        shippingCost: 0, source: "aliexpress-verified-landed-cost", verifiedAt: new Date().toISOString(),
+        detail: { itemId: String(v.itemId), includesShipping: true, deliveryMin: v.deliveryMin, deliveryMax: v.deliveryMax, stock: v.stock } });
       console.log(`Scout: imported DRAFT [${v.tier}/${imp.collection}] "${imp.copy.title}" — $${price} (${multiple}x on $${v.landedCost.toFixed(2)})`);
     } catch (e) {
       console.error(`Scout: import failed for ${imp.itemId}: ${e.message.slice(0, 200)}`);
@@ -446,6 +450,9 @@ async function main() {
         importedOn: today(), lastVerifiedOn: today(),
         verifyHistory: [{ on: today(), ok: true, note: "bundle created from verified components" }],
       });
+      upsertUnitEconomics({ productKey: String(product.id), sellingPrice: Number(price), supplierCost: landedCost,
+        shippingCost: 0, source: "aliexpress-verified-bundle-landed-cost", verifiedAt: new Date().toISOString(),
+        detail: { includesShipping: true, components: comps.map(({ itemId, skuId }) => ({ itemId, skuId })) } });
       console.log(`Scout: created BUNDLE draft "${bp.copy.title}" — $${price} (${multiple}x on summed landed $${landedCost})`);
     } catch (e) {
       console.error(`Scout: bundle creation failed for "${bp.title}": ${e.message.slice(0, 200)}`);

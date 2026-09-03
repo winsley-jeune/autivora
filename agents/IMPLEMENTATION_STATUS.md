@@ -41,7 +41,7 @@ analytics pagination, and the edit-only image contract.
 
 ## Next migration slice
 
-1. Add commercial funnel and contribution-margin attribution to the evidence layer.
+1. Populate verified unit economics for current non-Scout products; new Scout imports now register landed costs automatically.
 2. Add independent factual Content QA and Visual QA.
 3. Extend versioned Shopify publishing from copy to media.
 4. Convert Product and Category into autonomous commercial-page agents.
