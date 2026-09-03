@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "ai:health": "node agents/scripts/local-ai-health.mjs",
+    "ai:training:export": "node agents/scripts/export-ai-training.mjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

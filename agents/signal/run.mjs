@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Signal — the analyst agent's daily decision entry point. Reads the analytics snapshot +
-// Signal's own task history, asks Claude to score past decisions and emit today's prioritized
+// Signal's own task history, asks the configured AI model to score past decisions and emit today's prioritized
 // task list, then persists both. Read-only against the live store — it queues tasks for the
 // specialist agents (ctr/uplift/linker/envoy/author/social) to execute; it never publishes
 // anything itself. See agents/ARCHITECTURE.md and agents/signal/prompt.md.
@@ -10,13 +10,14 @@
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { readEnv } from "../lib/env.mjs";
+import { readAiEnv } from "../lib/env.mjs";
 import { buildInputs } from "./lib/inputs.mjs";
 import { callSignal } from "./lib/anthropic.mjs";
 import { mutateTaskStore, applyCheckbackScores, appendTasks, isOnCooldown, expireStaleTasks, releaseExpiredClaims } from "./lib/task-store.mjs";
 import { updateQueryHistory, saveQueryHistory } from "./lib/query-history.mjs";
 import { mutateCatalog } from "../dropship/lib/catalog-store.mjs";
 import { acquireWorkflowLease, finishWorkflow } from "../lib/control-plane.mjs";
+import { compactPromptInputs } from "./lib/compact-inputs.mjs";
 
 const __dir = dirname(fileURLToPath(import.meta.url));
 const args = process.argv.slice(2);
@@ -57,7 +58,7 @@ export function enforceCaps(tasks, { authorGateMet, revenueConstraintActive = fa
 }
 
 (async () => {
-  const { ANTHROPIC_API_KEY } = readEnv(["ANTHROPIC_API_KEY"]);
+  const { ANTHROPIC_API_KEY } = readAiEnv();
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://autivara.com";
   const systemPrompt = readFileSync(join(__dir, "prompt.md"), "utf8");
 
@@ -102,8 +103,10 @@ export function enforceCaps(tasks, { authorGateMet, revenueConstraintActive = fa
     workflowRunId = lease.run.id;
   }
 
-  console.log("Signal: calling Claude...");
-  const { output, usage } = await callSignal({ apiKey: ANTHROPIC_API_KEY, systemPrompt, userInput: promptInputs });
+  console.log("Signal: calling configured AI model...");
+  const modelInputs = compactPromptInputs(promptInputs);
+  console.log(`Signal: compacted model input ${JSON.stringify(promptInputs).length} -> ${JSON.stringify(modelInputs).length} chars.`);
+  const { output, usage } = await callSignal({ apiKey: ANTHROPIC_API_KEY, systemPrompt, userInput: modelInputs });
 
   const now = new Date();
   const nowISO = now.toISOString();

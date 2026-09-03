@@ -23,7 +23,7 @@
 //
 // Products only ever land as drafts. Scout never touches a live product — it flags, the
 // operator decides. That's the human-approval gate for anything customer-facing.
-import { readEnv } from "../lib/env.mjs";
+import { readAiEnv, readEnv } from "../lib/env.mjs";
 import { getFreshSession } from "./lib/aliexpress-auth.mjs";
 import { searchKeyword, verifyCandidate } from "./lib/market.mjs";
 import { loadCatalog, mutateCatalog } from "./lib/catalog-store.mjs";
@@ -43,11 +43,11 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const today = () => new Date().toISOString().slice(0, 10);
 
 async function main() {
-  const { ALIEXPRESS_APP_KEY, ALIEXPRESS_APP_SECRET, ANTHROPIC_API_KEY } = readEnv([
+  const { ALIEXPRESS_APP_KEY, ALIEXPRESS_APP_SECRET } = readEnv([
     "ALIEXPRESS_APP_KEY",
     "ALIEXPRESS_APP_SECRET",
-    "ANTHROPIC_API_KEY",
   ]);
+  const { ANTHROPIC_API_KEY } = readAiEnv();
 
   console.log("Scout: refreshing AliExpress session...");
   const session = await getFreshSession({ appKey: ALIEXPRESS_APP_KEY, appSecret: ALIEXPRESS_APP_SECRET });
@@ -306,7 +306,7 @@ async function main() {
     recent_lessons: catalog.lessons.slice(-7),
   };
 
-  console.log("Scout: calling Claude...");
+  console.log("Scout: calling configured AI model...");
   const { output } = await callScout({ apiKey: ANTHROPIC_API_KEY, systemPrompt, userInput });
   // Defensive normalization: if the model's output was truncated (max_tokens mid-tool-call),
   // degrade to a no-op decision pass instead of crashing after the expensive verify phase.

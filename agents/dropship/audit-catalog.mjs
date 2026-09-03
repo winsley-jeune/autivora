@@ -15,7 +15,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { readEnv } from "../lib/env.mjs";
+import { readAiEnv } from "../lib/env.mjs";
 import { pullCompleteShopifyCatalog, recordShopifyCatalogSnapshot } from "../lib/shopify-catalog.mjs";
 import { loadCatalog } from "./lib/catalog-store.mjs";
 import { callCatalogAudit } from "./lib/anthropic.mjs";
@@ -36,7 +36,7 @@ const CATEGORY_RULES = [
 const categorize = (title) => CATEGORY_RULES.find((r) => r.re.test(title)).key;
 
 async function main() {
-  const { ANTHROPIC_API_KEY } = readEnv(["ANTHROPIC_API_KEY"]);
+  const { ANTHROPIC_API_KEY } = readAiEnv();
 
   // Landed costs are facts (freight-verified), not opinions — the auditor needs them for the
   // 3x floor. Everything else from internal state (flags, lessons, verdicts) stays out.

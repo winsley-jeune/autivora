@@ -148,6 +148,17 @@ To change the policy (priority order, caps, gate threshold, judgment guidance), 
 live. `run.mjs`'s `CAPS` constant and `task-store.mjs`'s `CHECK_BACK_DAYS` should stay in sync
 with the prompt's hard rules.
 
+## Local model
+
+The default AI provider is Ollama with `qwen3.5:9b` at `http://127.0.0.1:11434`. Routine agent
+calls keep their existing JSON schemas, and every schema-valid generation is stored in SQLite's
+`ai_training_examples` table for later LoRA dataset curation. Run `npm run ai:health` to verify
+the service and model; run `npm run ai:training:export` to emit JSONL training records.
+
+Envoy and Scout research uses DataForSEO live SERP/Shopping evidence in local mode. If
+`DATAFORSEO_API_KEY` is absent or the provider returns no results, research fails closed instead
+of inferring current competitors, prices, suppliers, or contacts from model weights.
+
 ## Specialist agents (not yet built)
 
 `ctr`, `uplift`, `linker`, `envoy`, `author`, `social`, and `qa` don't exist yet — Signal emits

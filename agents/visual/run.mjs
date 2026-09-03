@@ -15,7 +15,7 @@ import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { readEnv } from "../lib/env.mjs";
+import { readAiEnv, readEnv } from "../lib/env.mjs";
 import { resolveArticle } from "../lib/blog-source.mjs";
 import { planVisual, verifyVisual } from "./lib/anthropic.mjs";
 import { editImage } from "../content/lib/openai-image.mjs";
@@ -103,7 +103,8 @@ function clearCacheFor(targetSlug) {
 
 (async () => {
   if (!slug) throw new Error('Usage: node agents/visual/run.mjs <slug> [--query "..."] [--dry-run]');
-  const { ANTHROPIC_API_KEY, OPENAI_API_KEY } = readEnv(["ANTHROPIC_API_KEY", "OPENAI_API_KEY"]);
+  const { OPENAI_API_KEY } = readEnv(["OPENAI_API_KEY"]);
+  const { ANTHROPIC_API_KEY } = readAiEnv();
   const systemPrompt = readFileSync(join(__dir, "prompt.md"), "utf8");
 
   // Refuse to overwrite — matches agents/content/generate-blog-image.mjs's existing guard. This

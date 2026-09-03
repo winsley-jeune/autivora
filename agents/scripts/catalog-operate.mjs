@@ -6,7 +6,7 @@ import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createHash } from "node:crypto";
-import { readEnv } from "../lib/env.mjs";
+import { readAiEnv } from "../lib/env.mjs";
 import { latestShopifyCatalogSnapshot } from "../lib/shopify-catalog.mjs";
 import { acquireWorkflowLease, finishWorkflow } from "../lib/control-plane.mjs";
 import { buildCatalogPatch } from "../lib/catalog-policy.mjs";
@@ -35,7 +35,7 @@ if (!lease.acquired) {
 }
 
 try {
-  const { ANTHROPIC_API_KEY } = readEnv(["ANTHROPIC_API_KEY"]);
+  const { ANTHROPIC_API_KEY } = readAiEnv();
   const prompt = readFileSync(join(dropshipDir, "prompt-catalog-verify.md"), "utf8");
   const facts = new Map(scope.products.map((p) => [String(p.id), p]));
   const candidates = [];

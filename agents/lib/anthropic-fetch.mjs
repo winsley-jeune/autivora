@@ -5,12 +5,15 @@
 const API_URL = "https://api.anthropic.com/v1/messages";
 import { assertAnthropicBudget, estimatedAnthropicCost, recordAnthropicUsage } from "./ai-budget.mjs";
 import { readOptionalEnv } from "./env.mjs";
+import { callOllamaStructured, OLLAMA_MODEL } from './ollama-fetch.mjs';
+import { googleShoppingProducts, serpTop } from './dataforseo.mjs';
 // Routine generation uses the efficient model; only explicitly routed high-risk verification
 // receives Opus. Environment overrides make model migrations configuration-only.
-const modelEnv = readOptionalEnv(["ANTHROPIC_OPUS_MODEL", "ANTHROPIC_GENERATOR_MODEL", "ANTHROPIC_VERIFIER_MODEL"]);
-export const OPUS_MODEL = process.env.ANTHROPIC_OPUS_MODEL ?? modelEnv.ANTHROPIC_OPUS_MODEL ?? "claude-opus-4-8";
-export const GENERATOR_MODEL = process.env.ANTHROPIC_GENERATOR_MODEL ?? modelEnv.ANTHROPIC_GENERATOR_MODEL ?? "claude-sonnet-4-6";
-export const VERIFIER_MODEL = process.env.ANTHROPIC_VERIFIER_MODEL ?? modelEnv.ANTHROPIC_VERIFIER_MODEL ?? OPUS_MODEL;
+const modelEnv = readOptionalEnv(["AI_PROVIDER", "ANTHROPIC_OPUS_MODEL", "ANTHROPIC_GENERATOR_MODEL", "ANTHROPIC_VERIFIER_MODEL"]);
+export const AI_PROVIDER = process.env.AI_PROVIDER ?? modelEnv.AI_PROVIDER ?? 'ollama';
+export const OPUS_MODEL = AI_PROVIDER === 'ollama' ? OLLAMA_MODEL : process.env.ANTHROPIC_OPUS_MODEL ?? modelEnv.ANTHROPIC_OPUS_MODEL ?? "claude-opus-4-8";
+export const GENERATOR_MODEL = AI_PROVIDER === 'ollama' ? OLLAMA_MODEL : process.env.ANTHROPIC_GENERATOR_MODEL ?? modelEnv.ANTHROPIC_GENERATOR_MODEL ?? "claude-sonnet-4-6";
+export const VERIFIER_MODEL = AI_PROVIDER === 'ollama' ? OLLAMA_MODEL : process.env.ANTHROPIC_VERIFIER_MODEL ?? modelEnv.ANTHROPIC_VERIFIER_MODEL ?? OPUS_MODEL;
 export const MODEL = GENERATOR_MODEL;
 const MAX_ATTEMPTS = 3;
 const RETRYABLE_STATUS = new Set([429, 500, 529]);
@@ -50,6 +53,36 @@ async function postWithRetry(url, options, label) {
 // stay "auto" for the search phase, so the output tool isn't API-guaranteed — one nudge turn
 // recovers the case where the model stops after researching without emitting.
 export async function callWithSearchThenTool({ apiKey, model = MODEL, systemPrompt, userContent, tool, maxTokens = 16000, maxSearches = 12, effort = "high", label = "agent" }) {
+  if (AI_PROVIDER === 'ollama') {
+    const querySchema = { type: 'object', properties: {
+      queries: { type: 'array', minItems: 1, maxItems: Math.min(maxSearches, 6), items: { type: 'string' } },
+    }, required: ['queries'] };
+    const { output: plan } = await callOllamaStructured({
+      model,
+      label: `${label}/research-plan`,
+      maxTokens: 800,
+      systemPrompt: 'Create concise Google search queries for the entities, products, prices, publications, or contacts in the request. Do not answer the request. Never search for meta-instructions such as current, live, organic result, evidence, or Google itself; search the underlying subject directly. Never use site:google.com.',
+      userContent: typeof userContent === 'string' ? userContent : JSON.stringify(userContent),
+      schema: querySchema,
+    });
+    const queries = [...new Set(plan.queries.map((query) => query.trim()).filter(Boolean))].slice(0, Math.min(maxSearches, 6));
+    const research = await Promise.all(queries.map(async (query) => ({
+      query,
+      organic: await serpTop(query, { limit: 5 }),
+      ...(/anchor/i.test(label) ? { shopping: await googleShoppingProducts(query, { depth: 10, maxPolls: 8 }) } : {}),
+    })));
+    if (!research.some((item) => item.organic?.length || item.shopping?.length)) {
+      throw new Error(`${label}: DataForSEO returned no live evidence; refusing ungrounded output`);
+    }
+    return callOllamaStructured({
+      model,
+      label,
+      maxTokens,
+      systemPrompt: `${systemPrompt}\nUse only the supplied live_research for current web facts. Cite exact URLs from it. If evidence is insufficient, return an empty result rather than guessing.`,
+      userContent: JSON.stringify({ request: userContent, live_research: research }, null, 2),
+      schema: tool.input_schema,
+    });
+  }
   assertAnthropicBudget(estimatedAnthropicCost({ model, inputText: `${systemPrompt}\n${userContent}`, maxTokens, maxSearches }));
   const tools = [{ type: "web_search_20260209", name: "web_search", max_uses: maxSearches }, tool];
   const baseBody = {
@@ -149,6 +182,9 @@ async function streamMessage(url, headers, body, label) {
 // (this call) and Vertex AI — the "thinking must be disabled with forced tool_choice" restriction
 // is Bedrock-only. If this ever 400s, the full response body is surfaced via the thrown error.
 export async function callWithForcedTool({ apiKey, model = MODEL, systemPrompt, userContent, tool, maxTokens = 8000, effort = "high", label = "agent" }) {
+  if (AI_PROVIDER === 'ollama') {
+    return callOllamaStructured({ model, systemPrompt, userContent, schema: tool.input_schema, maxTokens, label });
+  }
   assertAnthropicBudget(estimatedAnthropicCost({ model, inputText: `${systemPrompt}\n${userContent}`, maxTokens }));
   const body = {
     model,
