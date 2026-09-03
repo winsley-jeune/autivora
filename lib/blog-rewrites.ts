@@ -455,6 +455,7 @@ export const BLOG_REWRITES: Record<string, BlogArticle> = {
   "content": [
     "## Scent Is Part of Your Brand",
     "Walk into a good hotel, boutique, or spa and the air is part of the experience — consistent, clean, and unmistakably *theirs*. That is [commercial scenting](/industrial), and it is no longer the exclusive domain of luxury chains paying for locked three-month contracts. This guide explains how commercial scent diffusers work, how to size one to your space, and how to do it without the sales-call runaround.",
+    "Ready to choose equipment? Compare every [commercial scent diffuser for offices and venues — no contract, own your oil](/industrial), including the [HVAC scent diffuser for large venues ($349)](/product/autivara-atmos-pro-hvac) and the [Wi-Fi wall scent diffuser for offices ($149)](/product/autivara-atmos-wifi-diffuser).",
     "## How Commercial Scenting Works: Cold-Air Diffusion",
     "Commercial units use cold-air (nebulizing) diffusion. Instead of heating or diluting the oil, they use pressurized air to atomize pure fragrance into a dry micro-mist of droplets so fine they stay suspended and travel far further than the mist from a home unit. There is no water, no heat, and no residue on your surfaces — and because the oil is never altered, the scent reaches your space exactly as it was blended.",
     "There are two ways to deliver it:",
@@ -923,6 +924,7 @@ export const BLOG_REWRITES: Record<string, BlogArticle> = {
     content: [
       '## How do you make a gym smell good?',
       'In that order: **fix the source, then add scent.** Fragrance layered over a ventilation or cleaning problem just smells like fragrance plus sweat. Once airflow and cleaning are handled, a steady ambient scent keeps the space feeling fresh and energizing — and members notice it the moment they walk in.',
+      'For equipment, compare the full [commercial scent diffuser range for offices and venues — no contract, own your oil](/industrial). Larger or multi-zone gyms can evaluate the [HVAC scent diffuser for large venues ($349)](/product/autivara-atmos-pro-hvac), while studios and reception areas can use the [Wi-Fi wall scent diffuser for offices ($149)](/product/autivara-atmos-wifi-diffuser).',
       '## Step 1: deal with the odor source',
       'Gym smell is mostly trapped humidity and bacteria. Make sure exhaust and HVAC are moving air, mats and equipment are wiped down, and high-traffic zones (locker rooms, cardio areas) are cleaned often. Scent is the finishing layer, not the fix.',
       '## Step 2: scent the space by size',
@@ -957,6 +959,7 @@ export const BLOG_REWRITES: Record<string, BlogArticle> = {
     content: [
       '## Should a dental office use scent?',
       'Yes — carefully. The clinical smell of a dental office (eugenol, disinfectant) is strongly associated with anxiety, and a subtle, calming scent in the **waiting and reception areas** can measurably soften that first impression. The key word is *subtle*: dental patients include scent-sensitive people, so this is a light-touch, reception-first job — not heavy scenting of treatment rooms.',
+      'Start by comparing the [commercial scent diffuser range for offices and venues — no contract, own your oil](/industrial). A practice can choose the [Wi-Fi wall scent diffuser for offices ($149)](/product/autivara-atmos-wifi-diffuser) for a controlled reception area; larger facilities with separately mapped HVAC zones can also review the [HVAC scent diffuser for large venues ($349)](/product/autivara-atmos-pro-hvac).',
       '## Scent reception, not the operatory',
       'Keep diffusion to the **waiting room, reception, and hallways** — the spaces where patients form their first impression. Leave **treatment rooms unscented or barely scented**: clinicians need a neutral environment, and some patients are sensitive mid-procedure. The point is to ease the arrival, not perfume the chair.',
       '## Which device and setting',
@@ -989,6 +992,7 @@ export const BLOG_REWRITES: Record<string, BlogArticle> = {
     content: [
       '## Should a restaurant use scent marketing?',
       'Yes — but selectively, because a restaurant already has the most valuable scent in the building: the food. The rule that separates wins from disasters is simple: **scent the entry, the bar, the lounge, and the restrooms — never the dining room.** Adding fragrance where people eat competes with the kitchen and reads as a cover-up.',
+      'Compare the [commercial scent diffuser range for offices and venues — no contract, own your oil](/industrial), then choose by zone. The [Wi-Fi wall scent diffuser for offices ($149)](/product/autivara-atmos-wifi-diffuser) suits independently controlled arrival or lounge areas; review the [HVAC scent diffuser for large venues ($349)](/product/autivara-atmos-pro-hvac) only when the HVAC zone cannot carry fragrance into dining or kitchen areas.',
       '## Restaurant scenting: the practical answer',
       'Use scent only in guest-arrival and non-dining zones, keep each zone independently controlled, and schedule output to opening hours. A small entry or restroom can use a compact plug-in; a larger bar or lounge is better served by a scheduled standalone unit. Do not choose by building square footage alone: walls, open doors, exhaust, ceiling height, and the zone served by each HVAC loop all change effective coverage.',
       '## Why the dining room is off-limits',
