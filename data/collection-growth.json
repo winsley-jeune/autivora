@@ -100,5 +100,76 @@
         "answer": "A traditional disposable air freshener (hanging card, gel vent clip, or plastic unit) has a fixed fragrance baked in — once it fades in 2–4 weeks, you throw it away and buy another. A waterless car diffuser like Autivara's uses a dry felt pad or scent core that you recharge with a few drops of any oil. You choose the scent, control the intensity, and reuse the same unit indefinitely — no single-use plastic waste, no locked-in fragrance, no subscription."
       }
     ]
+  },
+  "/industrial": {
+    "heading": "Commercial Scent Diffusers — Waterless Control Without a Service Contract",
+    "intro": "Choose a commercial scent diffuser by installation method and space type: plug-in for a small room, wall-mounted Wi-Fi control for a mid-size lobby or showroom, or HVAC integration for whole-venue distribution. Autivara equipment is purchased outright, uses waterless nebulizing, and lets you manage fragrance oil without a required scent-service subscription.",
+    "comparison": {
+      "columns": [
+        "Model",
+        "Best fit",
+        "Installation",
+        "Controls",
+        "Price"
+      ],
+      "rows": [
+        [
+          "Smart Plug-In",
+          "Small offices, treatment rooms, guest suites, and compact boutiques",
+          "Plugs directly into a wall outlet; no mounting hardware",
+          "Wi-Fi app scheduling and intensity",
+          "$79"
+        ],
+        [
+          "Atmos Wi-Fi Wall Diffuser",
+          "Mid-size offices, lobbies, salons, and showrooms",
+          "Wall-mounted standalone unit",
+          "Wi-Fi app scheduling and intensity",
+          "$149"
+        ],
+        [
+          "Atmos Pro HVAC",
+          "Larger venues that need scent distributed through existing vents",
+          "Connects to existing HVAC ductwork",
+          "App scheduling and precise intensity settings",
+          "$349"
+        ]
+      ]
+    },
+    "chooser": [
+      {
+        "title": "Smart Plug-In ($79) — Start with One Small Space",
+        "body": "A direct-to-outlet diffuser for a small office, guest suite, treatment room, or compact retail area. It needs no mounting or wiring and includes app-based scheduling and intensity control.",
+        "href": "/product/autivara-smart-plug-diffuser"
+      },
+      {
+        "title": "Atmos Wi-Fi Wall Diffuser ($149) — Manage a Mid-Size Customer Area",
+        "body": "A wall-mounted waterless system designed for offices, lobbies, salons, and mid-size showrooms. Schedule operating times and adjust strength in the Wi-Fi app, then use the magnetic refill bay for oil changes.",
+        "href": "/product/autivara-atmos-wifi-diffuser"
+      },
+      {
+        "title": "Atmos Pro HVAC ($349) — Distribute Scent Across a Venue",
+        "body": "The largest system in the Atmos range connects to existing HVAC ductwork and sends fragrance through the venue's vents. App controls provide scheduling and intensity adjustment for whole-venue operation.",
+        "href": "/product/autivara-atmos-pro-hvac"
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Do Autivara commercial scent diffusers require a contract?",
+        "answer": "No required scent-service contract is attached to these diffusers. You purchase the equipment outright and manage its waterless fragrance-oil refills. Your operating cost therefore depends on the oil you choose, the schedule, and the intensity setting rather than a mandatory monthly service plan."
+      },
+      {
+        "question": "How much does commercial scenting cost?",
+        "answer": "Autivara's current equipment prices are $79 for the Smart Plug-In, $149 for the Atmos Wi-Fi Wall Diffuser, and $349 for the Atmos Pro HVAC. Ongoing fragrance cost varies with your oil, operating hours, and intensity, so a universal monthly estimate would be misleading. Start at the lowest practical intensity and adjust after observing the space."
+      },
+      {
+        "question": "Which diffuser size should I choose for my business?",
+        "answer": "Choose by installation and layout rather than an unsupported one-size-fits-all square-foot claim. Use the Smart Plug-In for one smaller room, the wall-mounted Atmos Wi-Fi for a mid-size customer area, and the Atmos Pro HVAC when you need distribution through existing ductwork across a larger venue. Room shape, airflow, doors, ceiling height, and desired intensity all affect real coverage."
+      },
+      {
+        "question": "Are these commercial diffusers waterless?",
+        "answer": "Yes. The commercial range uses waterless fragrance delivery, so there is no water tank to fill. The Atmos systems nebulize fragrance oil, while each product's controls let you manage its operating schedule and intensity."
+      }
+    ]
   }
 }
