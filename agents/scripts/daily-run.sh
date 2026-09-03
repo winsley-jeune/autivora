@@ -24,7 +24,9 @@ LOG_FILE="$LOG_DIR/daily-run-$(date +%Y-%m-%d).log"
 ATTEMPT_LOG="$LOG_DIR/daily-run-$(date +%Y-%m-%d)-$(date +%H%M%S)-$$.log"
 
 mkdir -p "$LOG_DIR"
-export PATH="$NODE_BIN:/usr/bin:/bin:/usr/sbin:/sbin"
+# Homebrew provides gh on Apple Silicon. Executor agents need it to open their PRs; launchd
+# does not inherit the interactive shell's Homebrew PATH.
+export PATH="$NODE_BIN:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 cd "$REPO_DIR"
 
 if node agents/scripts/daily-pipeline.mjs > "$ATTEMPT_LOG" 2>&1; then
