@@ -4,7 +4,7 @@
 // Shopify (not the snapshot — this line must never be stale), frames them against the North
 // Star (10 sales/day), and delivers via macOS notification + a one-line log the operator can
 // read in three seconds. Deterministic end to end — no model call.
-import { writeFileSync, mkdirSync } from "node:fs";
+import { writeFileSync, mkdirSync, readFileSync, existsSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
@@ -34,10 +34,12 @@ async function main() {
 
   const items = todays.flatMap((o) => o.line_items.map((li) => li.title)).slice(0, 3);
   const northStar = 10;
+  const profitPath = join(__dir, "output", "profit-controller-latest.json");
+  const profit = existsSync(profitPath) ? JSON.parse(readFileSync(profitPath, "utf8")) : null;
   const headline = todays.length
     ? `${todays.length} sale(s) today — $${todayRevenue.toFixed(2)}${items.length ? ` (${items.join("; ").slice(0, 80)})` : ""}`
     : `0 sales today`;
-  const line = `[scoreboard ${today()}] ${headline} | organic: ${organicToday.length} / $${organicRevenueToday.toFixed(2)} | 7d: ${orders.length} orders / $${weekRevenue.toFixed(2)} | North Star ${todays.length}/${northStar}`;
+  const line = `[scoreboard ${today()}] ${headline} | organic: ${organicToday.length} / $${organicRevenueToday.toFixed(2)} | 7d: ${orders.length} orders / $${weekRevenue.toFixed(2)} | profit constraint: ${profit?.constraint ?? "unknown"} | margin-ready offers: ${profit?.economics?.marginEligible ?? 0} | North Star ${todays.length}/${northStar}`;
 
   console.log(line);
   mkdirSync(join(__dir, "output"), { recursive: true });

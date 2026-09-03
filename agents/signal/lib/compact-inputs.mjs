@@ -46,6 +46,7 @@ export function compactPromptInputs(inputs) {
         .map(({ id, url, handle, title, status, price, inventory, collections, seo_title, seo_description }) =>
           ({ id, url, handle, title, status, price, inventory, collections, seo_title, seo_description })),
     },
+    profit_control: inputs.profit_control,
     unindexed_pages: {
       ...inputs.unindexed_pages,
       pages: (inputs.unindexed_pages?.pages ?? []).slice(0, 60),

@@ -17,6 +17,7 @@ const DAY = 24 * 60 * MINUTE;
 export const STAGES = [
   { name: "catalog-sync", args: ["run", "catalog:sync"], timeoutMs: 3 * MINUTE, attempts: 3, lane: "catalog" },
   { name: "analytics", args: ["run", "analytics:run"], timeoutMs: 10 * MINUTE, lane: "monitoring" },
+  { name: "profit-control", args: ["run", "profit:control"], timeoutMs: 2 * MINUTE, lane: "revenue" },
   { name: "local-ai-health", args: ["run", "ai:health"], timeoutMs: 2 * MINUTE, lane: "monitoring" },
   { name: "product-seo", args: ["run", "seo:products"], timeoutMs: 15 * MINUTE, lane: "catalog", needsCatalog: true },
   { name: "catalog-autonomous", args: ["run", "catalog:autonomous"], timeoutMs: 20 * MINUTE, lane: "catalog", needsCatalog: true, needsSeo: true, needsAi: true },

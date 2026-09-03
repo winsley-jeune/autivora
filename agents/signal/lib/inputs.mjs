@@ -230,6 +230,7 @@ export async function buildInputs({ baseUrl, skipCrawl = false } = {}) {
     product_economics: productEconomics(),
     commercial_surfaces: listCommercialSurfaces(),
     pricing_experiments: readJson(join(__dir, "..", "state", "pricing-experiments.json")) ?? [],
+    profit_control: readJson(join(ANALYTICS_OUT, "profit-controller-latest.json")) ?? { note: "profit controller has not run" },
     sourcing_state: sourcingState(),
     competitor_intel: await competitorIntelSafe(),
     site_audit: await siteAuditSafe(),

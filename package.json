@@ -35,7 +35,8 @@
     "herald:run": "node agents/herald/run.mjs",
     "queue": "node agents/scripts/queue.mjs",
     "scheduler": "node agents/scripts/scheduler.mjs",
-    "scoreboard": "node agents/analytics/scoreboard.mjs"
+    "scoreboard": "node agents/analytics/scoreboard.mjs",
+    "profit:control": "node agents/scripts/profit-controller.mjs"
   },
   "dependencies": {
     "@sanity/client": "^6.0.0",
