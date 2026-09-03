@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { assertSchema, ollamaUserMessage } from '../lib/ollama-fetch.mjs';
+import { assertSchema, ollamaUserMessage, readOllamaStream } from '../lib/ollama-fetch.mjs';
 import { AI_PROVIDER, GENERATOR_MODEL } from '../lib/anthropic-fetch.mjs';
 import { compactPromptInputs } from '../signal/lib/compact-inputs.mjs';
 
@@ -32,6 +32,18 @@ test('Anthropic-style image content is normalized for Ollama vision messages', (
 test('agent AI compatibility layer defaults to the installed local model', () => {
   assert.equal(AI_PROVIDER, 'ollama');
   assert.equal(GENERATOR_MODEL, 'qwen3.5:9b');
+});
+
+test('streamed Ollama chunks are assembled into one structured response', async () => {
+  const encoder = new TextEncoder();
+  const response = new Response(new ReadableStream({ start(controller) {
+    controller.enqueue(encoder.encode('{"message":{"content":"{\\"ok\\":"}}\n'));
+    controller.enqueue(encoder.encode('{"message":{"content":"true}"},"done":true,"prompt_eval_count":12,"eval_count":4}\n'));
+    controller.close();
+  }}));
+  const body = await readOllamaStream(response);
+  assert.equal(body.message.content, '{"ok":true}');
+  assert.equal(body.prompt_eval_count, 12);
 });
 
 test('Signal compaction keeps decisions but drops inactive catalog bulk', () => {
