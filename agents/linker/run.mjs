@@ -10,7 +10,7 @@ import { readFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { readEnv } from "../lib/env.mjs";
+import { readAiEnv } from "../lib/env.mjs";
 import { loadTasks, claimTask, completeTask, releaseTask } from "../signal/lib/task-store.mjs";
 import { resolveArticle, upsertRewriteEntry } from "../lib/blog-source.mjs";
 import { callLinker } from "./lib/anthropic.mjs";
@@ -50,7 +50,7 @@ function extractCandidateSlugs(task) {
 
 (async () => {
   if (!taskId) throw new Error("Usage: node agents/linker/run.mjs <taskId> [--dry-run]");
-  const { ANTHROPIC_API_KEY } = readEnv(["ANTHROPIC_API_KEY"]);
+  const { ANTHROPIC_API_KEY } = readAiEnv();
   const systemPrompt = readFileSync(join(__dir, "prompt.md"), "utf8");
 
   const store = loadTasks();
@@ -91,7 +91,7 @@ function extractCandidateSlugs(task) {
     if (!candidateSourcePages.length) throw new Error(`None of task ${taskId}'s candidate source pages (${candidateSlugs.join(", ")}) resolved to real articles`);
 
     console.log(`Linker: task #${taskId} → ${task.target_url}, ${candidateSourcePages.length} candidate source page(s): ${candidateSourcePages.map((p) => p.slug).join(", ")}`);
-    console.log("Linker: calling Claude...");
+    console.log("Linker: calling configured AI model...");
     const { output, usage } = await callLinker({ apiKey: ANTHROPIC_API_KEY, systemPrompt, task, candidateSourcePages });
 
     console.log(`\nchange_summary: ${output.change_summary}`);

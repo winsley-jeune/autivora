@@ -38,3 +38,12 @@ export function readEnv(keys) {
 export function readOptionalEnv(keys) {
   return parseEnvFile(keys);
 }
+
+export function readAiEnv() {
+  const values = parseEnvFile(["AI_PROVIDER", "ANTHROPIC_API_KEY"]);
+  const provider = process.env.AI_PROVIDER ?? values.AI_PROVIDER ?? "ollama";
+  if (provider === "anthropic" && !(process.env.ANTHROPIC_API_KEY ?? values.ANTHROPIC_API_KEY)) {
+    throw new Error("AI_PROVIDER=anthropic requires ANTHROPIC_API_KEY in .env");
+  }
+  return { AI_PROVIDER: provider, ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY ?? values.ANTHROPIC_API_KEY };
+}

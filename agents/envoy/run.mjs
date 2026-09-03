@@ -9,7 +9,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { readEnv } from "../lib/env.mjs";
+import { readAiEnv } from "../lib/env.mjs";
 import { loadTasks, claimTask, completeTask, releaseTask } from "../signal/lib/task-store.mjs";
 import { listDrafts, addDrafts } from "../lib/drafts-store.mjs";
 import { callEnvoy } from "./lib/anthropic.mjs";
@@ -19,7 +19,7 @@ const TASK_CAP = process.argv.includes("--all") ? Infinity : 2;
 const today = () => new Date().toISOString().slice(0, 10);
 
 async function main() {
-  const { ANTHROPIC_API_KEY } = readEnv(["ANTHROPIC_API_KEY"]);
+  const { ANTHROPIC_API_KEY } = readAiEnv();
 
   const store = loadTasks();
   const open = store.tasks.filter((t) => t.agent === "envoy" && t.status === "open").slice(0, TASK_CAP);

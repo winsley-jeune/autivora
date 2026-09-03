@@ -9,7 +9,7 @@ import { readFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { readEnv } from "../lib/env.mjs";
+import { readAiEnv } from "../lib/env.mjs";
 import { loadTasks, claimTask, completeTask, releaseTask } from "../signal/lib/task-store.mjs";
 import { resolveArticle, resolveOriginalArticle, upsertRewriteEntry } from "../lib/blog-source.mjs";
 import { callUplift } from "./lib/anthropic.mjs";
@@ -39,7 +39,7 @@ function typecheck() {
 
 (async () => {
   if (!taskId) throw new Error("Usage: node agents/uplift/run.mjs <taskId> [--dry-run]");
-  const { ANTHROPIC_API_KEY } = readEnv(["ANTHROPIC_API_KEY"]);
+  const { ANTHROPIC_API_KEY } = readAiEnv();
   const systemPrompt = readFileSync(join(__dir, "prompt.md"), "utf8");
 
   const store = loadTasks();
@@ -86,7 +86,7 @@ function typecheck() {
     }));
 
     console.log(`Uplift: task #${taskId} → ${task.target_url} (slug: ${slug}, existing override: ${resolved.hasOverride}, competitor grounding: ${competitorGrounding ? `yes (${original.sourceFile})` : "no"})`);
-    console.log("Uplift: calling Claude...");
+    console.log("Uplift: calling configured AI model...");
     const { output, usage } = await callUplift({
       apiKey: ANTHROPIC_API_KEY,
       systemPrompt,

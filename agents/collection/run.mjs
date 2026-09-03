@@ -3,7 +3,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { readEnv } from '../lib/env.mjs';
+import { readAiEnv } from '../lib/env.mjs';
 import { loadTasks, claimTask, completeTask, releaseTask } from '../signal/lib/task-store.mjs';
 import { startTaskBranch, finishTaskPR, abandonTaskBranch, assertCleanFor } from '../lib/git-task-pr.mjs';
 import { latestShopifyCatalogSnapshot } from '../lib/shopify-catalog.mjs';
@@ -20,7 +20,7 @@ const git = (args) => execFileSync('git', args, { cwd: root, encoding: 'utf8' })
   if (!task || task.status !== 'open') throw new Error(`Task ${taskId} is not open`);
   if (!['uplift', 'author'].includes(task.agent) || !allowedPaths.has(task.target_url)) throw new Error(`Task ${taskId} is not a supported collection revenue task`);
   assertCleanFor([contentPath], root);
-  const { ANTHROPIC_API_KEY } = readEnv(['ANTHROPIC_API_KEY']);
+  const { ANTHROPIC_API_KEY } = readAiEnv();
   let startBranch; let branchStarted = false; let claimed = false;
   try {
     ({ startBranch } = startTaskBranch(task, root)); branchStarted = true;

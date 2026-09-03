@@ -7,6 +7,7 @@ import { dirname, join, resolve } from "node:path";
 import { existsSync, readFileSync } from "node:fs";
 import { acquireWorkflowLease, finishWorkflow } from "../lib/control-plane.mjs";
 import { latestShopifyCatalogSnapshot } from "../lib/shopify-catalog.mjs";
+import { readOptionalEnv } from "../lib/env.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, "..", "..");
@@ -16,15 +17,16 @@ const DAY = 24 * 60 * MINUTE;
 export const STAGES = [
   { name: "catalog-sync", args: ["run", "catalog:sync"], timeoutMs: 3 * MINUTE, attempts: 3, lane: "catalog" },
   { name: "analytics", args: ["run", "analytics:run"], timeoutMs: 10 * MINUTE, lane: "monitoring" },
+  { name: "local-ai-health", args: ["run", "ai:health"], timeoutMs: 2 * MINUTE, lane: "monitoring" },
   { name: "product-seo", args: ["run", "seo:products"], timeoutMs: 15 * MINUTE, lane: "catalog", needsCatalog: true },
-  { name: "catalog-autonomous", args: ["run", "catalog:autonomous"], timeoutMs: 10 * MINUTE, lane: "catalog", needsCatalog: true, needsSeo: true },
+  { name: "catalog-autonomous", args: ["run", "catalog:autonomous"], timeoutMs: 20 * MINUTE, lane: "catalog", needsCatalog: true, needsSeo: true, needsAi: true },
   { name: "reindex", args: ["run", "analytics:reindex"], timeoutMs: 5 * MINUTE, lane: "monitoring" },
-  { name: "signal", args: ["run", "signal:run"], timeoutMs: 8 * MINUTE, lane: "monitoring" },
-  { name: "revenue-execute", args: ["run", "revenue:execute"], timeoutMs: 15 * MINUTE, lane: "revenue" },
-  { name: "herald", args: ["run", "herald:run"], timeoutMs: 5 * MINUTE, lane: "distribution", pauseForRevenue: true },
-  { name: "envoy", args: ["run", "envoy:run"], timeoutMs: 5 * MINUTE, lane: "distribution", pauseForRevenue: true },
+  { name: "signal", args: ["run", "signal:run"], timeoutMs: 20 * MINUTE, lane: "monitoring", needsAi: true },
+  { name: "revenue-execute", args: ["run", "revenue:execute"], timeoutMs: 30 * MINUTE, lane: "revenue", needsAi: true },
+  { name: "herald", args: ["run", "herald:run"], timeoutMs: 20 * MINUTE, lane: "distribution", pauseForRevenue: true, needsAi: true },
+  { name: "envoy", args: ["run", "envoy:run"], timeoutMs: 20 * MINUTE, lane: "distribution", pauseForRevenue: true, needsAi: true, needsLiveResearch: true },
   { name: "dropship-observe", args: ["run", "dropship:observe"], timeoutMs: 10 * MINUTE, lane: "monitoring" },
-  { name: "dropship-scout", args: ["run", "dropship:run"], timeoutMs: 10 * MINUTE, lane: "monitoring" },
+  { name: "dropship-scout", args: ["run", "dropship:run"], timeoutMs: 30 * MINUTE, lane: "monitoring", needsAi: true, needsLiveResearch: true },
   { name: "scoreboard", args: ["run", "scoreboard"], timeoutMs: 2 * MINUTE, lane: "monitoring" },
 ];
 
@@ -100,6 +102,13 @@ export function hasRevenueConstraint() {
   return organicSessions >= 50 && (snapshot.shopify?.organicOrderCount ?? 0) === 0;
 }
 
+export function hasLiveResearchProvider() {
+  const env = readOptionalEnv(["AI_PROVIDER", "ANTHROPIC_API_KEY", "DATAFORSEO_API_KEY"]);
+  const provider = process.env.AI_PROVIDER ?? env.AI_PROVIDER ?? "ollama";
+  if (provider === "ollama") return Boolean(process.env.DATAFORSEO_API_KEY ?? env.DATAFORSEO_API_KEY);
+  return provider === "anthropic" && Boolean(process.env.ANTHROPIC_API_KEY ?? env.ANTHROPIC_API_KEY);
+}
+
 export async function runDailyPipeline({
   now = new Date(),
   stages = STAGES,
@@ -110,9 +119,9 @@ export async function runDailyPipeline({
   revenueConstraint = hasRevenueConstraint,
 } = {}) {
   const day = localDay(now);
-  // Worst case is about 90 minutes when every stage reaches its deadline. Keep the global lease
-  // longer than that total so a second scheduler cannot enter while the final stage is alive.
-  const pipeline = acquire({ workflow: "daily-pipeline", runKey: day, leaseMs: 120 * MINUTE });
+  // Local inference is slower than the former hosted calls. Keep the global lease beyond the
+  // scheduler's realistic run window so a wake/retry cannot overlap a still-running model job.
+  const pipeline = acquire({ workflow: "daily-pipeline", runKey: day, leaseMs: 170 * MINUTE });
   if (!pipeline.acquired) {
     console.log(`[daily ${day}] pipeline no-op (${pipeline.reason}).`);
     return { day, acquired: false, reason: pipeline.reason, results: [] };
@@ -121,12 +130,25 @@ export async function runDailyPipeline({
   const results = [];
   let catalogReady = false;
   let seoReady = false;
+  let aiReady = !stages.some((stage) => stage.name === "local-ai-health");
+  const liveResearchReady = hasLiveResearchProvider();
   const revenueBlocked = revenueConstraint();
   try {
     for (const stage of stages) {
       if (stage.pauseForRevenue && revenueBlocked) {
         console.log(`[daily ${day}] ${stage.name}: paused (organic revenue constraint).`);
         results.push({ name: stage.name, ok: true, skipped: true, reason: "organic revenue constraint" });
+        continue;
+      }
+      if (stage.needsLiveResearch && !liveResearchReady) {
+        console.log(`[daily ${day}] ${stage.name}: paused (live research provider not configured).`);
+        results.push({ name: stage.name, ok: true, skipped: true, reason: "live research provider not configured" });
+        continue;
+      }
+      if (stage.needsAi && !aiReady) {
+        const skipped = { name: stage.name, ok: false, skipped: true, reason: "local AI unavailable" };
+        console.error(`[daily ${day}] ${stage.name}: skipped (${skipped.reason}).`);
+        results.push(skipped);
         continue;
       }
       if (stage.needsCatalog && !catalogReady) {
@@ -145,6 +167,7 @@ export async function runDailyPipeline({
       results.push(result);
       if (stage.name === "catalog-sync") catalogReady = result.ok || catalogFresh(now);
       if (stage.name === "product-seo") seoReady = result.ok;
+      if (stage.name === "local-ai-health") aiReady = result.ok;
     }
 
     const failed = results.filter((result) => !result.ok);

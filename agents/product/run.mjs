@@ -27,7 +27,7 @@ import { readFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { readEnv } from "../lib/env.mjs";
+import { readAiEnv } from "../lib/env.mjs";
 import { resolveCatalogProduct, getCollectionSiblings, upsertCatalogProduct } from "../lib/catalog-source.mjs";
 import { upsertRewriteEntry } from "../lib/blog-source.mjs";
 import { loadProductFaqFn, hasFaqOverride } from "../lib/product-faq-source.mjs";
@@ -58,7 +58,7 @@ function typecheck() {
 
 (async () => {
   if (!handle) throw new Error("Usage: node agents/product/run.mjs <handle> [--dry-run]");
-  const { ANTHROPIC_API_KEY } = readEnv(["ANTHROPIC_API_KEY"]);
+  const { ANTHROPIC_API_KEY } = readAiEnv();
   const systemPrompt = readFileSync(join(__dir, "prompt.md"), "utf8");
 
   if (!dryRun) assertCleanFor([CATALOG_PATH, FAQ_PATH], ROOT);
@@ -94,7 +94,7 @@ function typecheck() {
     const genericFaq = productFaq({ handle: product.handle, title: product.title, tags: [...(product.tags ?? []), product.collection] });
 
     console.log(`Product: task → ${handle} (collection: ${product.collection}, ${siblings.length} sibling(s) for grounding)`);
-    console.log("Product: calling Claude...");
+    console.log("Product: calling configured AI model...");
     const { output, usage } = await callProduct({
       apiKey: ANTHROPIC_API_KEY,
       systemPrompt,
