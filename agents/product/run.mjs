@@ -64,11 +64,12 @@ function typecheck() {
   if (!dryRun) assertCleanFor([CATALOG_PATH, FAQ_PATH], ROOT);
 
   let startBranch = null;
+  let taskBranch = null;
   let branchStarted = false;
 
   try {
     if (!dryRun) {
-      ({ startBranch } = startTaskBranch({ id: handle, agent: "product" }, ROOT));
+      ({ startBranch, branch: taskBranch } = startTaskBranch({ id: handle, agent: "product" }, ROOT));
       branchStarted = true;
     }
 
@@ -151,6 +152,7 @@ function typecheck() {
       commitMessage: `product: de-duplicate content for ${handle}`,
       cwd: ROOT,
       startBranch,
+      branch: taskBranch,
     });
     console.log(`Product: opened PR → ${prUrl}`);
     console.log(`Product: REMINDER — merging this PR does not change the live Shopify page. After merge, run:`);
@@ -160,7 +162,7 @@ function typecheck() {
     if (branchStarted) {
       try { git(["checkout", "--", CATALOG_PATH, FAQ_PATH]); } catch {}
       try { git(["checkout", startBranch]); } catch {}
-      abandonTaskBranch({ id: handle, agent: "product" }, ROOT);
+      abandonTaskBranch({ id: handle, agent: "product" }, ROOT, taskBranch);
     }
     console.error(`Product: FAILED for "${handle}".`);
     throw e;

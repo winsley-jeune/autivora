@@ -58,12 +58,13 @@ function typecheck() {
   // that happened after claimTask()). `claimed` gates whether releaseTask() applies — a failure
   // before the task was ever claimed leaves it `open`, nothing to release.
   let startBranch = null;
+  let taskBranch = null;
   let branchStarted = false;
   let claimed = false;
 
   try {
     if (!dryRun) {
-      ({ startBranch } = startTaskBranch(task, ROOT));
+      ({ startBranch, branch: taskBranch } = startTaskBranch(task, ROOT));
       branchStarted = true;
     }
 
@@ -127,6 +128,7 @@ function typecheck() {
       commitMessage: `uplift: ${task.action} on ${task.target_url}`,
       cwd: ROOT,
       startBranch,
+      branch: taskBranch,
     });
     console.log(`Uplift: opened PR → ${prUrl}`);
 
@@ -136,7 +138,7 @@ function typecheck() {
     if (branchStarted) {
       try { git(["checkout", "--", REWRITES_PATH]); } catch {}
       try { git(["checkout", startBranch]); } catch {}
-      abandonTaskBranch(task, ROOT);
+      abandonTaskBranch(task, ROOT, taskBranch);
     }
     if (claimed) {
       await releaseTask(taskId, e.message);

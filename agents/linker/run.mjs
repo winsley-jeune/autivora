@@ -68,12 +68,13 @@ function extractCandidateSlugs(task) {
   // cleanup, since the old code only handled failures after claimTask()). `claimed` gates
   // whether releaseTask() applies — a failure before the task was ever claimed leaves it `open`.
   let startBranch = null;
+  let taskBranch = null;
   let branchStarted = false;
   let claimed = false;
 
   try {
     if (!dryRun) {
-      ({ startBranch } = startTaskBranch(task, ROOT));
+      ({ startBranch, branch: taskBranch } = startTaskBranch(task, ROOT));
       branchStarted = true;
     }
 
@@ -135,6 +136,7 @@ function extractCandidateSlugs(task) {
       commitMessage: `linker: ${task.action.slice(0, 72)}`,
       cwd: ROOT,
       startBranch,
+      branch: taskBranch,
     });
     console.log(`Linker: opened PR → ${prUrl}`);
 
@@ -144,7 +146,7 @@ function extractCandidateSlugs(task) {
     if (branchStarted) {
       try { git(["checkout", "--", REWRITES_PATH]); } catch {}
       try { git(["checkout", startBranch]); } catch {}
-      abandonTaskBranch(task, ROOT);
+      abandonTaskBranch(task, ROOT, taskBranch);
     }
     if (claimed) {
       await releaseTask(taskId, e.message);

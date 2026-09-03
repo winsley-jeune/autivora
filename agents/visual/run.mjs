@@ -196,8 +196,9 @@ function clearCacheFor(targetSlug) {
   };
 
   let startBranch = null;
+  let taskBranch = null;
   try {
-    ({ startBranch } = startTaskBranch(pseudoTask, ROOT));
+    ({ startBranch, branch: taskBranch } = startTaskBranch(pseudoTask, ROOT));
     mkdirSync(join(ROOT, "public", "blog"), { recursive: true });
     writeFileSync(join(ROOT, OUTPUT_PATH), imageBuffer);
     console.log(`Visual: wrote ${OUTPUT_PATH}.`);
@@ -208,13 +209,14 @@ function clearCacheFor(targetSlug) {
       commitMessage: `visual: hero image for ${slug}`,
       cwd: ROOT,
       startBranch,
+      branch: taskBranch,
     });
     console.log(`Visual: opened PR → ${prUrl}`);
     clearCacheFor(slug);
   } catch (e) {
     try { git(["checkout", "--", OUTPUT_PATH]); } catch {}
     try { git(["checkout", startBranch]); } catch {}
-    abandonTaskBranch(pseudoTask, ROOT);
+    abandonTaskBranch(pseudoTask, ROOT, taskBranch);
     console.error(`Visual: FAILED after generating a verified image — nothing was committed.`);
     throw e;
   }
