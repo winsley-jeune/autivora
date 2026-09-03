@@ -66,6 +66,30 @@ export async function ollamaHealth({ model = OLLAMA_MODEL } = {}) {
   return { provider: 'ollama', model, url: OLLAMA_URL };
 }
 
+export async function readOllamaStream(response) {
+  if (!response.body) throw new Error('Ollama returned no response body');
+  const decoder = new TextDecoder();
+  let pending = '';
+  let content = '';
+  let final = {};
+  const consume = (line) => {
+    if (!line.trim()) return;
+    const chunk = JSON.parse(line);
+    if (chunk.error) throw new Error(chunk.error);
+    content += chunk.message?.content ?? '';
+    if (chunk.done) final = chunk;
+  };
+  for await (const bytes of response.body) {
+    pending += decoder.decode(bytes, { stream: true });
+    const lines = pending.split('\n');
+    pending = lines.pop() ?? '';
+    for (const line of lines) consume(line);
+  }
+  pending += decoder.decode();
+  consume(pending);
+  return { ...final, message: { ...(final.message ?? {}), content } };
+}
+
 export async function callOllamaStructured({ model = OLLAMA_MODEL, systemPrompt, userContent, schema, maxTokens = 8000, label = 'agent' }) {
   let lastError;
   for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt += 1) {
@@ -75,7 +99,9 @@ export async function callOllamaStructured({ model = OLLAMA_MODEL, systemPrompt,
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
           model,
-          stream: false,
+          // Streaming sends headers immediately. A non-streaming local generation can exceed
+          // Node/Undici's five-minute response-header timeout while Ollama is still healthy.
+          stream: true,
           think: false,
           keep_alive: '30m',
           format: schema,
@@ -87,8 +113,11 @@ export async function callOllamaStructured({ model = OLLAMA_MODEL, systemPrompt,
         }),
         signal: AbortSignal.timeout(TIMEOUT_MS),
       });
-      const body = await response.json();
-      if (!response.ok) throw new Error(`Ollama HTTP ${response.status}: ${body.error ?? JSON.stringify(body).slice(0, 300)}`);
+      if (!response.ok) {
+        const errorBody = await response.text();
+        throw new Error(`Ollama HTTP ${response.status}: ${errorBody.slice(0, 300)}`);
+      }
+      const body = await readOllamaStream(response);
       const output = JSON.parse(body.message?.content ?? '');
       assertSchema(output, schema);
       recordTrainingExample({ label, model, systemPrompt, userContent, output });
