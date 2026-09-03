@@ -10,7 +10,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { readEnv } from "../lib/env.mjs";
+import { readAiEnv } from "../lib/env.mjs";
 import { initShopify, shopifyApi } from "../lib/shopify.mjs";
 import { listDrafts, addDrafts, countUnposted } from "../lib/drafts-store.mjs";
 import { callHerald } from "./lib/anthropic.mjs";
@@ -31,7 +31,7 @@ function articlesFromRewrites() {
 }
 
 async function main() {
-  const { ANTHROPIC_API_KEY } = readEnv(["ANTHROPIC_API_KEY"]);
+  const { ANTHROPIC_API_KEY } = readAiEnv();
 
   const unposted = countUnposted("herald");
   const wanted = QUEUE_TARGET - unposted;
