@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { assertSchema, ollamaUserMessage, readOllamaStream } from '../lib/ollama-fetch.mjs';
-import { AI_PROVIDER, GENERATOR_MODEL } from '../lib/anthropic-fetch.mjs';
+import { AI_PROVIDER, GENERATOR_MODEL, compactResearchPlanInput } from '../lib/anthropic-fetch.mjs';
 import { compactPromptInputs } from '../signal/lib/compact-inputs.mjs';
 
 const schema = {
@@ -32,6 +32,14 @@ test('Anthropic-style image content is normalized for Ollama vision messages', (
 test('agent AI compatibility layer defaults to the installed local model', () => {
   assert.equal(AI_PROVIDER, 'ollama');
   assert.equal(GENERATOR_MODEL, 'qwen3.5:9b');
+});
+
+test('research query planning compacts oversized evidence without losing both ends', () => {
+  const input = `start-${'x'.repeat(20_000)}-end`;
+  const compact = compactResearchPlanInput(input, 1_000);
+  assert.ok(compact.length <= 1_000);
+  assert.ok(compact.startsWith('start-'));
+  assert.ok(compact.endsWith('-end'));
 });
 
 test('streamed Ollama chunks are assembled into one structured response', async () => {

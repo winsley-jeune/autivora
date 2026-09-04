@@ -21,9 +21,9 @@
 // (expensive, multi-minute) web-search pass is a topping-up cost, not a per-run cost.
 export const HYPOTHESIS_TARGET = 4;
 
-// A hypothesis that has been scanned this many times without producing a single verified
-// candidate is spent regardless of how good the story was — surfaced to the researcher for
-// explicit retirement rather than auto-killed, so the reason lands in state.
+// A hypothesis that has been scanned this many times without producing an import is spent.
+// Candidate count is deliberately irrelevant: candidates that repeatedly fail freight,
+// economics, trust, or the anchor test are evidence that the thesis is not sourceable here.
 export const HYPOTHESIS_STALE_SCANS = 3;
 
 const BRAND_RE = /autivara|autivora/i;
@@ -88,8 +88,21 @@ export function activeHypotheses(catalog) {
 // verified. Passed to the research call as candidates for retirement.
 export function staleHypotheses(catalog) {
   return activeHypotheses(catalog).filter(
-    (h) => (h.yields?.scans ?? 0) >= HYPOTHESIS_STALE_SCANS && (h.yields?.candidates ?? 0) === 0,
+    (h) => (h.yields?.scans ?? 0) >= HYPOTHESIS_STALE_SCANS && (h.yields?.imports ?? 0) === 0,
   );
+}
+
+// Deterministically free discovery slots. Relying on the researcher to retire stale theses
+// created a deadlock: research only ran below the active target, while stale theses kept the
+// pool above that target forever. The evidence and reason remain in durable catalog state.
+export function retireStaleHypotheses(catalog, todayStr) {
+  const stale = staleHypotheses(catalog);
+  for (const h of stale) {
+    h.status = "retired";
+    h.retiredOn = todayStr;
+    h.retireReason = `auto-retired after ${h.yields?.scans ?? 0} scans with zero imports`;
+  }
+  return stale;
 }
 
 // Fold a research call's output into catalog state. Returns the new hypothesis records so the

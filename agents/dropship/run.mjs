@@ -31,7 +31,7 @@ import { loadBands, saveBands, matchBand, maxLandedOf } from "./lib/market-bands
 import { TIERS, computePrice, isNoise, passesTrust, SCAN_KEYWORDS_PER_TIER, VERIFY_CAP_PER_RUN, REJECT_COOLDOWN_DAYS } from "./lib/policy.mjs";
 import { callScout, callDemandResearch, callAnchorCheck } from "./lib/anthropic.mjs";
 import { competitorIntel } from "../lib/espionage.mjs";
-import { HYPOTHESIS_TARGET, mineSearchDemand, provenSales, WINNER_DEFINITION, activeHypotheses, staleHypotheses, applyResearchOutput } from "./lib/demand.mjs";
+import { HYPOTHESIS_TARGET, mineSearchDemand, provenSales, WINNER_DEFINITION, activeHypotheses, staleHypotheses, retireStaleHypotheses, applyResearchOutput } from "./lib/demand.mjs";
 import { demandMovers, categoryPulse } from "./lib/observatory.mjs";
 import { initShopify, createDraftProduct, createBundleDraft } from "./lib/shopify.mjs";
 import { upsertUnitEconomics } from "../lib/profit-control.mjs";
@@ -104,6 +104,10 @@ async function main() {
   } catch {}
 
   let researchNote = null;
+  const autoRetired = retireStaleHypotheses(catalog, today());
+  if (autoRetired.length) {
+    console.log(`Scout: auto-retired ${autoRetired.length} hypothesis(es) after repeated zero-import scans.`);
+  }
   const activeBefore = activeHypotheses(catalog);
   if (activeBefore.length < HYPOTHESIS_TARGET) {
     console.log(`Scout: ${activeBefore.length}/${HYPOTHESIS_TARGET} active demand hypotheses — running live demand research...`);
