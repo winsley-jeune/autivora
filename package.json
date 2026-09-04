@@ -48,7 +48,8 @@
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "sanity": "^3.0.0",
-    "tailwind-merge": "^2.2.0"
+    "tailwind-merge": "^2.2.0",
+    "undici": "^6.23.0"
   },
   "devDependencies": {
     "@types/node": "20.10.6",

@@ -21,6 +21,13 @@ const RETRYABLE_STATUS = new Set([429, 500, 529]);
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const nonRetryableRequest = (error) => /Anthropic API error 4(?!29)\d|invalid_request_error|credit balance is too low/i.test(error?.message ?? "");
 
+export function compactResearchPlanInput(input, maxChars = 16_000) {
+  const text = typeof input === 'string' ? input : JSON.stringify(input);
+  if (text.length <= maxChars) return text;
+  const half = Math.floor((maxChars - 80) / 2);
+  return `${text.slice(0, half)}\n...[middle omitted for search-query planning]...\n${text.slice(-half)}`;
+}
+
 // A raw fetch call gets none of the SDK clients' automatic retry — without this, a single
 // transient 429/5xx/overloaded_error on a daily cron silently costs a whole day of an agent's
 // run (no decision, no execution) until the next scheduled attempt.
@@ -62,8 +69,9 @@ export async function callWithSearchThenTool({ apiKey, model = MODEL, systemProm
       label: `${label}/research-plan`,
       maxTokens: 800,
       systemPrompt: 'Create concise Google search queries for the entities, products, prices, publications, or contacts in the request. Do not answer the request. Never search for meta-instructions such as current, live, organic result, evidence, or Google itself; search the underlying subject directly. Never use site:google.com.',
-      userContent: typeof userContent === 'string' ? userContent : JSON.stringify(userContent),
+      userContent: compactResearchPlanInput(userContent),
       schema: querySchema,
+      contextTokens: 8192,
     });
     const queries = [...new Set(plan.queries.map((query) => query.trim()).filter(Boolean))].slice(0, Math.min(maxSearches, 6));
     const research = await Promise.all(queries.map(async (query) => ({

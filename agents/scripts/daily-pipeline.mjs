@@ -123,7 +123,9 @@ export async function runDailyPipeline({
   const day = localDay(now);
   // Local inference is slower than the former hosted calls. Keep the global lease beyond the
   // scheduler's realistic run window so a wake/retry cannot overlap a still-running model job.
-  const pipeline = acquire({ workflow: "daily-pipeline", runKey: day, leaseMs: 170 * MINUTE });
+  // Worst-case stage budgets now include the 90-minute creative/launch gate. Keep the global
+  // lease longer than the sum of normal long-running stages so a healthy run cannot be stolen.
+  const pipeline = acquire({ workflow: "daily-pipeline", runKey: day, leaseMs: 300 * MINUTE });
   if (!pipeline.acquired) {
     console.log(`[daily ${day}] pipeline no-op (${pipeline.reason}).`);
     return { day, acquired: false, reason: pipeline.reason, results: [] };

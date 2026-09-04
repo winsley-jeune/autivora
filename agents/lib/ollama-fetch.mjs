@@ -1,5 +1,6 @@
 import { readOptionalEnv } from './env.mjs';
 import { openDb } from './db.mjs';
+import { Agent } from 'undici';
 
 const env = readOptionalEnv(['OLLAMA_URL', 'OLLAMA_MODEL', 'OLLAMA_CONTEXT_TOKENS', 'OLLAMA_TIMEOUT_MS']);
 export const OLLAMA_URL = process.env.OLLAMA_URL ?? env.OLLAMA_URL ?? 'http://127.0.0.1:11434';
@@ -7,6 +8,10 @@ export const OLLAMA_MODEL = process.env.OLLAMA_MODEL ?? env.OLLAMA_MODEL ?? 'qwe
 const CONTEXT_TOKENS = Number(process.env.OLLAMA_CONTEXT_TOKENS ?? env.OLLAMA_CONTEXT_TOKENS ?? 49152);
 const TIMEOUT_MS = Number(process.env.OLLAMA_TIMEOUT_MS ?? env.OLLAMA_TIMEOUT_MS ?? 20 * 60 * 1000);
 const MAX_ATTEMPTS = 3;
+// Node's default Undici response-header timeout is five minutes. Ollama may spend longer
+// ingesting a large research context before it emits streaming headers, so align the transport
+// timeout with the explicit model timeout instead of silently dying at five minutes.
+const OLLAMA_DISPATCHER = new Agent({ headersTimeout: TIMEOUT_MS, bodyTimeout: TIMEOUT_MS });
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -90,7 +95,7 @@ export async function readOllamaStream(response) {
   return { ...final, message: { ...(final.message ?? {}), content } };
 }
 
-export async function callOllamaStructured({ model = OLLAMA_MODEL, systemPrompt, userContent, schema, maxTokens = 8000, label = 'agent' }) {
+export async function callOllamaStructured({ model = OLLAMA_MODEL, systemPrompt, userContent, schema, maxTokens = 8000, contextTokens = CONTEXT_TOKENS, label = 'agent' }) {
   let lastError;
   for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt += 1) {
     try {
@@ -109,9 +114,10 @@ export async function callOllamaStructured({ model = OLLAMA_MODEL, systemPrompt,
             { role: 'system', content: `${systemPrompt}\nReturn only JSON matching the supplied schema. Do not invent facts absent from the input.` },
             ollamaUserMessage(userContent),
           ],
-          options: { temperature: 0.1, num_ctx: CONTEXT_TOKENS, num_predict: Math.min(maxTokens, 8192), seed: 42 },
+          options: { temperature: 0.1, num_ctx: contextTokens, num_predict: Math.min(maxTokens, 8192), seed: 42 },
         }),
         signal: AbortSignal.timeout(TIMEOUT_MS),
+        dispatcher: OLLAMA_DISPATCHER,
       });
       if (!response.ok) {
         const errorBody = await response.text();
