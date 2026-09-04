@@ -30,7 +30,7 @@ function dateNDaysAgo(n) {
 export async function listOrders(sinceISO, { pageLimit = 10_000 } = {}) {
   const all = [];
   let url = `orders.json?status=any&created_at_min=${encodeURIComponent(sinceISO)}` +
-    `&limit=250&fields=id,created_at,total_price,currency,financial_status,cancelled_at,test,email,line_items,landing_site,referring_site,source_name`;
+    `&limit=250&fields=id,created_at,total_price,current_total_price,currency,financial_status,cancelled_at,test,email,line_items,refunds,landing_site,referring_site,source_name`;
   let pages = 0;
   while (url && pages < pageLimit) {
     const json = await shopifyApi("GET", url);
@@ -75,11 +75,21 @@ export function aggregate(orders, testCustomerEmails) {
   const productMap = new Map();
   for (const o of valid) {
     for (const li of o.line_items || []) {
-      const cur = productMap.get(li.title) || { title: li.title, quantity: 0, revenue: 0 };
+      const key = String(li.product_id ?? li.title);
+      const cur = productMap.get(key) || { productId: li.product_id ?? null, title: li.title, quantity: 0, revenue: 0, refundedQuantity: 0, refundAmount: 0 };
       cur.quantity += li.quantity;
       cur.revenue += Number(li.price) * li.quantity;
-      productMap.set(li.title, cur);
+      productMap.set(key, cur);
     }
+  }
+
+  let refundAmount = 0;
+  for (const order of valid) for (const refund of order.refunds ?? []) for (const item of refund.refund_line_items ?? []) {
+    const line = item.line_item ?? {};
+    const amount = Number(item.subtotal ?? 0);
+    refundAmount += amount;
+    const cur = productMap.get(String(line.product_id ?? line.title));
+    if (cur) { cur.refundedQuantity += Number(item.quantity ?? 0); cur.refundAmount += amount; }
   }
 
   const attributedOrders = valid.map((order) => ({
@@ -101,7 +111,7 @@ export function aggregate(orders, testCustomerEmails) {
     currency,
     byDay: [...byDayMap.values()].sort((a, b) => a.date.localeCompare(b.date)),
     topProducts: [...productMap.values()]
-      .map((p) => ({ ...p, revenue: Number(p.revenue.toFixed(2)) }))
+      .map((p) => ({ ...p, revenue: Number(p.revenue.toFixed(2)), refundAmount: Number(p.refundAmount.toFixed(2)) }))
       .sort((a, b) => b.revenue - a.revenue)
       .slice(0, 15),
     attributedOrders,
@@ -111,6 +121,8 @@ export function aggregate(orders, testCustomerEmails) {
     excludedTestOrders: orders.filter((o) => o.test).length,
     excludedCancelledOrders: orders.filter((o) => o.cancelled_at).length,
     excludedKnownTestCustomerOrders: orders.filter(isKnownTestCustomer).length,
+    refundedOrderCount: valid.filter((order) => (order.refunds ?? []).length > 0).length,
+    refundAmount: Number(refundAmount.toFixed(2)),
   };
 }
 

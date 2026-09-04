@@ -28,6 +28,7 @@ export const STAGES = [
   { name: "envoy", args: ["run", "envoy:run"], timeoutMs: 20 * MINUTE, lane: "distribution", pauseForRevenue: true, needsAi: true, needsLiveResearch: true },
   { name: "dropship-observe", args: ["run", "dropship:observe"], timeoutMs: 10 * MINUTE, lane: "monitoring" },
   { name: "dropship-scout", args: ["run", "dropship:run"], timeoutMs: 30 * MINUTE, lane: "monitoring", needsAi: true, needsLiveResearch: true },
+  { name: "offer-launch", args: ["run", "offer:launch"], timeoutMs: 90 * MINUTE, lane: "revenue", needsAi: true },
   { name: "scoreboard", args: ["run", "scoreboard"], timeoutMs: 2 * MINUTE, lane: "monitoring" },
 ];
 

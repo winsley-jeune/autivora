@@ -23,7 +23,7 @@ export const DEMAND_RESEARCH_SCHEMA = {
           anchor: { type: "string", enum: ["strong", "weak"], description: "strong = identical item findable on Amazon/Walmart in ~30s (usually disqualifying); weak = boutique/emerging/no direct comparable" },
           aliexpress_keywords: { type: "array", items: { type: "string" }, description: "2-4 supply-side search terms in supplier vocabulary to reverse-source this demand" },
           tier: { type: "string", enum: ["us-fast", "value-china"] },
-          collection: { type: "string", enum: ["business", "home", "car"] },
+          collection: { type: "string", description: "Lowercase category handle. May introduce an evidence-backed adjacent category; use 2-4 hyphenated words." },
         },
         required: ["hypothesis", "demand_evidence", "us_anchor_price", "anchor", "aliexpress_keywords", "tier", "collection"],
       },
@@ -194,7 +194,7 @@ export const SCOUT_OUTPUT_SCHEMA = {
         type: "object",
         properties: {
           itemId: { type: "string" },
-          collection: { type: "string", enum: ["business", "home", "car"] },
+          collection: { type: "string", description: "Lowercase category handle from the demand hypothesis; new adjacent categories are allowed." },
           price_multiple: { type: "number", description: "The multiple of landed cost this product can actually command (e.g. 20, 50, 100) given perceived value, competition, and channel" },
           pricing_rationale: { type: "string", description: "Why a customer would pay this multiple — perceived value, competitor pricing, novelty" },
           competition: { type: "string", description: "Who else sells this or close equivalents, how saturated, whether it's new/emerging or commodity" },
