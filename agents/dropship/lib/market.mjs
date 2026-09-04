@@ -12,14 +12,14 @@ const SEARCH_RETRIES = 2;
 
 // Returns { ok, totalCount, products } — products carry the market signals Scout reasons over
 // (orders, rating/score, price). ok:false means the search backend erred even after retries.
-export async function searchKeyword({ keyword, tier, auth }) {
+export async function searchKeyword({ keyword, tier, auth, pageIndex = 1 }) {
   const params = {
     keyWord: keyword,
     local: "en_US",
     countryCode: "US",
     currency: "USD",
     pageSize: 20,
-    pageIndex: 1,
+    pageIndex,
     sortBy: "orders,desc",
   };
   const shipFrom = TIERS[tier].searchShipFromFilter;

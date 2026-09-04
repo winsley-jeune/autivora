@@ -12,7 +12,7 @@
 //                 importedOn, lastVerifiedOn, verifyHistory: [{on, ok, stock, note}] }]
 //   rejected:  { [itemId]: { reason, on } }          — cooldown list; don't re-verify for 30d
 //   keywordQueue:   { [tier]: [keyword, ...] }        — what to scan next (Scout replenishes)
-//   keywordHistory: { [tier]: { [keyword]: { lastRun, totalCount, returned, imported, apiErrors } } }
+//   keywordHistory: { [tier]: { [keyword]: { lastRun, scans, lastPage, totalCount, returned, imported, apiErrors } } }
 //   lessons:   [{ on, lesson }]                       — Scout's own run-over-run memory
 //   pendingApprovals / demandHypotheses: free-form arrays owned by Scout
 import { fileURLToPath } from "node:url";

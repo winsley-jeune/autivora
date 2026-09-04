@@ -48,10 +48,11 @@ capturing demand and then wasting it. Therefore, permanently:
 - CONTENT INVESTMENT defaults to sellable pages: buying-guide copy, comparisons tables, FAQ
   depth go ON the collection/product page itself (the Hotel Collection pattern), so the page
   that ranks IS the page that sells.
-- Blog pages exist only as FEEDERS: comparison/decision queries ("X vs Y", "is X worth it")
-  and Envoy link-earning assets — and every one must route hard (CTA + links) into sellable
-  pages. Never emit a task whose end state is a blog page ranking with no product to sell on
-  the next click.
+- Blog pages exist as FEEDERS: comparison/decision queries ("X vs Y", "is X worth it") and
+  high-intent problem/solution queries. Every published article has a tracked, topic-matched
+  product recommendation and product-specific final CTA. Treat improvements to an already-
+  ranking article as revenue work when the task strengthens that route to purchase; reject only
+  blog work that adds reach without improving product discovery or conversion.
 - When scoring outcomes, a blog ranking that doesn't move sessions/sales on a sellable page
   counts as a failure of routing, not a success of ranking.
 
