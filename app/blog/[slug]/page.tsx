@@ -9,6 +9,7 @@ import PuraCostCalculator from "@/components/blog/PuraCostCalculator";
 import Image from "next/image";
 import { blogImage } from "@/lib/blog-image";
 import { extractFaq } from "@/lib/blog-faq";
+import { blogProduct } from "@/lib/blog-product";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -194,9 +195,13 @@ export default async function BlogArticle({ params }: Props) {
 
   if (!article) notFound();
 
-  // Find related articles (same category, or next/prev)
-  const related = BLOG_ARTICLES.filter((a) => a.slug !== slug).slice(0, 2);
+  const sameCategory = BLOG_ARTICLES.filter((a) => a.slug !== slug && a.category === article.category);
+  const fallbackRelated = BLOG_ARTICLES.filter(
+    (a) => a.slug !== slug && !sameCategory.some((relatedArticle) => relatedArticle.slug === a.slug),
+  );
+  const related = [...sameCategory, ...fallbackRelated].slice(0, 2);
   const faq = extractFaq(article.content);
+  const recommendedProduct = blogProduct(article);
 
   return (
     <div className="bg-white min-h-screen">
@@ -266,6 +271,37 @@ export default async function BlogArticle({ params }: Props) {
 
       <div className="w-16 h-[1px] bg-black mx-auto"></div>
 
+      <aside className="max-w-3xl mx-auto px-6 pt-16" aria-label="Recommended product">
+        <Link
+          href={recommendedProduct.href}
+          className="group grid overflow-hidden rounded-sm border border-neutral-200 bg-neutral-50 transition-colors hover:border-black md:grid-cols-[220px_1fr]"
+        >
+          <div className="relative aspect-square bg-white md:aspect-auto">
+            <Image
+              src={recommendedProduct.image}
+              alt={recommendedProduct.name}
+              fill
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              sizes="(max-width: 768px) 100vw, 220px"
+            />
+          </div>
+          <div className="flex flex-col justify-center p-7 md:p-9">
+            <span className="mb-3 text-[10px] font-bold uppercase tracking-[0.25em] text-neutral-400">
+              {recommendedProduct.eyebrow}
+            </span>
+            <h2 className="mb-3 text-2xl font-display font-medium tracking-tight">
+              {recommendedProduct.name}
+            </h2>
+            <p className="mb-5 text-sm font-light leading-relaxed text-neutral-600">
+              {recommendedProduct.description}
+            </p>
+            <span className="text-[10px] font-bold uppercase tracking-[0.25em] underline decoration-neutral-300 underline-offset-4 group-hover:decoration-black">
+              View product details
+            </span>
+          </div>
+        </Link>
+      </aside>
+
       {/* Article Body */}
       <article className="max-w-3xl mx-auto px-6 py-16">
         {article.content.map((block, i) => renderBlock(block, i))}
@@ -275,17 +311,17 @@ export default async function BlogArticle({ params }: Props) {
       <section className="bg-neutral-900 text-white py-20 px-6 text-center">
         <div className="max-w-2xl mx-auto space-y-8">
           <h2 className="text-3xl font-display font-bold tracking-tight">
-            Explore the Current Collection
+            Put This Guide Into Practice
           </h2>
           <p className="text-neutral-400 font-light">
-            Compare the current products, prices, availability, and model-specific details before
-            choosing a diffuser for your space.
+            See current pricing, availability, and product details for the option selected for this
+            article.
           </p>
           <Link
-            href="/collection"
+            href={recommendedProduct.href.replace('article-recommendation', 'final-cta')}
             className="inline-block px-16 py-5 bg-white text-black text-[11px] font-bold uppercase tracking-[0.3em] hover:bg-neutral-200 transition-all rounded-sm"
           >
-            View the Collection
+            View {recommendedProduct.name}
           </Link>
         </div>
       </section>
