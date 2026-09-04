@@ -61,7 +61,7 @@ function recommendationKey(article: Pick<BlogArticle, 'slug' | 'title' | 'catego
     return /vent|compact|clip/.test(text) ? 'compactCar' : 'car';
   }
   if (/hvac|whole.house|10,?000|commercial scent diffuser|scent marketing/.test(text)) return 'hvac';
-  if (/hotel|gym|spa|salon|dental|restaurant|\bbar\b|retail|boutique|business|office|airbnb|staging|coffee.shop/.test(text)) {
+  if (/hotel|gym|spa|salon|dental|restaurant|\bbar\b|retail|boutique|\bstore\b|business|office|airbnb|staging|coffee.shop/.test(text)) {
     return 'commercial';
   }
   if (/sleep|bedroom|anxiety|stress|calm|relax/.test(text)) return 'calmRoom';
