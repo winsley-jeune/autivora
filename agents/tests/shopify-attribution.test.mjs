@@ -19,3 +19,10 @@ test('Shopify aggregate exposes attributable organic revenue', () => {
   assert.equal(report.organicRevenue, 39);
   assert.equal(report.attributionCoverage, 0.5);
 });
+
+test('Shopify aggregate attributes refunds to the affected product', () => {
+  const report = aggregate([{ id:3,created_at:'2026-08-30T12:00:00Z',total_price:'50',currency:'USD',line_items:[{product_id:9,title:'Offer',price:'50',quantity:1}],refunds:[{refund_line_items:[{quantity:1,subtotal:50,line_item:{product_id:9,title:'Offer'}}]}] }],new Set());
+  assert.equal(report.refundedOrderCount,1);
+  assert.equal(report.refundAmount,50);
+  assert.equal(report.topProducts[0].refundedQuantity,1);
+});

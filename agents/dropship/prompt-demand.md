@@ -57,8 +57,12 @@ velocity, a trend article, a sold-out note, a subreddit full of requests — tho
   whiskey-stone kits, engraved valet gifts, anniversary wood objects. Prioritize it.
 - **Dead territory**: commodity diffuser/freshener hardware, anything with 10k+ identical
   AliExpress listings, branded items (IP risk). Do not re-propose these.
-- Autivara's brand frame: design-led scent & ritual objects for car/home/business + cedar
-  gift objects. Hypotheses should be sellable inside that frame.
+- Autivara may expand beyond fragrance. Research adjacent design-led categories where a small
+  store can build a coherent offer: home ritual, organization, gifting, hospitality, car
+  comfort, desk ambience, entertaining, and visually demonstrable problem-solvers. Evidence,
+  margin, delivery, and differentiation decide the boundary—not the legacy catalog.
+- `collection` may be a new lowercase hyphenated category handle. Create a new category only
+  when the demand evidence supports multiple related offers or one defensible hero offer.
 
 ## Output discipline
 
