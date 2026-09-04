@@ -42,6 +42,27 @@ export default function BlogIndex() {
         </p>
       </section>
 
+      <nav className="max-w-5xl mx-auto px-6 pb-14" aria-label="Shop by scenting space">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+          {[
+            { href: "/auto", label: "Car scenting", note: "Shop products for the drive" },
+            { href: "/home", label: "Home scenting", note: "Shop products for every room" },
+            { href: "/industrial", label: "Business scenting", note: "Shop commercial solutions" },
+          ].map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="group border border-neutral-200 p-6 transition-colors hover:border-black"
+            >
+              <span className="block text-sm font-display font-medium tracking-tight">{item.label}</span>
+              <span className="mt-2 block text-[10px] font-bold uppercase tracking-[0.18em] text-neutral-400 group-hover:text-black">
+                {item.note} &rarr;
+              </span>
+            </Link>
+          ))}
+        </div>
+      </nav>
+
       {/* Article Grid */}
       <section className="max-w-5xl mx-auto px-6 pb-32">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

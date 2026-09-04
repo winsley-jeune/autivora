@@ -121,6 +121,17 @@ test('blog heroes rotate across topic-specific product image pools', () => {
   );
 });
 
+test('every blog article receives a tracked product recommendation', () => {
+  const recommendations = read('lib/blog-product.ts');
+  const articlePage = read('app/blog/[slug]/page.tsx');
+  assert.match(recommendations, /export function blogProduct/);
+  assert.match(recommendations, /utm_source=blog/);
+  assert.match(recommendations, /\/product\/\$\{product\.handle\}/);
+  assert.match(articlePage, /const recommendedProduct = blogProduct\(article\)/);
+  assert.match(articlePage, /aria-label="Recommended product"/);
+  assert.match(articlePage, /href=\{recommendedProduct\.href/);
+});
+
 test('overlays use modal semantics and shared keyboard focus management', () => {
   const cart = read('components/cart/CartDrawer.tsx');
   const upsell = read('components/UpsellModal.tsx');
