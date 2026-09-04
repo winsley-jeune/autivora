@@ -43,6 +43,14 @@ const __dir = dirname(fileURLToPath(import.meta.url));
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const today = () => new Date().toISOString().slice(0, 10);
 
+// Ordered search results are useful on the first pass, but repeatedly requesting page 1 only
+// rediscovers saturated listings. Rotate each keyword through the first five result pages; all
+// candidates still pass the existing freight, trust, delivery, and contribution gates.
+export function discoveryPage(historyEntry, pageCount = 5) {
+  const scans = Math.max(0, Number(historyEntry?.scans) || 0);
+  return 1 + (scans % pageCount);
+}
+
 async function main() {
   const { ALIEXPRESS_APP_KEY, ALIEXPRESS_APP_SECRET } = readEnv([
     "ALIEXPRESS_APP_KEY",
@@ -201,11 +209,12 @@ async function main() {
       // tray for "valet tray" — object semantics have to be enforced on our side.
       const exclusions = [...entry.keyword.matchAll(/(?:^|\s)-(\S+)/g)].map((m) => m[1].toLowerCase());
       const query = entry.keyword.replace(/(?:^|\s)-\S+/g, "").trim();
-      const res = await searchKeyword({ keyword: query, tier, auth });
+      const pageIndex = discoveryPage(history[entry.keyword]);
+      const res = await searchKeyword({ keyword: query, tier, auth, pageIndex });
       if (exclusions.length) res.products = res.products.filter((p) => !exclusions.some((x) => p.title.toLowerCase().includes(x)));
-      scanResults.push({ tier, keyword: entry.keyword, hypothesisId: entry.hypothesisId, ok: res.ok, totalCount: res.totalCount, returned: res.products.length });
+      scanResults.push({ tier, keyword: entry.keyword, hypothesisId: entry.hypothesisId, pageIndex, ok: res.ok, totalCount: res.totalCount, returned: res.products.length });
       const tag = entry.hypothesisId ? `${tier}|${entry.hypothesisId}` : tier;
-      console.log(`Scout: scan [${tag}] "${entry.keyword}" -> ${res.ok ? `${res.totalCount} total` : "API error after retries"}`);
+      console.log(`Scout: scan [${tag}] "${entry.keyword}" page ${pageIndex} -> ${res.ok ? `${res.totalCount} total` : "API error after retries"}`);
       if (entry.hypothesisId) hypById.get(entry.hypothesisId).yields.scans++;
       for (const hit of res.products) {
         if (knownIds.has(hit.itemId) || rejectedRecently(hit.itemId) || unseen.has(hit.itemId)) continue;
@@ -502,7 +511,8 @@ async function main() {
     }
     for (const s of scanResults) {
       const h = ((store.keywordHistory[s.tier] ??= {})[s.keyword] ??= {});
-      Object.assign(h, { lastRun: today(), totalCount: s.totalCount, returned: s.returned, ok: s.ok });
+      Object.assign(h, { lastRun: today(), totalCount: s.totalCount, returned: s.returned, ok: s.ok, lastPage: s.pageIndex });
+      h.scans = (h.scans ?? 0) + 1;
       h.imported = (h.imported ?? 0) + imported.filter((i) => i.tier === s.tier).length; // coarse per-tier credit
     }
     // Persist the hypothesis pool: research additions/retirements and this run's yield
@@ -557,7 +567,9 @@ function countByTierAndStatus(products) {
   return out;
 }
 
-main().catch((e) => {
-  console.error(e);
-  process.exit(1);
-});
+if (import.meta.url === `file://${process.argv[1]}`) {
+  main().catch((e) => {
+    console.error(e);
+    process.exit(1);
+  });
+}

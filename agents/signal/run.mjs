@@ -44,10 +44,9 @@ export function enforceCaps(tasks, { authorGateMet, revenueConstraintActive = fa
       dropped.push({ task: t, reason: "revenue constraint: distribution paused until organic traffic converts" });
       continue;
     }
-    if (revenueConstraintActive && t.agent === "uplift" && t.target_url.startsWith("/blog/")) {
-      dropped.push({ task: t, reason: "revenue constraint: uplift must target a sellable page" });
-      continue;
-    }
+    // Every published blog page now has a deterministic, tracked product recommendation and
+    // product-specific final CTA. Ranking/conversion work on those feeder pages is revenue work,
+    // so do not discard it merely because the URL begins with /blog/.
     if (isOnCooldown(store, t.target_url, t.agent, now)) { dropped.push({ task: t, reason: "page cooldown" }); continue; }
     const cap = CAPS[t.agent];
     counts[t.agent] = (counts[t.agent] ?? 0) + 1;

@@ -132,6 +132,19 @@ test('every blog article receives a tracked product recommendation', () => {
   assert.match(articlePage, /href=\{recommendedProduct\.href/);
 });
 
+test('conversion is prioritized over missing legacy catalog costs', () => {
+  const controller = read('agents/scripts/profit-controller.mjs');
+  const conversionCheck = controller.indexOf('organicSessions >= 50 && organicOrders === 0');
+  const economicsCheck = controller.indexOf('else if (!eligible.length)');
+  assert.ok(conversionCheck > -1 && economicsCheck > conversionCheck);
+});
+
+test('revenue mode permits conversion work on monetized blog feeders', () => {
+  const signal = read('agents/signal/run.mjs');
+  assert.doesNotMatch(signal, /t\.agent === "uplift" && t\.target_url\.startsWith\("\/blog\/"\)/);
+  assert.match(signal, /Every published blog page now has a deterministic, tracked product recommendation/);
+});
+
 test('overlays use modal semantics and shared keyboard focus management', () => {
   const cart = read('components/cart/CartDrawer.tsx');
   const upsell = read('components/UpsellModal.tsx');

@@ -34,6 +34,10 @@ raw/ (your sheet export)  ──►  clean.* (script)  ──►  output/ (Shopi
 - `CANDIDATE_ANALYSIS.md` — triage of the 27 Alibaba sourcing links.
 - `SCENT_OPTIONS.md` — full scent name menu.
 - `raw/candidates.csv` — parsed Alibaba seed list.
+- `raw/alibaba-quotes.csv` — optional supplier RFQ responses. Copy the example header from
+  `raw/alibaba-quotes.example.csv`, then run `npm run dropship:alibaba`. The intake will only
+  mark a product sample-ready when supplier verification, Trade Assurance, delivery, test MOQ,
+  and expected contribution margin pass. It never contacts or pays a supplier automatically.
 
 ## Status
 - [x] Folder scaffolded
