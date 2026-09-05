@@ -5,7 +5,8 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { keywordOverview, googleShoppingProducts, serpTop } from '../lib/dataforseo.mjs';
+import { execFileSync } from 'node:child_process';
+import { keywordOverview, googleShoppingProducts } from '../lib/dataforseo.mjs';
 import { estimateAlibabaEconomics, parseAlibabaEvidence, prequalifyAlibaba } from './lib/alibaba-market.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -13,7 +14,9 @@ const root = join(here, '..', '..');
 const seedsPath = join(root, 'product-pipeline', 'raw', 'candidates.csv');
 const quotesPath = join(root, 'product-pipeline', 'raw', 'alibaba-quotes.csv');
 const outputPath = join(here, 'output', 'alibaba-intake-latest.json');
-const SCAN_LIMIT = Math.max(1, Number(process.env.ALIBABA_SCAN_LIMIT ?? 5));
+// Operator policy: never send more than two Alibaba listing requests in one run. An environment
+// override may lower the cap for testing, but cannot raise it.
+export const ALIBABA_REQUEST_LIMIT = Math.min(2, Math.max(1, Number(process.env.ALIBABA_SCAN_LIMIT ?? 2)));
 
 export function csvRows(text) {
   const lines = text.trim().split(/\r?\n/);
@@ -108,31 +111,25 @@ async function fetchPublicListing(url) {
   }
 }
 
-async function indexedFallback(seed) {
-  const results = await serpTop(`site:alibaba.com/product-detail "${seed.slug}"`, { limit: 10 });
-  const exact = results?.find((row) => String(row.url).includes(String(seed.alibaba_id)))
-    ?? results?.find((row) => /alibaba\.com/i.test(String(row.domain)));
-  if (!exact) return null;
-  return { ...parseAlibabaEvidence(`${exact.title ?? ''} ${exact.description ?? ''}`, 'dataforseo-indexed-snippet'), indexedUrl: exact.url };
-}
-
-export async function researchAlibabaCandidates(seeds, { prior = null } = {}) {
+export async function researchAlibabaCandidates(seeds, {
+  prior = null, fetchListing = fetchPublicListing,
+  demandLoader = keywordOverview, shoppingLoader = googleShoppingProducts,
+} = {}) {
   const previous = new Map((prior?.research ?? []).map((item) => [String(item.alibabaId), item]));
   const cursor = Number(prior?.nextCursor ?? 0) % Math.max(1, seeds.length);
-  const batch = Array.from({ length: Math.min(SCAN_LIMIT, seeds.length) }, (_, offset) => seeds[(cursor + offset) % seeds.length]);
-  const overview = await keywordOverview(batch.map(demandQuery)) ?? [];
+  const batch = Array.from({ length: Math.min(ALIBABA_REQUEST_LIMIT, seeds.length) }, (_, offset) => seeds[(cursor + offset) % seeds.length]);
+  const overview = await demandLoader(batch.map(demandQuery)) ?? [];
   const demandByKeyword = new Map(overview.map((item) => [item.keyword.toLowerCase(), item]));
 
+  const attempted = [];
+  let operatorAction = null;
   for (const seed of batch) {
-    let evidence = await fetchPublicListing(seed.url);
-    if (evidence.blocked || !(evidence.priceHigh > 0 && evidence.moq > 0)) {
-      const indexed = await indexedFallback(seed);
-      if (indexed?.priceHigh > 0 || indexed?.moq > 0) evidence = { ...evidence, ...indexed, blocked: false };
-    }
+    const evidence = await fetchListing(seed.url);
+    attempted.push(seed);
     const query = demandQuery(seed);
     const demand = demandByKeyword.get(query.toLowerCase()) ?? { keyword: query, volume: 0, cpc: null, competition: null, intent: null };
     let shopping = [];
-    if (evidence.priceHigh > 0 && evidence.moq > 0 && demand.volume > 0) shopping = await googleShoppingProducts(query, { depth: 20 }) ?? [];
+    if (evidence.priceHigh > 0 && evidence.moq > 0 && demand.volume > 0) shopping = await shoppingLoader(query, { depth: 20 }) ?? [];
     const marketplacePrices = shopping.map((item) => item.price).filter((price) => Number.isFinite(Number(price))).map(Number);
     const economics = estimateAlibabaEconomics(evidence, marketplacePrices, demand);
     const decision = prequalifyAlibaba({ evidence, economics, demand });
@@ -142,10 +139,17 @@ export async function researchAlibabaCandidates(seeds, { prior = null } = {}) {
       marketplace: { source: 'google-shopping-dataforseo', comparableCount: marketplacePrices.length, prices: marketplacePrices.slice(0, 20) },
       economics, ...decision,
     });
+    if (evidence.blocked) {
+      operatorAction = { type: 'alibaba_access_challenge', url: seed.url, alibabaId: seed.alibaba_id, message: 'Open this URL in authenticated Chrome and complete Alibaba verification, then rerun.' };
+      break;
+    }
   }
   const research = seeds.map((seed) => previous.get(String(seed.alibaba_id))).filter(Boolean);
   return {
-    research, scanned: batch.length, nextCursor: (cursor + batch.length) % Math.max(1, seeds.length),
+    research, scanned: attempted.length,
+    // Do not skip a challenged product. It stays at the cursor until the operator resolves it.
+    nextCursor: operatorAction ? cursor : (cursor + attempted.length) % Math.max(1, seeds.length),
+    operatorAction,
     counts: Object.fromEntries(['prequalified', 'needs_evidence', 'listing_data_blocked', 'reject_preliminary'].map((status) => [status, research.filter((item) => item.status === status).length])),
   };
 }
@@ -155,13 +159,13 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const quotes = existsSync(quotesPath) ? csvRows(readFileSync(quotesPath, 'utf8')) : [];
   let prior = null;
   try { prior = JSON.parse(readFileSync(outputPath, 'utf8')); } catch {}
-  const preliminary = process.argv.includes('--quotes-only') ? { research: prior?.research ?? [], counts: prior?.preliminaryCounts ?? {}, nextCursor: prior?.nextCursor ?? 0, scanned: 0 } : await researchAlibabaCandidates(seeds, { prior });
+  const preliminary = process.argv.includes('--quotes-only') ? { research: prior?.research ?? [], counts: prior?.preliminaryCounts ?? {}, nextCursor: prior?.nextCursor ?? 0, scanned: 0, operatorAction: prior?.operatorAction ?? null } : await researchAlibabaCandidates(seeds, { prior });
   const quoted = buildAlibabaIntake(seeds, quotes);
   const report = {
     ...quoted, research: preliminary.research, preliminaryCounts: preliminary.counts,
-    scannedThisRun: preliminary.scanned, nextCursor: preliminary.nextCursor,
+    scannedThisRun: preliminary.scanned, nextCursor: preliminary.nextCursor, operatorAction: preliminary.operatorAction,
     supervision: {
-      mode: 'autonomous-research', scheduledStage: 'alibaba-research',
+      mode: 'supervised-autonomous-research', scheduledStage: 'alibaba-research', alibabaRequestLimit: ALIBABA_REQUEST_LIMIT,
       automaticActions: ['scan', 'extract', 'measure-demand', 'compare-marketplace', 'estimate-economics', 'rank'],
       approvalRequired: ['supplier-contact', 'sample-order', 'inventory-purchase', 'shopify-publication'],
       policy: 'MOQ is evaluated through profit and demand-adjusted sell-through; it is not a numeric hard blocker.',
@@ -171,5 +175,11 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   writeFileSync(outputPath, `${JSON.stringify(report, null, 2)}\n`);
   console.log(`Alibaba intake: ${report.counts.sample_ready} sample-ready, ${report.counts.needs_quote} need quotes, ${report.counts.reject} rejected.`);
   console.log(`Alibaba research: scanned ${report.scannedThisRun}; ${report.preliminaryCounts.prequalified ?? 0} prequalified, ${report.preliminaryCounts.listing_data_blocked ?? 0} listing-data blocked.`);
+  if (report.operatorAction) {
+    console.warn(`ACTION REQUIRED: ${report.operatorAction.message} ${report.operatorAction.url}`);
+    try {
+      execFileSync('osascript', ['-e', `display notification ${JSON.stringify(report.operatorAction.message)} with title "Autivara — Alibaba access required" sound name "Glass"`]);
+    } catch {}
+  }
   console.log(`Saved -> ${outputPath.slice(root.length + 1)}`);
 }
