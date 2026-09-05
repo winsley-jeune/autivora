@@ -35,7 +35,11 @@ raw/ (your sheet export)  ──►  clean.* (script)  ──►  output/ (Shopi
 - `SCENT_OPTIONS.md` — full scent name menu.
 - `raw/candidates.csv` — parsed Alibaba seed list.
 - `raw/alibaba-quotes.csv` — optional supplier RFQ responses. Copy the example header from
-  `raw/alibaba-quotes.example.csv`, then run `npm run dropship:alibaba`. The intake will only
+  `raw/alibaba-quotes.example.csv`. The daily engine researches five seed listings per run,
+  extracts advertised MOQ/price from public markup or DataForSEO-indexed snippets, measures US
+  demand and Google Shopping prices, and writes an estimate-only prequalification report. Direct
+  Alibaba requests that return a challenge are recorded as blocked, never treated as evidence.
+  Run `npm run dropship:alibaba:quotes` after adding formal quotes. The intake will only
   mark a product sample-ready when supplier verification, Trade Assurance, delivery, test MOQ,
   and expected contribution margin pass. It never contacts or pays a supplier automatically.
 

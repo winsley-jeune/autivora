@@ -154,7 +154,8 @@ export async function organicCompetitorDomains(domain, { limit = 25 } = {}) {
 }
 
 // Live US Google SERP for one query — the real top competitors for that term.
-// Returns [{ position, url, domain, title }] (organic only, top `limit`) or null.
+// Returns organic results including snippets; Alibaba discovery uses indexed snippets as a
+// compliant fallback when the public listing itself presents an anti-bot challenge.
 export async function serpTop(query, { limit = 10 } = {}) {
   const json = await dfs("serp/google/organic/live/regular", [
     { keyword: query, location_code: 2840, language_code: "en", depth: 10 },
@@ -164,5 +165,5 @@ export async function serpTop(query, { limit = 10 } = {}) {
   return items
     .filter((i) => i.type === "organic")
     .slice(0, limit)
-    .map((i) => ({ position: i.rank_absolute, url: i.url, domain: i.domain, title: i.title }));
+    .map((i) => ({ position: i.rank_absolute, url: i.url, domain: i.domain, title: i.title, description: i.description ?? null }));
 }

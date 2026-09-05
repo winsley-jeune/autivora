@@ -27,6 +27,7 @@
     "dropship:observe": "node agents/dropship/observe-market.mjs",
     "dropship:audit": "node agents/dropship/audit-catalog.mjs",
     "dropship:alibaba": "node agents/dropship/alibaba-intake.mjs",
+    "dropship:alibaba:quotes": "node agents/dropship/alibaba-intake.mjs --quotes-only",
     "catalog:sync": "node agents/scripts/catalog-sync.mjs",
     "catalog:operate": "node agents/scripts/catalog-operate.mjs",
     "catalog:autonomous": "node agents/scripts/catalog-autonomous.mjs",
