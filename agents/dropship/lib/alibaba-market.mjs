@@ -61,7 +61,8 @@ export function prequalifyAlibaba({ evidence, economics, demand }) {
   if (!(evidence?.priceHigh > 0)) blockers.push('advertised_price_missing');
   if (!(evidence?.moq > 0)) blockers.push('advertised_moq_missing');
   if (!economics?.marketMedian) blockers.push('marketplace_price_missing');
-  if (economics?.contributionMarginLow != null && economics.contributionMarginLow < 0.3) blockers.push('estimated_margin_below_30pct');
+  if (economics?.contributionMarginHigh != null && economics.contributionMarginHigh < 0.3) blockers.push('estimated_margin_below_30pct');
+  else if (economics?.contributionMarginLow != null && economics.contributionMarginLow < 0.3) blockers.push('shipping_quote_required_for_margin');
   if (economics?.totalContributionAtSellThrough != null && economics.totalContributionAtSellThrough <= 0) blockers.push('moq_not_profitable_at_sell_through');
   if (economics?.sellThroughMonths != null && economics.sellThroughMonths > 12) blockers.push('moq_exceeds_12_month_demand');
   if (!demand || demand.volume <= 0) blockers.push('measured_search_demand_missing');

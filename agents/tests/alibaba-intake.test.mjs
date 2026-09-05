@@ -92,6 +92,16 @@ test('Alibaba MOQ is rejected only when demand implies excessive sell-through ti
   assert.ok(result.blockers.includes('moq_exceeds_12_month_demand'));
 });
 
+test('Alibaba margin range that crosses 30 percent requests shipping evidence instead of rejecting', () => {
+  const evidence = { priceLow: 23, priceHigh: 23, moq: 1 };
+  const demand = { volume: 90, cpc: 2.02, competition: 'HIGH' };
+  const economics = estimateAlibabaEconomics(evidence, [59], demand);
+  const result = prequalifyAlibaba({ evidence, economics, demand });
+  assert.equal(result.status, 'needs_evidence');
+  assert.ok(result.blockers.includes('shipping_quote_required_for_margin'));
+  assert.ok(!result.blockers.includes('estimated_margin_below_30pct'));
+});
+
 test('Alibaba demand research translates internal categories into buyer language', () => {
   assert.equal(demandQuery({ inferred_type: 'home/commercial', slug: 'ignored' }), 'scent diffuser machine');
   assert.equal(demandQuery({ inferred_type: 'passive-car-vent', slug: 'ignored' }), 'car vent air freshener');
