@@ -5,14 +5,17 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { keywordOverview, googleShoppingProducts, serpTop } from '../lib/dataforseo.mjs';
+import { estimateAlibabaEconomics, parseAlibabaEvidence, prequalifyAlibaba } from './lib/alibaba-market.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, '..', '..');
 const seedsPath = join(root, 'product-pipeline', 'raw', 'candidates.csv');
 const quotesPath = join(root, 'product-pipeline', 'raw', 'alibaba-quotes.csv');
 const outputPath = join(here, 'output', 'alibaba-intake-latest.json');
+const SCAN_LIMIT = Math.max(1, Number(process.env.ALIBABA_SCAN_LIMIT ?? 5));
 
-function csvRows(text) {
+export function csvRows(text) {
   const lines = text.trim().split(/\r?\n/);
   const headers = lines.shift().split(',');
   return lines.map((line) => {
@@ -84,12 +87,81 @@ export function buildAlibabaIntake(seeds, quotes) {
   };
 }
 
+const DEMAND_QUERIES = {
+  'home/commercial': 'scent diffuser machine',
+  'passive-car-vent': 'car vent air freshener',
+  'electric-car-diffuser': 'electric car diffuser',
+  'ambiguous': 'home fragrance diffuser',
+};
+export const demandQuery = (seed) => DEMAND_QUERIES[seed.inferred_type]
+  ?? String(seed.slug).replace(/\b(2025|new|style|top|sale|custom|wholesale)\b/gi, ' ').replace(/[-_/]+/g, ' ').replace(/\s+/g, ' ').trim();
+
+async function fetchPublicListing(url) {
+  try {
+    const response = await fetch(url, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; AutivaraProductResearch/1.0; +https://autivara.com)' },
+      redirect: 'follow', signal: AbortSignal.timeout(30_000),
+    });
+    if (!response.ok) return { source: 'listing', blocked: true, httpStatus: response.status, priceLow: null, priceHigh: null, moq: null };
+    return { ...parseAlibabaEvidence(await response.text(), 'listing'), httpStatus: response.status };
+  } catch (error) {
+    return { source: 'listing', blocked: true, error: error.message, priceLow: null, priceHigh: null, moq: null };
+  }
+}
+
+async function indexedFallback(seed) {
+  const results = await serpTop(`site:alibaba.com/product-detail "${seed.slug}"`, { limit: 10 });
+  const exact = results?.find((row) => String(row.url).includes(String(seed.alibaba_id)))
+    ?? results?.find((row) => /alibaba\.com/i.test(String(row.domain)));
+  if (!exact) return null;
+  return { ...parseAlibabaEvidence(`${exact.title ?? ''} ${exact.description ?? ''}`, 'dataforseo-indexed-snippet'), indexedUrl: exact.url };
+}
+
+export async function researchAlibabaCandidates(seeds, { prior = null } = {}) {
+  const previous = new Map((prior?.research ?? []).map((item) => [String(item.alibabaId), item]));
+  const cursor = Number(prior?.nextCursor ?? 0) % Math.max(1, seeds.length);
+  const batch = Array.from({ length: Math.min(SCAN_LIMIT, seeds.length) }, (_, offset) => seeds[(cursor + offset) % seeds.length]);
+  const overview = await keywordOverview(batch.map(demandQuery)) ?? [];
+  const demandByKeyword = new Map(overview.map((item) => [item.keyword.toLowerCase(), item]));
+
+  for (const seed of batch) {
+    let evidence = await fetchPublicListing(seed.url);
+    if (evidence.blocked || !(evidence.priceHigh > 0 && evidence.moq > 0)) {
+      const indexed = await indexedFallback(seed);
+      if (indexed?.priceHigh > 0 || indexed?.moq > 0) evidence = { ...evidence, ...indexed, blocked: false };
+    }
+    const query = demandQuery(seed);
+    const demand = demandByKeyword.get(query.toLowerCase()) ?? { keyword: query, volume: 0, cpc: null, competition: null, intent: null };
+    let shopping = [];
+    if (evidence.priceHigh > 0 && evidence.moq > 0 && demand.volume > 0) shopping = await googleShoppingProducts(query, { depth: 20 }) ?? [];
+    const marketplacePrices = shopping.map((item) => item.price).filter((price) => Number.isFinite(Number(price))).map(Number);
+    const economics = estimateAlibabaEconomics(evidence, marketplacePrices);
+    const decision = prequalifyAlibaba({ evidence, economics, demand });
+    previous.set(String(seed.alibaba_id), {
+      alibabaId: seed.alibaba_id, title: seed.slug, inferredType: seed.inferred_type, url: seed.url,
+      observedAt: new Date().toISOString(), query, evidence, demand,
+      marketplace: { source: 'google-shopping-dataforseo', comparableCount: marketplacePrices.length, prices: marketplacePrices.slice(0, 20) },
+      economics, ...decision,
+    });
+  }
+  const research = seeds.map((seed) => previous.get(String(seed.alibaba_id))).filter(Boolean);
+  return {
+    research, scanned: batch.length, nextCursor: (cursor + batch.length) % Math.max(1, seeds.length),
+    counts: Object.fromEntries(['prequalified', 'needs_evidence', 'listing_data_blocked', 'reject_preliminary'].map((status) => [status, research.filter((item) => item.status === status).length])),
+  };
+}
+
 if (import.meta.url === `file://${process.argv[1]}`) {
   const seeds = csvRows(readFileSync(seedsPath, 'utf8'));
   const quotes = existsSync(quotesPath) ? csvRows(readFileSync(quotesPath, 'utf8')) : [];
-  const report = buildAlibabaIntake(seeds, quotes);
+  let prior = null;
+  try { prior = JSON.parse(readFileSync(outputPath, 'utf8')); } catch {}
+  const preliminary = process.argv.includes('--quotes-only') ? { research: prior?.research ?? [], counts: prior?.preliminaryCounts ?? {}, nextCursor: prior?.nextCursor ?? 0, scanned: 0 } : await researchAlibabaCandidates(seeds, { prior });
+  const quoted = buildAlibabaIntake(seeds, quotes);
+  const report = { ...quoted, research: preliminary.research, preliminaryCounts: preliminary.counts, scannedThisRun: preliminary.scanned, nextCursor: preliminary.nextCursor };
   mkdirSync(dirname(outputPath), { recursive: true });
   writeFileSync(outputPath, `${JSON.stringify(report, null, 2)}\n`);
   console.log(`Alibaba intake: ${report.counts.sample_ready} sample-ready, ${report.counts.needs_quote} need quotes, ${report.counts.reject} rejected.`);
+  console.log(`Alibaba research: scanned ${report.scannedThisRun}; ${report.preliminaryCounts.prequalified ?? 0} prequalified, ${report.preliminaryCounts.listing_data_blocked ?? 0} listing-data blocked.`);
   console.log(`Saved -> ${outputPath.slice(root.length + 1)}`);
 }
