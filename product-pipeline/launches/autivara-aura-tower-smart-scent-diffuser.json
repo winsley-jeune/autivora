@@ -1,0 +1,61 @@
+{
+  "alibabaId": "1601681358554",
+  "sku": "AB-1601681358554-US-CHAMPAGNE",
+  "hypothesisId": "smart-home-atmosphere-aroma-tower",
+  "supplier": {
+    "name": "Guangdong Chiyang Scent Technology Co., Ltd.",
+    "url": "https://www.alibaba.com/product-detail/SCENTA-OEM-Wholesale-Smart-Home-Aroma_1601681358554.html",
+    "images": ["https://s.alicdn.com/@sc04/kf/Hf3a9c44d475e4d679a729308eebb4656K.jpg"],
+    "evidence": {
+      "verifiedAt": "2026-09-05T12:30:00.000Z",
+      "rating": 4.9,
+      "storeReviews": 607,
+      "sold": 1000,
+      "reorderRate": 0.28,
+      "onTimeDispatchRate": 0.75,
+      "supplierYears": 11,
+      "fullCustomization": true,
+      "usMainMarket": true,
+      "testQuantity": 200,
+      "deliveryMinDays": 17,
+      "deliveryMaxDays": 24,
+      "advertisedUnitPrice": 58.5,
+      "shippingForTestQuantity": 1854
+    }
+  },
+  "collection": { "handle": "smart-home-atmosphere", "title": "Smart Home Atmosphere" },
+  "marketEvidence": {
+    "verifiedAt": "2026-09-05T12:38:26.700Z",
+    "keyword": "smart scent diffuser",
+    "intent": "transactional",
+    "monthlySearchVolume": 720,
+    "shoppingComparables": 45,
+    "shoppingMedianPrice": 81.25
+  },
+  "economics": {
+    "sellingPrice": 149.99,
+    "supplierCost": 58.5,
+    "shippingCost": 9.27,
+    "landedCost": 67.77,
+    "fulfillmentCost": 12,
+    "paymentFeeRate": 0.029,
+    "paymentFeeFixed": 0.30,
+    "expectedRefundRate": 0.08
+  },
+  "offer": {
+    "title": "Aura Tower Smart Scent Diffuser",
+    "productType": "Smart Waterless Scent Diffuser",
+    "positioning": "A sculptural waterless aroma tower with Bluetooth control for larger living spaces.",
+    "seoTitle": "Aura Tower Smart Scent Diffuser | Autivara",
+    "seoDescription": "Control a quiet waterless scent tower from your phone and create a consistent atmosphere across larger living spaces.",
+    "bodyHtml": "<p>Turn fragrance into part of the room rather than another object to hide. Aura Tower combines a slim metal silhouette with waterless diffusion and Bluetooth control for intentional home atmosphere.</p><h2>Designed for larger rooms</h2><ul><li>Waterless fragrance diffusion</li><li>Bluetooth smart control and timer</li><li>Quiet operation rated at 40 dB or below</li><li>Metal tower body in a champagne finish</li><li>US plug configuration</li></ul><h2>What to know</h2><p>This offer is for the champagne-color tower with a US plug. Fragrance oil is sold separately. Supplier transit for the verified production quantity is estimated at 17–24 days before domestic fulfillment.</p><h2>Frequently asked questions</h2><h3>Does it need water?</h3><p>No. It is designed for waterless fragrance diffusion.</p><h3>Can I schedule it?</h3><p>The supplier lists Bluetooth smart control and timer functionality.</p><h3>Is oil included?</h3><p>No fragrance oil is promised with this offer.</p>"
+  },
+  "assets": {
+    "supplierReference": "public/products/aura-tower-smart-scent-diffuser/source/supplier-main.jpg",
+    "shopify": [
+      { "path": "public/products/aura-tower-smart-scent-diffuser/generated/clean-hero.png", "filename": "aura-tower-clean-hero.png", "alt": "Champagne Aura Tower smart scent diffuser on a stone pedestal" },
+      { "path": "public/products/aura-tower-smart-scent-diffuser/generated/lifestyle-living-room.png", "filename": "aura-tower-living-room.png", "alt": "Aura Tower smart scent diffuser in a warm contemporary living room" },
+      { "path": "public/products/aura-tower-smart-scent-diffuser/generated/problem-solution-office.png", "filename": "aura-tower-home-office.png", "alt": "Aura Tower waterless scent diffuser in a calm home office" }
+    ]
+  }
+}

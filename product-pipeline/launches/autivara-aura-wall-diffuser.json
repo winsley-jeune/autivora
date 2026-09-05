@@ -24,6 +24,13 @@
     }
   },
   "collection": { "handle": "smart-home-atmosphere", "title": "Smart Home Atmosphere" },
+  "marketEvidence": {
+    "verifiedAt": "2026-09-05T12:38:26.700Z",
+    "keyword": "smart scent diffuser",
+    "intent": "transactional",
+    "monthlySearchVolume": 720,
+    "shoppingComparables": 45
+  },
   "economics": {
     "sellingPrice": 69.99,
     "supplierCost": 17,

@@ -11,7 +11,21 @@ export function validateAlibabaLaunchDossier(dossier) {
     dossier?.offer?.seoTitle, dossier?.offer?.seoDescription];
   if (required.some((value) => !String(value ?? "").trim())) throw new Error("Launch dossier is incomplete");
   if (!Array.isArray(dossier.supplier.images) || !dossier.supplier.images.length) throw new Error("A real supplier image is required");
-  if (!dossier.supplier.evidence?.verifiedAt || Number(dossier.supplier.evidence.deliveryMaxDays) > 30) throw new Error("Fresh supplier and delivery evidence is required");
+  const deliveryMinDays = Number(dossier.supplier.evidence?.deliveryMinDays);
+  const deliveryMaxDays = Number(dossier.supplier.evidence?.deliveryMaxDays);
+  const testQuantity = Number(dossier.supplier.evidence?.testQuantity);
+  if (!dossier.supplier.evidence?.verifiedAt
+    || !Number.isFinite(deliveryMinDays) || deliveryMinDays <= 0
+    || !Number.isFinite(deliveryMaxDays) || deliveryMaxDays <= 0 || deliveryMaxDays > 30
+    || !Number.isFinite(testQuantity) || testQuantity <= 0) {
+    throw new Error("Fresh supplier, test-quantity, and delivery evidence is required");
+  }
+  const market = dossier.marketEvidence;
+  if (!market?.verifiedAt || market.intent !== "transactional"
+    || !Number.isFinite(Number(market.monthlySearchVolume)) || Number(market.monthlySearchVolume) <= 0
+    || !Number.isFinite(Number(market.shoppingComparables)) || Number(market.shoppingComparables) < 5) {
+    throw new Error("Fresh transactional demand and US marketplace evidence is required");
+  }
   if (dossier.offer.seoTitle.length > 60 || dossier.offer.seoDescription.length > 160) throw new Error("SEO metadata exceeds its limit");
   const economics = calculateUnitEconomics({ productKey: dossier.sku, ...dossier.economics });
   if (!economics.complete || !economics.passesMarginGate) throw new Error("Offer does not pass the 30% contribution-margin gate");
