@@ -1,0 +1,216 @@
+{
+  "generatedAt": "2026-09-05T04:40:00.000Z",
+  "source": "authenticated-alibaba-live-search",
+  "strategy": "supply-side problem-solution discovery",
+  "status": "hypotheses_pending_market_and_landed_cost_validation",
+  "notes": [
+    "These are not winners yet and are not selected from generic category trend lists.",
+    "Amazon candidates require retail price, competition, PPC, FBA, IP, compliance, and landed-cost validation.",
+    "Autivara will test one coherent seven-product category before considering additional category expansion."
+  ],
+  "amazonCandidates": [
+    {
+      "rank": 1,
+      "problem": "Travelers cannot locate a lost suitcase and still need a TSA-compliant physical lock.",
+      "product": "TSA combination luggage lock with built-in Find My-compatible tracker",
+      "alibabaId": "1601423083238",
+      "url": "https://www.alibaba.com/product-detail/Luggage-Lock-Mini-Suitcase-Anti-lost_1601423083238.html",
+      "advertisedPrice": 6.74,
+      "moq": 1,
+      "supplierSignals": ["certified", "money-back guarantee", "1077 sold", "4.6/5 from 147 reviews"],
+      "differentiation": "Bundle lock, replaceable battery, luggage tag, setup guide, and travel recovery card.",
+      "risk": "Verify Apple Find My authorization, TSA compliance, battery shipping, and patent status."
+    },
+    {
+      "rank": 2,
+      "problem": "Water leaks cause expensive damage before homeowners notice them.",
+      "product": "IP66 Tuya Zigbee water-leak sensor with phone alerts",
+      "alibabaId": "1601652515256",
+      "url": "https://www.alibaba.com/product-detail/Tuya-Zigbee-3-0-Water-Leak_1601652515256.html",
+      "advertisedPriceLow": 5.90,
+      "advertisedPriceHigh": 6.90,
+      "moq": 1,
+      "supplierSignals": ["OEM supplier", "IP66", "easy return", "4.9/5"],
+      "differentiation": "Sell as a three- or five-room prevention kit with placement labels and setup guide.",
+      "risk": "Confirm hub requirements, app longevity, FCC documentation, battery life, and alert reliability."
+    },
+    {
+      "rank": 3,
+      "problem": "Reading difficulty and language barriers make printed material inaccessible.",
+      "product": "Wi-Fi AI scanner pen with text-to-speech and 112-language translation",
+      "alibabaId": "1601612944234",
+      "url": "https://www.alibaba.com/product-detail/Smart-AI-Scan-Reader-Portable-Voice_1601612944234.html",
+      "advertisedPrice": 25,
+      "moq": 1,
+      "supplierSignals": ["4.9/5 from 22 reviews", "delivery date shown"],
+      "differentiation": "Focus the offer on travel, ESL learning, and reading assistance with a protective case and tutorials.",
+      "risk": "Do not make medical claims; verify offline functions, privacy, translation quality, and software support."
+    },
+    {
+      "rank": 4,
+      "problem": "Steam cleaning multiple household surfaces requires several tools.",
+      "product": "OEM/ODM 10-in-1 digital high-pressure steam cleaner",
+      "alibabaId": "1601897533946",
+      "url": "https://www.alibaba.com/product-detail/Smart-Multifunctional-Steam-Cleaner-With-Digital_1601897533946.html",
+      "advertisedPriceLow": 18.50,
+      "advertisedPriceHigh": 19,
+      "moq": 500,
+      "supplierSignals": ["OEM", "ODM", "easy return"],
+      "differentiation": "Create task-specific attachment bundles and visual cleaning protocols.",
+      "risk": "High opening MOQ; validate ETL/UL-equivalent electrical and burn-safety compliance before sampling."
+    },
+    {
+      "rank": 5,
+      "problem": "Bathroom waste bins require hand contact and expose liners.",
+      "product": "Compact motion-sensor touchless bathroom trash can",
+      "alibabaId": "1601558678052",
+      "url": "https://www.alibaba.com/product-detail/Motion-Sensor-Trash-Can-with-Lid_1601558678052.html",
+      "advertisedPriceLow": 4.90,
+      "advertisedPriceHigh": 6.90,
+      "moq": 300,
+      "supplierSignals": ["easy return", "5.0/5"],
+      "differentiation": "Improve liner retention, splash resistance, narrow-space fit, and include fitted liners.",
+      "risk": "Bulky dimensional freight could erase the apparent price advantage."
+    },
+    {
+      "rank": 6,
+      "problem": "People worry about hidden cameras in hotels and short-term rentals.",
+      "product": "Portable infrared wireless-camera detector",
+      "alibabaId": "1601287591717",
+      "url": "https://www.alibaba.com/product-detail/Best-Selling-Portable-Electronic-Wireless-Camera_1601287591717.html",
+      "advertisedPrice": 1.78,
+      "moq": 5,
+      "supplierSignals": ["easy return", "10 sold", "4.3/5 from 71 reviews"],
+      "differentiation": "Bundle a privacy inspection card, travel case, and verified detection-distance specifications.",
+      "risk": "Cheap optical-only detectors may underperform; hands-on efficacy testing is mandatory."
+    },
+    {
+      "rank": 7,
+      "problem": "Insect bites remain itchy and topical products are inconvenient while traveling.",
+      "product": "Rechargeable physical after-bite anti-itch device",
+      "alibabaId": "1601492415630",
+      "url": "https://www.alibaba.com/product-detail/New-Design-Simple-Style-After-Bite_1601492415630.html",
+      "advertisedPrice": 4.38,
+      "moq": 100,
+      "supplierSignals": ["4.7/5", "delivery date shown"],
+      "differentiation": "Pair with a travel case and clear temperature/treatment controls.",
+      "risk": "Medical-device classification, burn risk, claims, and safety documentation require review."
+    },
+    {
+      "rank": 8,
+      "problem": "Opening wine bottles is difficult for users with limited grip strength.",
+      "product": "Private-label cordless electric wine opener gift set",
+      "alibabaId": "1601799891374",
+      "url": "https://www.alibaba.com/product-detail/Best-Selling-Customized-Red-Wine-Gifts_1601799891374.html",
+      "advertisedPriceLow": 3.09,
+      "advertisedPriceHigh": 3.89,
+      "moq": 20,
+      "supplierSignals": ["certified", "customized", "20 sold", "4.9/5 from 56 reviews"],
+      "differentiation": "Premium gift packaging, foil cutter, date stopper, and accessibility-led positioning.",
+      "risk": "Mature category; enter only if the bundle and keyword gap survive Amazon validation."
+    },
+    {
+      "rank": 9,
+      "problem": "Food waste smells and accumulates before disposal or outdoor composting.",
+      "product": "2.5-3.3L electric kitchen food-waste composter",
+      "alibabaId": "1601613153501",
+      "url": "https://www.alibaba.com/product-detail/2025-Trending-New-Design-500W-Food_1601613153501.html",
+      "advertisedPriceLow": 79.50,
+      "advertisedPriceHigh": 87,
+      "moq": 2,
+      "supplierSignals": ["certified", "easy return", "4.6/5 from 17 reviews"],
+      "differentiation": "Odor-filter subscription, quieter cycle, countertop footprint comparison, and waste-reduction education.",
+      "risk": "High return and warranty exposure; verify certifications, filter supply, cycle claims, freight, and patents."
+    },
+    {
+      "rank": 10,
+      "problem": "Exterior windows are difficult or unsafe to clean from inside apartments.",
+      "product": "Obstacle-detecting automatic window-cleaning robot",
+      "alibabaId": "1601689252630",
+      "url": "https://www.alibaba.com/product-detail/2026-Glass-Cleaning-Robot-High-Efficiency_1601689252630.html",
+      "advertisedPriceLow": 55,
+      "advertisedPriceHigh": 83,
+      "moq": 10,
+      "supplierSignals": ["easy return", "auto-path planning", "obstacle detection"],
+      "differentiation": "Safety-tether kit, glass compatibility guide, replacement pads, and verified edge detection.",
+      "risk": "Product-liability, fall risk, certification, returns, and dimensional economics require strict testing."
+    }
+  ],
+  "autivaraCategory": {
+    "category": "Smart Home Atmosphere",
+    "positioning": "Control how a room smells, feels, and refreshes from one visually coherent collection.",
+    "status": "seven_product_cohort_pending_demand_validation",
+    "products": [
+      {
+        "role": "flagship",
+        "product": "Bluetooth-controlled aroma tower",
+        "alibabaId": "1601681358554",
+        "url": "https://www.alibaba.com/product-detail/SCENTA-OEM-Wholesale-Smart-Home-Aroma_1601681358554.html",
+        "advertisedPriceLow": 47,
+        "advertisedPriceHigh": 58.50,
+        "moq": 200,
+        "signals": ["OEM", "certified", "1000 sold", "4.9/5", "manufacturer leaderboard"]
+      },
+      {
+        "role": "core",
+        "product": "200ml smart waterless home scent machine",
+        "alibabaId": "1601938498218",
+        "url": "https://www.alibaba.com/product-detail/Customized-200-ml-Scent-Machine-Smart_1601938498218.html",
+        "advertisedPriceLow": 35,
+        "advertisedPriceHigh": 42,
+        "moq": 2,
+        "signals": ["customized", "certified", "easy return", "4.7/5"]
+      },
+      {
+        "role": "connected",
+        "product": "Bluetooth/Wi-Fi wall-mount HVAC scent system",
+        "alibabaId": "1601705445940",
+        "url": "https://www.alibaba.com/product-detail/Best-Seller-Crearoma-OV-10-1000ml_1601705445940.html",
+        "advertisedPriceLow": 60,
+        "advertisedPriceHigh": 79,
+        "moq": 2,
+        "signals": ["OEM", "certified", "32 sold", "4.9/5"]
+      },
+      {
+        "role": "portable",
+        "product": "App-controlled portable waterless aroma diffuser",
+        "alibabaId": "10000044217680",
+        "url": "https://www.alibaba.com/product-detail/Smart-Wireless-Electric-App-Controlled-Portable_10000044217680.html",
+        "advertisedPriceLow": 27,
+        "advertisedPriceHigh": 32,
+        "moq": 2,
+        "signals": ["certified", "128 sold", "4.7/5"]
+      },
+      {
+        "role": "entry",
+        "product": "Compact wall-mounted waterless scent machine",
+        "alibabaId": "1601892309577",
+        "url": "https://www.alibaba.com/product-detail/Custom-Supermarket-Electronic-Product-Practical-Essential_1601892309577.html",
+        "advertisedPriceLow": 12,
+        "advertisedPriceHigh": 17,
+        "moq": 2,
+        "signals": ["custom", "certified", "easy return", "4.7/5"]
+      },
+      {
+        "role": "air-care",
+        "product": "Smart purifier/humidifier and odor eliminator",
+        "alibabaId": "1601445857006",
+        "url": "https://www.alibaba.com/product-detail/Wholesale-Smart-Air-Purifier-with-Humidifier_1601445857006.html",
+        "advertisedPriceLow": 42.23,
+        "advertisedPriceHigh": 48.18,
+        "moq": 50,
+        "signals": ["certified", "4.9/5"]
+      },
+      {
+        "role": "visual-demo",
+        "product": "Intelligent induction-spray aroma and odor-removal light",
+        "alibabaId": "1601777994554",
+        "url": "https://www.alibaba.com/product-detail/Air-Perfume-Air-Purifier-Night-Light_1601777994554.html",
+        "advertisedPriceLow": 10.86,
+        "advertisedPriceHigh": 11.60,
+        "moq": 20,
+        "signals": ["easy return", "USB powered", "induction spray"]
+      }
+    ]
+  }
+}
