@@ -40,7 +40,8 @@
     "scoreboard": "node agents/analytics/scoreboard.mjs",
     "profit:control": "node agents/scripts/profit-controller.mjs",
     "offer:launch": "node agents/scripts/offer-launch.mjs"
-    ,"offer:prepare:alibaba": "node agents/scripts/alibaba-offer-prepare.mjs"
+    ,"offer:prepare:alibaba": "node agents/scripts/alibaba-offer-prepare.mjs",
+    "offer:readiness:alibaba": "node agents/scripts/alibaba-cohort-readiness.mjs"
   },
   "dependencies": {
     "@sanity/client": "^6.0.0",
