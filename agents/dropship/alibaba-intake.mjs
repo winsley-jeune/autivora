@@ -12,6 +12,7 @@ import { estimateAlibabaEconomics, parseAlibabaEvidence, prequalifyAlibaba } fro
 const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, '..', '..');
 const seedsPath = join(root, 'product-pipeline', 'raw', 'candidates.csv');
+const liveDiscoveryPath = join(root, 'product-pipeline', 'raw', 'alibaba-live-discovery.json');
 const quotesPath = join(root, 'product-pipeline', 'raw', 'alibaba-quotes.csv');
 const outputPath = join(here, 'output', 'alibaba-intake-latest.json');
 // Operator policy: never send more than two Alibaba listing requests in one run. An environment
@@ -89,6 +90,29 @@ export function buildAlibabaIntake(seeds, quotes) {
   };
 }
 
+export function mergeAlibabaSeeds(manualSeeds, liveDiscovery = {}) {
+  const merged = new Map();
+  const liveSeeds = (liveDiscovery.candidates ?? []).map((seed) => ({
+    ...seed, observed_at: seed.observed_at ?? liveDiscovery.generatedAt ?? null,
+  }));
+  for (const seed of [...manualSeeds, ...liveSeeds]) {
+    const id = String(seed.alibaba_id ?? '').trim();
+    if (id) merged.set(id, { ...seed, alibaba_id: id });
+  }
+  return [...merged.values()];
+}
+
+export function seedListingEvidence(seed) {
+  const priceLow = number(seed.advertised_price_low);
+  const priceHigh = number(seed.advertised_price_high);
+  const moq = number(seed.advertised_moq);
+  if (!(priceLow > 0) || !(priceHigh > 0) || !(moq > 0)) return null;
+  return {
+    source: 'authenticated-browser', blocked: false, priceLow, priceHigh, moq,
+    supplier: seed.supplier ?? null, signals: seed.signals ?? [], observedAt: seed.observed_at ?? null,
+  };
+}
+
 const DEMAND_QUERIES = {
   'home/commercial': 'scent diffuser machine',
   'passive-car-vent': 'car vent air freshener',
@@ -127,7 +151,7 @@ export async function researchAlibabaCandidates(seeds, {
   );
   let operatorAction = null;
   for (const seed of batch) {
-    const evidence = await fetchListing(seed.url);
+    const evidence = seedListingEvidence(seed) ?? await fetchListing(seed.url);
     attempted.push(seed);
     const query = demandQuery(seed);
     const demand = demandByKeyword.get(query.toLowerCase()) ?? { keyword: query, volume: 0, cpc: null, competition: null, intent: null };
@@ -162,7 +186,10 @@ export async function researchAlibabaCandidates(seeds, {
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const seeds = csvRows(readFileSync(seedsPath, 'utf8'));
+  const manualSeeds = csvRows(readFileSync(seedsPath, 'utf8'));
+  let liveDiscovery = {};
+  try { liveDiscovery = JSON.parse(readFileSync(liveDiscoveryPath, 'utf8')); } catch {}
+  const seeds = mergeAlibabaSeeds(manualSeeds, liveDiscovery);
   const quotes = existsSync(quotesPath) ? csvRows(readFileSync(quotesPath, 'utf8')) : [];
   let prior = null;
   try { prior = JSON.parse(readFileSync(outputPath, 'utf8')); } catch {}
@@ -176,6 +203,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       automaticActions: ['scan', 'extract', 'measure-demand', 'compare-marketplace', 'estimate-economics', 'rank'],
       approvalRequired: ['supplier-contact', 'sample-order', 'inventory-purchase', 'shopify-publication'],
       policy: 'MOQ is evaluated through profit and demand-adjusted sell-through; it is not a numeric hard blocker.',
+      seedSources: { manual: manualSeeds.length, live: liveDiscovery.candidates?.length ?? 0, merged: seeds.length },
     },
   };
   mkdirSync(dirname(outputPath), { recursive: true });

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { ALIBABA_REQUEST_LIMIT, demandQuery, evaluateAlibabaCandidate, researchAlibabaCandidates } from '../dropship/alibaba-intake.mjs';
+import { ALIBABA_REQUEST_LIMIT, demandQuery, evaluateAlibabaCandidate, mergeAlibabaSeeds, researchAlibabaCandidates, seedListingEvidence } from '../dropship/alibaba-intake.mjs';
 import { discoveryPage } from '../dropship/run.mjs';
 import { estimateAlibabaEconomics, parseAlibabaEvidence, prequalifyAlibaba } from '../dropship/lib/alibaba-market.mjs';
 
@@ -10,6 +10,39 @@ test('Alibaba intake waits for a complete supplier quote', () => {
   const result = evaluateAlibabaCandidate(seed, {});
   assert.equal(result.status, 'needs_quote');
   assert.ok(result.missing.includes('unit_cost'));
+});
+
+test('Alibaba live discovery expands and deduplicates the manually seeded catalog', () => {
+  const manual = [{ alibaba_id: '1', slug: 'manual', url: 'https://www.alibaba.com/1' }];
+  const live = { candidates: [
+    { alibaba_id: '1', slug: 'live refresh', url: 'https://www.alibaba.com/live-1' },
+    { alibaba_id: '2', slug: 'new live product', url: 'https://www.alibaba.com/live-2' },
+  ] };
+  const merged = mergeAlibabaSeeds(manual, live);
+  assert.equal(merged.length, 2);
+  assert.equal(merged[0].slug, 'live refresh');
+  assert.equal(merged[1].slug, 'new live product');
+});
+
+test('Alibaba live browser evidence bypasses a redundant blocked server fetch', async () => {
+  const liveSeed = {
+    alibaba_id: '2', slug: 'new live product', inferred_type: 'car-safety', url: 'https://www.alibaba.com/live-2',
+    advertised_price_low: 5, advertised_price_high: 7, advertised_moq: 10,
+    supplier: 'Verified Co.', signals: ['easy return'],
+  };
+  assert.deepEqual(seedListingEvidence(liveSeed), {
+    source: 'authenticated-browser', blocked: false, priceLow: 5, priceHigh: 7, moq: 10,
+    supplier: 'Verified Co.', signals: ['easy return'], observedAt: null,
+  });
+  let fetches = 0;
+  const result = await researchAlibabaCandidates([liveSeed], {
+    fetchListing: async () => { fetches += 1; return { blocked: true }; },
+    demandLoader: async () => [{ keyword: 'new live product', volume: 100, cpc: 1, competition: 'MEDIUM' }],
+    shoppingLoader: async () => [{ price: 49 }],
+  });
+  assert.equal(fetches, 0);
+  assert.equal(result.research[0].evidence.source, 'authenticated-browser');
+  assert.equal(result.operatorAction, null);
 });
 
 test('Alibaba intake accepts a low-MOQ profitable sample', () => {
