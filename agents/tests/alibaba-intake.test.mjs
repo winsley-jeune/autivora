@@ -138,6 +138,8 @@ test('Alibaba margin range that crosses 30 percent requests shipping evidence in
 test('Alibaba demand research translates internal categories into buyer language', () => {
   assert.equal(demandQuery({ inferred_type: 'home/commercial', slug: 'ignored' }), 'scent diffuser machine');
   assert.equal(demandQuery({ inferred_type: 'passive-car-vent', slug: 'ignored' }), 'car vent air freshener');
+  assert.equal(demandQuery({ inferred_type: 'electric-spin-scrubber', slug: 'ignored' }), 'electric spin scrubber');
+  assert.equal(demandQuery({ inferred_type: 'pet-hair-remover', slug: 'ignored' }), 'reusable pet hair remover');
 });
 
 test('Alibaba research caps direct requests, queues a challenge, and advances the catalog cursor', async () => {

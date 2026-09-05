@@ -117,6 +117,8 @@ const DEMAND_QUERIES = {
   'home/commercial': 'scent diffuser machine',
   'passive-car-vent': 'car vent air freshener',
   'electric-car-diffuser': 'electric car diffuser',
+  'electric-spin-scrubber': 'electric spin scrubber',
+  'pet-hair-remover': 'reusable pet hair remover',
   'ambiguous': 'home fragrance diffuser',
 };
 export const demandQuery = (seed) => DEMAND_QUERIES[seed.inferred_type]
