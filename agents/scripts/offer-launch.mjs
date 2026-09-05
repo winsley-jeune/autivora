@@ -50,6 +50,7 @@ async function findOrCreateCollection(handle, title, imageAttachment) {
   const list = await shopifyApi('GET','custom_collections.json?limit=250');
   let collection = (list.custom_collections ?? []).find((x) => x.handle === handle);
   if (!collection) collection = (await shopifyApi('POST','custom_collections.json',{custom_collection:{title,handle,body_html:`<p>Purpose-built products selected for ${title.toLowerCase()}, verified for supply, delivery, and contribution margin.</p>`,published:true,...(imageAttachment ? {image:{attachment:imageAttachment,alt:`${title} collection`}} : {})}})).custom_collection;
+  else if (!collection.published_at) collection = (await shopifyApi('PUT',`custom_collections/${collection.id}.json`,{custom_collection:{id:collection.id,published:true}})).custom_collection;
   return collection;
 }
 

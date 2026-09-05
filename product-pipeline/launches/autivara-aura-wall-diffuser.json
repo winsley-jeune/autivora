@@ -1,0 +1,50 @@
+{
+  "alibabaId": "1601892309577",
+  "sku": "AB-1601892309577-US-BLACK",
+  "hypothesisId": "smart-home-atmosphere-wall-diffuser",
+  "supplier": {
+    "name": "Hunan Heyu Technology Co., Ltd.",
+    "url": "https://www.alibaba.com/product-detail/Custom-Supermarket-Electronic-Product-Practical-Essential_1601892309577.html",
+    "images": ["https://s.alicdn.com/@sc04/kf/He146f8157088416c910d1ab7296409baF.jpg_960x960q80.jpg"],
+    "evidence": {
+      "verifiedAt": "2026-09-05T04:52:00.000Z",
+      "rating": 4.7,
+      "storeReviews": 103,
+      "sold": 1,
+      "reorderRate": 0.23,
+      "onTimeDispatchRate": 0.96,
+      "supplierYears": 2,
+      "fullCustomization": true,
+      "usMainMarket": true,
+      "testQuantity": 2,
+      "deliveryMinDays": 8,
+      "deliveryMaxDays": 9,
+      "advertisedUnitPrice": 17,
+      "shippingForTwo": 16
+    }
+  },
+  "collection": { "handle": "smart-home-atmosphere", "title": "Smart Home Atmosphere" },
+  "economics": {
+    "sellingPrice": 69.99,
+    "supplierCost": 17,
+    "shippingCost": 8,
+    "landedCost": 25,
+    "fulfillmentCost": 6,
+    "paymentFeeRate": 0.029,
+    "paymentFeeFixed": 0.30,
+    "expectedRefundRate": 0.08
+  },
+  "offer": {
+    "title": "Aura 400 Waterless Scent Diffuser",
+    "productType": "Waterless Scent Diffuser",
+    "positioning": "A compact wall-or-desktop scent system for intentional room atmosphere without a water tank.",
+    "seoTitle": "Aura 400 Waterless Scent Diffuser | Autivara",
+    "seoDescription": "Create a consistent home atmosphere with a compact 400 ml waterless scent diffuser designed for wall or desktop placement.",
+    "bodyHtml": "<p>Build a more intentional room atmosphere without refilling a water tank. Aura 400 is a compact waterless scent diffuser designed for wall mounting or desktop placement.</p><h2>Why it belongs in your space</h2><ul><li>400 ml fragrance capacity</li><li>Wall-mounted or freestanding placement</li><li>Remote-control operation</li><li>US plug option</li><li>Designed for homes, garages, hospitality spaces and studios</li></ul><h2>What to know</h2><p>This is the black US-plug configuration. Fragrance oil is sold separately. Estimated supplier transit is 8–9 days before domestic handling; the final delivery estimate is shown at checkout.</p><h2>Frequently asked questions</h2><h3>Does it use water?</h3><p>No. This model is designed as a waterless fragrance-oil diffuser.</p><h3>Can it be wall mounted?</h3><p>Yes. The supplier specifies both wall and flat-surface installation.</p><h3>Is fragrance included?</h3><p>No fragrance is promised with this offer. Choose a compatible oil separately.</p>"
+  },
+  "assets": {
+    "supplierReference": "public/products/autivara-aura-wall-diffuser/source/supplier-main.png",
+    "categoryHero": "public/products/autivara-aura-wall-diffuser/generated/category-hero.png",
+    "shopify": []
+  }
+}
