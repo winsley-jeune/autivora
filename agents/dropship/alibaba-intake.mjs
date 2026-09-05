@@ -113,12 +113,29 @@ export function seedListingEvidence(seed) {
   };
 }
 
+export function categoryCohorts(seeds) {
+  const groups = new Map();
+  for (const seed of seeds) {
+    if (!seed.category_cohort) continue;
+    if (!groups.has(seed.category_cohort)) groups.set(seed.category_cohort, []);
+    groups.get(seed.category_cohort).push(String(seed.alibaba_id));
+  }
+  return [...groups].map(([category, productIds]) => ({
+    category, productIds, deviceCount: productIds.length,
+    status: productIds.length >= 5 && productIds.length <= 7 ? 'cohort_ready' : 'building',
+  }));
+}
+
 const DEMAND_QUERIES = {
   'home/commercial': 'scent diffuser machine',
   'passive-car-vent': 'car vent air freshener',
   'electric-car-diffuser': 'electric car diffuser',
   'electric-spin-scrubber': 'electric spin scrubber',
   'pet-hair-remover': 'reusable pet hair remover',
+  'smart-pet-feeder': 'smart pet feeder',
+  'pet-gps-tracker': 'pet gps tracker',
+  'smart-pet-fountain': 'smart pet water fountain',
+  'interactive-pet-toy': 'interactive cat ball',
   'ambiguous': 'home fragrance diffuser',
 };
 export const demandQuery = (seed) => DEMAND_QUERIES[seed.inferred_type]
@@ -200,6 +217,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const report = {
     ...quoted, research: preliminary.research, preliminaryCounts: preliminary.counts,
     scannedThisRun: preliminary.scanned, nextCursor: preliminary.nextCursor, operatorAction: preliminary.operatorAction, accessChallenges: preliminary.accessChallenges,
+    categoryCohorts: categoryCohorts(seeds),
     supervision: {
       mode: 'supervised-autonomous-research', scheduledStage: 'alibaba-research', alibabaRequestLimit: ALIBABA_REQUEST_LIMIT,
       automaticActions: ['scan', 'extract', 'measure-demand', 'compare-marketplace', 'estimate-economics', 'rank'],

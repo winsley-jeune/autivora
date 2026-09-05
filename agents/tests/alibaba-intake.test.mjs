@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { ALIBABA_REQUEST_LIMIT, demandQuery, evaluateAlibabaCandidate, mergeAlibabaSeeds, researchAlibabaCandidates, seedListingEvidence } from '../dropship/alibaba-intake.mjs';
+import { ALIBABA_REQUEST_LIMIT, categoryCohorts, demandQuery, evaluateAlibabaCandidate, mergeAlibabaSeeds, researchAlibabaCandidates, seedListingEvidence } from '../dropship/alibaba-intake.mjs';
 import { discoveryPage } from '../dropship/run.mjs';
 import { estimateAlibabaEconomics, parseAlibabaEvidence, prequalifyAlibaba } from '../dropship/lib/alibaba-market.mjs';
 
@@ -43,6 +43,13 @@ test('Alibaba live browser evidence bypasses a redundant blocked server fetch', 
   assert.equal(fetches, 0);
   assert.equal(result.research[0].evidence.source, 'authenticated-browser');
   assert.equal(result.operatorAction, null);
+});
+
+test('Alibaba category cohorts require five to seven distinct devices', () => {
+  const seeds = Array.from({ length: 7 }, (_, index) => ({ alibaba_id: String(index + 1), category_cohort: 'smart-pet-care' }));
+  assert.equal(categoryCohorts(seeds)[0].status, 'cohort_ready');
+  assert.equal(categoryCohorts(seeds.slice(0, 4))[0].status, 'building');
+  assert.equal(categoryCohorts([...seeds, { alibaba_id: '8', category_cohort: 'smart-pet-care' }])[0].status, 'building');
 });
 
 test('Alibaba intake accepts a low-MOQ profitable sample', () => {
@@ -140,6 +147,10 @@ test('Alibaba demand research translates internal categories into buyer language
   assert.equal(demandQuery({ inferred_type: 'passive-car-vent', slug: 'ignored' }), 'car vent air freshener');
   assert.equal(demandQuery({ inferred_type: 'electric-spin-scrubber', slug: 'ignored' }), 'electric spin scrubber');
   assert.equal(demandQuery({ inferred_type: 'pet-hair-remover', slug: 'ignored' }), 'reusable pet hair remover');
+  assert.equal(demandQuery({ inferred_type: 'smart-pet-feeder', slug: 'ignored' }), 'smart pet feeder');
+  assert.equal(demandQuery({ inferred_type: 'pet-gps-tracker', slug: 'ignored' }), 'pet gps tracker');
+  assert.equal(demandQuery({ inferred_type: 'smart-pet-fountain', slug: 'ignored' }), 'smart pet water fountain');
+  assert.equal(demandQuery({ inferred_type: 'interactive-pet-toy', slug: 'ignored' }), 'interactive cat ball');
 });
 
 test('Alibaba research caps direct requests, queues a challenge, and advances the catalog cursor', async () => {
