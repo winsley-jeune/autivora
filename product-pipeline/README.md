@@ -42,6 +42,9 @@ raw/ (your sheet export)  ──►  clean.* (script)  ──►  output/ (Shopi
   Run `npm run dropship:alibaba:quotes` after adding formal quotes. The intake will only
   mark a product sample-ready when supplier verification, Trade Assurance, delivery, test MOQ,
   and expected contribution margin pass. It never contacts or pays a supplier automatically.
+  MOQ is not rejected by a fixed quantity ceiling: the engine estimates inventory outlay,
+  monthly units, sell-through time, 90-day contribution, and total contribution. It rejects an
+  MOQ only when measured demand or conservative economics cannot support it.
 
 ## Status
 - [x] Folder scaffolded
