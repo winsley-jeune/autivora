@@ -418,6 +418,47 @@ const PRODUCTS_PENDING_MANUAL_REVIEW = new Set([
   'autivara-wood-grain-diffuser',
 ]);
 
+// Evidence-approved launch FAQs. These are the only new-product answers allowed to reach the
+// visible FAQ block and FAQPage schema; unreviewed legacy products remain closed below.
+const VERIFIED_LAUNCH_FAQ: Record<string, FaqItem[]> = {
+  'aura-tower-smart-scent-diffuser': [
+    { question: 'Is the Aura Tower a waterless diffuser?', answer: 'Yes. It diffuses fragrance oil without a water tank, so there is no water to refill.' },
+    { question: 'Can I control the Aura Tower from my phone?', answer: 'The verified supplier configuration includes Bluetooth smart control and timer settings.' },
+    { question: 'How loud is the Aura Tower?', answer: 'The supplier rates operation at 40 dB or below. Perceived sound varies with placement and room conditions.' },
+    { question: 'Is fragrance oil included?', answer: 'No fragrance oil is promised with the device. Choose a compatible oil separately.' },
+  ],
+  'aura-200-smart-waterless-diffuser': [
+    { question: 'Does the Aura 200 use water?', answer: 'No. It is a 200 ml two-fluid waterless scent machine designed to diffuse fragrance oil.' },
+    { question: 'Where can the Aura 200 be used?', answer: 'The supplier lists household, hotel, commercial, and spa applications. Choose a stable location with access to power.' },
+    { question: 'Does it have a US plug option?', answer: 'Yes. The verified listing offers a US plug configuration as well as other regional plug options.' },
+    { question: 'When will my Aura 200 arrive?', answer: 'Delivery timing is confirmed during order processing. The page does not promise a fixed delivery window while supplier timing remains unconfirmed.' },
+  ],
+  'atmos-1000-connected-hvac-scent-system': [
+    { question: 'Can the Atmos 1000 connect to an HVAC system?', answer: 'Yes. The verified supplier listing supports HVAC connection as well as secure wall mounting.' },
+    { question: 'How is the Atmos 1000 controlled?', answer: 'The verified configuration supports controls on the device plus Bluetooth and Wi-Fi app control.' },
+    { question: 'How much fragrance does it hold?', answer: 'The unit has a 1000 ml fragrance capacity intended for larger commercial spaces.' },
+    { question: 'When will my Atmos 1000 arrive?', answer: 'Delivery timing is confirmed during order processing because the current supplier listing does not provide a reliable fixed window.' },
+  ],
+  'aura-go-app-controlled-waterless-diffuser': [
+    { question: 'Is Aura Go portable and rechargeable?', answer: 'Yes. The verified 120 ml configuration is rechargeable and designed for portable placement.' },
+    { question: 'Can Aura Go be controlled from an app?', answer: 'Yes. App control is included in the verified supplier configuration.' },
+    { question: 'What is Aura Go made from?', answer: 'The verified listing specifies an aluminum-alloy body.' },
+    { question: 'When will my Aura Go arrive?', answer: 'Delivery timing is confirmed during order processing; no fixed delivery window is promised while supplier timing is unconfirmed.' },
+  ],
+  'pureroom-smart-pet-odor-eliminator': [
+    { question: 'What is PureRoom designed to do?', answer: 'It is designed as a rechargeable air-care device for spaces used by cats and dogs, with odor-elimination functionality listed by the supplier.' },
+    { question: 'Is PureRoom intended only for cats?', answer: 'No. The verified listing identifies both cats and dogs as applicable pets.' },
+    { question: 'Does PureRoom make medical or allergen-removal claims?', answer: 'No. This offer does not promise medical benefits or quantified allergen removal.' },
+    { question: 'When will my PureRoom arrive?', answer: 'Delivery timing is confirmed during order processing because supplier timing is currently unconfirmed.' },
+  ],
+  'glowmist-automatic-car-aroma-diffuser': [
+    { question: 'Is GlowMist a home diffuser?', answer: 'No. GlowMist is designed for an upright position on a vehicle center console.' },
+    { question: 'How is GlowMist powered?', answer: 'The verified supplier configuration is USB powered and uses an electric spray mechanism.' },
+    { question: 'Is fragrance included with GlowMist?', answer: 'The supplier lists fragrance as optional, so this offer does not promise that fragrance is included.' },
+    { question: 'When will my GlowMist arrive?', answer: 'Delivery timing is confirmed during order processing; no fixed delivery window is promised.' },
+  ],
+};
+
 /**
  * Per-product FAQ. Checks PRODUCT_FAQ_OVERRIDES first (real, product-specific content); falls
  * back to the collection-level generic template below for any product not yet enriched. Powers
@@ -428,10 +469,9 @@ export function productFaq(product: {
   title: string;
   tags?: string[];
 }): FaqItem[] {
-  // Product FAQ publication is paused until the custom catalog stores approved, cited answers.
-  // This prevents legacy Shopify-era compatibility and mechanism claims from reaching pages or
-  // FAQPage structured data while the evidence migration is in progress.
-  return [];
+  // Launch products may publish only their evidence-approved answers. This keeps FAQPage
+  // structured data useful without reopening unsupported legacy compatibility claims.
+  return VERIFIED_LAUNCH_FAQ[product.handle] ?? [];
 
   /* Legacy product-specific answers retained temporarily for the evidence migration.
   if (MANUALLY_REVIEWED_FAQ[product.handle]) return MANUALLY_REVIEWED_FAQ[product.handle];

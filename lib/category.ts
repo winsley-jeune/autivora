@@ -10,6 +10,7 @@
 // Priority-ordered: first match wins.
 const CATEGORY_RULES: Array<{ match: string[]; label: string }> = [
   { match: ['fragrance-oil', 'fragrance-oils', 'refill', 'scent'], label: 'Fragrance Oil' },
+  { match: ['smart-home-atmosphere'], label: 'Smart Home Atmosphere' },
   { match: ['business'], label: 'For Business' },
   { match: ['car-accessories'], label: 'Car Accessory' },
   { match: ['commercial-industrial', 'commercial', 'industrial'], label: 'Commercial Diffuser' },
