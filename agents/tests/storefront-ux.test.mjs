@@ -98,8 +98,8 @@ test('shared customer surfaces do not publish universal legacy catalog claims', 
   assert.doesNotMatch(about, /No proprietary|refill it with any Autivara oil|reply within one business day/);
   assert.doesNotMatch(faq, /there are no proprietary pods|You can use any quality|reply within one business day/);
   assert.doesNotMatch(blogPage, /Zero residue|without heat, water, or chemicals/);
-  assert.match(productFaq, /Product FAQ publication is paused/);
-  assert.match(productFaq, /return \[\];/);
+  assert.match(productFaq, /return VERIFIED_LAUNCH_FAQ\[product\.handle\] \?\? \[\];/);
+  assert.match(productFaq, /unreviewed legacy products remain closed/);
 });
 
 test('published blog data filters unverified product-specific claim blocks', () => {

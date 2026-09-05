@@ -68,7 +68,7 @@ export default async function ProductPage({ params }: Props) {
   const faqItems = productFaq(product);
 
   // Recommendations: other products from the same collection.
-  const COLLECTION_TAGS = ['car-diffusers', 'home-diffusers', 'industrial-scenting'];
+  const COLLECTION_TAGS = ['car-diffusers', 'home-diffusers', 'industrial-scenting', 'smart-home-atmosphere'];
   const collectionTag = product.tags?.find((t: string) => COLLECTION_TAGS.includes(t)) ?? null;
 
   // Upsell oils (refills) — fetched from Shopify; shown in the add-to-cart modal.

@@ -1,0 +1,76 @@
+{
+  "generatedAt": "2026-09-05T13:10:00.000Z",
+  "policy": { "delivery": "unconfirmed_no_numeric_promise", "faq": "verified_supplier_facts_only" },
+  "products": [
+    {
+      "alibabaId": "1601938498218",
+      "handle": "aura-200-smart-waterless-diffuser",
+      "title": "Aura 200 Smart Waterless Diffuser",
+      "collection": "smart-home-atmosphere",
+      "tags": ["smart-home-atmosphere", "home-diffusers", "waterless-diffuser"],
+      "primaryKeyword": "waterless home diffuser",
+      "seoTitle": "Aura 200 Waterless Home Diffuser | Autivara",
+      "seoDescription": "Control home fragrance without a water tank using a compact 200 ml waterless diffuser with timer controls and a US plug option.",
+      "conversionPromise": "Compact waterless scent control without refilling a water tank.",
+      "descriptionHtml": "<p><strong>Control room fragrance without a water tank.</strong> Aura 200 combines a compact metal body, 200 ml capacity and straightforward timer controls for homes, studios and hospitality spaces.</p><h2>Why choose Aura 200</h2><ul><li>Waterless two-fluid diffusion</li><li>200 ml fragrance capacity</li><li>US plug configuration available</li><li>Metal housing with a compact footprint</li><li>Designed for household, hotel, commercial and spa settings</li></ul><h2>Before ordering</h2><p>Fragrance oil is not promised with the device. Delivery timing is confirmed during order processing.</p>",
+      "internalLinks": ["/category/smart-home-atmosphere", "/product/aura-400-waterless-scent-diffuser"],
+      "images": ["public/products/aura-200-smart-waterless-diffuser/source/supplier-main.jpg", "public/products/aura-200-smart-waterless-diffuser/generated/clean-hero.png", "public/products/aura-200-smart-waterless-diffuser/generated/lifestyle.png"]
+    },
+    {
+      "alibabaId": "1601705445940",
+      "handle": "atmos-1000-connected-hvac-scent-system",
+      "title": "Atmos 1000 Connected HVAC Scent System",
+      "collection": "smart-home-atmosphere",
+      "tags": ["smart-home-atmosphere", "industrial-scenting", "hvac-scent-diffuser"],
+      "primaryKeyword": "HVAC scent diffuser",
+      "seoTitle": "Atmos 1000 HVAC Scent Diffuser | Autivara",
+      "seoDescription": "Control large-space fragrance with a 1000 ml HVAC scent diffuser featuring wall mounting plus Bluetooth and Wi-Fi app control.",
+      "conversionPromise": "Connected scent control for large rooms and commercial spaces.",
+      "descriptionHtml": "<p><strong>Bring scheduled fragrance to a larger space from one connected unit.</strong> Atmos 1000 supports HVAC connection or secure wall mounting with device, Bluetooth and Wi-Fi controls.</p><h2>Built for larger spaces</h2><ul><li>1000 ml fragrance capacity</li><li>HVAC connection support</li><li>Secure wall-mount installation</li><li>Bluetooth and Wi-Fi app control</li><li>Waterless two-fluid diffusion</li></ul><h2>Before ordering</h2><p>Confirm installation requirements for your HVAC system before purchase. Fragrance oil is sold separately. Delivery timing is confirmed during order processing.</p>",
+      "internalLinks": ["/category/smart-home-atmosphere", "/blog/aromini-bt-vs-aera-vs-hotel-collection-studio-pro"],
+      "images": ["public/products/atmos-1000-connected-hvac-scent-system/source/supplier-main.png", "public/products/atmos-1000-connected-hvac-scent-system/generated/clean-hero.png", "public/products/atmos-1000-connected-hvac-scent-system/generated/lifestyle.png"]
+    },
+    {
+      "alibabaId": "10000044217680",
+      "handle": "aura-go-app-controlled-waterless-diffuser",
+      "title": "Aura Go App-Controlled Waterless Diffuser",
+      "collection": "smart-home-atmosphere",
+      "tags": ["smart-home-atmosphere", "home-diffusers", "portable-diffuser"],
+      "primaryKeyword": "portable waterless diffuser",
+      "seoTitle": "Aura Go Portable Waterless Diffuser | Autivara",
+      "seoDescription": "Take waterless fragrance from room to room with a rechargeable 120 ml aluminum diffuser featuring app control and a compact footprint.",
+      "conversionPromise": "Rechargeable waterless fragrance that moves with your routine.",
+      "descriptionHtml": "<p><strong>Move fragrance where you need it without carrying a water tank.</strong> Aura Go is a slim rechargeable 120 ml waterless diffuser with an aluminum-alloy body and app control.</p><h2>Made to move</h2><ul><li>Rechargeable portable design</li><li>120 ml fragrance capacity</li><li>App-controlled operation</li><li>Aluminum-alloy housing</li><li>Designed for home, office, hotel and RV use</li></ul><h2>Before ordering</h2><p>Fragrance oil is not promised with the device. Delivery timing is confirmed during order processing.</p>",
+      "internalLinks": ["/category/smart-home-atmosphere", "/product/aura-400-waterless-scent-diffuser"],
+      "images": ["public/products/aura-go-waterless-diffuser/source/supplier-main.png", "public/products/aura-go-waterless-diffuser/generated/clean-hero.png", "public/products/aura-go-waterless-diffuser/generated/lifestyle.png"]
+    },
+    {
+      "alibabaId": "1601445857006",
+      "handle": "pureroom-smart-pet-odor-eliminator",
+      "title": "PureRoom Smart Pet Odor Eliminator",
+      "collection": "smart-home-atmosphere",
+      "tags": ["smart-home-atmosphere", "pet-air-care", "odor-control"],
+      "primaryKeyword": "pet odor eliminator machine",
+      "seoTitle": "PureRoom Smart Pet Odor Eliminator | Autivara",
+      "seoDescription": "Refresh spaces shared with cats and dogs using a rechargeable pet odor-control device designed for modern rooms and pet areas.",
+      "conversionPromise": "Purpose-built air care for rooms shared with cats and dogs.",
+      "descriptionHtml": "<p><strong>Give pet areas their own dedicated air-care device.</strong> PureRoom is a rechargeable odor-control unit designed for spaces shared with cats and dogs.</p><h2>Designed around pet spaces</h2><ul><li>Supplier-listed odor-elimination function</li><li>Rechargeable power</li><li>Applicable to cat and dog spaces</li><li>Compact freestanding form</li><li>Modern gray-and-white housing</li></ul><h2>Clear expectations</h2><p>This product does not make medical or quantified allergen-removal claims. Delivery timing is confirmed during order processing.</p>",
+      "internalLinks": ["/category/smart-home-atmosphere"],
+      "images": ["public/products/pureroom-smart-pet-odor-eliminator/source/supplier-main.jpg", "public/products/pureroom-smart-pet-odor-eliminator/generated/clean-hero.png", "public/products/pureroom-smart-pet-odor-eliminator/generated/lifestyle.png"]
+    },
+    {
+      "alibabaId": "1601777994554",
+      "handle": "glowmist-automatic-car-aroma-diffuser",
+      "title": "GlowMist Automatic Car Aroma Diffuser",
+      "collection": "car-diffusers",
+      "tags": ["car-diffusers", "electric-car-diffuser", "automatic-spray"],
+      "primaryKeyword": "automatic car aroma diffuser",
+      "seoTitle": "GlowMist Automatic Car Aroma Diffuser | Autivara",
+      "seoDescription": "Add controlled fragrance to your center console with a compact USB-powered automatic car aroma diffuser and illuminated top ring.",
+      "conversionPromise": "A compact automatic fragrance device designed for the center console.",
+      "descriptionHtml": "<p><strong>Add controlled fragrance from a device designed for your center console.</strong> GlowMist uses a USB-powered electric spray mechanism in a compact black-and-gold cylindrical body.</p><h2>Designed for the car</h2><ul><li>USB-powered operation</li><li>Electric spray mechanism</li><li>Compact upright center-console placement</li><li>Illuminated circular top</li><li>Optional fragrance configurations from the supplier</li></ul><h2>Before ordering</h2><p>This offer does not promise that fragrance is included. Keep the device upright and away from driving controls and airbags. Delivery timing is confirmed during order processing.</p>",
+      "internalLinks": ["/category/car-diffusers", "/blog/best-car-diffuser"],
+      "images": ["public/products/glowmist-automatic-aroma-light/source/supplier-main.jpg", "public/products/glowmist-automatic-aroma-light/generated/clean-hero.png", "public/products/glowmist-automatic-aroma-light/generated/lifestyle.png"]
+    }
+  ]
+}
