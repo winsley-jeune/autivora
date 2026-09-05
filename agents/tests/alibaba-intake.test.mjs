@@ -107,7 +107,7 @@ test('Alibaba demand research translates internal categories into buyer language
   assert.equal(demandQuery({ inferred_type: 'passive-car-vent', slug: 'ignored' }), 'car vent air freshener');
 });
 
-test('Alibaba research caps direct requests at two and stops on the first challenge', async () => {
+test('Alibaba research caps direct requests, queues a challenge, and advances the catalog cursor', async () => {
   assert.equal(ALIBABA_REQUEST_LIMIT, 2);
   const seeds = [
     { alibaba_id: '1', slug: 'first', inferred_type: 'ambiguous', url: 'https://www.alibaba.com/1' },
@@ -121,6 +121,26 @@ test('Alibaba research caps direct requests at two and stops on the first challe
   });
   assert.equal(requests, 1);
   assert.equal(result.scanned, 1);
-  assert.equal(result.nextCursor, 0);
+  assert.equal(result.nextCursor, 1);
   assert.equal(result.operatorAction.type, 'alibaba_access_challenge');
+  assert.equal(result.accessChallenges.length, 1);
+  assert.equal(result.accessChallenges[0].alibabaId, '1');
+});
+
+test('Alibaba research retains earlier access challenges without duplicating them', async () => {
+  const prior = {
+    nextCursor: 1,
+    accessChallenges: [{ type: 'alibaba_access_challenge', alibabaId: '1', url: 'https://www.alibaba.com/1' }],
+  };
+  const seeds = [
+    { alibaba_id: '1', slug: 'first', inferred_type: 'ambiguous', url: 'https://www.alibaba.com/1' },
+    { alibaba_id: '2', slug: 'second', inferred_type: 'ambiguous', url: 'https://www.alibaba.com/2' },
+  ];
+  const result = await researchAlibabaCandidates(seeds, {
+    prior,
+    fetchListing: async () => ({ blocked: true, priceLow: null, priceHigh: null, moq: null }),
+    demandLoader: async () => [], shoppingLoader: async () => [],
+  });
+  assert.equal(result.nextCursor, 0);
+  assert.deepEqual(result.accessChallenges.map((item) => item.alibabaId), ['1', '2']);
 });
