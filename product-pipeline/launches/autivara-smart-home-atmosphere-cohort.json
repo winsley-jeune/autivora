@@ -22,7 +22,7 @@
       "alibabaId": "1601938498218",
       "supplier": { "name": "Hunan Heyu Technology Co., Ltd.", "url": "https://www.alibaba.com/product-detail/Customized-200-ml-Scent-Machine-Smart_1601938498218.html", "image": "https://s.alicdn.com/@sc04/kf/Ha9f7be4e09854bbaaab4b287fa919ff8z.jpg", "verifiedAt": "2026-09-05T12:31:00.000Z", "unitPrice": 42, "moq": 2, "rating": 4.7, "storeReviews": 103 },
       "market": { "keyword": "waterless home diffuser", "intent": "transactional", "monthlySearchVolume": 40, "cpc": 2.38, "shoppingComparables": 45, "medianPrice": 65, "verifiedAt": "2026-09-05T12:38:26.700Z" },
-      "logistics": {},
+      "logistics": { "deliveryStatus": "unconfirmed" },
       "offer": { "title": "Aura 200 Smart Waterless Diffuser", "targetRetail": 99.99, "fulfillmentCost": 8 },
       "assets": { "generated": [] }
     },
@@ -32,7 +32,7 @@
       "alibabaId": "1601705445940",
       "supplier": { "name": "Guangdong Crearoma Scent Tech Limited", "url": "https://www.alibaba.com/product-detail/Best-Seller-Crearoma-OV-10-1000ml_1601705445940.html", "image": "https://s.alicdn.com/@sc04/kf/H6d02ee502a3b4fc88b50546a174bdb0eC.png", "verifiedAt": "2026-09-05T12:32:00.000Z", "unitPrice": 79, "moq": 2, "rating": 4.9, "storeReviews": 49, "sold": 26 },
       "market": { "keyword": "HVAC scent diffuser", "intent": "transactional", "monthlySearchVolume": 2900, "cpc": 2.94, "shoppingComparables": 42, "medianPrice": 299, "verifiedAt": "2026-09-05T12:38:26.700Z" },
-      "logistics": {},
+      "logistics": { "deliveryStatus": "unconfirmed" },
       "offer": { "title": "Atmos 1000 Connected HVAC Scent System", "targetRetail": 249.99, "fulfillmentCost": 15 },
       "assets": { "generated": [] }
     },
@@ -42,7 +42,7 @@
       "alibabaId": "10000044217680",
       "supplier": { "name": "Dadb (Guangdong) Technology Co., Ltd.", "url": "https://www.alibaba.com/product-detail/Smart-Wireless-Electric-App-Controlled-Portable_10000044217680.html", "image": "https://s.alicdn.com/@sc04/kf/S047ad360bc3c4963bd6c6b7a556a73c3k.png", "verifiedAt": "2026-09-05T12:33:00.000Z", "unitPrice": 32, "moq": 2, "rating": 4.7, "storeReviews": 165, "sold": 128 },
       "market": { "keyword": "portable waterless diffuser", "intent": "transactional", "monthlySearchVolume": 480, "cpc": 1.43, "shoppingComparables": 45, "medianPrice": 49.95, "verifiedAt": "2026-09-05T12:38:26.700Z" },
-      "logistics": {},
+      "logistics": { "deliveryStatus": "unconfirmed" },
       "offer": { "title": "Aura Go App-Controlled Waterless Diffuser", "targetRetail": 79.99, "fulfillmentCost": 7 },
       "assets": { "generated": [] }
     },
@@ -52,7 +52,7 @@
       "alibabaId": "1601445857006",
       "supplier": { "name": "Ningbo Jia Chong International Trade Co., Ltd.", "url": "https://www.alibaba.com/product-detail/Wholesale-Smart-Air-Purifier-with-Humidifier_1601445857006.html", "image": "https://s.alicdn.com/@sc04/kf/Hb87d8f9c0457491b9a9366eb5a009118F.jpg", "verifiedAt": "2026-09-05T12:34:00.000Z", "unitPrice": 48.18, "moq": 50, "rating": 4.9, "storeReviews": 379 },
       "market": { "keyword": "pet odor eliminator machine", "intent": "transactional", "monthlySearchVolume": 210, "cpc": 2.42, "shoppingComparables": 42, "medianPrice": 96.65, "verifiedAt": "2026-09-05T12:38:26.700Z" },
-      "logistics": {},
+      "logistics": { "deliveryStatus": "unconfirmed" },
       "offer": { "title": "PureRoom Smart Pet Odor Eliminator", "targetRetail": 129.99, "fulfillmentCost": 12 },
       "assets": { "generated": [] }
     },
@@ -62,7 +62,7 @@
       "alibabaId": "1601777994554",
       "supplier": { "name": "Shaanxi Simple Style Architecture Decoration Engineering Co., Ltd.", "url": "https://www.alibaba.com/product-detail/Air-Perfume-Air-Purifier-Night-Light_1601777994554.html", "image": "https://s.alicdn.com/@sc04/kf/H8cf4491eae5641eea64d18d3eb04f2ecA.jpg", "verifiedAt": "2026-09-05T12:35:00.000Z", "unitPrice": 11.6, "moq": 20 },
       "market": { "keyword": "automatic spray air freshener", "intent": "transactional", "monthlySearchVolume": 1300, "cpc": 0.61, "shoppingComparables": 44, "medianPrice": 20.21, "verifiedAt": "2026-09-05T12:38:26.700Z" },
-      "logistics": {},
+      "logistics": { "deliveryStatus": "unconfirmed" },
       "offer": { "title": "GlowMist Automatic Aroma Light", "targetRetail": 39.99, "fulfillmentCost": 6 },
       "assets": { "generated": [] }
     }

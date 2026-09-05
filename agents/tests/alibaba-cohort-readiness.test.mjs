@@ -9,7 +9,13 @@ test("cohort readiness passes a fully evidenced profitable product", () => {
 });
 
 test("cohort readiness stops before Shopify when freight is unknown", () => {
-  const result = assessCandidate({ ...candidate, logistics:{} });
+  const result = assessCandidate({ ...candidate, logistics:{ deliveryStatus:"unconfirmed" } });
   assert.equal(result.status, "blocked_before_shopify");
-  assert.ok(result.blockers.includes("shipping_or_delivery_quote_missing"));
+  assert.ok(result.blockers.includes("shipping_cost_missing"));
+});
+
+test("cohort readiness allows unclear delivery with disclosure when economics pass", () => {
+  const result = assessCandidate({ ...candidate, logistics:{ shippingPerUnit:5, deliveryStatus:"unconfirmed" } });
+  assert.equal(result.status, "ready_for_shopify_draft_with_delivery_disclosure");
+  assert.equal(result.stages.deliveryDisclosure, true);
 });
