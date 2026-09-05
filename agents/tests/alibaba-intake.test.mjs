@@ -33,6 +33,16 @@ test('Alibaba intake rejects unsafe or unprofitable quotes', () => {
   assert.ok(result.blockers.includes('trade_assurance_required'));
 });
 
+test('Alibaba formal quote does not reject a product solely because MOQ is high', () => {
+  const result = evaluateAlibabaCandidate(seed, {
+    unit_cost: '4', shipping_per_unit: '3', target_retail: '39', moq: '500',
+    sample_cost: '15', delivery_days: '20', dropship_supported: 'no',
+    trade_assurance: 'yes', supplier_verified: 'yes',
+  });
+  assert.equal(result.status, 'sample_ready');
+  assert.ok(!result.blockers.some((item) => item.includes('moq')));
+});
+
 test('AliExpress discovery rotates beyond saturated first-page listings', () => {
   assert.equal(discoveryPage(undefined), 1);
   assert.equal(discoveryPage({ scans: 1 }), 2);
@@ -54,12 +64,32 @@ test('Alibaba parser refuses anti-bot challenge pages as product evidence', () =
 
 test('Alibaba preliminary economics use high advertised cost and marketplace median', () => {
   const evidence = { priceLow: 5, priceHigh: 9, moq: 10 };
-  const economics = estimateAlibabaEconomics(evidence, [39, 49, 59]);
+  const economics = estimateAlibabaEconomics(evidence, [39, 49, 59], { volume: 500, competition: 'MEDIUM' });
   assert.equal(economics.unitCostHigh, 9);
   assert.equal(economics.marketMedian, 49);
   assert.equal(economics.estimateOnly, true);
   assert.ok(economics.landedHigh > economics.unitCostHigh);
   assert.equal(prequalifyAlibaba({ evidence, economics, demand: { volume: 500, cpc: 1.5 } }).status, 'prequalified');
+});
+
+test('Alibaba MOQ is accepted when measured demand can sell it profitably', () => {
+  const evidence = { priceLow: 4, priceHigh: 6, moq: 500 };
+  const demand = { volume: 10000, cpc: 2, competition: 'MEDIUM' };
+  const economics = estimateAlibabaEconomics(evidence, [35, 39, 45], demand);
+  const result = prequalifyAlibaba({ evidence, economics, demand });
+  assert.equal(result.status, 'prequalified');
+  assert.ok(economics.totalContributionAtSellThrough > 0);
+  assert.ok(economics.sellThroughMonths < 12);
+  assert.ok(!result.blockers.some((item) => item.includes('moq_above')));
+});
+
+test('Alibaba MOQ is rejected only when demand implies excessive sell-through time', () => {
+  const evidence = { priceLow: 4, priceHigh: 6, moq: 500 };
+  const demand = { volume: 50, cpc: 0.2, competition: 'HIGH' };
+  const economics = estimateAlibabaEconomics(evidence, [35, 39, 45], demand);
+  const result = prequalifyAlibaba({ evidence, economics, demand });
+  assert.equal(result.status, 'reject_preliminary');
+  assert.ok(result.blockers.includes('moq_exceeds_12_month_demand'));
 });
 
 test('Alibaba demand research translates internal categories into buyer language', () => {

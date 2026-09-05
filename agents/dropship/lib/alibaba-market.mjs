@@ -25,7 +25,7 @@ export function parseAlibabaEvidence(text, source = 'listing') {
   };
 }
 
-export function estimateAlibabaEconomics(evidence, marketplacePrices = []) {
+export function estimateAlibabaEconomics(evidence, marketplacePrices = [], demand = null) {
   if (!(evidence?.priceHigh > 0) || !(evidence?.moq > 0)) return null;
   const unitCostLow = evidence.priceLow > 0 ? evidence.priceLow : evidence.priceHigh;
   const unitCostHigh = evidence.priceHigh;
@@ -38,7 +38,21 @@ export function estimateAlibabaEconomics(evidence, marketplacePrices = []) {
   const targetRetail = marketMedian == null ? null : round(marketMedian);
   const contributionMarginLow = targetRetail == null ? null : round((targetRetail - landedHigh - targetRetail * 0.03) / targetRetail);
   const contributionMarginHigh = targetRetail == null ? null : round((targetRetail - landedLow - targetRetail * 0.03) / targetRetail);
-  return { unitCostLow, unitCostHigh, landedLow, landedHigh, marketMedian, targetRetail, contributionMarginLow, contributionMarginHigh, estimateOnly: true };
+  const competition = String(demand?.competition ?? '').toUpperCase();
+  const captureRate = competition === 'HIGH' ? 0.003 : competition === 'MEDIUM' ? 0.006 : 0.01;
+  const expectedMonthlyUnits = demand?.volume > 0 ? Math.max(1, Math.floor(demand.volume * captureRate)) : null;
+  const sellThroughMonths = expectedMonthlyUnits == null ? null : round(evidence.moq / expectedMonthlyUnits);
+  const inventoryOutlayHigh = round(landedHigh * evidence.moq);
+  const unitContributionLow = targetRetail == null ? null : round(targetRetail * 0.97 - landedHigh);
+  const totalContributionAtSellThrough = unitContributionLow == null ? null : round(unitContributionLow * evidence.moq);
+  const unitsSoldIn90Days = expectedMonthlyUnits == null ? null : Math.min(evidence.moq, expectedMonthlyUnits * 3);
+  const contributionIn90Days = unitContributionLow == null || unitsSoldIn90Days == null ? null : round(unitContributionLow * unitsSoldIn90Days);
+  return {
+    unitCostLow, unitCostHigh, landedLow, landedHigh, marketMedian, targetRetail,
+    contributionMarginLow, contributionMarginHigh, inventoryOutlayHigh, expectedMonthlyUnits,
+    sellThroughMonths, unitContributionLow, totalContributionAtSellThrough, unitsSoldIn90Days,
+    contributionIn90Days, demandCaptureRate: captureRate, estimateOnly: true,
+  };
 }
 
 export function prequalifyAlibaba({ evidence, economics, demand }) {
@@ -46,16 +60,17 @@ export function prequalifyAlibaba({ evidence, economics, demand }) {
   const blockers = [];
   if (!(evidence?.priceHigh > 0)) blockers.push('advertised_price_missing');
   if (!(evidence?.moq > 0)) blockers.push('advertised_moq_missing');
-  if (evidence?.moq > 50) blockers.push('discovery_moq_above_50');
   if (!economics?.marketMedian) blockers.push('marketplace_price_missing');
   if (economics?.contributionMarginLow != null && economics.contributionMarginLow < 0.3) blockers.push('estimated_margin_below_30pct');
+  if (economics?.totalContributionAtSellThrough != null && economics.totalContributionAtSellThrough <= 0) blockers.push('moq_not_profitable_at_sell_through');
+  if (economics?.sellThroughMonths != null && economics.sellThroughMonths > 12) blockers.push('moq_exceeds_12_month_demand');
   if (!demand || demand.volume <= 0) blockers.push('measured_search_demand_missing');
-  const fatal = blockers.some((x) => ['discovery_moq_above_50', 'estimated_margin_below_30pct'].includes(x));
+  const fatal = blockers.some((x) => ['estimated_margin_below_30pct', 'moq_not_profitable_at_sell_through', 'moq_exceeds_12_month_demand'].includes(x));
   const complete = blockers.length === 0;
   const score = complete ? Math.round(Math.min(100,
     Math.log10(1 + demand.volume) * 18
     + Math.min(20, Number(demand.cpc ?? 0) * 4)
     + Math.max(0, economics.contributionMarginLow * 35)
-    + Math.max(0, 15 - evidence.moq / 4))) : 0;
+    + Math.max(0, 15 - Math.min(15, economics.sellThroughMonths ?? 15)))) : 0;
   return { status: fatal ? 'reject_preliminary' : complete ? 'prequalified' : 'needs_evidence', score, blockers };
 }

@@ -56,7 +56,6 @@ export function evaluateAlibabaCandidate(seed, quote = {}) {
   const blockers = [];
   if (!yes(quote.trade_assurance)) blockers.push('trade_assurance_required');
   if (!yes(quote.supplier_verified)) blockers.push('verified_supplier_required');
-  if (moq != null && moq > 20) blockers.push('test_moq_above_20');
   if (deliveryDays != null && deliveryDays > 30) blockers.push('delivery_above_30_days');
   if (contributionMargin != null && contributionMargin < 0.3) blockers.push('contribution_margin_below_30pct');
 
@@ -135,7 +134,7 @@ export async function researchAlibabaCandidates(seeds, { prior = null } = {}) {
     let shopping = [];
     if (evidence.priceHigh > 0 && evidence.moq > 0 && demand.volume > 0) shopping = await googleShoppingProducts(query, { depth: 20 }) ?? [];
     const marketplacePrices = shopping.map((item) => item.price).filter((price) => Number.isFinite(Number(price))).map(Number);
-    const economics = estimateAlibabaEconomics(evidence, marketplacePrices);
+    const economics = estimateAlibabaEconomics(evidence, marketplacePrices, demand);
     const decision = prequalifyAlibaba({ evidence, economics, demand });
     previous.set(String(seed.alibaba_id), {
       alibabaId: seed.alibaba_id, title: seed.slug, inferredType: seed.inferred_type, url: seed.url,
@@ -158,7 +157,16 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   try { prior = JSON.parse(readFileSync(outputPath, 'utf8')); } catch {}
   const preliminary = process.argv.includes('--quotes-only') ? { research: prior?.research ?? [], counts: prior?.preliminaryCounts ?? {}, nextCursor: prior?.nextCursor ?? 0, scanned: 0 } : await researchAlibabaCandidates(seeds, { prior });
   const quoted = buildAlibabaIntake(seeds, quotes);
-  const report = { ...quoted, research: preliminary.research, preliminaryCounts: preliminary.counts, scannedThisRun: preliminary.scanned, nextCursor: preliminary.nextCursor };
+  const report = {
+    ...quoted, research: preliminary.research, preliminaryCounts: preliminary.counts,
+    scannedThisRun: preliminary.scanned, nextCursor: preliminary.nextCursor,
+    supervision: {
+      mode: 'autonomous-research', scheduledStage: 'alibaba-research',
+      automaticActions: ['scan', 'extract', 'measure-demand', 'compare-marketplace', 'estimate-economics', 'rank'],
+      approvalRequired: ['supplier-contact', 'sample-order', 'inventory-purchase', 'shopify-publication'],
+      policy: 'MOQ is evaluated through profit and demand-adjusted sell-through; it is not a numeric hard blocker.',
+    },
+  };
   mkdirSync(dirname(outputPath), { recursive: true });
   writeFileSync(outputPath, `${JSON.stringify(report, null, 2)}\n`);
   console.log(`Alibaba intake: ${report.counts.sample_ready} sample-ready, ${report.counts.needs_quote} need quotes, ${report.counts.reject} rejected.`);
