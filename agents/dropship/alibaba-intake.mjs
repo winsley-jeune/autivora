@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 import { keywordOverview, googleShoppingProducts } from '../lib/dataforseo.mjs';
 import { estimateAlibabaEconomics, parseAlibabaEvidence, prequalifyAlibaba } from './lib/alibaba-market.mjs';
+import { amazonHuntEconomics, autivaraHuntEconomics } from './lib/channel-hunt.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, '..', '..');
@@ -126,6 +127,28 @@ export function categoryCohorts(seeds) {
   }));
 }
 
+export function evaluateChannelHunts(seed, economics) {
+  return {
+    amazon: amazonHuntEconomics({
+      sellingPrice: economics?.targetRetail, landedCost: economics?.landedHigh,
+      referralFeeRate: seed.amazon_referral_fee_rate, fbaFee: seed.amazon_fba_fee,
+      storagePerUnit: seed.amazon_storage_per_unit, ppcCpc: seed.amazon_ppc_cpc,
+      ppcConversionRate: seed.amazon_ppc_conversion_rate,
+      privateLabelPossible: seed.private_label_possible === true,
+      monthlyUnitPotential: seed.amazon_monthly_unit_potential,
+    }),
+    autivara: autivaraHuntEconomics({
+      sellingPrice: economics?.targetRetail, landedCost: economics?.landedHigh,
+      fulfillmentPerUnit: seed.autivara_fulfillment_per_unit,
+      paymentFeeRate: seed.autivara_payment_fee_rate,
+      blendedCac: seed.autivara_blended_cac,
+      privateLabelPossible: seed.private_label_possible === true,
+      organicDemandEvidence: seed.autivara_organic_demand_evidence === true,
+      paidAcquisitionEvidence: seed.autivara_paid_acquisition_evidence === true,
+    }),
+  };
+}
+
 const DEMAND_QUERIES = {
   'home/commercial': 'scent diffuser machine',
   'passive-car-vent': 'car vent air freshener',
@@ -179,11 +202,12 @@ export async function researchAlibabaCandidates(seeds, {
     const marketplacePrices = shopping.map((item) => item.price).filter((price) => Number.isFinite(Number(price))).map(Number);
     const economics = estimateAlibabaEconomics(evidence, marketplacePrices, demand);
     const decision = prequalifyAlibaba({ evidence, economics, demand });
+    const channelHunt = evaluateChannelHunts(seed, economics);
     previous.set(String(seed.alibaba_id), {
       alibabaId: seed.alibaba_id, title: seed.slug, inferredType: seed.inferred_type, url: seed.url,
       observedAt: new Date().toISOString(), query, evidence, demand,
       marketplace: { source: 'google-shopping-dataforseo', comparableCount: marketplacePrices.length, prices: marketplacePrices.slice(0, 20) },
-      economics, ...decision,
+      economics, channelHunt, ...decision,
     });
     if (evidence.blocked) {
       operatorAction = { type: 'alibaba_access_challenge', url: seed.url, alibabaId: seed.alibaba_id, observedAt: new Date().toISOString(), message: 'Open this URL in authenticated Chrome and complete Alibaba verification, then rerun.' };
