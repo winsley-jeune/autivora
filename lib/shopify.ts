@@ -546,6 +546,9 @@ export async function getProduct(handle: string): Promise<Product | null> {
     variables: {
       handle,
     },
+    // Product launches are published after the app has already seen the handle.
+    // Do not retain a pre-publication null result for 15 minutes.
+    cache: 'no-store',
   });
 
   return res.body.data.product ?? null;
