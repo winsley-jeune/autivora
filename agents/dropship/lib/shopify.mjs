@@ -76,6 +76,34 @@ export async function createDraftProduct({ v, copy, price, priceMultiple, tier, 
   return createProductIdempotently({ operationKey: `shopify:create:dropship:${v.itemId}:${v.skuId}`, sku, payload });
 }
 
+export async function createAlibabaDraftProduct({ dossier, generatedImages = [] }) {
+  const sku = dossier.sku;
+  const payload = {
+    product: {
+      title: dossier.offer.title,
+      body_html: dossier.offer.bodyHtml,
+      vendor: "Autivara",
+      product_type: dossier.offer.productType,
+      tags: ["alibaba", "private-label", dossier.collection.handle, "profit-validation"].join(","),
+      status: "draft",
+      images: [
+        ...dossier.supplier.images.map((src) => ({ src })),
+        ...generatedImages.map(({ attachment, filename, alt }) => ({ attachment, filename, alt })),
+      ],
+      variants: [{ price: dossier.economics.sellingPrice, sku, inventory_management: null }],
+      metafields: [
+        { namespace: "global", key: "title_tag", value: dossier.offer.seoTitle, type: "single_line_text_field" },
+        { namespace: "global", key: "description_tag", value: dossier.offer.seoDescription, type: "multi_line_text_field" },
+        { namespace: "sourcing", key: "alibaba_product_id", value: String(dossier.alibabaId), type: "single_line_text_field" },
+        { namespace: "sourcing", key: "supplier", value: dossier.supplier.name, type: "single_line_text_field" },
+        { namespace: "dropship", key: "landed_cost_usd", value: dossier.economics.landedCost.toFixed(2), type: "single_line_text_field" },
+        { namespace: "sourcing", key: "evidence", value: JSON.stringify(dossier.supplier.evidence), type: "json" },
+      ],
+    },
+  };
+  return createProductIdempotently({ operationKey: `shopify:create:alibaba:${dossier.alibabaId}:${sku}`, sku, payload });
+}
+
 // Bundle drafts: an anchor-free composite SKU manufactured from verified components. The
 // dropship.bundle_components metafield carries the machine-readable component list so the
 // future order-relay can place one AliExpress order per component.
