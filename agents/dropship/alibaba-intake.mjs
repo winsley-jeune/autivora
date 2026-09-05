@@ -122,6 +122,9 @@ export async function researchAlibabaCandidates(seeds, {
   const demandByKeyword = new Map(overview.map((item) => [item.keyword.toLowerCase(), item]));
 
   const attempted = [];
+  const accessChallenges = (prior?.accessChallenges ?? []).filter((item) =>
+    seeds.some((seed) => String(seed.alibaba_id) === String(item.alibabaId)),
+  );
   let operatorAction = null;
   for (const seed of batch) {
     const evidence = await fetchListing(seed.url);
@@ -140,16 +143,20 @@ export async function researchAlibabaCandidates(seeds, {
       economics, ...decision,
     });
     if (evidence.blocked) {
-      operatorAction = { type: 'alibaba_access_challenge', url: seed.url, alibabaId: seed.alibaba_id, message: 'Open this URL in authenticated Chrome and complete Alibaba verification, then rerun.' };
+      operatorAction = { type: 'alibaba_access_challenge', url: seed.url, alibabaId: seed.alibaba_id, observedAt: new Date().toISOString(), message: 'Open this URL in authenticated Chrome and complete Alibaba verification, then rerun.' };
+      const existing = accessChallenges.findIndex((item) => String(item.alibabaId) === String(seed.alibaba_id));
+      if (existing >= 0) accessChallenges[existing] = operatorAction;
+      else accessChallenges.push(operatorAction);
       break;
     }
   }
   const research = seeds.map((seed) => previous.get(String(seed.alibaba_id))).filter(Boolean);
   return {
     research, scanned: attempted.length,
-    // Do not skip a challenged product. It stays at the cursor until the operator resolves it.
-    nextCursor: operatorAction ? cursor : (cursor + attempted.length) % Math.max(1, seeds.length),
-    operatorAction,
+    // A challenged listing is queued for authenticated verification, but must not pin the
+    // catalog cursor and prevent every later candidate from being researched.
+    nextCursor: (cursor + attempted.length) % Math.max(1, seeds.length),
+    operatorAction, accessChallenges,
     counts: Object.fromEntries(['prequalified', 'needs_evidence', 'listing_data_blocked', 'reject_preliminary'].map((status) => [status, research.filter((item) => item.status === status).length])),
   };
 }
@@ -159,11 +166,11 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const quotes = existsSync(quotesPath) ? csvRows(readFileSync(quotesPath, 'utf8')) : [];
   let prior = null;
   try { prior = JSON.parse(readFileSync(outputPath, 'utf8')); } catch {}
-  const preliminary = process.argv.includes('--quotes-only') ? { research: prior?.research ?? [], counts: prior?.preliminaryCounts ?? {}, nextCursor: prior?.nextCursor ?? 0, scanned: 0, operatorAction: prior?.operatorAction ?? null } : await researchAlibabaCandidates(seeds, { prior });
+  const preliminary = process.argv.includes('--quotes-only') ? { research: prior?.research ?? [], counts: prior?.preliminaryCounts ?? {}, nextCursor: prior?.nextCursor ?? 0, scanned: 0, operatorAction: prior?.operatorAction ?? null, accessChallenges: prior?.accessChallenges ?? [] } : await researchAlibabaCandidates(seeds, { prior });
   const quoted = buildAlibabaIntake(seeds, quotes);
   const report = {
     ...quoted, research: preliminary.research, preliminaryCounts: preliminary.counts,
-    scannedThisRun: preliminary.scanned, nextCursor: preliminary.nextCursor, operatorAction: preliminary.operatorAction,
+    scannedThisRun: preliminary.scanned, nextCursor: preliminary.nextCursor, operatorAction: preliminary.operatorAction, accessChallenges: preliminary.accessChallenges,
     supervision: {
       mode: 'supervised-autonomous-research', scheduledStage: 'alibaba-research', alibabaRequestLimit: ALIBABA_REQUEST_LIMIT,
       automaticActions: ['scan', 'extract', 'measure-demand', 'compare-marketplace', 'estimate-economics', 'rank'],
