@@ -12,6 +12,9 @@ test("Alibaba launch dossier passes only with grounded supply and margin evidenc
   assert.throws(()=>validateAlibabaLaunchDossier({...dossier,economics:{...dossier.economics,sellingPrice:39}}),/margin/i);
 });
 
-test("Alibaba launch dossier rejects missing delivery instead of coercing null to zero", () => {
-  assert.throws(() => validateAlibabaLaunchDossier({ ...dossier, supplier: { ...dossier.supplier, evidence: { ...dossier.supplier.evidence, deliveryMaxDays: null } } }), /delivery evidence/);
+test("Alibaba launch dossier permits unconfirmed delivery without a delivery promise", () => {
+  const evidence = { ...dossier.supplier.evidence, deliveryMinDays: null, deliveryMaxDays: null, deliveryStatus: "unconfirmed" };
+  const offer = { ...dossier.offer, bodyHtml: "<p>Delivery timing is confirmed during order processing.</p>" };
+  assert.equal(validateAlibabaLaunchDossier({ ...dossier, supplier: { ...dossier.supplier, evidence }, offer }).passesMarginGate, true);
+  assert.throws(() => validateAlibabaLaunchDossier({ ...dossier, supplier: { ...dossier.supplier, evidence } }), /must not promise/i);
 });

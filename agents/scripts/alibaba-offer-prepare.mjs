@@ -14,11 +14,20 @@ export function validateAlibabaLaunchDossier(dossier) {
   const deliveryMinDays = Number(dossier.supplier.evidence?.deliveryMinDays);
   const deliveryMaxDays = Number(dossier.supplier.evidence?.deliveryMaxDays);
   const testQuantity = Number(dossier.supplier.evidence?.testQuantity);
+  const deliveryKnown = Number.isFinite(deliveryMinDays) && deliveryMinDays > 0
+    && Number.isFinite(deliveryMaxDays) && deliveryMaxDays > 0;
+  const deliveryUnconfirmed = dossier.supplier.evidence?.deliveryStatus === "unconfirmed";
   if (!dossier.supplier.evidence?.verifiedAt
-    || !Number.isFinite(deliveryMinDays) || deliveryMinDays <= 0
-    || !Number.isFinite(deliveryMaxDays) || deliveryMaxDays <= 0 || deliveryMaxDays > 30
-    || !Number.isFinite(testQuantity) || testQuantity <= 0) {
-    throw new Error("Fresh supplier, test-quantity, and delivery evidence is required");
+    || !Number.isFinite(testQuantity) || testQuantity <= 0
+    || (!deliveryKnown && !deliveryUnconfirmed)
+    || (deliveryKnown && deliveryMaxDays > 30)) {
+    throw new Error("Fresh supplier, test-quantity, and valid delivery evidence or an unconfirmed-delivery disclosure is required");
+  }
+  if (deliveryUnconfirmed) {
+    const deliveryPromise = /\b(deliver(?:y|ed)?|ships?|arrives?)\b.{0,40}\b\d+\s*(?:business\s*)?(?:days?|weeks?)\b/i;
+    if (deliveryPromise.test(dossier.offer.bodyHtml)) {
+      throw new Error("An offer with unconfirmed delivery must not promise a delivery timeframe");
+    }
   }
   const market = dossier.marketEvidence;
   if (!market?.verifiedAt || market.intent !== "transactional"
