@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { demandQuery, evaluateAlibabaCandidate } from '../dropship/alibaba-intake.mjs';
+import { ALIBABA_REQUEST_LIMIT, demandQuery, evaluateAlibabaCandidate, researchAlibabaCandidates } from '../dropship/alibaba-intake.mjs';
 import { discoveryPage } from '../dropship/run.mjs';
 import { estimateAlibabaEconomics, parseAlibabaEvidence, prequalifyAlibaba } from '../dropship/lib/alibaba-market.mjs';
 
@@ -95,4 +95,22 @@ test('Alibaba MOQ is rejected only when demand implies excessive sell-through ti
 test('Alibaba demand research translates internal categories into buyer language', () => {
   assert.equal(demandQuery({ inferred_type: 'home/commercial', slug: 'ignored' }), 'scent diffuser machine');
   assert.equal(demandQuery({ inferred_type: 'passive-car-vent', slug: 'ignored' }), 'car vent air freshener');
+});
+
+test('Alibaba research caps direct requests at two and stops on the first challenge', async () => {
+  assert.equal(ALIBABA_REQUEST_LIMIT, 2);
+  const seeds = [
+    { alibaba_id: '1', slug: 'first', inferred_type: 'ambiguous', url: 'https://www.alibaba.com/1' },
+    { alibaba_id: '2', slug: 'second', inferred_type: 'ambiguous', url: 'https://www.alibaba.com/2' },
+    { alibaba_id: '3', slug: 'third', inferred_type: 'ambiguous', url: 'https://www.alibaba.com/3' },
+  ];
+  let requests = 0;
+  const result = await researchAlibabaCandidates(seeds, {
+    fetchListing: async () => { requests += 1; return { blocked: true, priceLow: null, priceHigh: null, moq: null }; },
+    demandLoader: async () => [], shoppingLoader: async () => [],
+  });
+  assert.equal(requests, 1);
+  assert.equal(result.scanned, 1);
+  assert.equal(result.nextCursor, 0);
+  assert.equal(result.operatorAction.type, 'alibaba_access_challenge');
 });
